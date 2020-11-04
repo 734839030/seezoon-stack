@@ -1,4 +1,4 @@
-package com.seezoon.framework.entity;
+package com.seezoon.dao.framework.entity;
 
 /**
  * 查询基类

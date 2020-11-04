@@ -1,4 +1,4 @@
-package com.seezoon.autoconfigure;
+package com.seezoon.dao.autoconfigure;
 
 import java.sql.Connection;
 import java.sql.SQLException;

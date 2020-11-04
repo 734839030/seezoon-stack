@@ -1,4 +1,4 @@
-package com.seezoon.autoconfigure;
+package com.seezoon.dao.autoconfigure;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

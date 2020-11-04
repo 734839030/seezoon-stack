@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.seezoon.modules.sys.dao.SysParamDao">
+<mapper namespace="com.seezoon.modules.sys.SysParamDao">
     <resultMap id="BaseResultMap" type="com.seezoon.modules.sys.entity.SysParam">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
@@ -24,7 +24,7 @@
         where id = #{id,jdbcType=BIGINT}
     </select>
 
-    <select id="selectByCondition" parameterType="com.seezoon.framework.entity.QueryCondition"
+    <select id="selectByCondition" parameterType="com.seezoon.dao.framework.entity.QueryCondition"
             resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>

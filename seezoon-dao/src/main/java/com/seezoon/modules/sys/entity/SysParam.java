@@ -4,14 +4,18 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.seezoon.framework.entity.BaseEntity;
+import com.seezoon.dao.framework.entity.BaseEntity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * @author hdf
  */
-@Data
+@Getter
+@Setter
+@ToString
 public class SysParam extends BaseEntity<Long> {
 
     @NotEmpty

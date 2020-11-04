@@ -1,9 +1,9 @@
-package com.seezoon.modules.sys.dao;
+package com.seezoon.modules.sys;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
-import com.seezoon.framework.dao.CrudDao;
+import com.seezoon.dao.framework.CrudDao;
 import com.seezoon.modules.sys.entity.SysParam;
 
 /**

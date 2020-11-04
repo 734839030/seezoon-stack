@@ -1,12 +1,12 @@
-package com.seezoon.framework.dao;
+package com.seezoon.dao.framework;
 
 import java.util.List;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import com.seezoon.framework.entity.BaseEntity;
-import com.seezoon.framework.entity.QueryCondition;
+import com.seezoon.dao.framework.entity.BaseEntity;
+import com.seezoon.dao.framework.entity.QueryCondition;
 
 /**
  * 包含基本CRUD定义，DAO 完成基础字段验证

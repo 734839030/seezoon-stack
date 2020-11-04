@@ -1,4 +1,4 @@
-package com.seezoon.framework.dao;
+package com.seezoon.dao.framework;
 
 import org.springframework.validation.annotation.Validated;
 

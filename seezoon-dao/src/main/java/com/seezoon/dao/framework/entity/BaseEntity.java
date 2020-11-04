@@ -1,4 +1,4 @@
-package com.seezoon.framework.entity;
+package com.seezoon.dao.framework.entity;
 
 import java.util.Date;
 
@@ -17,7 +17,7 @@ public class BaseEntity<PK> {
      */
     private PK id;
     /**
-     * 数据状态 {@link com.seezoon.framework.constants.EntityStatus}
+     * 数据状态 {@link com.seezoon.dao.framework.constants.EntityStatus}
      *
      * 保存方法自动处理
      * </pre>

@@ -21,6 +21,7 @@
 
     <modules>
         <module>seezoon-dao</module>
+        <module>seezoon-framework</module>
     </modules>
 
 

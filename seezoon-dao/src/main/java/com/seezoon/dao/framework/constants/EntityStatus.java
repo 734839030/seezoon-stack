@@ -1,4 +1,4 @@
-package com.seezoon.framework.constants;
+package com.seezoon.dao.framework.constants;
 
 /**
  * @author hdf
