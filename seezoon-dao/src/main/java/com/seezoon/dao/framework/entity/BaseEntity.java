@@ -26,7 +26,7 @@ public class BaseEntity<PK> {
     /**
      * 保存方法自动处理
      */
-    private String createBy;
+    private Integer createBy;
     /**
      * 保存方法自动处理
      */
@@ -34,7 +34,7 @@ public class BaseEntity<PK> {
     /**
      * 更新方法自动处理
      */
-    private String updateBy;
+    private Integer updateBy;
     /**
      * 更新方法自动处理
      */

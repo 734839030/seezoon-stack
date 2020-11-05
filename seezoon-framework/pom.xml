@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>seezoon-stack</artifactId>
         <groupId>com.seezoon</groupId>
+        <artifactId>seezoon-stack</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 

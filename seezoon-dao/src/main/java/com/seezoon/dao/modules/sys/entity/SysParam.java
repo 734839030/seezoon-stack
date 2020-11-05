@@ -1,4 +1,4 @@
-package com.seezoon.modules.sys.entity;
+package com.seezoon.dao.modules.sys.entity;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class SysParam extends BaseEntity<Long> {
+public class SysParam extends BaseEntity<Integer> {
 
     @NotEmpty
     @Length(min = 1, max = 50)

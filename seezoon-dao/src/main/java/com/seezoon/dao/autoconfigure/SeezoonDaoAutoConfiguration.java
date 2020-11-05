@@ -10,7 +10,9 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.retry.support.RetryTemplate;
 
 import com.zaxxer.hikari.HikariDataSource;
@@ -21,7 +23,11 @@ import lombok.RequiredArgsConstructor;
  * @author hdf
  */
 @Configuration
-@MapperScan("com.seezoon.modules.*.dao")
+@MapperScan("com.seezoon.dao.modules.*")
+// 可以省略，但idea dao 注入有错误提示规避
+@ComponentScan("com.seezoon.dao.modules.*")
+// 这个配置名字不能用application.properties
+@PropertySource("classpath:default-datasource.properties")
 @AutoConfigureAfter({MybatisAutoConfiguration.class})
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SeezoonDaoAutoConfiguration implements InitializingBean {

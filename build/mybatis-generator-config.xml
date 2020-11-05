@@ -22,15 +22,15 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
         <!-- targetProject="MAVEN" is decided by mybatis-generator-maven-plugin,default is   ${project.build.directory}/generated-sources/mybatis-generator -->
-        <javaModelGenerator targetPackage="com.seezoon.modules.sys.entity"
+        <javaModelGenerator targetPackage="com.seezoon.dao.modules.sys.entity"
                             targetProject="MAVEN">
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="com.seezoon.modules.sys.dao"
+        <sqlMapGenerator targetPackage="com.seezoon.dao.modules.sys.dao"
                          targetProject="MAVEN">
         </sqlMapGenerator>
 
-        <javaClientGenerator targetPackage="com.seezoon.modules.sys.dao"
+        <javaClientGenerator targetPackage="com.seezoon.dao.modules.sys.dao"
                              targetProject="MAVEN"
                              type="XMLMAPPER">
         </javaClientGenerator>

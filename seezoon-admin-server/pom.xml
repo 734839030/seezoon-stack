@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.seezoon</groupId>
+        <artifactId>seezoon-stack</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <name>Seezoon Admin Server</name>
+    <artifactId>seezoon-admin-server</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.seezoon</groupId>
+            <artifactId>seezoon-dao</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.seezoon</groupId>
+            <artifactId>seezoon-framework</artifactId>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <!--
+            排除环境依赖配置文件，不打入jar中，
+            如果是排除src/main/resources 可以配置
+            <build><resources></resources></build>
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>application-local.properties</exclude>
+                        <exclude>logback-spring.xml</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <!-- 打包成结构化的包 -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <attach>false</attach>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <descriptors>
+                        <descriptor>${project.parent.basedir}/build/assembly/assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

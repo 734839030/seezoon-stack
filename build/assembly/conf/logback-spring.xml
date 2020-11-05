@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 启动时候可以指定为外部日志文件 动态修改日志级别 -->
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <property name="LOG_HOME" value="./logs"/>
+    <property name="LOG_FILE" value="seezoon"/>
+    <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%X{tid}] %-5level %logger{10} - %msg%n"/>
+    <!-- 控制台输出 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <!-- 按照每天生成日志文件 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 指定日志文件的名称 -->
+        <file>${LOG_HOME}/${LOG_FILE}.log</file>
+        <!-- ch.qos.logback.core.rolling.TimeBasedRollingPolicy
+            ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy
+         -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--
+          滚动时产生的文件的存放位置及文件名称 %d{yyyy-MM-dd}：按天进行日志滚动
+          %i：当文件大小超过maxFileSize时，按照i进行文件滚动,加上.gz 可以归档，查看可用gzip xx.gz
+          -->
+            <fileNamePattern>${LOG_HOME}/${LOG_FILE}.log.%d{yyyy-MM-dd}-%i</fileNamePattern>
+            <maxHistory>10</maxHistory>
+            <maxFileSize>2048MB</maxFileSize>
+            <totalSizeCap>10GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <appender name="AsyncFile" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>10000</queueSize>
+        <appender-ref ref="FILE"/>
+    </appender>
+
+
+    <!-- 日志输出级别 -->
+    <root level="INFO">
+        <!-- 使用异步日志 -->
+        <appender-ref ref="AsyncFile"/>
+    </root>
+</configuration>

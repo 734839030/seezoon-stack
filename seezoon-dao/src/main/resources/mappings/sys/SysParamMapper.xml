@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.seezoon.modules.sys.SysParamDao">
-    <resultMap id="BaseResultMap" type="com.seezoon.modules.sys.entity.SysParam">
-        <id column="id" jdbcType="BIGINT" property="id"/>
+<mapper namespace="com.seezoon.dao.modules.sys.SysParamDao">
+    <resultMap id="BaseResultMap" type="com.seezoon.dao.modules.sys.entity.SysParam">
+        <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="param_key" jdbcType="VARCHAR" property="paramKey"/>
         <result column="param_value" jdbcType="VARCHAR" property="paramValue"/>
         <result column="status" jdbcType="TINYINT" property="status"/>
-        <result column="create_by" jdbcType="VARCHAR" property="createBy"/>
+        <result column="create_by" jdbcType="INTEGER" property="createBy"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="update_by" jdbcType="VARCHAR" property="updateBy"/>
+        <result column="update_by" jdbcType="INTEGER" property="updateBy"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
         <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
     </resultMap>
@@ -17,11 +17,11 @@
         id, name, param_key, param_value, status, create_by, create_time, update_by, update_time,
         remarks
     </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from sys_param
-        where id = #{id,jdbcType=BIGINT}
+        where id = #{id,jdbcType=INTEGER}
     </select>
 
     <select id="selectByCondition" parameterType="com.seezoon.dao.framework.entity.QueryCondition"
@@ -57,13 +57,13 @@
         values
         <foreach item="item" collection="array" separator=",">
             (#{item.name,jdbcType=VARCHAR}, #{item.paramKey,jdbcType=VARCHAR},
-            #{item.paramValue,jdbcType=VARCHAR}, #{item.status,jdbcType=TINYINT}, #{item.createBy,jdbcType=VARCHAR},
-            #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateBy,jdbcType=VARCHAR},
+            #{item.paramValue,jdbcType=VARCHAR}, #{item.status,jdbcType=TINYINT}, #{item.createBy,jdbcType=INTEGER},
+            #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateBy,jdbcType=INTEGER},
             #{item.updateTime,jdbcType=TIMESTAMP},
             #{item.remarks,jdbcType=VARCHAR})
         </foreach>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.seezoon.modules.sys.entity.SysParam">
+    <update id="updateByPrimaryKeySelective" parameterType="com.seezoon.dao.modules.sys.entity.SysParam">
         update sys_param
         <set>
             <if test="name != null">
@@ -79,13 +79,13 @@
                 status = #{status,jdbcType=TINYINT},
             </if>
             <if test="createBy != null">
-                create_by = #{createBy,jdbcType=VARCHAR},
+                create_by = #{createBy,jdbcType=INTEGER},
             </if>
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="updateBy != null">
-                update_by = #{updateBy,jdbcType=VARCHAR},
+                update_by = #{updateBy,jdbcType=INTEGER},
             </if>
             <if test="updateTime != null">
                 update_time = #{updateTime,jdbcType=TIMESTAMP},
@@ -94,19 +94,19 @@
                 remarks = #{remarks,jdbcType=VARCHAR},
             </if>
         </set>
-        where id = #{id,jdbcType=BIGINT}
+        where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.seezoon.modules.sys.entity.SysParam">
+    <update id="updateByPrimaryKey" parameterType="com.seezoon.dao.modules.sys.entity.SysParam">
         update sys_param
         set name = #{name,jdbcType=VARCHAR},
         param_key = #{paramKey,jdbcType=VARCHAR},
         param_value = #{paramValue,jdbcType=VARCHAR},
         status = #{status,jdbcType=TINYINT},
-        create_by = #{createBy,jdbcType=VARCHAR},
+        create_by = #{createBy,jdbcType=INTEGER},
         create_time = #{createTime,jdbcType=TIMESTAMP},
-        update_by = #{updateBy,jdbcType=VARCHAR},
+        update_by = #{updateBy,jdbcType=INTEGER},
         update_time = #{updateTime,jdbcType=TIMESTAMP},
         remarks = #{remarks,jdbcType=VARCHAR}
-        where id = #{id,jdbcType=BIGINT}
+        where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>
