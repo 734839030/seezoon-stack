@@ -20,13 +20,17 @@ import com.zaxxer.hikari.HikariDataSource;
 import lombok.RequiredArgsConstructor;
 
 /**
+ * <p>
+ * {@code  @ComponentScan} 可以省略，但idea dao 注入有错误提示规避
+ * 为了让连接池属性尽量默认，使用{@code @PropertySource("default-datasource.properties")}
+ * 这里不能用application.properties相关名称.配置中字段可以被外部配置或者引用该组件方覆盖
+ * </p>
+ *
  * @author hdf
  */
 @Configuration
 @MapperScan("com.seezoon.dao.modules.*")
-// 可以省略，但idea dao 注入有错误提示规避
 @ComponentScan("com.seezoon.dao.modules.*")
-// 这个配置名字不能用application.properties
 @PropertySource("classpath:default-datasource.properties")
 @AutoConfigureAfter({MybatisAutoConfiguration.class})
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))

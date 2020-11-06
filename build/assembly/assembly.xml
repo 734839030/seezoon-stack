@@ -19,7 +19,7 @@
         -->
         <!-- 将src/main/assembly/bin目录下的所有文件输出到打包后的bin目录中 -->
         <fileSet>
-            <directory>${basedir}/src/main/assembly/bin</directory>
+            <directory>${project.parent.basedir}/build/assembly/bin</directory>
             <outputDirectory>bin</outputDirectory>
             <fileMode>0755</fileMode>
             <includes>
@@ -28,13 +28,13 @@
         </fileSet>
         <!-- 基本配置文件 -->
         <fileSet>
-            <directory>${basedir}/src/main/assembly/conf</directory>
+            <directory>${project.parent.basedir}/build/assembly/conf</directory>
             <outputDirectory>conf</outputDirectory>
             <fileMode>0644</fileMode>
         </fileSet>
         <!-- log 目录 -->
         <fileSet>
-            <directory>${basedir}/src/main/assembly/logs</directory>
+            <directory>${project.parent.basedir}/build/assembly/logs</directory>
             <outputDirectory>logs</outputDirectory>
             <fileMode>0644</fileMode>
         </fileSet>

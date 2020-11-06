@@ -19,6 +19,7 @@
     see https://docs.spring.io/spring-boot/docs/2.3.4.RELEASE/reference/htmlsingle/#profile-specific-configuration
      -->
     <logger name="org.springframework" level="INFO"/>
+    <logger name="com.zaxxer.hikari.HikariConfig" level="DEBUG"/>
     <!-- 日志输出级别 -->
     <root level="DEBUG">
         <appender-ref ref="CONSOLE"/>

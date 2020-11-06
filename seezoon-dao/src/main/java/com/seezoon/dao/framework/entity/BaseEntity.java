@@ -2,6 +2,8 @@ package com.seezoon.dao.framework.entity;
 
 import java.util.Date;
 
+import com.seezoon.dao.framework.constants.EntityStatus;
+
 import lombok.Data;
 
 /**
@@ -22,7 +24,7 @@ public class BaseEntity<PK> {
      * 保存方法自动处理
      * </pre>
      */
-    private Byte status;
+    private Byte status = EntityStatus.NORMAL.status();
     /**
      * 保存方法自动处理
      */
