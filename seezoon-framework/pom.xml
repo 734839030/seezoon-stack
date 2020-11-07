@@ -15,6 +15,7 @@
 
     <properties>
         <guava.version>30.0-jre</guava.version>
+        <commons-text.version>1.9</commons-text.version>
     </properties>
     <dependencies>
         <dependency>
@@ -34,6 +35,11 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>${commons-text.version}</version>
         </dependency>
     </dependencies>
 </project>

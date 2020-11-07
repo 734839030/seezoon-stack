@@ -13,6 +13,6 @@ public class SeezoonFrameworkAutoConfigurationTest {
 
     @Test
     public void start() {
-
+        System.out.println("success");
     }
 }
