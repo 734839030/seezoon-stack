@@ -16,6 +16,7 @@
     <properties>
         <guava.version>30.0-jre</guava.version>
         <commons-text.version>1.9</commons-text.version>
+        <fastjson.version>1.2.75</fastjson.version>
     </properties>
     <dependencies>
         <dependency>
@@ -40,6 +41,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
             <version>${commons-text.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
         </dependency>
     </dependencies>
 </project>

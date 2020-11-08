@@ -11,7 +11,7 @@ public class DefaultCodeMsgBundle {
 
     public static final CodeMsg SUCCESS = new CodeMsg("0", "Success");
     public static final CodeMsg FAIL = new CodeMsg("-1", null);
-    public static final CodeMsg UNKNOWN = new CodeMsg("90000", "Unknown Error,%s");
+    public static final CodeMsg UNKNOWN = new CodeMsg("90000", "Unregistered Error,%s");
     public static final CodeMsg PARAM_INVALID = new CodeMsg("90001", "Param Invalid,%s");
     public static final CodeMsg PARAM_BIND_ERROR = new CodeMsg("90002", "Param Bind Error,%s");
 

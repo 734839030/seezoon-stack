@@ -1,4 +1,4 @@
-package com.seezoon.dao.framework.log;
+package com.seezoon.framework.log;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -11,14 +11,16 @@ import org.slf4j.MDC;
  */
 public class MdcHelper {
 
+    public final static String HTTP_HEADER = "X-Trace-Id";
     private final static String THREAD_ID = "tid";
+    private static final int LENGTH = 10;
 
     public static void put() {
         MDC.put(THREAD_ID, randomThreadId());
     }
 
     public static void put(String tid) {
-        if (StringUtils.isNotEmpty(tid)) {
+        if (StringUtils.isNotEmpty(tid) && tid.length() == LENGTH) {
             MDC.put(THREAD_ID, tid);
         } else {
             put();
@@ -35,6 +37,6 @@ public class MdcHelper {
     }
 
     private static String randomThreadId() {
-        return RandomStringUtils.randomAlphanumeric(10);
+        return RandomStringUtils.randomAlphanumeric(LENGTH);
     }
 }

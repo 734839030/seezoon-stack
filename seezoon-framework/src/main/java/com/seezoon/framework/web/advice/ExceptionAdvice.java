@@ -4,6 +4,7 @@ import javax.validation.ConstraintViolationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -28,8 +29,15 @@ public class ExceptionAdvice {
      */
     private static final Logger logger = LoggerFactory.getLogger(ExceptionAdvice.class);
 
+    /**
+     * 具体Excetion 场景参见其java doc
+     *
+     * @param e
+     * @return
+     */
     @ExceptionHandler({MissingServletRequestParameterException.class, MethodArgumentNotValidException.class,
-        ConstraintViolationException.class, MethodArgumentTypeMismatchException.class})
+        ConstraintViolationException.class, MethodArgumentTypeMismatchException.class,
+        HttpMessageNotReadableException.class})
     public Result parameterInvalidException(Exception e) {
         return Result.error(DefaultCodeMsgBundle.PARAM_INVALID, e.getMessage());
 

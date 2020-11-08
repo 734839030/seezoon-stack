@@ -3,7 +3,7 @@ package com.seezoon.framework.event;
 import org.springframework.boot.context.event.ApplicationStartingEvent;
 import org.springframework.context.ApplicationListener;
 
-import com.seezoon.dao.framework.log.MdcHelper;
+import com.seezoon.framework.log.MdcHelper;
 
 /**
  * 监听spring boot 应用启动开始事件

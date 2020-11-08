@@ -2,11 +2,6 @@ package com.seezoon.dao.framework.entity;
 
 import java.util.Date;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.seezoon.dao.framework.constants.EntityStatus;
-
 import lombok.Data;
 
 /**
@@ -27,7 +22,7 @@ public class BaseEntity<PK> {
      * 保存方法自动处理
      * </pre>
      */
-    private Byte status = EntityStatus.NORMAL.status();
+    private Byte status;
     /**
      * 保存方法自动处理
      */
@@ -35,8 +30,6 @@ public class BaseEntity<PK> {
     /**
      * 保存方法自动处理
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     /**
      * 更新方法自动处理
