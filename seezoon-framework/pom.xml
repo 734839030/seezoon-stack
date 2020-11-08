@@ -15,8 +15,10 @@
 
     <properties>
         <guava.version>30.0-jre</guava.version>
+        <guava.version>30.0-jre</guava.version>
         <commons-text.version>1.9</commons-text.version>
         <fastjson.version>1.2.75</fastjson.version>
+        <springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
     </properties>
     <dependencies>
         <dependency>
@@ -47,5 +49,19 @@
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>${springfox-boot-starter.version}</version>
+        </dependency>
     </dependencies>
+    <build>
+        <resources>
+            <resource>
+                <!-- 替换配置中的@变量@，如果是spring boot 中application.properties 则是自动替换-->
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
 </project>

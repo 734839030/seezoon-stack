@@ -12,6 +12,10 @@
     <name>Seezoon Stack</name>
     <url>http://www.seezoon.com/</url>
 
+    <description>
+        快速开发平台
+    </description>
+
     <!-- 继承会继承其properties,非继承模式下需要自己写properties -->
     <parent>
         <groupId>org.springframework.boot</groupId>

@@ -6,6 +6,8 @@ import lombok.Setter;
 /**
  * web 层通用返回结果，按照约定，只出现在web层
  *
+ * 泛型是为了让swagger 能获取字段信息
+ *
  * 默认code = '0' 成功 ，code = '-1' 错误
  *
  * @author hdf

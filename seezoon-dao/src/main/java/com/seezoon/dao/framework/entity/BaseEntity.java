@@ -2,6 +2,8 @@ package com.seezoon.dao.framework.entity;
 
 import java.util.Date;
 
+import org.hibernate.validator.constraints.Length;
+
 import lombok.Data;
 
 /**
@@ -39,6 +41,7 @@ public class BaseEntity<PK> {
      * 更新方法自动处理
      */
     private Date updateTime;
+    @Length(max = 255)
     private String remarks;
 
 }
