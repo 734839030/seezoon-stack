@@ -19,6 +19,7 @@
         <commons-text.version>1.9</commons-text.version>
         <fastjson.version>1.2.75</fastjson.version>
         <springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
+        <knife4j-spring-boot-starter.version>3.0.1</knife4j-spring-boot-starter.version>
     </properties>
     <dependencies>
         <dependency>
@@ -53,6 +54,11 @@
             <groupId>io.springfox</groupId>
             <artifactId>springfox-boot-starter</artifactId>
             <version>${springfox-boot-starter.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <version>${knife4j-spring-boot-starter.version}</version>
         </dependency>
     </dependencies>
     <build>

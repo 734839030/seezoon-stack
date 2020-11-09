@@ -1,5 +1,7 @@
 package com.seezoon.framework.api;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,14 +14,20 @@ import lombok.Setter;
  *
  * @author hdf
  */
+@ApiModel
 @Getter
 @Setter
 public class Result<T> {
 
     public final static Result SUCCESS = new Result(DefaultCodeMsgBundle.SUCCESS);
 
+    @ApiModelProperty("响应码-0成功")
     private String code;
+
+    @ApiModelProperty("响应消息")
     private String msg;
+
+    @ApiModelProperty("业务字段")
     private T data;
 
     private Result(String code, String msg, Object... args) {

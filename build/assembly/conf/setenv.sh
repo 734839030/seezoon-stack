@@ -1,5 +1,7 @@
-# 默认使用系统环境变量中的java命令
+# 如果不设置，默认使用系统环境变量中的java命令
 #JAVA_HOME="/usr/local/jdk"
+# 远程调试功能for > jdk1.5
+# -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
 # for jdk version >= 11
 JAVA_OPTS="-Xmx512m -Xms128m -XX:+UseG1GC -verbose:gc -Xlog:gc*,safepoint:./logs/gc.log:time,uptime:filecount=10,filesize=10M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./logs/dump"
 # for 1.7 < jdk version < 11

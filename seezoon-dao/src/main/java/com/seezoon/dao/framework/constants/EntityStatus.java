@@ -7,15 +7,15 @@ public enum EntityStatus {
     /**
      * DB 字段默认状态
      */
-    NORMAL((byte)1), INVALID((byte)0);
+    NORMAL(1), INVALID(0);
 
-    private byte status;
+    private int status;
 
-    EntityStatus(byte status) {
+    EntityStatus(int status) {
         this.status = status;
     }
 
-    public byte status() {
+    public int status() {
         return status;
     }
 }

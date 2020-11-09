@@ -13,11 +13,15 @@ import com.seezoon.dao.modules.sys.entity.SysParamCondition;
 import com.seezoon.framework.api.Result;
 import com.seezoon.framework.web.BaseController;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 
 /**
  * @author hdf
  */
+@Api(tags = "系统参数")
 @RestController
 @RequestMapping("/sys")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -25,12 +29,14 @@ public class SysParamController extends BaseController {
 
     private final SysParamService sysParamService;
 
+    @ApiOperation(value = "主键查询")
     @GetMapping("/queryById")
-    public Result<SysParam> queryById(@NotNull Integer id) {
+    public Result<SysParam> queryById(@NotNull @ApiParam(value = "主键", required = true) Integer id) {
         SysParam sysParam = sysParamService.findById(id);
         return Result.ok(sysParam);
     }
 
+    @ApiOperation(value = "分页查询")
     @PostMapping("/queryByPage")
     public Result<PageInfo<SysParam>> queryByPage(SysParamCondition condition) {
         PageInfo<SysParam> pageInfo =
@@ -38,20 +44,23 @@ public class SysParamController extends BaseController {
         return Result.ok(pageInfo);
     }
 
+    @ApiOperation(value = "保存")
     @PostMapping(value = "/save")
     public Result save(@Validated @RequestBody SysParam sysParam) {
         sysParamService.save(sysParam);
         return Result.SUCCESS;
     }
 
+    @ApiOperation(value = "更新")
     @PostMapping(value = "/update")
     public Result update(@Validated @RequestBody SysParam sysParam) {
-        sysParamService.update(sysParam);
+        sysParamService.updateSelective(sysParam);
         return Result.SUCCESS;
     }
 
+    @ApiOperation(value = "删除")
     @PostMapping(value = "/delete")
-    public Result delete(@NotNull Integer id) {
+    public Result delete(@NotNull @ApiParam(value = "主键", required = true) Integer id) {
         sysParamService.delete(id);
         return Result.SUCCESS;
     }

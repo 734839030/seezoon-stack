@@ -16,6 +16,6 @@ public class SysParamCondition extends PageCondition {
 
     private String name;
     private String paramKey;
-    private Byte status;
+    private Integer status;
 
 }
