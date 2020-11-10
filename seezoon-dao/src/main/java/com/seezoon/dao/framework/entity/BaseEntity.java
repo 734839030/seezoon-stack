@@ -23,7 +23,9 @@ public class BaseEntity<PK> {
     @ApiModelProperty("*内置*-主键")
     private PK id;
     /**
-     * 数据状态 {@link com.seezoon.dao.framework.constants.EntityStatus}
+     * 数据状态 一般表建议不要这个字段，设计上没有软删除场景，如果有就用
+     *
+     * {@link com.seezoon.dao.framework.constants.EntityStatus}
      *
      * 使用Integer 写代码更方便
      *

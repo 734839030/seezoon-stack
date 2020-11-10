@@ -3,10 +3,9 @@ package com.seezoon.framework.autoconfigure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.ServletComponentScan;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
+
+import com.seezoon.framework.web.AutoWebMvcConfigurer;
 
 import io.swagger.annotations.Api;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -31,6 +30,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 @ServletComponentScan("com.seezoon.framework.servlet")
 @ComponentScan("com.seezoon.framework.web.advice")
 @EnableOpenApi
+@Import({AutoWebMvcConfigurer.class})
 public class SeezoonFrameworkAutoConfiguration {
 
     @Autowired

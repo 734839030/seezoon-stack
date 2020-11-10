@@ -13,12 +13,12 @@ public class PageCondition extends QueryCondition {
     /**
      * 页码
      */
-    @ApiModelProperty(value = "页码(分页请求必传)", required = true)
+    @ApiModelProperty(value = "页码(分页请求必传)")
     private int page = 1;
     /**
      * 默认每页大小
      */
-    @ApiModelProperty(value = "每页大小(分页请求必传)", required = true)
+    @ApiModelProperty(value = "每页大小(分页请求必传)")
     private int pageSize = 20;
 
     public int getPage() {
