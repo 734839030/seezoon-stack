@@ -4,8 +4,7 @@ import java.util.Date;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-
-import org.hibernate.validator.constraints.Length;
+import javax.validation.constraints.Size;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -57,7 +56,7 @@ public class BaseEntity<PK> {
     private Date updateTime;
 
     @ApiModelProperty("*内置*-备注")
-    @Length(max = 255)
+    @Size(max = 255)
     private String remarks;
 
 }

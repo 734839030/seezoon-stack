@@ -1,7 +1,5 @@
 package com.seezoon.admin.modules.sys.controller;
 
-import javax.validation.constraints.NotNull;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +13,6 @@ import com.seezoon.framework.web.BaseController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -31,7 +28,7 @@ public class SysParamController extends BaseController {
 
     @ApiOperation(value = "主键查询")
     @GetMapping("/queryById")
-    public Result<SysParam> queryById(@NotNull @ApiParam(value = "主键", required = true) Integer id) {
+    public Result<SysParam> queryById(@RequestParam Integer id) {
         SysParam sysParam = sysParamService.findById(id);
         return Result.ok(sysParam);
     }
@@ -60,7 +57,7 @@ public class SysParamController extends BaseController {
 
     @ApiOperation(value = "删除")
     @PostMapping(value = "/delete")
-    public Result delete(@NotNull @ApiParam(value = "主键", required = true) Integer id) {
+    public Result delete(@RequestParam Integer id) {
         sysParamService.delete(id);
         return Result.SUCCESS;
     }

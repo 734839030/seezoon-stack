@@ -39,6 +39,8 @@ public class SeezoonFrameworkAutoConfiguration {
     /**
      * @see <a>http://127.0.0.1:8080/swagger-ui/index.html</a>
      * @see <a>http://127.0.0.1:8080/doc.html</a>
+     *
+     * @see <a>http://springfox.github.io/springfox/docs/current/</a>
      * @return
      */
     @Bean
