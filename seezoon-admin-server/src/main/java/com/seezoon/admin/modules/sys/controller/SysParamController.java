@@ -1,6 +1,5 @@
 package com.seezoon.admin.modules.sys.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @Api(tags = "系统参数")
 @RestController
 @RequestMapping("/sys")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 public class SysParamController extends BaseController {
 
     private final SysParamService sysParamService;
