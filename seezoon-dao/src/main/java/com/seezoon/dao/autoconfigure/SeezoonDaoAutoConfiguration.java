@@ -14,6 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.retry.support.RetryTemplate;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -33,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 @ComponentScan("com.seezoon.dao.modules.*")
 @PropertySource("classpath:default-datasource.properties")
 @AutoConfigureAfter({MybatisAutoConfiguration.class})
+@EnableTransactionManagement(proxyTargetClass = true)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class SeezoonDaoAutoConfiguration implements InitializingBean {
 

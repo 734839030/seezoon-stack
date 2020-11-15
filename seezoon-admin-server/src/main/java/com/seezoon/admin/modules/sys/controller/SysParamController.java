@@ -1,5 +1,7 @@
 package com.seezoon.admin.modules.sys.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +29,8 @@ public class SysParamController extends BaseController {
 
     @ApiOperation(value = "主键查询")
     @GetMapping("/queryById")
-    public Result<SysParam> queryById(@RequestParam Integer id) {
+    public Result<SysParam> queryById(@RequestParam Integer id, HttpSession session) {
+        int maxInactiveInterval = session.getMaxInactiveInterval();
         SysParam sysParam = sysParamService.findById(id);
         return Result.ok(sysParam);
     }
