@@ -10,8 +10,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "framework")
-public class FrameworkProperties {
+@ConfigurationProperties(prefix = "seezoon")
+public class SeezoonProperties {
     private String name;
     private String version;
     private String url;

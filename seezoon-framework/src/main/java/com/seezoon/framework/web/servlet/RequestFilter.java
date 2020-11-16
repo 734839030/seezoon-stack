@@ -1,15 +1,11 @@
-package com.seezoon.framework.servlet;
+package com.seezoon.framework.web.servlet;
 
 import java.io.IOException;
 import java.util.Map;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 
 import com.alibaba.fastjson.JSON;
 import com.seezoon.framework.log.MdcHelper;
@@ -19,10 +15,13 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * 框架中做请求的拦截处理
  *
+ * 未添加{@code  @WebFilter}，不让@ServletComponentScan 扫描，采用spring 加载servlet filter，可以调整顺序，
+ *
+ * 比如可以早于spring security filter的顺序
+ *
+ *
  * @author hdf
  */
-@WebFilter
-@Order(Ordered.HIGHEST_PRECEDENCE)
 @Slf4j
 public class RequestFilter implements Filter {
 

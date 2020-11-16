@@ -53,6 +53,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // seesion 管理 default is this,you can set lot of param.
         http.sessionManagement();
 
+        http.rememberMe().tokenValiditySeconds(7 * 24 * 60 * 60).userDetailsService(adminUserDetailsService());
+
         // 安全头设置
         http.headers().defaultsDisabled()// 关闭默认
             // 浏览器根据respone content type 格式解析资源

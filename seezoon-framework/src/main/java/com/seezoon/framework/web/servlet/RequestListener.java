@@ -1,12 +1,9 @@
-package com.seezoon.framework.servlet;
+package com.seezoon.framework.web.servlet;
 
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 
 import com.seezoon.framework.log.MdcHelper;
 
@@ -22,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
  * @author hdf
  */
 @WebListener
-@Order(Ordered.HIGHEST_PRECEDENCE)
 @Slf4j
 public class RequestListener implements ServletRequestListener {
 
@@ -31,6 +27,7 @@ public class RequestListener implements ServletRequestListener {
         HttpServletRequest servletRequest = (HttpServletRequest)sre.getServletRequest();
         // 处理调用链信息
         String traceId = servletRequest.getHeader(MdcHelper.HTTP_HEADER);
+        // 如果traceId 为空则自动生成
         MdcHelper.put(traceId);
 
     }

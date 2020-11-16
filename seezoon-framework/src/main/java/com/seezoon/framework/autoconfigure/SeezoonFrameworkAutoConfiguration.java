@@ -1,5 +1,7 @@
 package com.seezoon.framework.autoconfigure;
 
+import javax.servlet.ServletRequestListener;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.ServletComponentScan;
@@ -19,36 +21,39 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 /**
  * event listener 通过spring.factories 加载
- *
+ * <p>
  * 通过{@code @ComponentScan }扫描advice 也可以使用@import
  *
  * @author hdf
  */
 @Configuration
-@EnableConfigurationProperties(FrameworkProperties.class)
+@EnableConfigurationProperties(SeezoonProperties.class)
 @PropertySource({"classpath:default-framework.properties"})
-@ServletComponentScan("com.seezoon.framework.servlet")
-@ComponentScan("com.seezoon.framework.web.advice")
+@ServletComponentScan(basePackages = "com.seezoon.framework.web.servlet",
+    basePackageClasses = ServletRequestListener.class)
+@ComponentScan({"com.seezoon.framework.web.advice", "com.seezoon.framework.component"})
 @EnableOpenApi
 @Import({AutoWebMvcConfigurer.class})
 public class SeezoonFrameworkAutoConfiguration {
 
     @Autowired
-    private FrameworkProperties frameworkProperties;
+    private SeezoonProperties seezoonProperties;
 
     /**
+     * doc 配置
+     *
+     * @return
      * @see <a>http://127.0.0.1:8080/swagger-ui/index.html</a>
      * @see <a>http://127.0.0.1:8080/doc.html</a>
-     *
      * @see <a>http://springfox.github.io/springfox/docs/current/</a>
-     * @return
      */
     @Bean
     public Docket openApiStore() {
-        ApiInfo apiInfo = new ApiInfoBuilder().title(frameworkProperties.getName())
-            .description(frameworkProperties.getDescription()).contact(new Contact(frameworkProperties.getName(),
-                frameworkProperties.getUrl(), frameworkProperties.getAuthor()))
-            .version(frameworkProperties.getVersion()).build();
+        ApiInfo apiInfo =
+            new ApiInfoBuilder().title(seezoonProperties.getName()).description(seezoonProperties.getDescription())
+                .contact(
+                    new Contact(seezoonProperties.getName(), seezoonProperties.getUrl(), seezoonProperties.getAuthor()))
+                .version(seezoonProperties.getVersion()).build();
 
         return new Docket(DocumentationType.OAS_30).apiInfo(apiInfo).select()
             .apis(RequestHandlerSelectors.withClassAnnotation(Api.class)).paths(PathSelectors.any()).build()
