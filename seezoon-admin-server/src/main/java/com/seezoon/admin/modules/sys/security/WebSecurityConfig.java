@@ -2,13 +2,17 @@ package com.seezoon.admin.modules.sys.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.seezoon.admin.modules.sys.security.handler.AdminAccessDeniedHandler;
 import com.seezoon.admin.modules.sys.security.handler.AjaxAuthenticationFailureHandler;
@@ -16,6 +20,22 @@ import com.seezoon.admin.modules.sys.security.handler.AjaxAuthenticationSuccessH
 import com.seezoon.admin.modules.sys.security.handler.AjaxLogoutSuccessHandler;
 
 /**
+ * <code>
+ *     账号密码登录
+ *     url:/login
+ *     method:POST
+ *     param:
+ *          username
+ *          password
+ *          remember-me
+ *
+ *     退出登录
+ *     url:/logout
+ *     method:POST
+ *
+ * </code>
+ *
+ *
  * 安全配置
  *
  * @see <a>https://docs.spring.io/spring-security/site/docs/5.4.1/reference/html5</a>
@@ -25,6 +45,8 @@ import com.seezoon.admin.modules.sys.security.handler.AjaxLogoutSuccessHandler;
  * @author hdf
  */
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+@ControllerAdvice
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String PUBLIC_ANT_PATH = "/public/**";
@@ -45,13 +67,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // 以下为公共逻辑 如果要扩展登录方式，只需要添加类似UsernamePasswordAuthenticationFilter-> DaoAuthenticationProvider 这种整套逻辑
         // 登出处理
         http.logout().logoutUrl(LOGIN_OUT_URL).logoutSuccessHandler(ajaxLogoutSuccessHandler());
-        // 默认认证过程中的异常处理，accessDeniedHandler 默认为也是返回403
+        // 默认认证过程中的异常处理，accessDeniedHandler 默认为也是返回403，spring security
+        // 是在filter级别抓住异常回调handler的,所以会被全局拦截器模式@ExceptionHandler 吃掉
         http.exceptionHandling().accessDeniedHandler(new AdminAccessDeniedHandler())
             // 到认证环节的入口逻辑,默认是跳页
             .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
 
-        // seesion 管理 default is this,you can set lot of param.
-        http.sessionManagement();
+        // seesion 管理 一个账号登录一次，后面的挤掉前面的(spring security 默认的,true 则已登录的优先)
+        // remember 采用默认解密前端remember-cookie,修改密码后防止其他人通过remeber登录，也可以采用DB的remember 方案，不过没必要
+        http.sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(false);
 
         http.rememberMe().tokenValiditySeconds(7 * 24 * 60 * 60).userDetailsService(adminUserDetailsService());
 
@@ -63,9 +87,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and().xssProtection()
             // 同域名可以通过frame
             .and().frameOptions().sameOrigin()
-            // CSRF 攻击
+            // CSRF 攻击 开发时候暂时disable
             .and().csrf().ignoringAntMatchers(PUBLIC_ANT_PATH, LOGIN_URL)
-            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).disable();
+    }
+
+    /**
+     * 防止被上层的@ExceptionHandler 范围更大的给拦截住，而无法调用accessDeniedHandler
+     *
+     * @param e
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    public void accessDeniedException(AccessDeniedException e) {
+        throw e;
     }
 
     @Override

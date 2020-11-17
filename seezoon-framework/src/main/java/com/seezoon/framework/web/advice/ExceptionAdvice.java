@@ -60,7 +60,7 @@ public class ExceptionAdvice {
      * @return
      */
     @ExceptionHandler(Exception.class)
-    public Result exception(Exception e) {
+    public Result exception(Exception e) throws Exception {
         logger.error("global exception ", e);
         return Result.error(DefaultCodeMsgBundle.UNKNOWN, e.getMessage());
     }

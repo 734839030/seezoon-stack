@@ -2,6 +2,7 @@ package com.seezoon.admin.modules.sys.controller;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,7 @@ public class SysParamController extends BaseController {
 
     private final SysParamService sysParamService;
 
+    @PreAuthorize("hasAuthority('ROLE_ADMIN1')")
     @ApiOperation(value = "主键查询")
     @GetMapping("/queryById")
     public Result<SysParam> queryById(@RequestParam Integer id, HttpSession session) {
