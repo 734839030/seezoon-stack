@@ -13,15 +13,6 @@
     <name>Seezoon Framework</name>
     <artifactId>seezoon-framework</artifactId>
 
-    <properties>
-        <guava.version>30.0-jre</guava.version>
-        <guava.version>30.0-jre</guava.version>
-        <commons-text.version>1.9</commons-text.version>
-        <fastjson.version>1.2.75</fastjson.version>
-        <springfox-boot-starter.version>3.0.0</springfox-boot-starter.version>
-        <springfox-bean-validators.version>3.0.0</springfox-bean-validators.version>
-        <knife4j-spring-ui.version>3.0.1</knife4j-spring-ui.version>
-    </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

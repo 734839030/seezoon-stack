@@ -12,13 +12,39 @@
     <name>Seezoon Generator</name>
     <artifactId>seezoon-generator</artifactId>
 
+    <properties>
+        <mybatis-generator-maven-plugin.version>1.4.0</mybatis-generator-maven-plugin.version>
+        <mysql-connector-java.version>8.0.22</mysql-connector-java.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>${mybatis-spring-boot-starter.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>application.properties</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
             <!-- see http://mybatis.org/generator/running/runningWithMaven.html# -->
             <plugin>
                 <groupId>org.mybatis.generator</groupId>
                 <artifactId>mybatis-generator-maven-plugin</artifactId>
-                <version>1.4.0</version>
+                <version>${mybatis-generator-maven-plugin.version}</version>
                 <configuration>
                     <configurationFile>${project.parent.basedir}/build/mybatis-generator-config.xml</configurationFile>
                     <overwrite>true</overwrite>
@@ -27,7 +53,7 @@
                     <dependency>
                         <groupId>mysql</groupId>
                         <artifactId>mysql-connector-java</artifactId>
-                        <version>8.0.22</version>
+                        <version>${mysql-connector-java.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
