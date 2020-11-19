@@ -14,9 +14,11 @@ import org.springframework.util.Assert;
  *      &#64;PreAuthorize("hasAuthority('ROLE_admin')")
  *      &#64;PreAuthorize("hasRole('admin')")
  * </code>
+ *
+ * @author hdf
  */
 public class UserGrantedAuthority implements GrantedAuthority {
-    private static final String defaultRolePrefix = "ROLE_";
+    private static final String DEFAULT_ROLE_PREFIX = "ROLE_";
 
     private static final long serialVersionUID = 1L;
     private String authorityName;
@@ -27,7 +29,7 @@ public class UserGrantedAuthority implements GrantedAuthority {
 
     public UserGrantedAuthority(String authorityName, boolean isRole) {
         Assert.hasText(authorityName, "A granted authority textual representation is required");
-        this.authorityName = isRole ? defaultRolePrefix + authorityName : authorityName;
+        this.authorityName = isRole ? DEFAULT_ROLE_PREFIX + authorityName : authorityName;
     }
 
     @Override

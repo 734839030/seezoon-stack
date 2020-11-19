@@ -62,8 +62,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin().loginProcessingUrl(LOGIN_URL).successHandler(ajaxAuthenticationSuccessHandler())
             .failureHandler(ajaxAuthenticationFailureHandler());
 
-        // http.authenticationProvider()
-        // http.userDetailsService(adminUserDetailsService());
         // 以下为公共逻辑 如果要扩展登录方式，只需要添加类似UsernamePasswordAuthenticationFilter-> DaoAuthenticationProvider 这种整套逻辑
         // 登出处理
         http.logout().logoutUrl(LOGIN_OUT_URL).logoutSuccessHandler(ajaxLogoutSuccessHandler());
@@ -76,9 +74,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // seesion 管理 一个账号登录一次，后面的挤掉前面的(spring security 默认的,true 则已登录的优先)
         // remember 采用默认解密前端remember-cookie,修改密码后防止其他人通过remeber登录，也可以采用DB的remember 方案，不过没必要
         http.sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(false);
-
         http.rememberMe().tokenValiditySeconds(7 * 24 * 60 * 60).userDetailsService(adminUserDetailsService());
-
+        http.cors();
         // 安全头设置
         http.headers().defaultsDisabled()// 关闭默认
             // 浏览器根据respone content type 格式解析资源
@@ -124,7 +121,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public AdminUserDetailsService adminUserDetailsService() {
-        return new AdminUserDetailsService();
+    public AdminUserDetailsServiceImpl adminUserDetailsService() {
+        return new AdminUserDetailsServiceImpl();
     }
 }
