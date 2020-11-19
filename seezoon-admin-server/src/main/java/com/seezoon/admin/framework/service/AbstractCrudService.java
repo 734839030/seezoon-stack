@@ -18,7 +18,7 @@ import com.seezoon.dao.framework.entity.QueryCondition;
  * @author hdf
  */
 public abstract class AbstractCrudService<D extends CrudDao<T, PK>, T extends BaseEntity<PK>, PK>
-    extends AutoTransactionService {
+    extends AbstractTransactionService {
 
     @SuppressWarnings("all")
     @Autowired

@@ -8,7 +8,7 @@ import org.springframework.validation.annotation.Validated;
  * @author hdf
  */
 @Validated
-public abstract class BaseService {
+public abstract class AbstractBaseService {
 
     /**
      * 提供日志对象

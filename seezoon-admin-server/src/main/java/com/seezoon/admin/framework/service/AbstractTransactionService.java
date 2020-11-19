@@ -8,6 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @author hdf
  */
 @Transactional(rollbackFor = Exception.class)
-public class AutoTransactionService extends BaseService {
+public abstract class AbstractTransactionService extends AbstractBaseService {
 
 }

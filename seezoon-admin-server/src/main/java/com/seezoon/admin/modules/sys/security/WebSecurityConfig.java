@@ -6,6 +6,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -49,9 +50,14 @@ import com.seezoon.admin.modules.sys.security.handler.AjaxLogoutSuccessHandler;
 @ControllerAdvice
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    public static final String[] static_resources =
+        {"/**/*.html", "/**/*.js", "/**/*.css", "/**/*.ico", "/**/*.png", "/**/*.jpg"};
+
+    public static final String[] DOC_API = {"/swagger-resources/**", "/**/api-docs"};
     private static final String PUBLIC_ANT_PATH = "/public/**";
     private static final String LOGIN_URL = "/login";
     private static final String LOGIN_OUT_URL = "/logout";
+    private static final String rememberKey = "C02tlRRi8JNsT6Bsp2liSE1paa5naDNY";
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -72,10 +78,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
 
         // seesion 管理 一个账号登录一次，后面的挤掉前面的(spring security 默认的,true 则已登录的优先)
-        // remember 采用默认解密前端remember-cookie,修改密码后防止其他人通过remeber登录，也可以采用DB的remember 方案，不过没必要
+        // remember 采用默认解密前端remember-cookie
         http.sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(false);
-        http.rememberMe().tokenValiditySeconds(7 * 24 * 60 * 60).userDetailsService(adminUserDetailsService());
-        http.cors();
+        http.rememberMe().key(rememberKey).tokenValiditySeconds(7 * 24 * 60 * 60)
+            .userDetailsService(adminUserDetailsService());
+
         // 安全头设置
         http.headers().defaultsDisabled()// 关闭默认
             // 浏览器根据respone content type 格式解析资源
@@ -87,6 +94,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             // CSRF 攻击 开发时候暂时disable
             .and().csrf().ignoringAntMatchers(PUBLIC_ANT_PATH, LOGIN_URL)
             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).disable();
+    }
+
+    /**
+     * 忽略静态资源在HttpSecurity前面
+     *
+     * @param web
+     * @throws Exception
+     */
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        // 按需忽略
+        web.ignoring().antMatchers(static_resources).antMatchers(DOC_API);
     }
 
     /**
