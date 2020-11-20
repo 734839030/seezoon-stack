@@ -7,7 +7,7 @@
     <parent>
         <groupId>com.seezoon</groupId>
         <artifactId>seezoon-stack</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.2-SNAPSHOT</version>
     </parent>
 
     <name>Seezoon Framework</name>

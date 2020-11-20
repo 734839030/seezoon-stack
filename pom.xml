@@ -6,7 +6,7 @@
 
     <groupId>com.seezoon</groupId>
     <artifactId>seezoon-stack</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Seezoon Stack</name>
@@ -34,6 +34,7 @@
     <properties>
         <!-- default version 1.8 -->
         <java.version>11</java.version>
+        <skipTests>true</skipTests>
         <!-- DB-->
         <mybatis-spring-boot-starter.version>2.1.3</mybatis-spring-boot-starter.version>
         <pagehelper-spring-boot-starter.version>1.3.0</pagehelper-spring-boot-starter.version>

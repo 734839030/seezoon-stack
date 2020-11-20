@@ -7,14 +7,16 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 数据库实体基类，框架默认字段，已实际表为准
  *
  * @author hdf
  */
-@Data
+@Getter
+@Setter
 public class BaseEntity<PK> {
 
     /**

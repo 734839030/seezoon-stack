@@ -1,0 +1,19 @@
+# 转换地址 https://tree.nathanfriend.io/
+seezoon-stack   parent工程
+  build 构建所需文件
+    assembly    生成产出物结构
+      bin     项目脚本
+      conf    配置目录
+      logs    日志目录
+      assembly.xml     maven assembly 打包插件描述文件(不打包到产出物)
+    build.sh    构建脚本
+    eclipse-codestyle.xml  P3C代码格式
+    maven-settings.xml     maven的setting配置(可选)
+    mybatis-generator-config.xml  原生mybatis-generator 描述文件
+  doc 项目文档及资料维护目录
+  seezoon-admin-server  管理端服务
+  seezoon-dao    DAO层，方便管理端和C端引用
+  seezoon-framework  管理端和C端通用框架层(基础中间件,参数验证，安全控制)
+  seezoon-generator  通用代码生成器，可以单独使用也可以供其他组件继承使用
+  seezoon-user-server  C端服务端
+
