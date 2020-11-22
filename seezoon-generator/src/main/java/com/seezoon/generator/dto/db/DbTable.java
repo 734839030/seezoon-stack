@@ -1,4 +1,4 @@
-package com.seezoon.generator.dto;
+package com.seezoon.generator.dto.db;
 
 import lombok.Getter;
 import lombok.Setter;

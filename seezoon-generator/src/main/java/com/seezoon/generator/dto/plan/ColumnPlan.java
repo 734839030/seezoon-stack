@@ -1,16 +1,24 @@
-package com.seezoon.generator.dto;
+package com.seezoon.generator.dto.plan;
 
+import com.seezoon.generator.constants.InputType;
+import com.seezoon.generator.constants.QueryType;
+import com.seezoon.generator.constants.db.ColumnDataType;
+import com.seezoon.generator.constants.db.ColumnExtra;
+import com.seezoon.generator.constants.db.ColumnKey;
+
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 代码生成每列的信息
+ * 代码生成每列的生成方案
  *
  * @author hdf 2018年4月27日
  */
 @Getter
 @Setter
-public class GenColumnInfo implements Comparable<GenColumnInfo> {
+@Builder
+public class ColumnPlan implements Comparable<ColumnPlan> {
 
     /**
      * DB 列名称
@@ -21,33 +29,27 @@ public class GenColumnInfo implements Comparable<GenColumnInfo> {
      */
     private String columnComment;
     /**
-     * 主键类型 如PRI
+     * 主键类型 如PRI(主键) UNI(唯一) MUL(普通索引) {@link ColumnKey}
      */
-    private String columnKey;
+    private ColumnKey columnKey;
     /**
      * 主键额外说明 如auto_increment
      */
-    private String extra;
+    private ColumnExtra extra;
     /**
      * 列类型 eg:varchar(64)
      */
     private String columnType;
     /**
-     * 数据类型eg:varchar
+     * 数据类型eg DB:varchar jdbcType:VARCHAR,javaType:String
      */
-    private String dataType;
+    private ColumnDataType dataType;
     /**
      * 字段长度eg:64
      */
-    private Long maxLength;
-    /**
-     * 对应的java类型
-     */
-    private String javaType;
-    /**
-     * 对应的mysbtis JDBC类型
-     */
-    private String jdbcType;
+    private Integer maxLength;
+
+    // 如下字段接收前端参数设置
     /**
      * 字段名称
      */
@@ -55,7 +57,11 @@ public class GenColumnInfo implements Comparable<GenColumnInfo> {
     /**
      * 是否可空
      */
-    private Boolean nullable;
+    private boolean nullable;
+    /**
+     * 排序
+     */
+    private Integer sort;
     /**
      * 是否可插入
      */
@@ -77,24 +83,20 @@ public class GenColumnInfo implements Comparable<GenColumnInfo> {
      */
     private boolean search;
     /**
-     * 查询方式，eg >= = <= like等
+     * 查询方式 {@link QueryType}
      */
-    private String queryType;
+    private QueryType queryType;
     /**
-     * 表单类型
+     * 表单类型 {@link InputType}
      */
-    private String inputType;
+    private InputType inputType;
     /**
      * 字典类型
      */
     private String dictType;
-    /**
-     * 排序
-     */
-    private Integer sort;
 
     @Override
-    public int compareTo(GenColumnInfo o) {
+    public int compareTo(ColumnPlan o) {
         return this.sort - o.getSort();
     }
 

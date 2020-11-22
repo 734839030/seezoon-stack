@@ -13,7 +13,7 @@ import lombok.val;
 class TableInfoDaoTest {
 
     @Autowired
-    private TableInfoDao tableInfoDao;
+    private GeneratorDao tableInfoDao;
 
     @Test
     void findTable() {

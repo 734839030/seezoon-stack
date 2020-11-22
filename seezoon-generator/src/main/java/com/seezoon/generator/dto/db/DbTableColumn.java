@@ -1,4 +1,4 @@
-package com.seezoon.generator.dto;
+package com.seezoon.generator.dto.db;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,11 +14,11 @@ import lombok.Setter;
 public class DbTableColumn {
 
     private String name;
+    private String comment;
     private Boolean nullable;
     private Integer sort;
-    private String comment;
     private String dataType;
-    private Long maxlength;
+    private Integer maxlength;
     private String columnType;
     private String columnKey;
     private String extra;

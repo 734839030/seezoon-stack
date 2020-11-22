@@ -53,7 +53,7 @@
 
 - `Idea` 中安装`Eclipse Code Formatter`导入`build/eclipse-codestyle.xml`,同时`Save Actions`插件，便于在自动格式化.
 
-代码格式检查，可以再提交时候自动检查，安装`Alibaba Java Coding Guidelines`插件，也可以使用PMD maven插件检查，在开发阶段的自我约束.
+代码格式检查，可以再提交时候自动检查，安装`Alibaba Java Coding Guidelines`插件，也可以使用`PMD maven`插件检查，在开发阶段的自我约束.
 
 - 自行安装`lombok`插件
 
@@ -154,7 +154,7 @@
 
 - 公共DAO层，基本CRUD皆为代码生成，引用该层的模块自动开启事务。
 
-- DB默认参数在`default-datasource.properties`,同理内部属性值可以配外部覆盖。
+- DB默认参数在`default-datasource.properties`,同理内部属性值可以被外部覆盖。
 
 - 以前一直使用`Druid`连接池，但新版本`spring boot`直接默认`HikariDataSource`,未来可能成为主流，因为`Druid`的优点在于监控及自定义插件，我们目前没有这些需求,监控可以用云厂商DB，或者开启mysql的慢日志查询来定位。
 - `HikariDataSource`启动不会默认初始化池子(也没有参数控制)，这个很不好，未来可能会变，目前我们在该组件自动配置时候会初始化池子，并采用`retry`的模型一致重试。

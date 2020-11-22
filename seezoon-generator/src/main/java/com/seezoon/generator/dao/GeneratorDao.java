@@ -6,8 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
-import com.seezoon.generator.dto.DbTable;
-import com.seezoon.generator.dto.DbTableColumn;
+import com.seezoon.generator.dto.db.DbTable;
+import com.seezoon.generator.dto.db.DbTableColumn;
 
 /**
  * 获取表信息DAO
@@ -18,7 +18,7 @@ import com.seezoon.generator.dto.DbTableColumn;
  */
 @Mapper
 @Repository
-public interface TableInfoDao {
+public interface GeneratorDao {
     // @formatter:off
     @Select({"<script>",
             "select table_name name, table_comment comment from information_schema.tables",
@@ -31,9 +31,10 @@ public interface TableInfoDao {
             "order by create_time desc",
             "</script>"})
     public List<DbTable> findTable(String tableName);
+
     @Select({"<script>",
             "select",
-            "lower(t.column_name) name,",
+            "t.column_name name,",
             "if(t.is_nullable = 'yes' , true , false) nullable,",
             "(t.ordinal_position * 10) sort ,",
             "t.column_comment comment ,",
