@@ -1,9 +1,9 @@
 package com.seezoon.admin.modules.sys.controller;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.github.pagehelper.PageInfo;
@@ -28,7 +28,7 @@ public class SysParamController extends BaseController {
 
     private final SysParamService sysParamService;
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN1')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @ApiOperation(value = "主键查询")
     @GetMapping("/queryById")
     public Result<SysParam> queryById(@RequestParam Integer id, HttpSession session) {
@@ -47,14 +47,14 @@ public class SysParamController extends BaseController {
 
     @ApiOperation(value = "保存")
     @PostMapping(value = "/save")
-    public Result save(@Validated @RequestBody SysParam sysParam) {
+    public Result save(@Valid @RequestBody SysParam sysParam) {
         sysParamService.save(sysParam);
         return Result.SUCCESS;
     }
 
     @ApiOperation(value = "更新")
     @PostMapping(value = "/update")
-    public Result update(@Validated @RequestBody SysParam sysParam) {
+    public Result update(@Valid @RequestBody SysParam sysParam) {
         sysParamService.updateSelective(sysParam);
         return Result.SUCCESS;
     }

@@ -1,4 +1,4 @@
-package com.seezoon.generator.dto.plan;
+package com.seezoon.generator.plan;
 
 import com.seezoon.generator.constants.InputType;
 import com.seezoon.generator.constants.QueryType;
@@ -27,7 +27,7 @@ public class ColumnPlan implements Comparable<ColumnPlan> {
     /**
      * 列备注
      */
-    private String columnComment;
+    private String fieldName;
     /**
      * 主键类型 如PRI(主键) UNI(唯一) MUL(普通索引) {@link ColumnKey}
      */

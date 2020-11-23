@@ -35,7 +35,7 @@ public enum InputType {
 
     RICHTEXT("richtext"),
 
-    PICTURE("picture"),
+    IMAGE("image"),
 
     FILE("file"),;
 

@@ -1,13 +1,6 @@
-package com.seezoon.generator.dto.plan;
+package com.seezoon.generator.plan;
 
 import java.util.List;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.Length;
 
 import com.seezoon.generator.constants.TemplateType;
 
@@ -26,47 +19,35 @@ public class TablePlan {
     /**
      * 表名
      */
-    @NotEmpty
-    @Size(min = 1, max = 32)
     private String tableName;
 
     /**
      * 菜单名，默认为DB表的备注
      */
-    @NotEmpty
-    @Length(min = 1, max = 50)
+
     private String menuName;
 
     /**
      * 模块名，默认为表的前缀
      */
-    @NotEmpty
-    @Length(min = 1, max = 10)
     private String moduleName;
     /**
      * 功能模块，默认为去掉前缀
      */
-    @NotEmpty
-    @Length(min = 1, max = 20)
     private String functionName;
     /**
      * 生成模板,保留,方便未来生成树结构等
      */
-    @NotNull
     private TemplateType templateType;
 
     /**
      * 类名，默认表名转大驼峰
      */
-    @NotEmpty
-    @Length(min = 1, max = 50)
     private String className;
 
     /**
      * 字段方案
      */
-    @Valid
-    @NotEmpty
     private List<ColumnPlan> columnPlans;
     /**
      * 是否引入Date

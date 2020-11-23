@@ -1,4 +1,4 @@
-package com.seezoon.generator.service;
+package com.seezoon.generator.plan.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -10,8 +10,6 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.CaseUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import com.seezoon.generator.constants.InputType;
 import com.seezoon.generator.constants.QueryType;
@@ -20,24 +18,18 @@ import com.seezoon.generator.constants.db.ColumnDataType;
 import com.seezoon.generator.constants.db.ColumnExtra;
 import com.seezoon.generator.constants.db.ColumnKey;
 import com.seezoon.generator.constants.db.DefaultColumns;
-import com.seezoon.generator.dao.GeneratorDao;
 import com.seezoon.generator.dto.db.DbTable;
 import com.seezoon.generator.dto.db.DbTableColumn;
-import com.seezoon.generator.dto.plan.ColumnPlan;
-import com.seezoon.generator.dto.plan.TablePlan;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
+import com.seezoon.generator.plan.ColumnPlan;
+import com.seezoon.generator.plan.TablePlan;
+import com.seezoon.generator.plan.TablePlanHandler;
 
 /**
- * 根据DB信息获得生成方案
+ * 系统默认生成方案
  *
  * @author hdf
  */
-@Log
-@RequiredArgsConstructor
-@Service
-public class SystemTablePlanMaker {
+public class SystemTablePlanHandlerImpl implements TablePlanHandler {
 
     /**
      * DB 及表字段的分隔符
@@ -46,24 +38,14 @@ public class SystemTablePlanMaker {
     private static final String[] DEFAULT_NOT_UPDATE_COLUMNS = {"id", "create_by", "create_date"};
     private static final String[] DEFAULT_NOT_LIST_COLUMNS = {"id", "create_by", "create_time", "update_by", "remarks"};
 
-    private final GeneratorDao generatorDao;
-
-    public TablePlan getPlan(String tableName) {
-        Assert.hasText(tableName, "tableName must not empty");
-        List<DbTable> dbTables = generatorDao.findTable(tableName);
-        Assert.notEmpty(dbTables, String.format("can't find tableName:%s", tableName));
-        DbTable dbTable = dbTables.get(0);
-        List<DbTableColumn> dbTableColumns = generatorDao.findColumnByTableName(tableName);
-        return createDefaultTablePlan(dbTable, dbTableColumns);
-    }
-
-    private TablePlan createDefaultTablePlan(DbTable dbTable, List<DbTableColumn> dbTableColumns) {
+    @Override
+    public TablePlan generatePlan(DbTable dbTable, List<DbTableColumn> dbTableColumns) {
         TablePlan tablePlan = new TablePlan();
         tablePlan.setTableName(dbTable.getName());
         tablePlan.setMenuName(dbTable.getComment());
         // 放入默认的模块名和功能名
         List<String> moduleAndFuntion = extractModuleAndFuntion(dbTable.getName());
-        tablePlan.setMenuName(moduleAndFuntion.get(0));
+        tablePlan.setModuleName(moduleAndFuntion.get(0));
         tablePlan.setFunctionName(moduleAndFuntion.get(1));
         tablePlan.setTemplateType(TemplateType.CRUD);
         tablePlan.setClassName(CaseUtils.toCamelCase(dbTable.getName(), true, DB_DELIMITER.toCharArray()));
@@ -77,7 +59,7 @@ public class SystemTablePlanMaker {
             // @formatter:off
             ColumnPlan columnPlan = ColumnPlan.builder()
                     .dbColumnName(v.getName())
-                    .columnComment(v.getComment())
+                    .fieldName(v.getComment())
                     .columnKey(StringUtils.isNotEmpty(v.getColumnKey()) ? ColumnKey.valueOf(v.getColumnKey())
                             : ColumnKey.NONE)
                     .extra(StringUtils.isNotEmpty(v.getExtra()) ? ColumnExtra.valueOf(v.getExtra()) : ColumnExtra.none)
@@ -115,6 +97,7 @@ public class SystemTablePlanMaker {
                 columnPlan.setList(false);
                 tablePlan.setHasBlob(true);
             }
+
             // 数值字段
             if (!DefaultColumns.id.name().equals(columnPlan.getDbColumnName())) {
                 if (ArrayUtils.contains(new String[] {Integer.class.getSimpleName(), Long.class.getSimpleName(),
@@ -126,6 +109,7 @@ public class SystemTablePlanMaker {
                     tablePlan.setImportBigDecimal(true);
                 }
             }
+
             // 有索引并且不在默认字段内
             if ((ColumnKey.MUL.equals(columnPlan.getColumnKey()) || ColumnKey.UNI.equals(columnPlan.getColumnKey()))
                 && !Arrays.stream(DefaultColumns.values()).map((defaultColumn) -> defaultColumn.name())
@@ -140,7 +124,7 @@ public class SystemTablePlanMaker {
     }
 
     /**
-     * 通过表名提取模块名和功能名，按{@link SystemTablePlanMaker#DB_DELIMITER} 拆分为2个，只拆第一个分隔符
+     * 通过表名提取模块名和功能名，按{@link SystemTablePlanHandlerImpl#DB_DELIMITER} 拆分为2个，只拆第一个分隔符
      *
      * @param tableName
      *            not null
