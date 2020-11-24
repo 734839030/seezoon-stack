@@ -21,6 +21,7 @@ import com.seezoon.generator.constants.db.DefaultColumns;
 import com.seezoon.generator.dto.db.DbTable;
 import com.seezoon.generator.dto.db.DbTableColumn;
 import com.seezoon.generator.plan.ColumnPlan;
+import com.seezoon.generator.plan.PkPlan;
 import com.seezoon.generator.plan.TablePlan;
 import com.seezoon.generator.plan.TablePlanHandler;
 
@@ -75,10 +76,12 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
             columnPlan.setInsert(!ColumnExtra.auto_increment.equals(columnPlan.getExtra()));
             columnPlan.setUpdate(!ArrayUtils.contains(DEFAULT_NOT_UPDATE_COLUMNS, columnPlan.getDbColumnName()));
             columnPlan.setList(!ArrayUtils.contains(DEFAULT_NOT_LIST_COLUMNS, columnPlan.getDbColumnName()));
-            // ID 默认为隐藏域
-            if (DefaultColumns.id.name().equals(columnPlan.getDbColumnName())) {
+            // 主键
+            if (columnPlan.getColumnKey().equals(ColumnKey.PRI)) {
                 columnPlan.setInputType(InputType.HIDDEN);
                 columnPlan.setList(false);
+                tablePlan.setPkPlan(new PkPlan(columnPlan.getDbColumnName(), columnPlan.getDataType().jdbcType(),
+                    columnPlan.getDataType().javaType()));
             }
             // 默认文本域
             if (DefaultColumns.remarks.name().equals(columnPlan.getDbColumnName())) {
@@ -120,6 +123,12 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
             }
             columnPlans.add(columnPlan);
         });
+
+        // 一定要有主键
+        if (null == tablePlan.getPkPlan()) {
+            throw new IllegalArgumentException(
+                String.format("table[%s] must have primary key", tablePlan.getTableName()));
+        }
         return columnPlans;
     }
 

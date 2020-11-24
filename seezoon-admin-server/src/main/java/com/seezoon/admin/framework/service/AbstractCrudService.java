@@ -31,7 +31,7 @@ public abstract class AbstractCrudService<D extends CrudDao<T, PK>, T extends Ba
      * @return
      */
     @Transactional(readOnly = true)
-    public T findById(PK pk) {
+    public T find(PK pk) {
         return this.d.selectByPrimaryKey(pk);
     }
 
@@ -42,7 +42,7 @@ public abstract class AbstractCrudService<D extends CrudDao<T, PK>, T extends Ba
      * @return
      */
     @Transactional(readOnly = true)
-    public List<T> findByCondition(QueryCondition condition) {
+    public List<T> find(QueryCondition condition) {
         return this.d.selectByCondition(condition);
     }
 
@@ -56,9 +56,9 @@ public abstract class AbstractCrudService<D extends CrudDao<T, PK>, T extends Ba
      * @return
      */
     @Transactional(readOnly = true)
-    public PageInfo<T> findByPage(QueryCondition condition, int pageNum, int pageSize, boolean count) {
+    public PageInfo<T> find(QueryCondition condition, int pageNum, int pageSize, boolean count) {
         PageHelper.startPage(pageNum, pageSize, count);
-        List<T> list = this.findByCondition(condition);
+        List<T> list = this.find(condition);
         PageInfo<T> pageInfo = new PageInfo<T>(list);
         return pageInfo;
     }
@@ -72,9 +72,9 @@ public abstract class AbstractCrudService<D extends CrudDao<T, PK>, T extends Ba
      * @return
      */
     @Transactional(readOnly = true)
-    public PageInfo<T> findByPage(QueryCondition condition, int pageNum, int pageSize) {
+    public PageInfo<T> find(QueryCondition condition, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize, Boolean.TRUE);
-        List<T> list = this.findByCondition(condition);
+        List<T> list = this.find(condition);
         PageInfo<T> pageInfo = new PageInfo<T>(list);
         return pageInfo;
     }

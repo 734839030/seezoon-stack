@@ -33,15 +33,14 @@ public class SysParamController extends BaseController {
     @GetMapping("/queryById")
     public Result<SysParam> queryById(@RequestParam Integer id, HttpSession session) {
         int maxInactiveInterval = session.getMaxInactiveInterval();
-        SysParam sysParam = sysParamService.findById(id);
+        SysParam sysParam = sysParamService.find(id);
         return Result.ok(sysParam);
     }
 
     @ApiOperation(value = "分页查询")
     @PostMapping("/queryByPage")
     public Result<PageInfo<SysParam>> queryByPage(SysParamCondition condition) {
-        PageInfo<SysParam> pageInfo =
-            sysParamService.findByPage(condition, condition.getPage(), condition.getPageSize());
+        PageInfo<SysParam> pageInfo = sysParamService.find(condition, condition.getPage(), condition.getPageSize());
         return Result.ok(pageInfo);
     }
 

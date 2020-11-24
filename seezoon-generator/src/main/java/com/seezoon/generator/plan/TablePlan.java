@@ -20,7 +20,10 @@ public class TablePlan {
      * 表名
      */
     private String tableName;
-
+    /**
+     * 主键类型
+     */
+    private PkPlan pkPlan;
     /**
      * 菜单名，默认为DB表的备注
      */
