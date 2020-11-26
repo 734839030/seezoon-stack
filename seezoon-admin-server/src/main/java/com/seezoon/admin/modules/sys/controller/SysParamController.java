@@ -1,6 +1,5 @@
 package com.seezoon.admin.modules.sys.controller;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,16 +29,15 @@ public class SysParamController extends BaseController {
 
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @ApiOperation(value = "主键查询")
-    @GetMapping("/queryById")
-    public Result<SysParam> queryById(@RequestParam Integer id, HttpSession session) {
-        int maxInactiveInterval = session.getMaxInactiveInterval();
+    @GetMapping("/query/{id}")
+    public Result<SysParam> query(@PathVariable Integer id) {
         SysParam sysParam = sysParamService.find(id);
         return Result.ok(sysParam);
     }
 
     @ApiOperation(value = "分页查询")
-    @PostMapping("/queryByPage")
-    public Result<PageInfo<SysParam>> queryByPage(SysParamCondition condition) {
+    @PostMapping("/query")
+    public Result<PageInfo<SysParam>> query(SysParamCondition condition) {
         PageInfo<SysParam> pageInfo = sysParamService.find(condition, condition.getPage(), condition.getPageSize());
         return Result.ok(pageInfo);
     }

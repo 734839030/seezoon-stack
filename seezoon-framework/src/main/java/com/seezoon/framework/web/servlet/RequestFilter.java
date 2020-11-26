@@ -33,7 +33,8 @@ public class RequestFilter implements Filter {
             // form 参数打印
             Map<String, String[]> parameterMap = httpServletRequest.getParameterMap();
             if (!parameterMap.isEmpty()) {
-                log.debug("Request Params=>{}", JSON.toJSONString(parameterMap));
+                log.debug("Uri=>{} Request Params=>{}", httpServletRequest.getRequestURI(),
+                    JSON.toJSONString(parameterMap));
             }
         }
         // 添加调用链响应头,因为spring 会在filter中结束respone 所以提前加上

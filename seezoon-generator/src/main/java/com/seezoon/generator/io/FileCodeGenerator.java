@@ -12,16 +12,17 @@ import org.apache.commons.io.FileUtils;
 import com.seezoon.generator.constants.CodeTemplate;
 import com.seezoon.generator.plan.TablePlan;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * 文件的方式生成
  * <p>
- * 生成目录target/generated-sources/
+ * 生成目录target/seezoon-sources/
  *
  * @author hdf
  */
+@Slf4j
 public class FileCodeGenerator implements CodeGenerator {
-
-    public static final String GENERATED_SOURCES_FOLDER = "seezoon-generated";
 
     @Override
     public void generate(TablePlan tablePlan) throws IOException {
@@ -44,6 +45,7 @@ public class FileCodeGenerator implements CodeGenerator {
             Files.createFile(filePath);
             String content = FreeMarkerRender.renderTemplate(ct.tplName(), tablePlan);
             Files.writeString(filePath, content);
+            log.info("success generated source files in {}", GENERATED_SOURCES_FOLDER);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -56,6 +58,11 @@ public class FileCodeGenerator implements CodeGenerator {
         Files.createDirectories(generatedFolderPath);
     }
 
+    /**
+     * 获取生成目录 target/GENERATED_SOURCES_FOLDER
+     *
+     * @return
+     */
     public String getGeneratedSourcesFolder() {
         // 获取更目录
         String classRoot = FileCodeGenerator.class.getClassLoader().getResource("").getPath();

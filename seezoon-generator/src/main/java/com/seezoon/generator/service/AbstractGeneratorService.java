@@ -29,7 +29,7 @@ public abstract class AbstractGeneratorService {
         Assert.notEmpty(dbTables, String.format("can't find tableName:%s", tableName));
         DbTable dbTable = dbTables.get(0);
         List<DbTableColumn> dbTableColumns = generatorDao.findColumnByTableName(tableName);
-        TablePlan tablePlan = tablePlanHandler.generatePlan(dbTable, dbTableColumns);
+        TablePlan tablePlan = tablePlanHandler.generate(dbTable, dbTableColumns);
         this.getCodeGenerator().generate(tablePlan);
     }
 

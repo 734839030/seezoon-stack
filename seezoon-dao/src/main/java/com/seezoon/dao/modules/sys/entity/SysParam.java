@@ -12,6 +12,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
+ * 系统参数
+ *
  * @author hdf
  */
 @ApiModel

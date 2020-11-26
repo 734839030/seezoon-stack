@@ -10,6 +10,7 @@ import org.springframework.util.CollectionUtils;
 import com.seezoon.generator.constants.InputType;
 import com.seezoon.generator.constants.QueryType;
 import com.seezoon.generator.constants.TemplateType;
+import com.seezoon.generator.constants.db.DefaultColumns;
 import com.seezoon.generator.dto.db.DbTable;
 import com.seezoon.generator.dto.db.DbTableColumn;
 import com.seezoon.generator.plan.ColumnPlan;
@@ -32,11 +33,11 @@ public class UserTablePlanHandlerImpl implements TablePlanHandler {
     }
 
     @Override
-    public TablePlan generatePlan(DbTable dbTable, List<DbTableColumn> dbTableColumns) {
-        TablePlan tablePlan = systemTablePlanHandler.generatePlan(dbTable, dbTableColumns);
+    public TablePlan generate(DbTable dbTable, List<DbTableColumn> dbTableColumns) {
+        TablePlan tablePlan = systemTablePlanHandler.generate(dbTable, dbTableColumns);
         if (null != userTablePlanParam) {
             tablePlan.setMenuName(userTablePlanParam.getMenuName());
-            tablePlan.setMenuName(userTablePlanParam.getMenuName());
+            tablePlan.setModuleName(userTablePlanParam.getModuleName());
             tablePlan.setFunctionName(userTablePlanParam.getFunctionName());
             tablePlan.setTemplateType(TemplateType.valueOf(userTablePlanParam.getTemplateType()));
             tablePlan.setClassName(userTablePlanParam.getClassName());
@@ -44,6 +45,11 @@ public class UserTablePlanHandlerImpl implements TablePlanHandler {
             tablePlan.setHasSearch(false);
             Map<String, ColumnPlan> columnPlanMapping =
                 tablePlan.getColumnPlans().stream().collect(Collectors.toMap(ColumnPlan::getDbColumnName, v -> v));
+            // 主键字段名改写
+            ColumnPlan pkColumnPlan = columnPlanMapping.get(tablePlan.getPkPlan().getDbColumnName());
+            tablePlan.getPkPlan().setJavaFieldName(pkColumnPlan.getJavaFieldName());
+            tablePlan.getPkPlan()
+                .setDefaultJavaPkName(DefaultColumns.id.name().equals(pkColumnPlan.getJavaFieldName()));
             if (!CollectionUtils.isEmpty(userTablePlanParam.getUserColumnPlanParams())) {
                 userTablePlanParam.getUserColumnPlanParams().forEach((u) -> {
                     ColumnPlan columnPlan = columnPlanMapping.get(u.getDbColumnName());

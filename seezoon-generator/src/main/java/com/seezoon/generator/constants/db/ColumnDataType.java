@@ -9,6 +9,8 @@ import java.util.Map;
 import org.springframework.util.Assert;
 
 /**
+ * 默认都用包装类型
+ *
  * 常用数据库字段类型->mybatis 类型-> java 类型，这里生成避免sql过长，不加入mybatis type
  * <p>
  * mybatis 类型可以不用，mybatis自动推导的，这里预留，在datetime和timestamp 场景会有区别，日常开发遇到特殊情况，自行修改sql即可

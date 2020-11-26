@@ -27,7 +27,6 @@ public class TablePlan {
     /**
      * 菜单名，默认为DB表的备注
      */
-
     private String menuName;
 
     /**

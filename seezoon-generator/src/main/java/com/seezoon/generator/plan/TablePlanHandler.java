@@ -11,5 +11,5 @@ import com.seezoon.generator.dto.db.DbTableColumn;
  */
 public interface TablePlanHandler {
 
-    public TablePlan generatePlan(DbTable dbTable, List<DbTableColumn> dbTableColumns);
+    public TablePlan generate(DbTable dbTable, List<DbTableColumn> dbTableColumns);
 }

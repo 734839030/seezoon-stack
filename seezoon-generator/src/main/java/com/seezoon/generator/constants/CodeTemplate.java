@@ -1,19 +1,21 @@
 package com.seezoon.generator.constants;
 
 /**
+ * 生成模板
+ *
  * @author hdf
  */
 public enum CodeTemplate {
 
-    MAPPER("mapper.xml.ftl", "mappings/%s", "%sMapper.xml"),
+    // MAPPER("mapper.xml.tpl", "mappings/%s", "%sMapper.xml"),
 
-    ENTITY("entity.java.ftl", "com/seezoon/dao/modules/%s/entity", "%s.java"),
+    ENTITY("entity.java.tpl", "com/seezoon/dao/modules/%s/entity", "%s.java"),
 
-    DAO("dao.java.ftl", "com/seezoon/dao/modules/%s", "%sDao.java"),
+    // DAO("dao.java.tpl", "com/seezoon/dao/modules/%s", "%sDao.java"),
 
-    SERVICE("service.java.ftl", "com/seezoon/admin/modules/%s/service", "%sService.java"),
+    // SERVICE("service.java.tpl", "com/seezoon/admin/modules/%s/service", "%sService.java"),
 
-    CONTROLLER("controller.java.ftl", "com/seezoon/admin/modules/%s/controller", "%sController.java"),
+    // CONTROLLER("controller.java.tpl", "com/seezoon/admin/modules/%s/controller", "%sController.java"),
 
     ;
 

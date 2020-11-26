@@ -38,10 +38,10 @@ public interface CrudDao<T extends BaseEntity<PK>, PK> extends BaseDao {
     /**
      * 根据主键查询
      *
-     * @param id
+     * @param pk
      * @return
      */
-    T selectByPrimaryKey(@NotNull PK id);
+    T selectByPrimaryKey(@NotNull PK pk);
 
     /**
      * 查询
