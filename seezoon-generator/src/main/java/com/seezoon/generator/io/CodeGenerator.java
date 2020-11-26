@@ -13,5 +13,5 @@ public interface CodeGenerator {
 
     public static final String GENERATED_SOURCES_FOLDER = "seezoon-generated";
 
-    public void generate(TablePlan tablePlan) throws IOException;
+    public void generate(TablePlan... tablePlans) throws IOException;
 }

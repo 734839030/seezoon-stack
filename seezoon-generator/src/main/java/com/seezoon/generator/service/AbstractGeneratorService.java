@@ -1,6 +1,7 @@
 package com.seezoon.generator.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +24,23 @@ public abstract class AbstractGeneratorService {
     @Autowired
     private GeneratorDao generatorDao;
 
+    /**
+     * 生成，tableName = null 时候生成全部
+     *
+     * @param tableName
+     * @param tablePlanHandler
+     * @throws IOException
+     */
     protected void generate(String tableName, TablePlanHandler tablePlanHandler) throws IOException {
-        Assert.hasText(tableName, "tableName must be not empty");
         List<DbTable> dbTables = generatorDao.findTable(tableName);
         Assert.notEmpty(dbTables, String.format("can't find tableName:%s", tableName));
-        DbTable dbTable = dbTables.get(0);
-        List<DbTableColumn> dbTableColumns = generatorDao.findColumnByTableName(tableName);
-        TablePlan tablePlan = tablePlanHandler.generate(dbTable, dbTableColumns);
-        this.getCodeGenerator().generate(tablePlan);
+        List<TablePlan> tablePlans = new ArrayList<>();
+        dbTables.forEach((dbTable) -> {
+            List<DbTableColumn> dbTableColumns = generatorDao.findColumnByTableName(dbTable.getName());
+            TablePlan tablePlan = tablePlanHandler.generate(dbTable, dbTableColumns);
+            tablePlans.add(tablePlan);
+        });
+        this.getCodeGenerator().generate(tablePlans.toArray(new TablePlan[tablePlans.size()]));
     }
 
     protected abstract CodeGenerator getCodeGenerator();

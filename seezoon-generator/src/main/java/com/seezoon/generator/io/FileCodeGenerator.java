@@ -25,13 +25,15 @@ import lombok.extern.slf4j.Slf4j;
 public class FileCodeGenerator implements CodeGenerator {
 
     @Override
-    public void generate(TablePlan tablePlan) throws IOException {
+    public void generate(TablePlan... tablePlans) throws IOException {
         // 获取根目录
         Path generatedFolderPath = Paths.get(this.getGeneratedSourcesFolder());
         this.emptyGeneratedFolder(generatedFolderPath);
-        Arrays.stream(CodeTemplate.values()).forEach((ct) -> {
-            this.createSourceFile(tablePlan, generatedFolderPath, ct);
-        });
+        for (TablePlan tablePlan : tablePlans) {
+            Arrays.stream(CodeTemplate.values()).forEach((ct) -> {
+                this.createSourceFile(tablePlan, generatedFolderPath, ct);
+            });
+        }
     }
 
     private void createSourceFile(TablePlan tablePlan, Path generatedFolderPath, CodeTemplate ct) {
