@@ -11,9 +11,11 @@ public enum CodeTemplate {
 
     ENTITY("entity.java.tpl", "com/seezoon/dao/modules/%s/entity", "%s.java"),
 
-    // DAO("dao.java.tpl", "com/seezoon/dao/modules/%s", "%sDao.java"),
+    CONDITION("condition.java.tpl", "com/seezoon/dao/modules/%s/entity", "%s.java"),
 
-    // SERVICE("service.java.tpl", "com/seezoon/admin/modules/%s/service", "%sService.java"),
+    DAO("dao.java.tpl", "com/seezoon/dao/modules/%s", "%sDao.java"),
+
+    SERVICE("service.java.tpl", "com/seezoon/admin/modules/%s/service", "%sService.java"),
 
     // CONTROLLER("controller.java.tpl", "com/seezoon/admin/modules/%s/controller", "%sController.java"),
 

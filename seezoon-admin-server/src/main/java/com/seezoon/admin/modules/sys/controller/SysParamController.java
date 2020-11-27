@@ -27,8 +27,8 @@ public class SysParamController extends BaseController {
 
     private final SysParamService sysParamService;
 
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @ApiOperation(value = "主键查询")
+    @PreAuthorize("hasAuthority('sys:param:query')")
     @GetMapping("/query/{id}")
     public Result<SysParam> query(@PathVariable Integer id) {
         SysParam sysParam = sysParamService.find(id);
@@ -36,6 +36,7 @@ public class SysParamController extends BaseController {
     }
 
     @ApiOperation(value = "分页查询")
+    @PreAuthorize("hasAuthority('sys:param:query')")
     @PostMapping("/query")
     public Result<PageInfo<SysParam>> query(SysParamCondition condition) {
         PageInfo<SysParam> pageInfo = sysParamService.find(condition, condition.getPage(), condition.getPageSize());
@@ -43,6 +44,7 @@ public class SysParamController extends BaseController {
     }
 
     @ApiOperation(value = "保存")
+    @PreAuthorize("hasAuthority('sys:param:save')")
     @PostMapping(value = "/save")
     public Result save(@Valid @RequestBody SysParam sysParam) {
         sysParamService.save(sysParam);
@@ -50,6 +52,7 @@ public class SysParamController extends BaseController {
     }
 
     @ApiOperation(value = "更新")
+    @PreAuthorize("hasAuthority('sys:param:update')")
     @PostMapping(value = "/update")
     public Result update(@Valid @RequestBody SysParam sysParam) {
         sysParamService.updateSelective(sysParam);
@@ -57,6 +60,7 @@ public class SysParamController extends BaseController {
     }
 
     @ApiOperation(value = "删除")
+    @PreAuthorize("hasAuthority('sys:param:delete')")
     @PostMapping(value = "/delete")
     public Result delete(@RequestParam Integer id) {
         sysParamService.delete(id);

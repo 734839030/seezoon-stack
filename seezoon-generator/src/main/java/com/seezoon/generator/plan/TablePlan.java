@@ -2,6 +2,8 @@ package com.seezoon.generator.plan;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.seezoon.generator.constants.TemplateType;
 
 import lombok.Getter;
@@ -15,7 +17,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class TablePlan {
-
+    // 如果不需要请置位空字符串
+    public static final String DEFAULT_TABLE_ALIAS = "t";
+    public static final String DEFAULT_TABLE_ALIAS_PREFIX =
+        StringUtils.isNotBlank(DEFAULT_TABLE_ALIAS) ? DEFAULT_TABLE_ALIAS + "." : "";
     /**
      * 表名
      */
@@ -84,4 +89,21 @@ public class TablePlan {
      */
     private boolean hasImageUploadWidget;
 
+    /**
+     * 为了让freemark读取到{@code defaultTableAlias}
+     *
+     * @return
+     */
+    public String getDefaultTableAlias() {
+        return DEFAULT_TABLE_ALIAS;
+    }
+
+    /**
+     * 为了让freemark读取到{@code defaultTableAliasPrefix}
+     *
+     * @return
+     */
+    public String getDefaultTableAliasPrefix() {
+        return DEFAULT_TABLE_ALIAS_PREFIX;
+    }
 }

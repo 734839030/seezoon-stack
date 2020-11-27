@@ -20,7 +20,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * ${menuName}
+ * ${menuName!}
  *
  * @author seezoon-generator ${.now}
  */

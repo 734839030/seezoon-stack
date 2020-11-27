@@ -14,8 +14,17 @@ import lombok.ToString;
 @ToString
 public class SysParamCondition extends PageCondition {
 
+    /**
+     * 名字
+     */
     private String name;
+    /**
+     * 唯一键
+     */
     private String paramKey;
+    /**
+     * 状态
+     */
     private Integer status;
 
 }

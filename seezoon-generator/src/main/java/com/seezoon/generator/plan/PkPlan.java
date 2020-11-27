@@ -18,5 +18,7 @@ public class PkPlan {
     private ColumnDataType dataType;
     // 是否和默认ID名字相等
     private boolean defaultJavaPkName;
+    // 是否自增
+    private boolean autoIncrement;
 
 }

@@ -17,6 +17,6 @@ class SystemGeneratorServiceImplTest {
 
     @Test
     void generate() throws IOException {
-        systemGeneratorService.generate(null);
+        systemGeneratorService.generate("sys_param");
     }
 }

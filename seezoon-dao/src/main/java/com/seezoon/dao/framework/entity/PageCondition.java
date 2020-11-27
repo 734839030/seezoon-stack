@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
  *
  * @author hdf
  */
-public class PageCondition extends QueryCondition {
+public class PageCondition extends AbstractQueryCondition {
 
     private static final int MAX_PAGE_SIZE = 1000;
     /**

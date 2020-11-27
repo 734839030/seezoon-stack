@@ -5,8 +5,8 @@ import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.seezoon.dao.framework.entity.AbstractQueryCondition;
 import com.seezoon.dao.framework.entity.BaseEntity;
-import com.seezoon.dao.framework.entity.QueryCondition;
 
 /**
  * 包含基本CRUD定义，DAO 完成基础字段验证
@@ -49,7 +49,7 @@ public interface CrudDao<T extends BaseEntity<PK>, PK> extends BaseDao {
      * @param condition
      * @return
      */
-    List<T> selectByCondition(QueryCondition condition);
+    List<T> selectByCondition(AbstractQueryCondition condition);
 
     /**
      * 选择性更新

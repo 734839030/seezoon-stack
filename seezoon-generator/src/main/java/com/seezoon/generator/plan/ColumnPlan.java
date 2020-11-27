@@ -65,6 +65,10 @@ public class ColumnPlan implements Comparable<ColumnPlan> {
      */
     private boolean stringType;
     /**
+     * 是否大字段
+     */
+    private boolean blobType;
+    /**
      * 是否可空
      */
     private boolean nullable;

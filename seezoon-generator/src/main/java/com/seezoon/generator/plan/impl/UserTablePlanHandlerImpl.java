@@ -61,7 +61,7 @@ public class UserTablePlanHandlerImpl implements TablePlanHandler {
                     columnPlan.setList(u.isList());
                     columnPlan.setSortable(u.isSortable());
                     columnPlan.setSearch(u.isSearch());
-                    columnPlan.setQueryType(QueryType.parse(u.getQueryType()));
+                    columnPlan.setQueryType(QueryType.valueOf(u.getQueryType()));
                     columnPlan.setInputType(InputType.parse(u.getInputType()));
                     columnPlan.setDictType(u.getDictType());
 

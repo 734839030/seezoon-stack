@@ -1,13 +1,17 @@
-package com.seezoon.service.modules.${moduleName}.dao;
+package com.seezoon.dao.modules.${moduleName};
 
-import com.seezoon.boot.common.dao.CrudDao;
-import com.seezoon.service.modules.${moduleName}.entity.${className};
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+
+import com.seezoon.dao.framework.CrudDao;
+import com.seezoon.dao.modules.${moduleName}.entity.${className};
 
 /**
- * ${menuName}Dao
- * Copyright &copy; 2018 powered by huangdf, All rights reserved.
- * @author hdf ${.now}
+ * ${menuName!}
+ * @author seezoon-generator ${.now}
  */
-public interface ${className}Dao extends CrudDao<${className}> {
+@Repository
+@Mapper
+public interface ${className}Dao extends CrudDao<${className}, ${pkPlan.dataType.jdbcType()}> {
 
 }

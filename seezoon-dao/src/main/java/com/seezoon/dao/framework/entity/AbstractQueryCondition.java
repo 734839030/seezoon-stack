@@ -5,6 +5,6 @@ package com.seezoon.dao.framework.entity;
  *
  * @author hdf
  */
-public class QueryCondition {
+public abstract class AbstractQueryCondition {
 
 }

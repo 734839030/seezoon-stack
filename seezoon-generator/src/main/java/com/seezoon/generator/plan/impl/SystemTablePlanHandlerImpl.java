@@ -36,7 +36,7 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
      * DB 及表字段的分隔符
      */
     private static final String DB_DELIMITER = "_";
-    private static final String[] DEFAULT_NOT_UPDATE_COLUMNS = {"id", "create_by", "create_date"};
+    private static final String[] DEFAULT_NOT_UPDATE_COLUMNS = {"create_by", "create_date"};
     private static final String[] DEFAULT_COLUMNS = {"id", "create_by", "create_time", "update_by", "remarks"};
 
     @Override
@@ -72,8 +72,7 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
                     .sort(v.getSort())
                     .build();
             // @formatter:on
-            // 自增不可插入
-            columnPlan.setInsert(!ColumnExtra.auto_increment.equals(columnPlan.getExtra()));
+            columnPlan.setInsert(true);
             columnPlan.setUpdate(!ArrayUtils.contains(DEFAULT_NOT_UPDATE_COLUMNS, columnPlan.getDbColumnName()));
             // 默认字段忽略
             columnPlan.setDefaultField(ArrayUtils.contains(DEFAULT_COLUMNS, columnPlan.getDbColumnName()));
@@ -82,11 +81,21 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
             columnPlan.setStringType(columnPlan.getDataType().jdbcType().equals(String.class.getSimpleName()));
             // 主键
             if (columnPlan.getColumnKey().equals(ColumnKey.PRI)) {
+                if (null != tablePlan.getPkPlan()) {
+                    throw new IllegalArgumentException(
+                        String.format("table[%s] must have only one primary key", tablePlan.getTableName()));
+                }
                 columnPlan.setInputType(InputType.HIDDEN);
                 columnPlan.setList(false);
                 tablePlan.setPkPlan(new PkPlan(columnPlan.getDbColumnName(), columnPlan.getJavaFieldName(),
-                    columnPlan.getDataType(), DefaultColumns.id.name().equals(columnPlan.getJavaFieldName())));
+                    columnPlan.getDataType(), DefaultColumns.id.name().equals(columnPlan.getJavaFieldName()),
+                    ColumnExtra.auto_increment.equals(columnPlan.getExtra())));
+                // 自增不可插入
+                columnPlan.setInsert(!tablePlan.getPkPlan().isAutoIncrement());
+                // 主键也不可更新
+                columnPlan.setUpdate(false);
             }
+
             // 默认文本域
             if (DefaultColumns.remarks.name().equals(columnPlan.getDbColumnName())) {
                 columnPlan.setInputType(InputType.TEXTAREA);
@@ -102,6 +111,7 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
                 columnPlan.setInputType(InputType.TEXTAREA);
                 // 列表默认也不展示
                 columnPlan.setList(false);
+                columnPlan.setBlobType(true);
                 tablePlan.setHasBlob(true);
             }
 

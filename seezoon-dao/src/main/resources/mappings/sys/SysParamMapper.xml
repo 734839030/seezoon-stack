@@ -24,7 +24,7 @@
         where id = #{id,jdbcType=INTEGER}
     </select>
 
-    <select id="selectByCondition" parameterType="com.seezoon.dao.framework.entity.QueryCondition"
+    <select id="selectByCondition" parameterType="com.seezoon.dao.framework.entity.AbstractQueryCondition"
             resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>

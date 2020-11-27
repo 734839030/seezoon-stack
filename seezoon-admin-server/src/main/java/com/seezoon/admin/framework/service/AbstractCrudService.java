@@ -1,5 +1,6 @@
 package com.seezoon.admin.framework.service;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -9,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.seezoon.dao.framework.CrudDao;
+import com.seezoon.dao.framework.entity.AbstractQueryCondition;
 import com.seezoon.dao.framework.entity.BaseEntity;
-import com.seezoon.dao.framework.entity.QueryCondition;
 
 /**
  * 增删改查service
@@ -42,7 +43,7 @@ public abstract class AbstractCrudService<D extends CrudDao<T, PK>, T extends Ba
      * @return
      */
     @Transactional(readOnly = true)
-    public List<T> find(QueryCondition condition) {
+    public List<T> find(AbstractQueryCondition condition) {
         return this.d.selectByCondition(condition);
     }
 
@@ -56,7 +57,7 @@ public abstract class AbstractCrudService<D extends CrudDao<T, PK>, T extends Ba
      * @return
      */
     @Transactional(readOnly = true)
-    public PageInfo<T> find(QueryCondition condition, int pageNum, int pageSize, boolean count) {
+    public PageInfo<T> find(AbstractQueryCondition condition, int pageNum, int pageSize, boolean count) {
         PageHelper.startPage(pageNum, pageSize, count);
         List<T> list = this.find(condition);
         PageInfo<T> pageInfo = new PageInfo<T>(list);
@@ -72,7 +73,7 @@ public abstract class AbstractCrudService<D extends CrudDao<T, PK>, T extends Ba
      * @return
      */
     @Transactional(readOnly = true)
-    public PageInfo<T> find(QueryCondition condition, int pageNum, int pageSize) {
+    public PageInfo<T> find(AbstractQueryCondition condition, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize, Boolean.TRUE);
         List<T> list = this.find(condition);
         PageInfo<T> pageInfo = new PageInfo<T>(list);
@@ -86,6 +87,7 @@ public abstract class AbstractCrudService<D extends CrudDao<T, PK>, T extends Ba
      * @return
      */
     public int save(T... records) {
+        Arrays.stream(records).forEach((t) -> t.setUpdateTime(new Date()));
         return this.d.insert(records);
     }
 
@@ -111,6 +113,7 @@ public abstract class AbstractCrudService<D extends CrudDao<T, PK>, T extends Ba
      * @return
      */
     public int update(T record) {
+        record.setUpdateTime(new Date());
         return this.d.updateByPrimaryKey(record);
     }
 

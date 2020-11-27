@@ -1,16 +1,16 @@
-package com.seezoon.service.modules.${moduleName}.service;
+package com.seezoon.admin.modules.${moduleName}.service;
 
 import org.springframework.stereotype.Service;
-import com.seezoon.boot.common.service.CrudService;
-import com.seezoon.service.modules.${moduleName}.dao.${className}Dao;
-import com.seezoon.service.modules.${moduleName}.entity.${className};
+
+import com.seezoon.admin.framework.service.AbstractCrudService;
+import com.seezoon.dao.modules.${moduleName}.SysParamDao;
+import com.seezoon.dao.modules.${moduleName}.entity.SysParam;
 
 /**
- * ${menuName}Service
- * Copyright &copy; 2018 powered by huangdf, All rights reserved.
- * @author hdf ${.now}
+ * ${menuName!}
+ * @author seezoon-generator ${.now}
  */
 @Service
-public class ${className}Service extends CrudService<${className}Dao, ${className}>{
+public class ${className}Service extends AbstractCrudService<${className}Dao, ${className}, ${pkPlan.dataType.jdbcType()}> {
 
 }
