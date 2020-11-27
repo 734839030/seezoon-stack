@@ -17,7 +17,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 /**
- *${menuName!}
+ * ${menuName!}
  * @author seezoon-generator ${.now}
  */
 @Api(tags = "${menuName!}")

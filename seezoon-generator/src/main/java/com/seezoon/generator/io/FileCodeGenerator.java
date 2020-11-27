@@ -47,7 +47,7 @@ public class FileCodeGenerator implements CodeGenerator {
             Files.createFile(filePath);
             String content = FreeMarkerRender.renderTemplate(ct.tplName(), tablePlan);
             Files.writeString(filePath, content);
-            log.info("success generated source files in {}", GENERATED_SOURCES_FOLDER);
+            log.info("success generated source files {}", filePath.toString());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

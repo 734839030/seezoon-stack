@@ -7,17 +7,17 @@ package com.seezoon.generator.constants;
  */
 public enum CodeTemplate {
 
-    // MAPPER("mapper.xml.tpl", "mappings/%s", "%sMapper.xml"),
+    MAPPER("mapper.xml.tpl", "mappings/%s", "%sMapper.xml"),
 
     ENTITY("entity.java.tpl", "com/seezoon/dao/modules/%s/entity", "%s.java"),
 
-    CONDITION("condition.java.tpl", "com/seezoon/dao/modules/%s/entity", "%s.java"),
+    CONDITION("condition.java.tpl", "com/seezoon/dao/modules/%s/entity", "%sCondition.java"),
 
     DAO("dao.java.tpl", "com/seezoon/dao/modules/%s", "%sDao.java"),
 
     SERVICE("service.java.tpl", "com/seezoon/admin/modules/%s/service", "%sService.java"),
 
-    // CONTROLLER("controller.java.tpl", "com/seezoon/admin/modules/%s/controller", "%sController.java"),
+    CONTROLLER("controller.java.tpl", "com/seezoon/admin/modules/%s/controller", "%sController.java"),
 
     ;
 

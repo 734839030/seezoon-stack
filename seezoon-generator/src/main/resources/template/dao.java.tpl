@@ -12,6 +12,6 @@ import com.seezoon.dao.modules.${moduleName}.entity.${className};
  */
 @Repository
 @Mapper
-public interface ${className}Dao extends CrudDao<${className}, ${pkPlan.dataType.jdbcType()}> {
+public interface ${className}Dao extends CrudDao<${className}, ${pkPlan.dataType.javaType()}> {
 
 }

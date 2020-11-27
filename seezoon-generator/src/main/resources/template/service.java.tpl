@@ -11,6 +11,6 @@ import com.seezoon.dao.modules.${moduleName}.entity.SysParam;
  * @author seezoon-generator ${.now}
  */
 @Service
-public class ${className}Service extends AbstractCrudService<${className}Dao, ${className}, ${pkPlan.dataType.jdbcType()}> {
+public class ${className}Service extends AbstractCrudService<${className}Dao, ${className}, ${pkPlan.dataType.javaType()}> {
 
 }
