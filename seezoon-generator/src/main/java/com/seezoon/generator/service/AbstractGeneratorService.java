@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
@@ -25,17 +26,25 @@ public abstract class AbstractGeneratorService {
     private GeneratorDao generatorDao;
 
     /**
-     * 生成，tableName = null 时候生成全部
+     * 生成，tableNames = null 时候生成全部
      *
-     * @param tableName
      * @param tablePlanHandler
+     * @param tableNames
      * @throws IOException
      */
-    protected void generate(String tableName, TablePlanHandler tablePlanHandler) throws IOException {
-        List<DbTable> dbTables = generatorDao.findTable(tableName);
-        Assert.notEmpty(dbTables, String.format("can't find tableName:%s", tableName));
+    protected void generate(TablePlanHandler tablePlanHandler, String... tableNames) throws IOException {
+        List<DbTable> allDbTables = new ArrayList<>();
+        if (ArrayUtils.isEmpty(tableNames)) {
+            allDbTables = generatorDao.findTable(null);
+        } else {
+            for (String tableName : tableNames) {
+                List<DbTable> dbTable = generatorDao.findTable(tableName);
+                Assert.notEmpty(dbTable, String.format("can't find tableName:%s", tableName));
+                allDbTables.addAll(dbTable);
+            }
+        }
         List<TablePlan> tablePlans = new ArrayList<>();
-        dbTables.forEach((dbTable) -> {
+        allDbTables.forEach((dbTable) -> {
             List<DbTableColumn> dbTableColumns = generatorDao.findColumnByTableName(dbTable.getName());
             TablePlan tablePlan = tablePlanHandler.generate(dbTable, dbTableColumns);
             tablePlans.add(tablePlan);

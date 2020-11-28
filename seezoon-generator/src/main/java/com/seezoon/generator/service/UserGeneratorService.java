@@ -19,13 +19,13 @@ import com.seezoon.generator.plan.impl.UserTablePlanHandlerImpl;
  */
 @Service
 @Validated
-public class UserGeneratorServiceImpl extends AbstractGeneratorService {
+public class UserGeneratorService extends AbstractGeneratorService {
 
     private FileCodeGenerator fileCodeGenerator = new FileCodeGenerator();
 
     public void generate(@Valid @NotNull UserTablePlanParam userTablePlanParam) throws IOException {
         TablePlanHandler tablePlanHandler = new UserTablePlanHandlerImpl(userTablePlanParam);
-        super.generate(userTablePlanParam.getTableName(), tablePlanHandler);
+        super.generate(tablePlanHandler, userTablePlanParam.getTableName());
     }
 
     @Override

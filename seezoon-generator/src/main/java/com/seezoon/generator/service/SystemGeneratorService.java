@@ -15,13 +15,13 @@ import com.seezoon.generator.plan.impl.SystemTablePlanHandlerImpl;
  * @author hdf
  */
 @Service
-public class SystemGeneratorServiceImpl extends AbstractGeneratorService {
+public class SystemGeneratorService extends AbstractGeneratorService {
 
     TablePlanHandler tablePlanHandler = new SystemTablePlanHandlerImpl();
     private FileCodeGenerator fileCodeGenerator = new FileCodeGenerator();
 
-    public void generate(String tableName) throws IOException {
-        super.generate(tableName, tablePlanHandler);
+    public void generate(String... tableNames) throws IOException {
+        super.generate(tablePlanHandler, tableNames);
     }
 
     @Override

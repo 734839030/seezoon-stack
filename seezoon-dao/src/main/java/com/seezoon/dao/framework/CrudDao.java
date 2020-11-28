@@ -22,10 +22,10 @@ public interface CrudDao<T extends BaseEntity<PK>, PK> extends BaseDao {
     /**
      * 通用删除，实际线上一般不给删除权限，无意义，可以根据项目情况注释掉
      *
-     * @param ids
+     * @param pks
      * @return
      */
-    int deleteByPrimaryKey(@NotEmpty PK... ids);
+    int deleteByPrimaryKey(@NotEmpty PK... pks);
 
     /**
      * 插入

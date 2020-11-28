@@ -48,6 +48,17 @@ public class ExceptionAdvice {
         return Result.error(DefaultCodeMsgBundle.PARAM_BIND_ERROR, e.getMessage());
     }
 
+    /**
+     * 使用{@link org.springframework.util.Assert} 来验证参数
+     *
+     * @param e
+     * @return
+     */
+    @ExceptionHandler({IllegalArgumentException.class})
+    public Result illegalArgumentException(IllegalArgumentException e) {
+        return Result.error(DefaultCodeMsgBundle.PARAM_INVALID, e.getMessage());
+    }
+
     @ExceptionHandler(BusinessException.class)
     public Result businessException(BusinessException e) {
         return Result.error(e.getCode(), e.getMsg());

@@ -165,16 +165,10 @@
 **通用DB实体父类，框架默认一些如下字段，如果不需要则建表不加这些字段即可。**
 
 ```
-/**
- * 数据库实体基类，框架默认字段，已实际表为准
- *
- * @author hdf
- */
-@Data
 public class BaseEntity<PK> {
 
     /**
-     * 主键只支持单一主键，数值或者字符串，数据库表必须存在名为ID的主键列
+     * 主键只支持单一主键，数值或者字符串,名字可以用其他的,其他的代码生成器会覆写getId方法，方便使用。
      */
     @ApiModelProperty("*内置*-主键")
     private PK id;
@@ -216,22 +210,33 @@ public class BaseEntity<PK> {
     @ApiModelProperty("*内置*-备注")
     @Size(max = 255)
     private String remarks;
+
 }
+
 
 ```
 
 **通用DAO,会有一层基于`jsr303`基本的校验，不用担心上层参数漏传造成全表扫描；在添加和更新场景，只简单的验证空，因为上层会自动验证实体中对象，这里约定不在冗余校验，因为DB自身还有一层保护，不会参数数据错乱.**
 
 ```
+/**
+ * 包含基本CRUD定义，DAO 完成基础字段验证
+ *
+ * @author hdf
+ * @param <T>
+ *            DB 实体
+ * @param <PK>
+ *            主键 快速开发所以只支持简单主键，即数值和字符
+ */
 public interface CrudDao<T extends BaseEntity<PK>, PK> extends BaseDao {
 
     /**
      * 通用删除，实际线上一般不给删除权限，无意义，可以根据项目情况注释掉
      *
-     * @param ids
+     * @param pks
      * @return
      */
-    int deleteByPrimaryKey(@NotEmpty PK... ids);
+    int deleteByPrimaryKey(@NotEmpty PK... pks);
 
     /**
      * 插入
@@ -244,10 +249,10 @@ public interface CrudDao<T extends BaseEntity<PK>, PK> extends BaseDao {
     /**
      * 根据主键查询
      *
-     * @param id
+     * @param pk
      * @return
      */
-    T selectByPrimaryKey(@NotNull PK id);
+    T selectByPrimaryKey(@NotNull PK pk);
 
     /**
      * 查询
@@ -255,7 +260,7 @@ public interface CrudDao<T extends BaseEntity<PK>, PK> extends BaseDao {
      * @param condition
      * @return
      */
-    List<T> selectByCondition(QueryCondition condition);
+    List<T> selectByCondition(AbstractQueryCondition condition);
 
     /**
      * 选择性更新
@@ -273,15 +278,58 @@ public interface CrudDao<T extends BaseEntity<PK>, PK> extends BaseDao {
      */
     int updateByPrimaryKey(@NotNull T record);
 }
+
 ```
 
 ## 2.7、seezoon-generator说明
 
-默认集成了`mybatis-generator-maven-plugin`插件，可以修改`build/mybatis-generator-config.xml`然后执行如下命令：
+### 使用原生mybatis-generator
+
+默认集成了原生`mybatis-generator-maven-plugin`插件，可以修改`build/mybatis-generator-config.xml`然后执行如下命令：
 
 ```
 mvn mybatis-generator:generate
 ```
 
 生成文件在`target/generated-sources`下。
+
+### 使用seezoon-generator 全能生成器
+
+> 该生成器是快速开发的核心，可以生成前后端，支持丰富的字段类型，权限控制，DB脚本等，有更多生成方案，可以自行扩展`resources/template`模板.
+
+在工程中执行`SystemGeneratorServiceImplTest`，自行修改待生成表名生成目录在`target/seezoon-generated`.
+
+当达成`jar`,需要在**平级目录**或者**平级目录下`config`**放入`application.properties`,配置文件加载是spring boot 自带的方式。
+
+```
+# DB参数
+spring.datasource.url=jdbc:mysql://127.0.0.1:3306/seezoon-stack?useUnicode=true&&characterEncoding=utf8&serverTimezone=GMT%2B8&connectTimeout=1000
+spring.datasource.username=root
+spring.datasource.password=
+```
+
+执行命令:
+
+```
+# 可以传表名，不传则全部生成，生成目录在平级目录中seezoon-generated
+java -jar seezoon-generator-xxx-exec.jar 表名1 表名2 ...
+```
+
+该工程也可以做为依赖被其他工程使用，默认`spring-boot-maven-plugin`生成的可执行jar是不可以被依赖使用的，所以在该插件下加入配置，**可执行jar生成代码使用的是`-exec`后缀的`jar`**.
+
+```
+<plugin>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-maven-plugin</artifactId>
+  <configuration>
+ 	 <classifier>exec</classifier>
+  </configuration>
+</plugin>
+```
+
+
+
+
+
+
 

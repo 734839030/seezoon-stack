@@ -91,7 +91,7 @@
         <#list columnPlans as columnPlan>
             <#if columnPlan.update>
             <if test="${columnPlan.javaFieldName} != null">
-                ${defaultTableAliasPrefix}${columnPlan.dbColumnName} = ${"#"}{${columnPlan.javaFieldName}},
+                ${defaultTableAliasPrefix}${columnPlan.dbColumnName} = ${"#"}{${columnPlan.javaFieldName}}<#sep>,</#sep>
             </if>
             </#if>
         </#list>

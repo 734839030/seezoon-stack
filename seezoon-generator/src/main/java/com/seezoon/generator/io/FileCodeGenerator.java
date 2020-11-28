@@ -1,11 +1,11 @@
 package com.seezoon.generator.io;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.FileUtils;
 
@@ -24,26 +24,49 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FileCodeGenerator implements CodeGenerator {
 
+    private static final String ZIP_NAME = "all-sources-in-one.zip";
+
     @Override
     public void generate(TablePlan... tablePlans) throws IOException {
         // 获取根目录
-        Path generatedFolderPath = Paths.get(this.getGeneratedSourcesFolder());
+        Path generatedFolderPath = this.getGeneratedSourcesFolder();
         this.emptyGeneratedFolder(generatedFolderPath);
         for (TablePlan tablePlan : tablePlans) {
             Arrays.stream(CodeTemplate.values()).forEach((ct) -> {
                 this.createSourceFile(tablePlan, generatedFolderPath, ct);
             });
         }
+        try (OutputStream fos = Files.newOutputStream(generatedFolderPath.resolve(ZIP_NAME));
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+            ZipOutputStream zipOutputStream = new ZipOutputStream(bos)) {
+            // 生成zip包
+            Files.walk(generatedFolderPath).filter(p -> !Files.isDirectory(p) && !p.endsWith(ZIP_NAME)).forEach((f) -> {
+                try (InputStream fis = Files.newInputStream(f);
+                    BufferedInputStream bins = new BufferedInputStream(fis)) {
+                    String relativePath = generatedFolderPath.relativize(f).toString();
+                    zipOutputStream.putNextEntry(new ZipEntry(relativePath));
+                    // 写入文件
+                    byte[] buff = new byte[(int)FileUtils.ONE_KB];
+                    int len = 0;
+                    while (-1 != (len = bins.read(buff))) {
+                        zipOutputStream.write(buff, 0, len);
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
     }
 
     private void createSourceFile(TablePlan tablePlan, Path generatedFolderPath, CodeTemplate ct) {
         try {
-            Path fileParentPath =
-                Paths.get(generatedFolderPath.toString(), String.format(ct.path(), tablePlan.getModuleName()));
+            // 得到生成文件的完成目录
+            Path fileParentPath = generatedFolderPath.resolve(String.format(ct.path(), tablePlan.getModuleName()));
             if (!Files.exists(fileParentPath)) {
                 Files.createDirectories(fileParentPath);
             }
-            Path filePath = Path.of(fileParentPath.toString(), String.format(ct.fileName(), tablePlan.getClassName()));
+            // 得到生成文件路径
+            Path filePath = fileParentPath.resolve(String.format(ct.fileName(), tablePlan.getClassName()));
             Files.createFile(filePath);
             String content = FreeMarkerRender.renderTemplate(ct.tplName(), tablePlan);
             Files.writeString(filePath, content);
@@ -58,19 +81,5 @@ public class FileCodeGenerator implements CodeGenerator {
             FileUtils.deleteDirectory(generatedFolderPath.toFile());
         }
         Files.createDirectories(generatedFolderPath);
-    }
-
-    /**
-     * 获取生成目录 target/GENERATED_SOURCES_FOLDER
-     *
-     * @return
-     */
-    public String getGeneratedSourcesFolder() {
-        // 获取更目录
-        String classRoot = FileCodeGenerator.class.getClassLoader().getResource("").getPath();
-        // 去掉末尾的分隔符号
-        classRoot = classRoot.substring(0, classRoot.length() - 1);
-        String generatedSourcesParent = classRoot.substring(0, classRoot.lastIndexOf(File.separator) + 1);
-        return generatedSourcesParent + GENERATED_SOURCES_FOLDER;
     }
 }

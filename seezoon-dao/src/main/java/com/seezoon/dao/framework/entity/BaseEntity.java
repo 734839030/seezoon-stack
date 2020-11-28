@@ -20,7 +20,7 @@ import lombok.Setter;
 public class BaseEntity<PK> {
 
     /**
-     * 主键只支持单一主键，数值或者字符串,名字可以用其他的
+     * 主键只支持单一主键，数值或者字符串,名字可以用其他的,其他的代码生成器会覆写getId方法，方便使用。
      */
     @ApiModelProperty("*内置*-主键")
     private PK id;
