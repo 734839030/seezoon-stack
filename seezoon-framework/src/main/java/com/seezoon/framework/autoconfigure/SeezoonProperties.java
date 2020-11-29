@@ -15,6 +15,7 @@ public class SeezoonProperties {
 
     private DocProperties doc = new DocProperties();
     private HttpProperties http = new HttpProperties();
+    private AsyncProperties async = new AsyncProperties();
 
     @Getter
     @Setter
@@ -53,5 +54,18 @@ public class SeezoonProperties {
         private String userAgent =
             "seezoon-framework " + "(" + System.getProperty("os.name") + "/" + System.getProperty("os.version") + "/"
                 + System.getProperty("os.arch") + ";" + System.getProperty("java.version") + ")";
+    }
+
+    @Getter
+    @Setter
+    public static class AsyncProperties {
+        private final int queueCapacity = 10000; // 缓冲队列数
+        private String threadNamePrefix = "Async-Service-"; // 线程池名前缀
+        private int corePoolSize = 1; // 核心线程数（默认线程数）
+        private int maxPoolSize = 100; // 最大线程数
+        private int keepAliveTime = 60; // 允许线程空闲时间（单位：默认为秒）
+        private boolean waitForTasksToCompleteOnShutdown = true;
+        private int awaitTerminationSeconds = 10;
+
     }
 }
