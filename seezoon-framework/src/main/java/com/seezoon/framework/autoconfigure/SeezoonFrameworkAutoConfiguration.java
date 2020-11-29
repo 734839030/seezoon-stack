@@ -49,11 +49,11 @@ public class SeezoonFrameworkAutoConfiguration {
      */
     @Bean
     public Docket openApiStore() {
-        ApiInfo apiInfo =
-            new ApiInfoBuilder().title(seezoonProperties.getName()).description(seezoonProperties.getDescription())
-                .contact(
-                    new Contact(seezoonProperties.getName(), seezoonProperties.getUrl(), seezoonProperties.getAuthor()))
-                .version(seezoonProperties.getVersion()).build();
+        ApiInfo apiInfo = new ApiInfoBuilder().title(seezoonProperties.getDoc().getName())
+            .description(seezoonProperties.getDoc().getDescription())
+            .contact(new Contact(seezoonProperties.getDoc().getName(), seezoonProperties.getDoc().getUrl(),
+                seezoonProperties.getDoc().getAuthor()))
+            .version(seezoonProperties.getDoc().getVersion()).build();
 
         return new Docket(DocumentationType.OAS_30).apiInfo(apiInfo).select()
             .apis(RequestHandlerSelectors.withClassAnnotation(Api.class)).paths(PathSelectors.any()).build()
