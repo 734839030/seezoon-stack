@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
  * @author hdf
  */
 @SpringBootTest
-class SystemGeneratorServiceImplTest {
+class SystemGeneratorServiceTest {
 
     // 可多个也可以空
     public static final String[] DB_TABLES = {"sys_param"};

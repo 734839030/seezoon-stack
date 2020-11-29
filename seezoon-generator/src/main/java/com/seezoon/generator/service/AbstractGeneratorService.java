@@ -32,7 +32,8 @@ public abstract class AbstractGeneratorService {
      * @param tableNames
      * @throws IOException
      */
-    protected void generate(TablePlanHandler tablePlanHandler, String... tableNames) throws IOException {
+    protected void generate(CodeGenerator codeGenerator, TablePlanHandler tablePlanHandler, String... tableNames)
+        throws IOException {
         List<DbTable> allDbTables = new ArrayList<>();
         if (ArrayUtils.isEmpty(tableNames)) {
             allDbTables = generatorDao.findTable(null);
@@ -49,8 +50,6 @@ public abstract class AbstractGeneratorService {
             TablePlan tablePlan = tablePlanHandler.generate(dbTable, dbTableColumns);
             tablePlans.add(tablePlan);
         });
-        this.getCodeGenerator().generate(tablePlans.toArray(new TablePlan[tablePlans.size()]));
+        codeGenerator.generate(tablePlans.toArray(new TablePlan[tablePlans.size()]));
     }
-
-    protected abstract CodeGenerator getCodeGenerator();
 }

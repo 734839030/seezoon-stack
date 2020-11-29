@@ -15,7 +15,7 @@ class FileCodeGeneratorTest {
 
     @Test
     void getGeneratedSourcesFolder() throws IOException {
-        final Path generatedSourcesFolder = new FileCodeGenerator().getGeneratedSourcesFolder();
+        final Path generatedSourcesFolder = new FileCodeGenerator().getReadyGeneratedSourcesFolder();
         assertTrue(generatedSourcesFolder.toString().endsWith(FileCodeGenerator.GENERATED_SOURCES_FOLDER));
     }
 }

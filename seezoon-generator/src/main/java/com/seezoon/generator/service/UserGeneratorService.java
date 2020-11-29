@@ -1,6 +1,7 @@
 package com.seezoon.generator.service;
 
 import java.io.IOException;
+import java.io.OutputStream;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -8,8 +9,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import com.seezoon.generator.io.CodeGenerator;
-import com.seezoon.generator.io.FileCodeGenerator;
+import com.seezoon.generator.io.ZipStreamCodeGenerator;
 import com.seezoon.generator.plan.TablePlanHandler;
 import com.seezoon.generator.plan.UserTablePlanParam;
 import com.seezoon.generator.plan.impl.UserTablePlanHandlerImpl;
@@ -21,15 +21,10 @@ import com.seezoon.generator.plan.impl.UserTablePlanHandlerImpl;
 @Validated
 public class UserGeneratorService extends AbstractGeneratorService {
 
-    private FileCodeGenerator fileCodeGenerator = new FileCodeGenerator();
-
-    public void generate(@Valid @NotNull UserTablePlanParam userTablePlanParam) throws IOException {
+    public void generate(@Valid @NotNull UserTablePlanParam userTablePlanParam, OutputStream outputStream)
+        throws IOException {
         TablePlanHandler tablePlanHandler = new UserTablePlanHandlerImpl(userTablePlanParam);
-        super.generate(tablePlanHandler, userTablePlanParam.getTableName());
-    }
 
-    @Override
-    protected CodeGenerator getCodeGenerator() {
-        return fileCodeGenerator;
+        super.generate(new ZipStreamCodeGenerator(outputStream), tablePlanHandler, userTablePlanParam.getTableName());
     }
 }

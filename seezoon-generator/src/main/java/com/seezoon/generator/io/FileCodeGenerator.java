@@ -8,6 +8,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.FileUtils;
+import org.springframework.boot.system.ApplicationHome;
 
 import com.seezoon.generator.constants.CodeTemplate;
 import com.seezoon.generator.plan.TablePlan;
@@ -16,26 +17,29 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 文件的方式生成
- * <p>
- * 生成目录target/seezoon-sources/
  *
  * @author hdf
  */
 @Slf4j
 public class FileCodeGenerator implements CodeGenerator {
 
+    public static final String GENERATED_SOURCES_FOLDER = "seezoon-generated";
+
     private static final String ZIP_NAME = "all-sources-in-one.zip";
 
     @Override
     public void generate(TablePlan... tablePlans) throws IOException {
         // 获取根目录
-        Path generatedFolderPath = this.getGeneratedSourcesFolder();
-        this.emptyGeneratedFolder(generatedFolderPath);
+        Path generatedFolderPath = this.getReadyGeneratedSourcesFolder();
         for (TablePlan tablePlan : tablePlans) {
             Arrays.stream(CodeTemplate.values()).forEach((ct) -> {
                 this.createSourceFile(tablePlan, generatedFolderPath, ct);
             });
         }
+        zipSourceFiles(generatedFolderPath);
+    }
+
+    private void zipSourceFiles(Path generatedFolderPath) throws IOException {
         try (OutputStream fos = Files.newOutputStream(generatedFolderPath.resolve(ZIP_NAME));
             BufferedOutputStream bos = new BufferedOutputStream(fos);
             ZipOutputStream zipOutputStream = new ZipOutputStream(bos)) {
@@ -76,7 +80,20 @@ public class FileCodeGenerator implements CodeGenerator {
         }
     }
 
-    private void emptyGeneratedFolder(Path generatedFolderPath) throws IOException {
+    /**
+     * 开发环境则为target,jar环境则为jar所在目录
+     *
+     * @return
+     */
+    public Path getReadyGeneratedSourcesFolder() throws IOException {
+        ApplicationHome ah = new ApplicationHome(CodeGenerator.class);
+        Path docStorePath = ah.getSource().getParentFile().toPath();
+        Path generatedFolderPath = docStorePath.resolve(GENERATED_SOURCES_FOLDER);
+        this.initGeneratedFolder(generatedFolderPath);
+        return generatedFolderPath;
+    }
+
+    private void initGeneratedFolder(Path generatedFolderPath) throws IOException {
         if (Files.exists(generatedFolderPath)) {
             FileUtils.deleteDirectory(generatedFolderPath.toFile());
         }
