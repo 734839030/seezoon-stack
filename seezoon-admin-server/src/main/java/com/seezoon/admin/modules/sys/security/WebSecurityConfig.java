@@ -50,14 +50,14 @@ import com.seezoon.admin.modules.sys.security.handler.AjaxLogoutSuccessHandler;
 @ControllerAdvice
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    public static final String[] static_resources =
+    public static final String[] STATIC_RESOURCES =
         {"/**/*.html", "/**/*.js", "/**/*.css", "/**/*.ico", "/**/*.png", "/**/*.jpg"};
 
     public static final String[] DOC_API = {"/swagger-resources/**", "/**/api-docs"};
     private static final String PUBLIC_ANT_PATH = "/public/**";
     private static final String LOGIN_URL = "/login";
     private static final String LOGIN_OUT_URL = "/logout";
-    private static final String rememberKey = "C02tlRRi8JNsT6Bsp2liSE1paa5naDNY";
+    private static final String REMEMBER_KEY = "C02tlRRi8JNsT6Bsp2liSE1paa5naDNY";
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -80,7 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // seesion 管理 一个账号登录一次，后面的挤掉前面的(spring security 默认的,true 则已登录的优先)
         // remember 采用默认解密前端remember-cookie
         http.sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(false);
-        http.rememberMe().key(rememberKey).tokenValiditySeconds(7 * 24 * 60 * 60)
+        http.rememberMe().key(REMEMBER_KEY).tokenValiditySeconds(7 * 24 * 60 * 60)
             .userDetailsService(adminUserDetailsService());
 
         // 安全头设置
@@ -105,7 +105,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         // 按需忽略
-        web.ignoring().antMatchers(static_resources).antMatchers(DOC_API);
+        web.ignoring().antMatchers(STATIC_RESOURCES).antMatchers(DOC_API);
     }
 
     /**

@@ -1,13 +1,16 @@
 package com.seezoon.framework.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.seezoon.framework.autoconfigure.SeezoonProperties;
 import com.seezoon.framework.web.servlet.RequestFilter;
 
 /**
@@ -15,6 +18,9 @@ import com.seezoon.framework.web.servlet.RequestFilter;
  */
 @Configuration
 public class AutoWebMvcConfigurer implements WebMvcConfigurer {
+
+    @Autowired
+    private SeezoonProperties seezoonProperties;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -38,5 +44,20 @@ public class AutoWebMvcConfigurer implements WebMvcConfigurer {
         registration.setName(RequestFilter.class.getSimpleName());
         registration.setOrder(Ordered.HIGHEST_PRECEDENCE);
         return registration;
+    }
+
+    /**
+     * 跨域很常见，默认框架参数开启，如果想更安全，请设置allowedOrigins，如https://www.seezoon.com
+     *
+     * 实际spring boot 的处理类{@link org.springframework.web.cors.reactive.CorsWebFilter}
+     *
+     * @param registry
+     */
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        SeezoonProperties.CorsProperties cors = seezoonProperties.getCors();
+        registry.addMapping(cors.getMapping()).allowedOrigins(cors.getAllowedOrigins())
+            .allowedHeaders(cors.getAllowedHeaders()).allowedMethods(cors.getAllowedMethods()).allowCredentials(true)
+            .maxAge(cors.getMaxAge());
     }
 }

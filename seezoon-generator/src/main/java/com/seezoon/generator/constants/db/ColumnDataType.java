@@ -42,11 +42,11 @@ public enum ColumnDataType {
     ;
     // @formatter:on
 
-    private static final Map<String, ColumnDataType> columnDataTypes = new HashMap<>();
+    private static final Map<String, ColumnDataType> COLUMN_DATA_TYPES = new HashMap<>();
 
     static {
         Arrays.stream(ColumnDataType.values()).forEach((v) -> {
-            columnDataTypes.put(v.dbType, v);
+            COLUMN_DATA_TYPES.put(v.dbType, v);
         });
     }
 
@@ -61,7 +61,7 @@ public enum ColumnDataType {
     }
 
     public static ColumnDataType parse(String dbType) {
-        ColumnDataType columnDataType = columnDataTypes.get(dbType);
+        ColumnDataType columnDataType = COLUMN_DATA_TYPES.get(dbType);
         Assert.isTrue(null != columnDataType,
             String.format("dbType[%s] not support,pls supplement enum ColumnDataType", dbType));
         return columnDataType;

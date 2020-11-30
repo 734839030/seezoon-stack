@@ -1,6 +1,7 @@
 package com.seezoon.framework.autoconfigure;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.web.cors.CorsConfiguration;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +17,11 @@ public class SeezoonProperties {
     private DocProperties doc = new DocProperties();
     private HttpProperties http = new HttpProperties();
     private AsyncProperties async = new AsyncProperties();
+    private CorsProperties cors = new CorsProperties();
 
+    /**
+     * 文档相关
+     */
     @Getter
     @Setter
     public static class DocProperties {
@@ -27,6 +32,9 @@ public class SeezoonProperties {
         private String author;
     }
 
+    /**
+     * rest template 相关
+     */
     @Getter
     @Setter
     public static class HttpProperties {
@@ -56,6 +64,9 @@ public class SeezoonProperties {
                 + System.getProperty("os.arch") + ";" + System.getProperty("java.version") + ")";
     }
 
+    /**
+     * 异步处理配置
+     */
     @Getter
     @Setter
     public static class AsyncProperties {
@@ -66,6 +77,25 @@ public class SeezoonProperties {
         private int keepAliveTime = 60; // 允许线程空闲时间（单位：默认为秒）
         private boolean waitForTasksToCompleteOnShutdown = true;
         private int awaitTerminationSeconds = 10;
+    }
 
+    /**
+     * 前后端分离，跨域很常见，框架默认开启，线上为了安全可以设置allowedOrigins
+     *
+     * also see {@link org.springframework.web.cors.CorsConfiguration}
+     */
+    @Getter
+    @Setter
+    public static class CorsProperties {
+        /**
+         * 路径{@link org.springframework.util.AntPathMatcher}
+         */
+        private String mapping = "/**";
+        // 配置时候可以逗号分隔,可以写实际域名,如https://www.seeezoon.com
+        private String[] allowedOrigins = {CorsConfiguration.ALL};
+        private String[] allowedMethods = {CorsConfiguration.ALL};
+        private String[] allowedHeaders = {CorsConfiguration.ALL};
+        private boolean allowCredentials = true;
+        private long maxAge = 1800;
     }
 }

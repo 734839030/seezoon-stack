@@ -39,11 +39,11 @@ public enum InputType {
 
     FILE("file"),;
 
-    private static final Map<String, InputType> inputTypes = new HashMap<>();
+    private static final Map<String, InputType> INPUT_TYPES = new HashMap<>();
 
     static {
         Arrays.stream(InputType.values()).forEach((v) -> {
-            inputTypes.put(v.inputName(), v);
+            INPUT_TYPES.put(v.inputName(), v);
         });
     }
 
@@ -57,7 +57,7 @@ public enum InputType {
     }
 
     public static InputType parse(String inputName) {
-        InputType inputType = inputTypes.get(inputName);
+        InputType inputType = INPUT_TYPES.get(inputName);
         Assert.isTrue(null != inputType,
             String.format("inputName[%s] not support,pls supplement enum InputType", inputName));
         return inputType;

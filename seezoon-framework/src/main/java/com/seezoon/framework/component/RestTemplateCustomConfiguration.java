@@ -123,7 +123,7 @@ public class RestTemplateCustomConfiguration {
      */
     public static final class HttpClientIdleConnectionMonitor extends Thread {
 
-        private static final ArrayList<HttpClientConnectionManager> connectionManagers = new ArrayList<>();
+        private static final ArrayList<HttpClientConnectionManager> CONNECTION_MANAGERS = new ArrayList<>();
         private static Logger logger = LoggerFactory.getLogger(HttpClientIdleConnectionMonitor.class);
         private static long idleScanTime;
         private static HttpClientIdleConnectionMonitor instance;
@@ -134,8 +134,8 @@ public class RestTemplateCustomConfiguration {
 
         private HttpClientIdleConnectionMonitor(long idleConnectionTime, long idleScanTime) {
             super("Connection Manager Monitor");
-            this.idleConnectionTime = idleConnectionTime;
-            this.idleScanTime = idleScanTime;
+            HttpClientIdleConnectionMonitor.idleConnectionTime = idleConnectionTime;
+            HttpClientIdleConnectionMonitor.idleScanTime = idleScanTime;
             setDaemon(true);
         }
 
@@ -153,13 +153,14 @@ public class RestTemplateCustomConfiguration {
                 instance = new HttpClientIdleConnectionMonitor(idleConnectionTime, idleScanTime);
                 instance.start();
             }
-            return connectionManagers.add(connectionManager);
+            return CONNECTION_MANAGERS.add(connectionManager);
         }
 
         public static synchronized boolean removeConnectionManager(HttpClientConnectionManager connectionManager) {
-            boolean b = connectionManagers.remove(connectionManager);
-            if (connectionManagers.isEmpty())
+            boolean b = CONNECTION_MANAGERS.remove(connectionManager);
+            if (CONNECTION_MANAGERS.isEmpty()) {
                 shutdown();
+            }
             return b;
         }
 
@@ -167,7 +168,7 @@ public class RestTemplateCustomConfiguration {
             if (instance != null) {
                 instance.markShuttingDown();
                 instance.interrupt();
-                connectionManagers.clear();
+                CONNECTION_MANAGERS.clear();
                 instance = null;
                 return true;
             }
@@ -175,7 +176,7 @@ public class RestTemplateCustomConfiguration {
         }
 
         public static synchronized int size() {
-            return connectionManagers.size();
+            return CONNECTION_MANAGERS.size();
         }
 
         public static synchronized void setIdleConnectionTime(long idletime) {
@@ -204,7 +205,7 @@ public class RestTemplateCustomConfiguration {
                     List<HttpClientConnectionManager> connectionManagers = null;
                     synchronized (HttpClientIdleConnectionMonitor.class) {
                         connectionManagers = (List<
-                            HttpClientConnectionManager>)HttpClientIdleConnectionMonitor.connectionManagers.clone();
+                            HttpClientConnectionManager>)HttpClientIdleConnectionMonitor.CONNECTION_MANAGERS.clone();
                     }
                     for (HttpClientConnectionManager connectionManager : connectionManagers) {
                         try {
