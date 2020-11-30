@@ -10,7 +10,7 @@
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
         <jdbcConnection
-                connectionURL="jdbc:mysql://127.0.0.1:3306/seezoon-admin-lite"
+                connectionURL="jdbc:mysql://127.0.0.1:3306/seezoon-stack"
                 driverClass="com.mysql.cj.jdbc.Driver"
                 password=""
                 userId="root">

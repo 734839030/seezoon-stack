@@ -5,6 +5,7 @@ import javax.servlet.ServletRequestListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.*;
 
 import com.seezoon.framework.web.AutoWebMvcConfigurer;
@@ -24,6 +25,8 @@ import springfox.documentation.spring.web.plugins.Docket;
  * <p>
  * 通过{@code @ComponentScan }扫描advice 也可以使用@import
  *
+ * 开启简易缓存，主要针对字典及基本配置参数，实时性要求不高的业务进行缓存
+ *
  * @author hdf
  */
 @Configuration
@@ -34,6 +37,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 @ComponentScan({"com.seezoon.framework.web.advice", "com.seezoon.framework.component"})
 @EnableOpenApi
 @Import({AutoWebMvcConfigurer.class})
+@EnableCaching
 public class SeezoonFrameworkAutoConfiguration {
 
     @Autowired

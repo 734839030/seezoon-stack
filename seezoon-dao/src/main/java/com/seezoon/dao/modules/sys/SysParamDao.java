@@ -11,6 +11,4 @@ import com.seezoon.dao.modules.sys.entity.SysParam;
  */
 @Repository
 @Mapper
-public interface SysParamDao extends CrudDao<SysParam, Integer> {
-
-}
+public interface SysParamDao extends CrudDao<SysParam, Integer> {}
