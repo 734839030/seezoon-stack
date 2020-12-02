@@ -20,6 +20,7 @@
      -->
     <logger name="org.springframework" level="INFO"/>
     <logger name="io.lettuce.core" level="ERROR"/>
+    <logger name="org.apache" level="ERROR"/>
     <logger name="com.zaxxer.hikari.HikariConfig" level="DEBUG"/>
     <!-- 日志输出级别 -->
     <root level="DEBUG">

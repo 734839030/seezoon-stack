@@ -42,6 +42,7 @@ public class ${className} extends BaseEntity<${pkPlan.dataType.javaType()}> {
         </#if>
       </#if>
     private ${columnPlan.dataType.javaType()} ${columnPlan.javaFieldName};
+
    </#if>
 </#list>
 

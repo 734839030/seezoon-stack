@@ -134,8 +134,9 @@
 5. 通用组件改写；
 
    - Redis 序列化方式
-   - RestTemplate 线程池及默认属性约定 TODO
-   - Spring Boot 异步线程调整 TODO
+   - RestTemplate 线程池及默认属性约定
+   - Spring Boot 异步线程调整
+   - 跨域配置
 
 6. 启动Banner；
 
@@ -156,6 +157,12 @@
    UI美化过的:http://127.0.0.1:8080/doc.html
    原生swagger:http://127.0.0.1:8080/swagger-ui/index.html
    ```
+
+8. 基于`spring boot` 推荐的内存缓存`caffeine`；
+
+   适用于数据更新频率不高的数据，如系统参数，数据字典等.
+
+   
 
 ## 2.6、`seezoon-dao`说明
 

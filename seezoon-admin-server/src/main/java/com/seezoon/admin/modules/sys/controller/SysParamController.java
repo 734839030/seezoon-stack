@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Api(tags = "系统参数")
 @RestController
-@RequestMapping("/sys")
+@RequestMapping("/sys/param")
 @RequiredArgsConstructor
 public class SysParamController extends BaseController {
 

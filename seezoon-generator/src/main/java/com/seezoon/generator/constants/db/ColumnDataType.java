@@ -21,7 +21,7 @@ public enum ColumnDataType {
     // @formatter:off
     VARCHAR("varchar", "VARCHAR", String.class.getSimpleName()),
     CHAR("char", "CHAR", String.class.getSimpleName()),
-    TINYINT("tinyint", "TINYINT", Short.class.getSimpleName()),
+    TINYINT("tinyint", "TINYINT", Integer.class.getSimpleName()),
     INT("int", "INTEGER", Integer.class.getSimpleName()),
     INTEGER("integer", "INTEGER", Integer.class.getSimpleName()),
     bigint("bigint", "BIGINT", Long.class.getSimpleName()),

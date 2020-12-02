@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FileCodeGenerator implements CodeGenerator {
 
+    public static final String TARGET = "target";
     public static final String GENERATED_SOURCES_FOLDER = "seezoon-generated";
 
     private static final String ZIP_NAME = "all-sources-in-one.zip";
@@ -86,9 +87,17 @@ public class FileCodeGenerator implements CodeGenerator {
      * @return
      */
     public Path getReadyGeneratedSourcesFolder() throws IOException {
-        ApplicationHome ah = new ApplicationHome(CodeGenerator.class);
-        Path docStorePath = ah.getSource().getParentFile().toPath();
-        Path generatedFolderPath = docStorePath.resolve(GENERATED_SOURCES_FOLDER);
+        ApplicationHome applicationHome = new ApplicationHome(FileCodeGenerator.class);
+        // 工程路径或者jar所在目录
+        Path usrDir = applicationHome.getDir().toPath();
+        // 在jar 中不为null，不在jar中dir 则为项目目录
+        Path generatedFolderPath = usrDir.resolve(TARGET);
+        if (null != applicationHome.getSource()) {
+            // 替换target 路径
+            generatedFolderPath = generatedFolderPath.resolveSibling(GENERATED_SOURCES_FOLDER);
+        } else {
+            generatedFolderPath = generatedFolderPath.resolve(GENERATED_SOURCES_FOLDER);
+        }
         this.initGeneratedFolder(generatedFolderPath);
         return generatedFolderPath;
     }

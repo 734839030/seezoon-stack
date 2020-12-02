@@ -19,7 +19,7 @@ import com.seezoon.dao.modules.sys.entity.SysParamCondition;
 @Service
 public class SysParamService extends AbstractCrudService<SysParamDao, SysParam, Integer> {
 
-    @Cacheable(cacheNames = "SysParam")
+    @Cacheable(cacheNames = "SysParam", key = "#paramKey")
     @Transactional(readOnly = true)
     public SysParam findByParamKey(@NotEmpty String paramKey) {
         SysParamCondition sysParamCondition = new SysParamCondition();

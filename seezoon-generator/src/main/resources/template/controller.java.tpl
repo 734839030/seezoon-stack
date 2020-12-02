@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Api(tags = "${menuName!}")
 @RestController
-@RequestMapping("/${moduleName}")
+@RequestMapping("/${moduleName}/${functionName}")
 @RequiredArgsConstructor
 public class ${className}Controller extends BaseController {
 
