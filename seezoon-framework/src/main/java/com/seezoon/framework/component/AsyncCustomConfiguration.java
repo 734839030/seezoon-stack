@@ -20,7 +20,7 @@ import com.seezoon.framework.autoconfigure.SeezoonProperties;
 /**
  * 异步配置
  *
- * 如需要使用异步，springboot 要求显示的用{@link @EnableAsync}
+ * 如需要使用异步，springboot 要求显示的用{@code @EnableAsync}
  */
 @Configuration
 public class AsyncCustomConfiguration extends AsyncConfigurerSupport {
@@ -44,6 +44,7 @@ public class AsyncCustomConfiguration extends AsyncConfigurerSupport {
         SeezoonProperties.AsyncProperties async = seezoonProperties.getAsync();
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(async.getCorePoolSize());
+        executor.setAllowCoreThreadTimeOut(async.isAllowCoreThreadTimeOut());
         executor.setMaxPoolSize(async.getMaxPoolSize());
         executor.setQueueCapacity(async.getQueueCapacity());
         executor.setKeepAliveSeconds(async.getKeepAliveTime());

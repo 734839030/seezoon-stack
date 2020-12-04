@@ -18,6 +18,7 @@ public class SeezoonProperties {
     private HttpProperties http = new HttpProperties();
     private AsyncProperties async = new AsyncProperties();
     private CorsProperties cors = new CorsProperties();
+    private ScheduledProperties scheduled = new ScheduledProperties();
 
     /**
      * 文档相关
@@ -73,6 +74,7 @@ public class SeezoonProperties {
         private final int queueCapacity = 10000; // 缓冲队列数
         private String threadNamePrefix = "Async-Service-"; // 线程池名前缀
         private int corePoolSize = 1; // 核心线程数（默认线程数）
+        private boolean allowCoreThreadTimeOut = true; // core size 可以根据自动缩到0
         private int maxPoolSize = 100; // 最大线程数
         private int keepAliveTime = 60; // 允许线程空闲时间（单位：默认为秒）
         private boolean waitForTasksToCompleteOnShutdown = true;
@@ -97,5 +99,13 @@ public class SeezoonProperties {
         private String[] allowedHeaders = {CorsConfiguration.ALL};
         private boolean allowCredentials = true;
         private long maxAge = 1800;
+    }
+
+    @Getter
+    @Setter
+    public static class ScheduledProperties {
+        private int corePoolSize = 1; // 核心线程数（默认线程数）
+        private int maxPoolSize = 100; // 最大线程数
+        private int keepAliveTime = 60; // 允许线程空闲时间（单位：默认为秒）
     }
 }
