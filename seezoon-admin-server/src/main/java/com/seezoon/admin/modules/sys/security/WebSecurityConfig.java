@@ -28,7 +28,7 @@ import com.seezoon.admin.modules.sys.security.handler.AjaxLogoutSuccessHandler;
  *     param:
  *          username
  *          password
- *          remember-me
+ *          rememberMe
  *
  *     退出登录
  *     url:/logout
@@ -49,11 +49,10 @@ import com.seezoon.admin.modules.sys.security.handler.AjaxLogoutSuccessHandler;
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @ControllerAdvice
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
     public static final String[] STATIC_RESOURCES =
         {"/**/*.html", "/**/*.js", "/**/*.css", "/**/*.ico", "/**/*.png", "/**/*.jpg"};
-
     public static final String[] DOC_API = {"/swagger-resources/**", "/**/api-docs"};
+    private static final String DEFAULT_REMEMBER_ME_NAME = "rememberMe";
     private static final String PUBLIC_ANT_PATH = "/public/**";
     private static final String LOGIN_URL = "/login";
     private static final String LOGIN_OUT_URL = "/logout";
@@ -80,8 +79,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // seesion 管理 一个账号登录一次，后面的挤掉前面的(spring security 默认的,true 则已登录的优先)
         // remember 采用默认解密前端remember-cookie
         http.sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(false);
-        http.rememberMe().key(REMEMBER_KEY).tokenValiditySeconds(7 * 24 * 60 * 60)
-            .userDetailsService(adminUserDetailsService());
+        http.rememberMe().rememberMeParameter(DEFAULT_REMEMBER_ME_NAME).key(REMEMBER_KEY)
+            .tokenValiditySeconds(7 * 24 * 60 * 60).userDetailsService(adminUserDetailsService());
 
         // 安全头设置
         http.headers().defaultsDisabled()// 关闭默认

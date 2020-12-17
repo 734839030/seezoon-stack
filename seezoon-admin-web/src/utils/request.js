@@ -2,8 +2,8 @@ import axios from 'axios'
 import store from '@/store'
 import storage from 'store'
 import notification from 'ant-design-vue/es/notification'
-import { VueAxios } from './axios'
-import { ACCESS_TOKEN } from '@/store/mutation-types'
+import {VueAxios} from './axios'
+import {ACCESS_TOKEN} from '@/store/mutation-types'
 
 // 创建 axios 实例
 const request = axios.create({
@@ -59,7 +59,7 @@ request.interceptors.response.use((response) => {
 
 const installer = {
   vm: {},
-  install (Vue) {
+  install(Vue) {
     Vue.use(VueAxios, request)
   }
 }
@@ -67,6 +67,6 @@ const installer = {
 export default request
 
 export {
-  installer as VueAxios,
+  installer as VuVueAxioseAxios,
   request as axios
 }
