@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.PageSerializable;
 import com.seezoon.dao.framework.CrudDao;
 import com.seezoon.dao.framework.entity.AbstractQueryCondition;
 import com.seezoon.dao.framework.entity.BaseEntity;
@@ -67,16 +68,18 @@ public abstract class AbstractCrudService<D extends CrudDao<T, PK>, T extends Ba
     /**
      * 分页查询
      *
+     * {@code PageSerializable}属性较少，适合序列化，如果想要更多属性，可以使用{@link PageInfo}
+     *
      * @param condition
      * @param pageNum
      * @param pageSize
      * @return
      */
     @Transactional(readOnly = true)
-    public PageInfo<T> find(AbstractQueryCondition condition, int pageNum, int pageSize) {
+    public PageSerializable<T> find(AbstractQueryCondition condition, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize, Boolean.TRUE);
         List<T> list = this.find(condition);
-        PageInfo<T> pageInfo = new PageInfo<T>(list);
+        PageSerializable<T> pageInfo = new PageSerializable<T>(list);
         return pageInfo;
     }
 

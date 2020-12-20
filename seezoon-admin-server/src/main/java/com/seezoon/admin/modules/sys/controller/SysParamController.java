@@ -5,7 +5,7 @@ import javax.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.PageSerializable;
 import com.seezoon.admin.modules.sys.service.SysParamService;
 import com.seezoon.dao.modules.sys.entity.SysParam;
 import com.seezoon.dao.modules.sys.entity.SysParamCondition;
@@ -36,11 +36,12 @@ public class SysParamController extends BaseController {
     }
 
     @ApiOperation(value = "分页查询")
-    @PreAuthorize("hasAuthority('sys:param:query')")
+    // @PreAuthorize("hasAuthority('sys:param:query')")
     @PostMapping("/query")
-    public Result<PageInfo<SysParam>> query(SysParamCondition condition) {
-        PageInfo<SysParam> pageInfo = sysParamService.find(condition, condition.getPage(), condition.getPageSize());
-        return Result.ok(pageInfo);
+    public Result<PageSerializable<SysParam>> query(@RequestBody SysParamCondition condition) {
+        PageSerializable<SysParam> pageSerializable =
+            sysParamService.find(condition, condition.getPage(), condition.getPageSize());
+        return Result.ok(pageSerializable);
     }
 
     @ApiOperation(value = "保存")

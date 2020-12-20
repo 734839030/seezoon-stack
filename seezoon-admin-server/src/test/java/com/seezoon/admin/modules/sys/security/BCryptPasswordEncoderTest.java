@@ -1,6 +1,7 @@
 package com.seezoon.admin.modules.sys.security;
 
-import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.RepeatedTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -15,6 +16,6 @@ public class BCryptPasswordEncoderTest {
     public void encode() {
         String encode = bCryptPasswordEncoder.encode("123");
         System.out.println(encode);
-        Assert.assertTrue(bCryptPasswordEncoder.matches("123", encode));
+        assertTrue(bCryptPasswordEncoder.matches("123", encode));
     }
 }

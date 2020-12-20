@@ -81,7 +81,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(false);
         http.rememberMe().rememberMeParameter(DEFAULT_REMEMBER_ME_NAME).key(REMEMBER_KEY)
             .tokenValiditySeconds(7 * 24 * 60 * 60).userDetailsService(adminUserDetailsService());
-
+        // 需要添加不然，spring boot 的跨域配置无效
+        http.cors();
         // 安全头设置
         http.headers().defaultsDisabled()// 关闭默认
             // 浏览器根据respone content type 格式解析资源

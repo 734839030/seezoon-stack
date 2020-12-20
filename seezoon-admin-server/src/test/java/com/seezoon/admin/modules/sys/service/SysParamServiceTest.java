@@ -21,6 +21,15 @@ class SysParamServiceTest extends BaseSpringBootTest {
             SysParam sysParam = sysParamService.findByParamKey("key1");
             System.out.println(sysParam.getName());
         }
+    }
 
+    @Test
+    void save() {
+        for (int i = 0; i < 200; i++) {
+            SysParam sysParam = sysParamService.findByParamKey("key1");
+            sysParam.setName("key-n-" + i);
+            sysParam.setParamKey("key-k" + i);
+            sysParamService.save(sysParam);
+        }
     }
 }

@@ -7,7 +7,7 @@ import javax.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.PageSerializable;
 import com.seezoon.admin.modules.sys.service.SysDictService;
 import com.seezoon.dao.modules.sys.entity.SysDict;
 import com.seezoon.dao.modules.sys.entity.SysDictCondition;
@@ -48,9 +48,10 @@ public class SysDictController extends BaseController {
     @ApiOperation(value = "分页查询")
     @PreAuthorize("hasAuthority('sys:dict:query')")
     @PostMapping("/query")
-    public Result<PageInfo<SysDict>> query(SysDictCondition condition) {
-        PageInfo<SysDict> pageInfo = sysDictService.find(condition, condition.getPage(), condition.getPageSize());
-        return Result.ok(pageInfo);
+    public Result<PageSerializable<SysDict>> query(SysDictCondition condition) {
+        PageSerializable<SysDict> pageSerializable =
+            sysDictService.find(condition, condition.getPage(), condition.getPageSize());
+        return Result.ok(pageSerializable);
     }
 
     @ApiOperation(value = "保存")

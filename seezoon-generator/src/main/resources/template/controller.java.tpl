@@ -5,7 +5,7 @@ import javax.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import com.github.pagehelper.PageInfo;
+import com.github.pagehelper.PageSerializable;
 import com.seezoon.admin.modules.${moduleName}.service.${className}Service;
 import com.seezoon.dao.modules.${moduleName}.entity.${className};
 import com.seezoon.dao.modules.${moduleName}.entity.${className}Condition;
@@ -39,9 +39,9 @@ public class ${className}Controller extends BaseController {
     @ApiOperation(value = "分页查询")
     @PreAuthorize("hasAuthority('${moduleName}:${functionName}:query')")
     @PostMapping("/query")
-    public Result<PageInfo<${className}>> query(${className}Condition condition) {
-        PageInfo<${className}> pageInfo = ${className?uncap_first}Service.find(condition, condition.getPage(), condition.getPageSize());
-        return Result.ok(pageInfo);
+    public Result<PageSerializable<${className}>> query(${className}Condition condition) {
+        PageSerializable<${className}> pageSerializable = ${className?uncap_first}Service.find(condition, condition.getPage(), condition.getPageSize());
+        return Result.ok(pageSerializable);
     }
 
     @ApiOperation(value = "保存")

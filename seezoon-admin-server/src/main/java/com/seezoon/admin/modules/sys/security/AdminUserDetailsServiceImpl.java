@@ -22,7 +22,7 @@ public class AdminUserDetailsServiceImpl implements UserDetailsService {
         authorities.add(new UserGrantedAuthority("ADMIN", true));
         authorities.add(new UserGrantedAuthority("sys:queryById"));
         AdminUserDetails adminUserDetails =
-            new AdminUserDetails(username, new BCryptPasswordEncoder().encode("123"), false, authorities);
+            new AdminUserDetails(username, new BCryptPasswordEncoder().encode("123456"), false, authorities);
         return adminUserDetails;
     }
 }

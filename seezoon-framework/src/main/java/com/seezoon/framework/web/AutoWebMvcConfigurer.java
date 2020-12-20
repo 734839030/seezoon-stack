@@ -47,7 +47,10 @@ public class AutoWebMvcConfigurer implements WebMvcConfigurer {
     }
 
     /**
+     *
      * 跨域很常见，默认框架参数开启，如果想更安全，请设置allowedOrigins，如https://www.seezoon.com
+     *
+     * 如果使用spring security 必须配置{@code http.cors()} 否则以下配置无效
      *
      * 实际spring boot 的处理类{@link org.springframework.web.cors.reactive.CorsWebFilter}
      *
@@ -57,7 +60,7 @@ public class AutoWebMvcConfigurer implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         SeezoonProperties.CorsProperties cors = seezoonProperties.getCors();
         registry.addMapping(cors.getMapping()).allowedOrigins(cors.getAllowedOrigins())
-            .allowedHeaders(cors.getAllowedHeaders()).allowedMethods(cors.getAllowedMethods()).allowCredentials(true)
-            .maxAge(cors.getMaxAge());
+            .allowedHeaders(cors.getAllowedHeaders()).allowedMethods(cors.getAllowedMethods())
+            .allowCredentials(cors.isAllowCredentials()).maxAge(cors.getMaxAge());
     }
 }
