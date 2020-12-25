@@ -64,6 +64,11 @@ public class TablePlan {
      * 是否引入BigDecimal
      */
     private boolean importBigDecimal;
+
+    /**
+     * 字段可排序查询
+     */
+    private boolean sortable;
     /**
      * 是否有大字段
      */
@@ -72,6 +77,7 @@ public class TablePlan {
      * 是否有搜索
      */
     private boolean hasSearch;
+
     /**
      * 是否富文本
      */

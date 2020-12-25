@@ -25,7 +25,7 @@ public class ColumnPlan implements Comparable<ColumnPlan> {
      */
     private String dbColumnName;
     /**
-     * 列备注
+     * 列中文名，默认是DB列备注
      */
     private String fieldName;
     /**

@@ -71,6 +71,7 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
                     .javaFieldName(CaseUtils.toCamelCase(v.getName(), false, DB_DELIMITER.toCharArray()))
                     .nullable(v.getNullable())
                     .sort(v.getSort())
+                    .sortable(DefaultColumns.create_time.name() == v.getName() ) // 创建时间默认可以排序
                     .build();
             // @formatter:on
             columnPlan.setInsert(true);
@@ -131,12 +132,13 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
                 && !Arrays.stream(DefaultColumns.values()).map((defaultColumn) -> defaultColumn.name())
                     .collect(Collectors.toList()).contains(columnPlan.getDbColumnName())) {
                 columnPlan.setSearch(true);
+                columnPlan.setSortable(true);
                 columnPlan.setQueryType(QueryType.EQUAL);
                 tablePlan.setHasSearch(true);
             }
             columnPlans.add(columnPlan);
         });
-
+        tablePlan.setSortable(columnPlans.stream().anyMatch(columnPlan -> columnPlan.isSortable()));
         // 一定要有主键
         if (null == tablePlan.getPkPlan()) {
             throw new IllegalArgumentException(

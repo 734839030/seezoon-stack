@@ -43,6 +43,8 @@ public class UserTablePlanHandlerImpl implements TablePlanHandler {
             tablePlan.setClassName(userTablePlanParam.getClassName());
             // 默认方案会自动判断是否search
             tablePlan.setHasSearch(false);
+            // 默认方法会对有所以的非默认字段排序
+            tablePlan.setSortable(false);
             Map<String, ColumnPlan> columnPlanMapping =
                 tablePlan.getColumnPlans().stream().collect(Collectors.toMap(ColumnPlan::getDbColumnName, v -> v));
             // 主键字段名改写
@@ -80,6 +82,9 @@ public class UserTablePlanHandlerImpl implements TablePlanHandler {
 
                     if (u.isSearch() && !tablePlan.isHasSearch()) {
                         tablePlan.setHasSearch(true);
+                    }
+                    if (u.isSortable() && !tablePlan.isSortable()) {
+                        tablePlan.setSortable(true);
                     }
                 });
             }
