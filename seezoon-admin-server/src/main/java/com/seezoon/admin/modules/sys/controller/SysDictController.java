@@ -1,7 +1,5 @@
 package com.seezoon.admin.modules.sys.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,22 +18,15 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * 字典
- *
- * @author seezoon-generator 2020年12月2日 下午11:35:26
+ * @author seezoon-generator 2020年12月26日 上午1:50:03
  */
-@Api(tags = "数据字典")
+@Api(tags = "字典")
 @RestController
 @RequestMapping("/sys/dict")
 @RequiredArgsConstructor
 public class SysDictController extends BaseController {
 
     private final SysDictService sysDictService;
-
-    @ApiOperation(value = "根据类型查询")
-    @GetMapping("/query/type/{type}")
-    public Result<List<SysDict>> query(@PathVariable String type) {
-        return Result.ok(sysDictService.find(type));
-    }
 
     @ApiOperation(value = "主键查询")
     @PreAuthorize("hasAuthority('sys:dict:query')")
@@ -49,8 +40,7 @@ public class SysDictController extends BaseController {
     @PreAuthorize("hasAuthority('sys:dict:query')")
     @PostMapping("/query")
     public Result<PageSerializable<SysDict>> query(SysDictCondition condition) {
-        PageSerializable<SysDict> pageSerializable =
-            sysDictService.find(condition, condition.getPage(), condition.getPageSize());
+        PageSerializable<SysDict> pageSerializable = sysDictService.find(condition, condition.getPage(), condition.getPageSize());
         return Result.ok(pageSerializable);
     }
 

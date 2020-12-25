@@ -28,4 +28,7 @@ public class SysParamCondition extends PageCondition {
     @ApiModelProperty(value = "唯一键")
     private String paramKey;
 
+    @ApiModelProperty(value = "状态")
+    private Integer status;
+
 }

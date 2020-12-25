@@ -37,7 +37,8 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
      */
     private static final String DB_DELIMITER = "_";
     private static final String[] DEFAULT_NOT_UPDATE_COLUMNS = {"create_by", "create_time"};
-
+    private static final String[] DEFAULT_COLUMNS =
+        {"id", "status", "create_by", "create_time", "update_by", "update_time", "remarks"};
     private static final String[] DEFAULT_LIST_COLUMNS = {"create_time"};
 
     @Override
@@ -76,6 +77,7 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
             // @formatter:on
             columnPlan.setInsert(true);
             columnPlan.setUpdate(!ArrayUtils.contains(DEFAULT_NOT_UPDATE_COLUMNS, columnPlan.getDbColumnName()));
+            columnPlan.setDefaultField(ArrayUtils.contains(DEFAULT_COLUMNS, columnPlan.getDbColumnName()));
             columnPlan.setList(ArrayUtils.contains(DEFAULT_LIST_COLUMNS, columnPlan.getDbColumnName()));
             // 是否String 类型
             columnPlan.setStringType(columnPlan.getDataType().javaType().equals(String.class.getSimpleName()));

@@ -39,6 +39,14 @@
             and t.type = #{type}
             </if>
         </where>
+        <choose>
+            <when test="sortField != null and sortField != '' and sortOrder != null and sortOrder !=''">
+                order by t.${sortField} ${sortOrder}
+            </when>
+            <otherwise>
+                order by t.create_time desc
+            </otherwise>
+        </choose>
     </select>
 
     <delete id="deleteByPrimaryKey">
@@ -49,11 +57,11 @@
         </foreach>
     </delete>
 
-    <insert id="insert" >
-        insert into sys_dict (id,type,code,name,sort,status,create_by,create_time,update_by,update_time,remarks)
+    <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_dict (type,code,name,sort,status,create_by,create_time,update_by,update_time,remarks)
         values
         <foreach item="item" collection="array" separator=",">
-            (#{item.id},#{item.type},#{item.code},#{item.name},#{item.sort},#{item.status},#{item.create_by},#{item.create_time},#{item.update_by},#{item.update_time},#{item.remarks})
+            (#{item.type},#{item.code},#{item.name},#{item.sort},#{item.status},#{item.create_by},#{item.create_time},#{item.update_by},#{item.update_time},#{item.remarks})
         </foreach>
     </insert>
 
@@ -75,9 +83,6 @@
             <if test="status != null">
                 t.status = #{status},
             </if>
-            <if test="createTime != null">
-                t.create_time = #{createTime},
-            </if>
             <if test="updateBy != null">
                 t.update_by = #{updateBy},
             </if>
@@ -97,7 +102,6 @@
         ,t.name = #{name}
         ,t.sort = #{sort}
         ,t.status = #{status}
-        ,t.create_time = #{createTime}
         ,t.update_by = #{updateBy}
         ,t.update_time = #{updateTime}
         ,t.remarks = #{remarks}

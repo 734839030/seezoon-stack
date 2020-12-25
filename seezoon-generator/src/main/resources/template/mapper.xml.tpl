@@ -67,7 +67,7 @@
         </#if>
         <choose>
             <when test="sortField != null and sortField != '' and sortOrder != null and sortOrder !=''">
-                order by ${defaultTableAliasPrefix}${sortField} ${sortOrder}
+                order by ${defaultTableAliasPrefix}${"$"}{sortField} ${"$"}{sortOrder}
             </when>
             <otherwise>
                 <#list columnPlans as columnPlan>
