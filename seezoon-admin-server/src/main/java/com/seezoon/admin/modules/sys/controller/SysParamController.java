@@ -1,6 +1,7 @@
 package com.seezoon.admin.modules.sys.controller;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class SysParamController extends BaseController {
     }
 
     @ApiOperation(value = "分页查询")
-    // @PreAuthorize("hasAuthority('sys:param:query')")
+    @PreAuthorize("hasAuthority('sys:param:query')")
     @PostMapping("/query")
     public Result<PageSerializable<SysParam>> query(@RequestBody SysParamCondition condition) {
         PageSerializable<SysParam> pageSerializable =
@@ -66,5 +67,12 @@ public class SysParamController extends BaseController {
     public Result delete(@RequestParam Integer id) {
         sysParamService.delete(id);
         return Result.SUCCESS;
+    }
+
+    @ApiOperation(value = "检查是否重复")
+    @PostMapping(value = "/checkParamKey")
+    public Result checkParamKey(Integer id, @NotEmpty String paramKey) {
+        SysParam sysParam = this.sysParamService.findByParamKey(paramKey);
+        return Result.ok(null == sysParam || sysParam.getId().equals(id));
     }
 }

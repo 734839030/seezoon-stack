@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -46,7 +45,7 @@ import com.seezoon.admin.modules.sys.security.handler.AjaxLogoutSuccessHandler;
  * @author hdf
  */
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+// @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @ControllerAdvice
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String[] STATIC_RESOURCES =
@@ -62,7 +61,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // 需要认证和授权的请求配置
         http.authorizeRequests().antMatchers(PUBLIC_ANT_PATH).permitAll().anyRequest().authenticated();
-
         // 自带username filter provider 处理机制
         http.formLogin().loginProcessingUrl(LOGIN_URL).successHandler(ajaxAuthenticationSuccessHandler())
             .failureHandler(ajaxAuthenticationFailureHandler());
@@ -79,7 +77,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // seesion 管理 一个账号登录一次，后面的挤掉前面的(spring security 默认的,true 则已登录的优先)
         // remember 采用默认解密前端remember-cookie
         http.sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(false);
-        http.rememberMe().rememberMeParameter(DEFAULT_REMEMBER_ME_NAME).key(REMEMBER_KEY)
+        http.rememberMe().rememberMeParameter(DEFAULT_REMEMBER_ME_NAME).key(REMEMBER_KEY).useSecureCookie(true)
             .tokenValiditySeconds(7 * 24 * 60 * 60).userDetailsService(adminUserDetailsService());
         // 需要添加不然，spring boot 的跨域配置无效
         http.cors();

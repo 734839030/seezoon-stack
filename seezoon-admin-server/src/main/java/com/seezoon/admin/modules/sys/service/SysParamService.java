@@ -21,10 +21,16 @@ public class SysParamService extends AbstractCrudService<SysParamDao, SysParam, 
 
     @Cacheable(cacheNames = "SysParam", key = "#paramKey")
     @Transactional(readOnly = true)
+    public SysParam findCacheByParamKey(@NotEmpty String paramKey) {
+        return this.findByParamKey(paramKey);
+    }
+
+    @Transactional(readOnly = true)
     public SysParam findByParamKey(@NotEmpty String paramKey) {
         SysParamCondition sysParamCondition = new SysParamCondition();
         sysParamCondition.setParamKey(paramKey);
         List<SysParam> sysParams = this.d.selectByCondition(sysParamCondition);
         return sysParams.isEmpty() ? null : sysParams.get(0);
     }
+
 }

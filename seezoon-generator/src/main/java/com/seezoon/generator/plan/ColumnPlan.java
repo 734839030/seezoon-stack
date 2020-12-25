@@ -56,11 +56,6 @@ public class ColumnPlan implements Comparable<ColumnPlan> {
     private String javaFieldName;
 
     /**
-     * 是否默认字段忽略，则字段会在能忽略的场景忽略，比如默认字段
-     */
-    private boolean defaultField;
-
-    /**
      * 大量需要判断是否字符串的
      */
     private boolean stringType;

@@ -1,39 +1,37 @@
 <template>
   <pro-layout
-    :title="title"
-    :menus="menus"
-    :collapsed="collapsed"
-    :mediaQuery="query"
-    :isMobile="isMobile"
-    :handleMediaQuery="handleMediaQuery"
-    :handleCollapse="handleCollapse"
-    :logo="logoRender"
-    :i18nRender="i18nRender"
     v-bind="settings"
+    :collapsed="collapsed"
+    :handleCollapse="handleCollapse"
+    :handleMediaQuery="handleMediaQuery"
+    :i18nRender="i18nRender"
+    :isMobile="isMobile"
+    :logo="logoRender"
+    :mediaQuery="query"
+    :menus="menus"
+      :title="title"
   >
-
-    <setting-drawer :settings="settings" @change="handleSettingChange" />
+    <setting-drawer :settings="settings" @change="handleSettingChange"/>
     <template v-slot:rightContentRender>
-      <right-content :top-menu="settings.layout === 'topmenu'" :is-mobile="isMobile" :theme="settings.theme" />
+      <right-content :is-mobile="isMobile" :theme="settings.theme" :top-menu="settings.layout === 'topmenu'"/>
     </template>
     <template v-slot:footerRender>
-      <global-footer />
+      <global-footer/>
     </template>
-    <router-view />
+    <router-view/>
   </pro-layout>
 </template>
 
 <script>
-import { SettingDrawer, updateTheme } from '@ant-design-vue/pro-layout'
-import { i18nRender } from '@/locales'
-import { mapState } from 'vuex'
-import { SIDEBAR_TYPE, TOGGLE_MOBILE_TYPE } from '@/store/mutation-types'
+import {SettingDrawer, updateTheme} from '@ant-design-vue/pro-layout'
+import {i18nRender} from '@/locales'
+import {mapState} from 'vuex'
+import {SIDEBAR_TYPE, TOGGLE_MOBILE_TYPE} from '@/store/mutation-types'
 
 import defaultSettings from '@/config/defaultSettings'
 import RightContent from '@/components/GlobalHeader/RightContent'
 import GlobalFooter from '@/components/GlobalFooter'
 import Ads from '@/components/Other/CarbonAds'
-import LogoSvg from '../assets/logo.svg?inline'
 
 export default {
   name: 'BasicLayout',
@@ -43,7 +41,7 @@ export default {
     GlobalFooter,
     Ads
   },
-  data () {
+  data() {
     return {
       // preview.pro.antdv.com only use.
       isProPreviewSite: process.env.VUE_APP_PREVIEW === 'true' && process.env.NODE_ENV !== 'development',
@@ -83,7 +81,7 @@ export default {
       mainMenu: state => state.permission.addRouters
     })
   },
-  created () {
+  created() {
     const routes = this.mainMenu.find(item => item.path === '/')
     this.menus = (routes && routes.children) || []
     // 处理侧栏收起状态
@@ -94,7 +92,7 @@ export default {
       this.$store.commit(TOGGLE_MOBILE_TYPE, this.isMobile)
     })
   },
-  mounted () {
+  mounted() {
     const userAgent = navigator.userAgent
     if (userAgent.indexOf('Edge') > -1) {
       this.$nextTick(() => {
@@ -113,7 +111,7 @@ export default {
   },
   methods: {
     i18nRender,
-    handleMediaQuery (val) {
+    handleMediaQuery(val) {
       this.query = val
       if (this.isMobile && !val['screen-xs']) {
         this.isMobile = false
@@ -126,10 +124,10 @@ export default {
         // this.settings.fixSiderbar = false
       }
     },
-    handleCollapse (val) {
+    handleCollapse(val) {
       this.collapsed = val
     },
-    handleSettingChange ({ type, value }) {
+    handleSettingChange({type, value}) {
       console.log('type', type, value)
       type && (this.settings[type] = value)
       switch (type) {
@@ -146,8 +144,10 @@ export default {
           break
       }
     },
-    logoRender () {
-      return <LogoSvg />
+    logoRender() {
+      return
+    <
+      LogoSvg / >
     }
   }
 }

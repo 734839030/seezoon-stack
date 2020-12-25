@@ -18,10 +18,10 @@ class FreeMarkerRenderTest {
 
     @Test
     void testBooleanIs() {
-        ColumnPlan columnPlan = ColumnPlan.builder().defaultField(false).build();
+        ColumnPlan columnPlan = ColumnPlan.builder().list(false).build();
         // http://freemarker.foofun.cn/dgui_quickstart_template.html#autoid_7
-        System.out.println(FreeMarkerRender
-            .renderStringTemplate("${defaultField?string('true','false')}<#if defaultField>12</#if>", columnPlan));
+        System.out.println(
+            FreeMarkerRender.renderStringTemplate("${list?string('true','false')}<#if list>12</#if>", columnPlan));
     }
 
     @Test

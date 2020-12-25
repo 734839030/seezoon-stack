@@ -40,6 +40,14 @@
                 and status = #{status}
             </if>
         </where>
+        <choose>
+            <when test="sortField != null and sortField != '' and sortOrder != null and sortOrder !=''">
+                order by ${sortField} ${sortOrder}
+            </when>
+            <otherwise>
+                order by create_time desc
+            </otherwise>
+        </choose>
     </select>
 
     <delete id="deleteByPrimaryKey">

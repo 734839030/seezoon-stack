@@ -90,7 +90,10 @@ public abstract class AbstractCrudService<D extends CrudDao<T, PK>, T extends Ba
      * @return
      */
     public int save(T... records) {
-        Arrays.stream(records).forEach((t) -> t.setUpdateTime(new Date()));
+        Arrays.stream(records).forEach((t) -> {
+            t.setCreateTime(new Date());
+            t.setUpdateTime(t.getCreateTime());
+        });
         return this.d.insert(records);
     }
 
