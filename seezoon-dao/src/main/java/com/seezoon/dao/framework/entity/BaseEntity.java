@@ -22,7 +22,7 @@ public class BaseEntity<PK> {
     /**
      * 主键只支持单一主键，数值或者字符串,名字可以用其他的,其他的代码生成器会覆写getId方法，方便使用。
      */
-    @ApiModelProperty("*内置*-主键")
+    @ApiModelProperty(value = "*内置*-主键")
     private PK id;
     /**
      * 数据状态 一般表建议不要这个字段，设计上没有软删除场景，如果有就用

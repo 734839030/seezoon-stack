@@ -17,7 +17,7 @@ import lombok.ToString;
 /**
  * 字典
  *
- * @author seezoon-generator 2020年12月2日 下午11:35:26
+ * @author seezoon-generator 2020年12月26日 上午1:50:03
  */
 @ApiModel
 @Getter

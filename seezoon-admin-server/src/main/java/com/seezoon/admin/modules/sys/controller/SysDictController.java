@@ -1,6 +1,9 @@
 package com.seezoon.admin.modules.sys.controller;
 
+import java.util.Objects;
+
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * 字典
+ *
  * @author seezoon-generator 2020年12月26日 上午1:50:03
  */
 @Api(tags = "字典")
@@ -40,7 +44,8 @@ public class SysDictController extends BaseController {
     @PreAuthorize("hasAuthority('sys:dict:query')")
     @PostMapping("/query")
     public Result<PageSerializable<SysDict>> query(SysDictCondition condition) {
-        PageSerializable<SysDict> pageSerializable = sysDictService.find(condition, condition.getPage(), condition.getPageSize());
+        PageSerializable<SysDict> pageSerializable =
+            sysDictService.find(condition, condition.getPage(), condition.getPageSize());
         return Result.ok(pageSerializable);
     }
 
@@ -66,5 +71,14 @@ public class SysDictController extends BaseController {
     public Result delete(@RequestParam Integer id) {
         sysDictService.delete(id);
         return Result.SUCCESS;
+    }
+
+    @ApiOperation(value = "检查是否重复")
+    @PreAuthorize("hasAuthority('sys:dict:query')")
+    @PostMapping(value = "/checkParamKey")
+    public Result checkParamKey(@RequestParam(required = false) Integer id, @NotBlank @RequestParam String type,
+        @NotBlank @RequestParam String code) {
+        SysDict sysDict = this.sysDictService.findByTypeAndCode(type, code);
+        return Result.ok(null == sysDict || Objects.equals(sysDict.getId(), id));
     }
 }

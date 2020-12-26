@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -35,6 +36,21 @@ public abstract class AbstractCrudService<D extends CrudDao<T, PK>, T extends Ba
     @Transactional(readOnly = true)
     public T find(PK pk) {
         return this.d.selectByPrimaryKey(pk);
+    }
+
+    /**
+     * 更具条件返回一个
+     *
+     * @param condition
+     *            可以为null
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public T findOne(AbstractQueryCondition condition) {
+        List<T> ts = this.find(condition);
+        Assert.isTrue(ts.size() <= 1,
+            "Expected one result (or null) to be returned by findOne(), but found: " + ts.size());
+        return ts.isEmpty() ? null : ts.get(0);
     }
 
     /**

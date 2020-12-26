@@ -1,72 +1,66 @@
 import axios from 'axios'
-import store from '@/store'
-import storage from 'store'
-import notification from 'ant-design-vue/es/notification'
-import {VueAxios} from './axios'
-import {ACCESS_TOKEN} from '@/store/mutation-types'
+import router from '@/router'
 
+import {message} from 'ant-design-vue';
+
+//import store from '@/store'
+
+//import notification from 'ant-design-vue/es/notification'
 // 创建 axios 实例
 const request = axios.create({
   // API 请求的默认前缀
   baseURL: process.env.VUE_APP_API_BASE_URL,
-  timeout: 6000 // 请求超时时间
+  timeout: 6000, // 请求超时时间
+  withCredentials: true,
+  xsrfCookieName:'XSRF-TOKEN',
+  xsrfHeaderName:'X-XSRF-TOKEN'
+
 })
 
 // 异常拦截处理器
 const errorHandler = (error) => {
   if (error.response) {
-    const data = error.response.data
-    // 从 localstorage 获取 token
-    const token = storage.get(ACCESS_TOKEN)
-    if (error.response.status === 403) {
-      notification.error({
-        message: 'Forbidden',
-        description: data.message
-      })
+      var status = error.response.status;
+    if (status === 403) {
+        message.error('没有权限，请联系管理员');
+    } else if (status === 401) {
+        console.log('登录态过期,请重新登录')
+        router.push('/login');
+    } else if (status === 500) {
+        message.error('服务器开小差了，请稍后重试');
+    } else if (status === 404) {
+        message.error('请求地址不存在');
+    } else {
+        message.error(`未知错误status=${status}`);
     }
-    if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
-      notification.error({
-        message: 'Unauthorized',
-        description: 'Authorization verification failed'
-      })
-      if (token) {
-        store.dispatch('Logout').then(() => {
-          setTimeout(() => {
-            window.location.reload()
-          }, 1500)
-        })
+  } else {
+      if (error.code === 'ECONNABORTED') {
+        message.error('请求超时');
+      } else {
+          message.error(error.message);
       }
-    }
   }
+
   return Promise.reject(error)
 }
 
 // request interceptor
 request.interceptors.request.use(config => {
-  const token = storage.get(ACCESS_TOKEN)
-  // 如果 token 存在
-  // 让每个请求携带自定义 token 请根据实际情况自行修改
-  if (token) {
-    config.headers['Access-Token'] = token
-  }
   return config
 }, errorHandler)
 
 // response interceptor
 request.interceptors.response.use((response) => {
+    if (response && response.data) {
+        var code = response.data.code;
+        if (code.startsWith('80') || code.startsWith('90') || code === '-1') { // 系统错误直接提示即可，业务无需处理
+            message.error(response.data.msg)
+            return Promise.reject(response.data)
+        }
+    }
   return response.data
 }, errorHandler)
 
-const installer = {
-  vm: {},
-  install(Vue) {
-    Vue.use(VueAxios, request)
-  }
-}
 
 export default request
 
-export {
-  installer as VuVueAxioseAxios,
-  request as axios
-}

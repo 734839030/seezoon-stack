@@ -1,7 +1,9 @@
 package com.seezoon.admin.modules.sys.controller;
 
+import java.util.Objects;
+
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -70,9 +72,10 @@ public class SysParamController extends BaseController {
     }
 
     @ApiOperation(value = "检查是否重复")
-    @PostMapping(value = "/checkParamKey")
-    public Result checkParamKey(Integer id, @NotEmpty String paramKey) {
+    @PreAuthorize("hasAuthority('sys:param:query')")
+    @PostMapping(value = "/checkTypeAndCode")
+    public Result checkParamKey(@RequestParam(required = false) Integer id, @NotBlank @RequestParam String paramKey) {
         SysParam sysParam = this.sysParamService.findByParamKey(paramKey);
-        return Result.ok(null == sysParam || sysParam.getId().equals(id));
+        return Result.ok(null == sysParam || Objects.equals(sysParam.getId(), id));
     }
 }

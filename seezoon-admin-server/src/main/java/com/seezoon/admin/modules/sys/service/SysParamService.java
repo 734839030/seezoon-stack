@@ -1,8 +1,6 @@
 package com.seezoon.admin.modules.sys.service;
 
-import java.util.List;
-
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -21,16 +19,15 @@ public class SysParamService extends AbstractCrudService<SysParamDao, SysParam, 
 
     @Cacheable(cacheNames = "SysParam", key = "#paramKey")
     @Transactional(readOnly = true)
-    public SysParam findCacheByParamKey(@NotEmpty String paramKey) {
+    public SysParam findCacheByParamKey(@NotBlank String paramKey) {
         return this.findByParamKey(paramKey);
     }
 
     @Transactional(readOnly = true)
-    public SysParam findByParamKey(@NotEmpty String paramKey) {
+    public SysParam findByParamKey(@NotBlank String paramKey) {
         SysParamCondition sysParamCondition = new SysParamCondition();
         sysParamCondition.setParamKey(paramKey);
-        List<SysParam> sysParams = this.d.selectByCondition(sysParamCondition);
-        return sysParams.isEmpty() ? null : sysParams.get(0);
+        return this.findOne(sysParamCondition);
     }
 
 }

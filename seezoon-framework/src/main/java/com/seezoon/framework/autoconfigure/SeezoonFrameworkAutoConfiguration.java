@@ -11,6 +11,7 @@ import org.springframework.context.annotation.*;
 import com.seezoon.framework.web.AutoWebMvcConfigurer;
 
 import io.swagger.annotations.Api;
+import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -25,6 +26,8 @@ import springfox.documentation.spring.web.plugins.Docket;
  * <p>
  * 通过{@code @ComponentScan }扫描advice 也可以使用@import
  *
+ * {@link BeanValidatorPluginsConfiguration} swagger jsr303 使用
+ *
  * 开启简易缓存，主要针对字典及基本配置参数，实时性要求不高的业务进行缓存
  *
  * @author hdf
@@ -36,7 +39,7 @@ import springfox.documentation.spring.web.plugins.Docket;
     basePackageClasses = ServletRequestListener.class)
 @ComponentScan({"com.seezoon.framework.web.advice", "com.seezoon.framework.component"})
 @EnableOpenApi
-@Import({AutoWebMvcConfigurer.class})
+@Import({AutoWebMvcConfigurer.class, BeanValidatorPluginsConfiguration.class})
 @EnableCaching
 public class SeezoonFrameworkAutoConfiguration {
 

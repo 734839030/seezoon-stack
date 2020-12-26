@@ -24,7 +24,7 @@ import lombok.ToString;
 @ToString
 <#if sortable>
 <#assign firstItem = true>
-@SortField({<#list columnPlans as columnPlan><#if columnPlan.sortable>${firstItem?string("",",")}"${columnPlan.javaFieldName}:${columnPlan.dbColumnName}"</#if><#assign firstItem = false></#list>})
+@SortField({<#list columnPlans as columnPlan><#if columnPlan.sortable>${firstItem?string("",",")}"${columnPlan.javaFieldName}:${columnPlan.dbColumnName}"<#assign firstItem = false></#if></#list>})
 </#if>
 public class ${className}Condition extends PageCondition {
 

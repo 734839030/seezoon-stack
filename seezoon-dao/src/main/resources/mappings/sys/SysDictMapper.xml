@@ -16,27 +16,33 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-    t.id,t.type,t.code,t.name,t.sort,t.status,t.createBy,t.createTime,t.updateBy,t.updateTime,t.remarks
+        t.id,t.type,t.code,t.name,t.sort,t.status,t.createBy,t.createTime,t.updateBy,t.updateTime,t.remarks
     </sql>
 
-    <sql id="Query_Table" >
-    sys_dict t
+    <sql id="Query_Table">
+        sys_dict t
     </sql>
 
     <select id="selectByPrimaryKey" parameterType="Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from <include refid="Query_Table" />
+        from
+        <include refid="Query_Table"/>
         where t.id = #{id}
     </select>
 
-    <select id="selectByCondition" parameterType="com.seezoon.dao.modules.sys.entity.SysDictCondition" resultMap="BaseResultMap">
+    <select id="selectByCondition" parameterType="com.seezoon.dao.modules.sys.entity.SysDictCondition"
+            resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from <include refid="Query_Table" />
+        from
+        <include refid="Query_Table"/>
         <where>
             <if test="type != null and type != ''">
-            and t.type = #{type}
+                and t.type = #{type}
+            </if>
+            <if test="code != null and code != ''">
+                and t.code = #{code}
             </if>
         </where>
         <choose>
@@ -44,7 +50,7 @@
                 order by t.${sortField} ${sortOrder}
             </when>
             <otherwise>
-                order by t.create_time desc
+                order by t.type desc, t.sort desc
             </otherwise>
         </choose>
     </select>
