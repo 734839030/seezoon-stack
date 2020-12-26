@@ -90,6 +90,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             // 同域名可以通过frame
             .and().frameOptions().sameOrigin()
             // CSRF 攻击 开发时候暂时disable
+            // respone cookie name XSRF-TOKEN
+            // requst param _csrf or below;
+            // request head HEADER_NAME = "X-CSRF-TOKEN";
             .and().csrf().ignoringAntMatchers(PUBLIC_ANT_PATH, LOGIN_URL)
             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).disable();
     }

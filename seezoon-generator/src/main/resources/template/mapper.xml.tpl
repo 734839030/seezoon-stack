@@ -9,13 +9,13 @@
 
     <sql id="Base_Column_List">
     <#assign firstItem = true>
-    <#list columnPlans as columnPlan><#if !columnPlan.blobType>${firstItem?string("",",")}${defaultTableAliasPrefix}${columnPlan.javaFieldName}<#assign firstItem = false></#if></#list>
+    <#list columnPlans as columnPlan><#if !columnPlan.blobType>${firstItem?string("",",")}${defaultTableAliasPrefix}${columnPlan.dbColumnName}<#assign firstItem = false></#if></#list>
     </sql>
 
     <#if hasBlob>
     <sql id="Blob_Column_List" >
     <#assign firstItem = true>
-    <#list columnPlans as columnPlan><#if columnPlan.blobType>${firstItem?string("",",")}${defaultTableAliasPrefix}${columnPlan.javaFieldName}<#assign firstItem = false></#if></#list>
+    <#list columnPlans as columnPlan><#if columnPlan.blobType>${firstItem?string("",",")}${defaultTableAliasPrefix}${columnPlan.dbColumnName}<#assign firstItem = false></#if></#list>
     </sql>
     </#if>
     <sql id="Query_Table" >
@@ -94,7 +94,7 @@
         values
         <#assign firstItem = true>
         <foreach item="item" collection="array" separator=",">
-            (<#list columnPlans as columnPlan><#if columnPlan.insert>${firstItem?string("",",")}${"#"}{item.${columnPlan.dbColumnName}}<#assign firstItem = false></#if></#list>)
+            (<#list columnPlans as columnPlan><#if columnPlan.insert>${firstItem?string("",",")}${"#"}{item.${columnPlan.javaFieldName}}<#assign firstItem = false></#if></#list>)
         </foreach>
     </insert>
 

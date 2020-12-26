@@ -16,7 +16,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        t.id,t.type,t.code,t.name,t.sort,t.status,t.createBy,t.createTime,t.updateBy,t.updateTime,t.remarks
+        t.id,t.type,t.code,t.name,t.sort,t.status,t.create_by,t.create_time,t.update_by,t.update_time,t.remarks
     </sql>
 
     <sql id="Query_Table">
@@ -67,7 +67,7 @@
         insert into sys_dict (type,code,name,sort,status,create_by,create_time,update_by,update_time,remarks)
         values
         <foreach item="item" collection="array" separator=",">
-            (#{item.type},#{item.code},#{item.name},#{item.sort},#{item.status},#{item.create_by},#{item.create_time},#{item.update_by},#{item.update_time},#{item.remarks})
+            (#{item.type},#{item.code},#{item.name},#{item.sort},#{item.status},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remarks})
         </foreach>
     </insert>
 

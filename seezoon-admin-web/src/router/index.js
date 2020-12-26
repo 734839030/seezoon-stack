@@ -6,6 +6,7 @@ const routes = [
     {path: '/', component: () => import('../views/index')},
     {path: '/home', component: () => import('../views/index')},
     {path: '/sys/param', component: () => import('../views/sys/param/index')},
+    {path: '/sys/dict', component: () => import('../views/sys/dict/index')},
 ]
 
 

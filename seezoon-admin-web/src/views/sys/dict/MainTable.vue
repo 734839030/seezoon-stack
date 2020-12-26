@@ -3,17 +3,13 @@
   <a-form ref="searchForm" :model="searchForm">
     <a-row>
       <a-col :span="4">
-        <a-form-item label="参数名" name="name">
-          <a-input
-              v-model:value="searchForm.name" :maxlength="50" placeholder="请输入参数名">
-          </a-input>
+        <a-form-item label="名称" name="name">
+          <a-input v-model:value="searchForm.name" :maxlength="50" placeholder="请输入名称"></a-input>
         </a-form-item>
       </a-col>
       <a-col :span="4">
-        <a-form-item label="键" name="paramKey">
-          <a-input
-              v-model:value="searchForm.paramKey" :maxlength="50" placeholder="请输入唯一键">
-          </a-input>
+        <a-form-item label="类型" name="type">
+          <a-input v-model:value="searchForm.type" :maxlength="50" placeholder="请输入唯一键"></a-input>
         </a-form-item>
       </a-col>
       <a-col :span="3">
@@ -28,9 +24,14 @@
     </a-row>
   </a-form>
   <a-table
-      :columns="columns" :data-source="data" :loading="loading" :pagination="pagination"
-      :row-key="(record) => record.id" :scroll="{y: 600 }" bordered @change="handleTableChange"
-  >
+      :columns="columns"
+      :data-source="data"
+      :loading="loading"
+      :pagination="pagination"
+      :row-key="(record) => record.id"
+      :scroll="{y: 600 }"
+      bordered
+      @change="handleTableChange">
     <template #status="{ text }">
       <a-tag :color="text == 1 ? 'blue' : 'red'">
         {{ text == 1 ? "有效" : "无效" }}
@@ -39,7 +40,7 @@
     <template #action="{ record }">
       <a @click="handleDataForm('编辑', record.id)">编辑</a>
       <a-divider type="vertical"/>
-      <a-popconfirm title="确定删除？" @confirm="handleDelete('/sys/param/delete',record.id)">
+      <a-popconfirm title="确定删除？" @confirm="handleDelete('/sys/dict/delete',record.id)">
         <a>删除</a>
       </a-popconfirm>
     </template>
@@ -57,19 +58,23 @@ export default {
   mixins: [pageTableMixin],
   data() {
     return {
-      url: '/sys/param/query',
+      url: '/sys/dict/query',
       columns: [
         {
-          title: '参数名',
+          title: '类型',
+          dataIndex: 'type',
+        },
+        {
+          title: '编码',
+          dataIndex: 'code',
+        },
+        {
+          title: '名称',
           dataIndex: 'name',
         },
         {
-          title: '键',
-          dataIndex: 'paramKey',
-        },
-        {
-          title: '值',
-          dataIndex: 'paramValue',
+          title: '排序',
+          dataIndex: 'sort',
         },
         {
           title: '状态',
@@ -97,15 +102,14 @@ export default {
   methods: {
     handleDataForm(title, id) {
       if (id) {
-        this.$http.get('/sys/param/query/' + id).then(({data}) => {
+        this.$http.get('/sys/dict/query/' + id).then(({data}) => {
           this.$refs.dataForm.showModal();
           this.dataForm = {title: title, data: data};
         });
       } else {
         this.$refs.dataForm.showModal();
-        this.dataForm = {title: title, data: {}};
+        this.dataForm = {title: title, data: {sort: 10}};
       }
-
     }
   }
 };

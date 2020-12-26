@@ -43,7 +43,7 @@ public class SysDictController extends BaseController {
     @ApiOperation(value = "分页查询")
     @PreAuthorize("hasAuthority('sys:dict:query')")
     @PostMapping("/query")
-    public Result<PageSerializable<SysDict>> query(SysDictCondition condition) {
+    public Result<PageSerializable<SysDict>> query(@RequestBody SysDictCondition condition) {
         PageSerializable<SysDict> pageSerializable =
             sysDictService.find(condition, condition.getPage(), condition.getPageSize());
         return Result.ok(pageSerializable);
@@ -75,8 +75,8 @@ public class SysDictController extends BaseController {
 
     @ApiOperation(value = "检查是否重复")
     @PreAuthorize("hasAuthority('sys:dict:query')")
-    @PostMapping(value = "/checkParamKey")
-    public Result checkParamKey(@RequestParam(required = false) Integer id, @NotBlank @RequestParam String type,
+    @PostMapping(value = "/checkTypeAndCode")
+    public Result checkTypeAndCode(@RequestParam(required = false) Integer id, @NotBlank @RequestParam String type,
         @NotBlank @RequestParam String code) {
         SysDict sysDict = this.sysDictService.findByTypeAndCode(type, code);
         return Result.ok(null == sysDict || Objects.equals(sysDict.getId(), id));

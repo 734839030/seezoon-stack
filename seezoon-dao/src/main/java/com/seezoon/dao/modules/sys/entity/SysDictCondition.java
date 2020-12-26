@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@SortField({"type:type"})
+@SortField({"createTime:create_time"})
 public class SysDictCondition extends PageCondition {
 
     /**
