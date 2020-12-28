@@ -55,6 +55,10 @@
         </choose>
     </select>
 
+    <select id="selectTypes" resultType="java.lang.String">
+        select distinct type from sys_dict
+    </select>
+
     <delete id="deleteByPrimaryKey">
         delete t from sys_dict t
         where t.id in

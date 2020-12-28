@@ -1,5 +1,6 @@
 package com.seezoon.admin.modules.sys.controller;
 
+import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
@@ -47,6 +48,12 @@ public class SysDictController extends BaseController {
         PageSerializable<SysDict> pageSerializable =
             sysDictService.find(condition, condition.getPage(), condition.getPageSize());
         return Result.ok(pageSerializable);
+    }
+
+    @ApiOperation(value = "查询所有分类")
+    @RequestMapping("/queryTypes")
+    public Result<List<String>> queryTypes() {
+        return Result.ok(sysDictService.findTypes());
     }
 
     @ApiOperation(value = "保存")

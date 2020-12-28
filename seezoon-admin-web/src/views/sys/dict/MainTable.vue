@@ -3,20 +3,27 @@
   <a-form ref="searchForm" :model="searchForm">
     <a-row>
       <a-col :span="4">
-        <a-form-item label="名称" name="name">
-          <a-input v-model:value="searchForm.name" :maxlength="50" placeholder="请输入名称"></a-input>
+        <a-form-item :wrapperCol="{span:18}" label="类型" name="type">
+          <a-select v-model:value="searchForm.type" :allowClear="true" :options="dictTypes"
+                    placeholder="请选择类型">
+          </a-select>
         </a-form-item>
       </a-col>
       <a-col :span="4">
-        <a-form-item label="类型" name="type">
-          <a-input v-model:value="searchForm.type" :maxlength="50" placeholder="请输入唯一键"></a-input>
+        <a-form-item label="编码" name="code">
+          <a-input v-model:value="searchForm.code" :maxlength="50" placeholder="请输入编码"></a-input>
+        </a-form-item>
+      </a-col>
+      <a-col :span="4">
+        <a-form-item label="名称" name="name">
+          <a-input v-model:value="searchForm.name" :maxlength="50" placeholder="请输入名称"></a-input>
         </a-form-item>
       </a-col>
       <a-col :span="3">
         <a-form-item>
           <a-space>
             <a-button type="primary" @click="handleQueryPage()">查询</a-button>
-            <a-button type="default" @click="this.$refs.searchForm.resetFields();">重置</a-button>
+            <a-button type="default" @click="this.$refs.searchForm.resetFields()">重置</a-button>
             <a-button type="default" @click="handleDataForm('添加')">添加</a-button>
           </a-space>
         </a-form-item>
@@ -51,11 +58,23 @@
 <script>
 import {pageTableMixin} from "@/views/common/mixins/page-table-mixin";
 import DataForm from './DataForm';
+import {onMounted, ref} from 'vue'
+import {getTypes} from "@/api/dict";
+
 
 export default {
   name: 'MainTable',
   components: {DataForm},
   mixins: [pageTableMixin],
+  setup(props) {
+    let dictTypes = ref([])
+    onMounted(async () => {
+      dictTypes.value = await getTypes()
+    })
+    return {
+      dictTypes
+    }
+  },
   data() {
     return {
       url: '/sys/dict/query',
@@ -108,7 +127,7 @@ export default {
         });
       } else {
         this.$refs.dataForm.showModal();
-        this.dataForm = {title: title, data: {sort: 10}};
+        this.dataForm = {title: title, data: {sort: 10, type: this.searchForm.type}};
       }
     }
   }

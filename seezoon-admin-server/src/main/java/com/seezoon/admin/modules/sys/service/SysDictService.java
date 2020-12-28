@@ -1,5 +1,7 @@
 package com.seezoon.admin.modules.sys.service;
 
+import java.util.List;
+
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.stereotype.Service;
@@ -24,5 +26,10 @@ public class SysDictService extends AbstractCrudService<SysDictDao, SysDict, Int
         condition.setType(type);
         condition.setCode(code);
         return this.findOne(condition);
+    }
+
+    @Transactional(readOnly = true)
+    public List<String> findTypes() {
+        return this.d.selectTypes();
     }
 }
