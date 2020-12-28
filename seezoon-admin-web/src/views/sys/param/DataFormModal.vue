@@ -77,12 +77,12 @@
 </template>
 
 <script>
-import {dataFormMixin} from "@/views/common/mixins/data-form-mixin";
+import {dataFormModalMixin} from "@/views/common/mixins/data-form-mixin-modal";
 import qs from 'qs'
 
 export default {
-  name: 'DataForm',
-  mixins: [dataFormMixin],
+  name: 'DataFormModal',
+  mixins: [dataFormModalMixin],
   emits: ['refreshQueryPage'],
   methods: {
     checkParamKey(rule, value) {

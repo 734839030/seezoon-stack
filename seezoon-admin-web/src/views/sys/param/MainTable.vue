@@ -44,16 +44,16 @@
       </a-popconfirm>
     </template>
   </a-table>
-  <data-form ref="dataForm" :data-form="dataForm.data" :title="dataForm.title"
-             @refreshQueryPage="handleQueryPage"></data-form>
+  <data-form-modal ref="dataFormModal" :data-form="dataFormModal.dataForm" :title="dataFormModal.title"
+                   @refreshQueryPage="handleQueryPage"></data-form-modal>
 </template>
 <script>
 import {pageTableMixin} from "@/views/common/mixins/page-table-mixin";
-import DataForm from './DataForm';
+import DataFormModal from './DataFormModal';
 
 export default {
   name: 'MainTable',
-  components: {DataForm},
+  components: {DataFormModal},
   mixins: [pageTableMixin],
   data() {
     return {
@@ -88,7 +88,7 @@ export default {
           slots: {customRender: 'action'},
         },
       ],
-      dataForm: {}
+      dataFormModal: {}
     }
   },
   mounted() {
@@ -98,12 +98,12 @@ export default {
     handleDataForm(title, id) {
       if (id) {
         this.$http.get('/sys/param/query/' + id).then(({data}) => {
-          this.$refs.dataForm.showModal();
-          this.dataForm = {title: title, data: data};
+          this.$refs.dataFormModal.show();
+          this.dataFormModal = {title: title, dataForm: data};
         });
       } else {
-        this.$refs.dataForm.showModal();
-        this.dataForm = {title: title, data: {}};
+        this.$refs.dataFormModal.show();
+        this.dataFormModal = {title: title, dataForm: {}};
       }
 
     }

@@ -1,6 +1,6 @@
 import request from '@/utils/request.js'
 // 用于子组件的时候,prop 是只读的，所以visible 不能在prop
-export const dataFormMixin = {
+export const dataFormModalMixin = {
     props: {
         title: String,
         dataForm: Object
@@ -13,7 +13,7 @@ export const dataFormMixin = {
     },
     methods: {
         // visible 不能在prop
-        showModal() {
+        show() {
             this.visible = true
         },
         handleOkCb() {

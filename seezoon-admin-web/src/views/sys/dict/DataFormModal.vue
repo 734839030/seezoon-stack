@@ -1,8 +1,8 @@
 <template>
-  <a-modal
-      v-model:visible="visible" :confirm-loading="confirmLoading" :destroyOnClose="true" :height="600"
-      :maskClosable="false" :title="title" :width="750" okText="保存"
-      @ok="handleOk(this.dataForm.id === undefined ? '/sys/dict/save':'/sys/dict/update')">
+  <a-modal v-model:visible="visible"
+           :confirm-loading="confirmLoading" :destroyOnClose="true" :height="600" :maskClosable="false"
+           :title="title" :width="750" okText="保存"
+           @ok="handleOk(this.dataForm.id === undefined ? '/sys/dict/save':'/sys/dict/update')">
     <a-form ref="dataForm" :label-col="{ span: 6 }" :model="dataForm" :wrapper-col="{ span: 18 }">
       <a-input v-model:value="dataForm.id" type="hidden"></a-input>
       <a-row>
@@ -69,12 +69,12 @@
 </template>
 
 <script>
-import {dataFormMixin} from "@/views/common/mixins/data-form-mixin";
+import {dataFormModalMixin} from "@/views/common/mixins/data-form-mixin-modal";
 import qs from 'qs'
 
 export default {
-  name: 'DataForm',
-  mixins: [dataFormMixin],
+  name: 'DataFormModal',
+  mixins: [dataFormModalMixin],
   emits: ['refreshQueryPage'],
   methods: {
     checkTypeAndCode(rule, value) {
