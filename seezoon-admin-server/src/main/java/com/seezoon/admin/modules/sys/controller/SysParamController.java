@@ -41,7 +41,7 @@ public class SysParamController extends BaseController {
     @ApiOperation(value = "分页查询")
     @PreAuthorize("hasAuthority('sys:param:query')")
     @PostMapping("/query")
-    public Result<PageSerializable<SysParam>> query(@RequestBody SysParamCondition condition) {
+    public Result<PageSerializable<SysParam>> query(@Valid @RequestBody SysParamCondition condition) {
         PageSerializable<SysParam> pageSerializable =
             sysParamService.find(condition, condition.getPage(), condition.getPageSize());
         return Result.ok(pageSerializable);
@@ -73,7 +73,7 @@ public class SysParamController extends BaseController {
 
     @ApiOperation(value = "检查是否重复")
     @PreAuthorize("hasAuthority('sys:param:query')")
-    @PostMapping(value = "/checkTypeAndCode")
+    @PostMapping(value = "/checkParamKey")
     public Result checkParamKey(@RequestParam(required = false) Integer id, @NotBlank @RequestParam String paramKey) {
         SysParam sysParam = this.sysParamService.findByParamKey(paramKey);
         return Result.ok(null == sysParam || Objects.equals(sysParam.getId(), id));

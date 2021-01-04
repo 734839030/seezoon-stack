@@ -1,25 +1,25 @@
 <template>
   <!-- 查询表单 -->
   <a-form ref="searchForm" :model="searchForm">
-    <a-row>
-      <a-col :span="4">
+    <a-row :gutter="10">
+      <a-col :md="4" :xs="24">
         <a-form-item :wrapperCol="{span:18}" label="类型" name="type">
-          <a-select v-model:value="searchForm.type" :allowClear="true" :options="dictTypes"
-                    placeholder="请选择类型">
+          <a-select v-model:value="searchForm.type" :allowClear="true" :options="dictTypes" placeholder="请选择类型"
+                    show-search>
           </a-select>
         </a-form-item>
       </a-col>
-      <a-col :span="4">
+      <a-col :md="4" :xs="24">
         <a-form-item label="编码" name="code">
           <a-input v-model:value="searchForm.code" :maxlength="50" placeholder="请输入编码"></a-input>
         </a-form-item>
       </a-col>
-      <a-col :span="4">
+      <a-col :md="4" :xs="24">
         <a-form-item label="名称" name="name">
           <a-input v-model:value="searchForm.name" :maxlength="50" placeholder="请输入名称"></a-input>
         </a-form-item>
       </a-col>
-      <a-col :span="3">
+      <a-col :md="4" :xs="24">
         <a-form-item>
           <a-space>
             <a-button type="primary" @click="handleQueryPage()">查询</a-button>
@@ -38,6 +38,7 @@
       :row-key="(record) => record.id"
       :scroll="{y: 600 }"
       bordered
+      size="small"
       @change="handleTableChange">
     <template #status="{ text }">
       <a-tag :color="text == 1 ? 'blue' : 'red'">
@@ -47,7 +48,7 @@
     <template #action="{ record }">
       <a @click="handleDataForm('编辑', record.id)">编辑</a>
       <a-divider type="vertical"/>
-      <a-popconfirm title="确定删除？" @confirm="handleDelete('/sys/dict/delete',record.id)">
+      <a-popconfirm placement="left" title="确定删除？" @confirm="handleDelete('/sys/dict/delete',record.id)">
         <a>删除</a>
       </a-popconfirm>
     </template>
@@ -60,7 +61,6 @@ import {pageTableMixin} from "@/views/common/mixins/page-table-mixin";
 import DataFormModal from './DataFormModal';
 import {onMounted, ref} from 'vue'
 import {getTypes} from "@/api/dict";
-
 
 export default {
   name: 'MainTable',

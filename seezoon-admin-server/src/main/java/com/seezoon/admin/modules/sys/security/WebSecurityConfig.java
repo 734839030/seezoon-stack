@@ -94,7 +94,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             // requst param _csrf or below;
             // request head HEADER_NAME = "X-CSRF-TOKEN";
             .and().csrf().ignoringAntMatchers(PUBLIC_ANT_PATH, LOGIN_URL)
-            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).disable();
+            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());// .disable();
     }
 
     /**

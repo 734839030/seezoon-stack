@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 class SystemGeneratorServiceTest {
 
     // 可多个也可以空
-    public static final String[] DB_TABLES = {"sys_dict"};
+    public static final String[] DB_TABLES = {"sys_file"};
     @Autowired
     private SystemGeneratorService systemGeneratorService;
 

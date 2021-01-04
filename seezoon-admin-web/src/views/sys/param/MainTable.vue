@@ -1,15 +1,15 @@
 <template>
   <!-- 查询表单 -->
   <a-form ref="searchForm" :model="searchForm">
-    <a-row>
-      <a-col :span="4">
+    <a-row :gutter="10">
+      <a-col :md="4" :xs="24">
         <a-form-item label="参数名" name="name">
           <a-input
               v-model:value="searchForm.name" :maxlength="50" placeholder="请输入参数名">
           </a-input>
         </a-form-item>
       </a-col>
-      <a-col :span="4">
+      <a-col :md="4" :xs="24">
         <a-form-item label="键" name="paramKey">
           <a-input
               v-model:value="searchForm.paramKey" :maxlength="50" placeholder="请输入唯一键">
@@ -27,10 +27,8 @@
       </a-col>
     </a-row>
   </a-form>
-  <a-table
-      :columns="columns" :data-source="data" :loading="loading" :pagination="pagination"
-      :row-key="(record) => record.id" :scroll="{y: 600 }" bordered @change="handleTableChange"
-  >
+  <a-table :columns="columns" :data-source="data" :loading="loading" :pagination="pagination"
+           :row-key="(record) => record.id" :scroll="{y: 600 }" bordered size="small" @change="handleTableChange">
     <template #status="{ text }">
       <a-tag :color="text == 1 ? 'blue' : 'red'">
         {{ text == 1 ? "有效" : "无效" }}
@@ -39,7 +37,7 @@
     <template #action="{ record }">
       <a @click="handleDataForm('编辑', record.id)">编辑</a>
       <a-divider type="vertical"/>
-      <a-popconfirm title="确定删除？" @confirm="handleDelete('/sys/param/delete',record.id)">
+      <a-popconfirm placement="left" title="确定删除？" @confirm="handleDelete('/sys/param/delete',record.id)">
         <a>删除</a>
       </a-popconfirm>
     </template>

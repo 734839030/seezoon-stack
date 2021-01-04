@@ -39,7 +39,7 @@ public class ${className}Controller extends BaseController {
     @ApiOperation(value = "分页查询")
     @PreAuthorize("hasAuthority('${moduleName}:${functionName}:query')")
     @PostMapping("/query")
-    public Result<PageSerializable<${className}>> query(@RequestBody ${className}Condition condition) {
+    public Result<PageSerializable<${className}>> query(@Valid @RequestBody ${className}Condition condition) {
         PageSerializable<${className}> pageSerializable = ${className?uncap_first}Service.find(condition, condition.getPage(), condition.getPageSize());
         return Result.ok(pageSerializable);
     }

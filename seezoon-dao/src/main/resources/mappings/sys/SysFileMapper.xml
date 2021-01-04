@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seezoon.dao.modules.sys.SysFileDao">
+    <resultMap id="BaseResultMap" type="com.seezoon.dao.modules.sys.entity.SysFile">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="content_type" jdbcType="VARCHAR" property="contentType"/>
+        <result column="file_size" jdbcType="INTEGER" property="fileSize"/>
+        <result column="relative_path" jdbcType="VARCHAR" property="relativePath"/>
+        <result column="create_by" jdbcType="INTEGER" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="INTEGER" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        t.id,t.name,t.content_type,t.file_size,t.relative_path,t.create_by,t.create_time,t.update_by,t.update_time,t.remarks
+    </sql>
+
+    <sql id="Query_Table">
+        sys_file t
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="Query_Table"/>
+        where t.id = #{id}
+    </select>
+
+    <select id="selectByCondition" parameterType="com.seezoon.dao.modules.sys.entity.SysFileCondition"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="Query_Table"/>
+        <where>
+            <if test="name != null and name != ''">
+                name like concat('%',#{name},'%')
+            </if>
+            <if test="relativePath != null and relativePath != ''">
+                and t.relative_path = #{relativePath}
+            </if>
+            <if test="createDateRange != null and createDateRange.length == 2">
+                <![CDATA[
+                and (t.create_time > #{createDateRange[0],javaType=String} and t.create_time < date_add(#{createDateRange[1],javaType=String}, interval 1 day))
+			    ]]>
+            </if>
+
+        </where>
+        <choose>
+            <when test="sortField != null and sortField != '' and sortOrder != null and sortOrder !=''">
+                order by t.${sortField} ${sortOrder}
+            </when>
+            <otherwise>
+                order by t.create_time desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <delete id="deleteByPrimaryKey">
+        delete t from sys_file t
+        where t.id in
+        <foreach item="item" collection="array" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_file
+        (name,content_type,file_size,relative_path,create_by,create_time,update_by,update_time,remarks)
+        values
+        <foreach item="item" collection="array" separator=",">
+            (#{item.name},#{item.contentType},#{item.fileSize},#{item.relativePath},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remarks})
+        </foreach>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.seezoon.dao.modules.sys.entity.SysFile">
+        update sys_file t
+        <set>
+            <if test="name != null">
+                t.name = #{name},
+            </if>
+            <if test="contentType != null">
+                t.content_type = #{contentType},
+            </if>
+            <if test="fileSize != null">
+                t.file_size = #{fileSize},
+            </if>
+            <if test="relativePath != null">
+                t.relative_path = #{relativePath},
+            </if>
+            <if test="updateBy != null">
+                t.update_by = #{updateBy},
+            </if>
+            <if test="updateTime != null">
+                t.update_time = #{updateTime},
+            </if>
+            <if test="remarks != null">
+                t.remarks = #{remarks}
+            </if>
+        </set>
+        where t.id = #{id}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.seezoon.dao.modules.sys.entity.SysFile">
+        update sys_file t set
+        t.name = #{name}
+        ,t.content_type = #{contentType}
+        ,t.file_size = #{fileSize}
+        ,t.relative_path = #{relativePath}
+        ,t.update_by = #{updateBy}
+        ,t.update_time = #{updateTime}
+        ,t.remarks = #{remarks}
+        where t.id = #{id}
+    </update>
+</mapper>

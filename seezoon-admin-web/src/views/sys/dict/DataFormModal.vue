@@ -6,7 +6,7 @@
     <a-form ref="dataForm" :label-col="{ span: 6 }" :model="dataForm" :wrapper-col="{ span: 18 }">
       <a-input v-model:value="dataForm.id" type="hidden"></a-input>
       <a-row>
-        <a-col :span="12">
+        <a-col :md="12" :xs="24">
           <a-form-item :rules="[
               { required: true, message: '类型不能为空', whitespace: true },
               { min: 1, max: 50, message: '类型长度1-50' },
@@ -15,7 +15,7 @@
             <a-input v-model:value="dataForm.type" :maxlength="50" placeholder="请输入类型"></a-input>
           </a-form-item>
         </a-col>
-        <a-col :span="12">
+        <a-col :md="12" :xs="24">
           <a-form-item :rules="[
               { required: true, message: '编码不能为空', whitespace: true },
               { min: 1, max: 50, message: '编码长度1-50' },
@@ -26,7 +26,7 @@
         </a-col>
       </a-row>
       <a-row>
-        <a-col :span="12">
+        <a-col :md="12" :xs="24">
           <a-form-item :rules="[
               { required: true, message: '名称不能为空', whitespace: true },
               { min: 1, max: 50, message: '名称长度1-50' },
@@ -34,7 +34,7 @@
             <a-input v-model:value="dataForm.name" :maxlength="50" placeholder="请输入名称"></a-input>
           </a-form-item>
         </a-col>
-        <a-col :span="12">
+        <a-col :md="12" :xs="24">
           <a-form-item :rules="[
               {required: true, type: 'number',message: '状态不能为空',whitespace: true}
             ]" label="状态" name="status">
@@ -50,14 +50,14 @@
         </a-col>
       </a-row>
       <a-row>
-        <a-col :span="12">
+        <a-col :md="12" :xs="24">
           <a-form-item :rules="[
               { required: true, type:'number', message: '请输入数字', whitespace: true },
             ]" help="顺序越大显示越前" label="顺序" name="sort">
             <a-input-number v-model:value="dataForm.sort" :precision="0" placeholder="请输入顺序"></a-input-number>
           </a-form-item>
         </a-col>
-        <a-col :span="12">
+        <a-col :md="12" :xs="24">
           <a-form-item label="备注" name="remarks">
             <a-textarea v-model:value="dataForm.remarks" :auto-size="{ minRows: 3, maxRows: 5 }" :maxlength="255"
                         placeholder="备注"/>

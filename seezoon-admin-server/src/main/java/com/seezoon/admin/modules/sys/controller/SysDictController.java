@@ -44,14 +44,14 @@ public class SysDictController extends BaseController {
     @ApiOperation(value = "分页查询")
     @PreAuthorize("hasAuthority('sys:dict:query')")
     @PostMapping("/query")
-    public Result<PageSerializable<SysDict>> query(@RequestBody SysDictCondition condition) {
+    public Result<PageSerializable<SysDict>> query(@Valid @RequestBody SysDictCondition condition) {
         PageSerializable<SysDict> pageSerializable =
             sysDictService.find(condition, condition.getPage(), condition.getPageSize());
         return Result.ok(pageSerializable);
     }
 
     @ApiOperation(value = "查询所有分类")
-    @RequestMapping("/queryTypes")
+    @GetMapping("/queryTypes")
     public Result<List<String>> queryTypes() {
         return Result.ok(sysDictService.findTypes());
     }
