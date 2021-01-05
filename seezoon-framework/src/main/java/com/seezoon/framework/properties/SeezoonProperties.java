@@ -1,7 +1,9 @@
-package com.seezoon.framework.autoconfigure;
+package com.seezoon.framework.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.web.cors.CorsConfiguration;
+
+import com.seezoon.framework.component.file.StoreType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -101,11 +103,66 @@ public class SeezoonProperties {
         private long maxAge = 1800;
     }
 
+    /**
+     * 定时任务线程配置
+     */
     @Getter
     @Setter
     public static class ScheduledProperties {
         private int corePoolSize = 1; // 核心线程数（默认线程数）
         private int maxPoolSize = 100; // 最大线程数
         private int keepAliveTime = 60; // 允许线程空闲时间（单位：默认为秒）
+    }
+
+    /**
+     * 文件上传配置
+     */
+    @Getter
+    @Setter
+    public static class FileProperties {
+        private StoreType storeType;
+        private LocalProperties local;
+        private AliyunOssProperties aliyunOss;
+
+        @Getter
+        @Setter
+        public static class LocalProperties {
+            /**
+             * 可访问的网址前缀，如https://xxx.com
+             */
+            private String urlPrefix;
+            /**
+             * 存储目录，一般为可以处理静态容器的路径，如nginx,tomcat 下可以通过url访问的目录,如果/data/files
+             */
+            private String directory;
+        }
+
+        @Getter
+        @Setter
+        public static class AliyunOssProperties {
+            /**
+             * 可访问的网址前缀，如https://xxx.com
+             */
+            private String urlPrefix;
+            /**
+             * 阿里云oss 存储空间
+             * <a>https://help.aliyun.com/document_detail/177682.html?spm=a2c4g.11186623.6.634.4a102c4cZPZ0M5</a>
+             */
+            private String bucketName;
+            /**
+             * 对外可访问的域名,线上推荐用内网，开发测试如果无法连接则使用公网
+             * <a>https://help.aliyun.com/document_detail/31837.html?spm=a2c4g.11186623.6.625.3e4933e1OCqmWA</a>
+             */
+            private String endpoint;
+            /**
+             * 分配的ID
+             */
+            private String accessKeyId;
+            /**
+             * 分配密钥
+             */
+            private String accessKeySecret;
+        }
+
     }
 }

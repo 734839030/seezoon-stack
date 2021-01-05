@@ -15,7 +15,7 @@ import org.springframework.scheduling.annotation.AsyncConfigurerSupport;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.alibaba.fastjson.JSON;
-import com.seezoon.framework.autoconfigure.SeezoonProperties;
+import com.seezoon.framework.properties.SeezoonProperties;
 
 /**
  * 异步配置

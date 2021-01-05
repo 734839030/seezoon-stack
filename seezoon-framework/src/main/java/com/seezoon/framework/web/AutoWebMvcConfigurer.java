@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.seezoon.framework.autoconfigure.SeezoonProperties;
+import com.seezoon.framework.properties.SeezoonProperties;
 import com.seezoon.framework.web.servlet.RequestFilter;
 
 /**

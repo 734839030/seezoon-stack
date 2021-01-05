@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 
-import com.seezoon.framework.autoconfigure.SeezoonProperties;
-import com.seezoon.framework.autoconfigure.SeezoonProperties.ScheduledProperties;
+import com.seezoon.framework.properties.SeezoonProperties;
+import com.seezoon.framework.properties.SeezoonProperties.ScheduledProperties;
 
 /**
  * 定时配置

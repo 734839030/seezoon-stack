@@ -33,6 +33,9 @@ public class SysFileCondition extends PageCondition {
     @ApiModelProperty(value = "相对路径")
     private String relativePath;
 
+    /**
+     * 如果使用Date数组接收，需要添加{@code @JsonFormat(pattern = "yyyy-MM-dd")}
+     */
     @NotEmpty
     @Size(min = 2, max = 2)
     @ApiModelProperty(value = "上传日期")

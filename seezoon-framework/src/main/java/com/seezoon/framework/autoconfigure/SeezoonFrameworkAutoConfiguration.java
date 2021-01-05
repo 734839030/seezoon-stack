@@ -8,6 +8,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.*;
 
+import com.seezoon.framework.properties.SeezoonProperties;
 import com.seezoon.framework.web.AutoWebMvcConfigurer;
 
 import io.swagger.annotations.Api;
@@ -24,7 +25,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 /**
  * event listener 通过spring.factories 加载
  * <p>
- * 通过{@code @ComponentScan }扫描advice 也可以使用@import
+ * 通过{@code @ComponentScan }扫描advice 也可以使用{@code @import}
  *
  * {@link BeanValidatorPluginsConfiguration} swagger jsr303 使用
  *

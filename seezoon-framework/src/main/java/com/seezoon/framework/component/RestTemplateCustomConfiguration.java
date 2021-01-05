@@ -25,7 +25,7 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
 
-import com.seezoon.framework.autoconfigure.SeezoonProperties;
+import com.seezoon.framework.properties.SeezoonProperties;
 
 /**
  * 优化原生无连接池问题
