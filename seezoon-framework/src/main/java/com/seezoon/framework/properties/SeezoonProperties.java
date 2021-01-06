@@ -122,7 +122,7 @@ public class SeezoonProperties {
     public static class FileProperties {
         private StoreType storeType;
         private LocalProperties local;
-        private AliyunOssProperties aliyunOss;
+        private AliyunOssProperties aliyun;
 
         @Getter
         @Setter

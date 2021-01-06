@@ -14,6 +14,7 @@ import com.github.pagehelper.PageSerializable;
 import com.seezoon.dao.framework.CrudDao;
 import com.seezoon.dao.framework.entity.AbstractQueryCondition;
 import com.seezoon.dao.framework.entity.BaseEntity;
+import com.seezoon.framework.utils.IdGen;
 
 /**
  * 增删改查service
@@ -107,6 +108,10 @@ public abstract class AbstractCrudService<D extends CrudDao<T, PK>, T extends Ba
      */
     public int save(T... records) {
         Arrays.stream(records).forEach((t) -> {
+            // 当为空且是字符串类型时候，默认为其生成主键
+            if (null == t.getId() && t.getId() instanceof String) {
+                t.setId((PK)IdGen.uuid());
+            }
             t.setCreateTime(new Date());
             t.setUpdateTime(t.getCreateTime());
         });

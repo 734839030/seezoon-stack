@@ -1,8 +1,16 @@
 package com.seezoon.framework.component.file.handler;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import org.apache.commons.io.FileUtils;
+import org.springframework.util.Assert;
+
+import com.seezoon.framework.exception.BusinessException;
+import com.seezoon.framework.properties.SeezoonProperties;
 
 /**
  * 本地文件存储处理
@@ -11,19 +19,45 @@ import java.io.InputStream;
  */
 public class LocalFileHandler implements FileHandler {
 
+    private SeezoonProperties.FileProperties.LocalProperties localProperties;
+
+    public LocalFileHandler(SeezoonProperties.FileProperties.LocalProperties localProperties) {
+        Assert.hasText(localProperties.getDirectory(), "FileProperties.LocalProperties directory must not be empty");
+        Assert.hasText(localProperties.getUrlPrefix(), "FileProperties.LocalProperties urlPrefix must not be empty");
+        this.localProperties = localProperties;
+    }
+
+    /**
+     * 上传文件
+     * <p>
+     * 目的地目录不存在会自动创建,文件存在则会覆盖
+     *
+     * @param relativePath
+     * @param in
+     *            会被关闭{@link FileUtils#copyInputStreamToFile(InputStream, File)}
+     * @throws IOException
+     */
     @Override
     public void upload(String relativePath, InputStream in) throws IOException {
-
+        Assert.hasLength(relativePath, "relativePath must not be empty");
+        Assert.notNull(in, "inputStream must not be null");
+        Path storePath = Path.of(localProperties.getDirectory(), relativePath);
+        FileUtils.copyInputStreamToFile(in, storePath.toFile());
     }
 
     @Override
-    public InputStream download(String relativePath) throws FileNotFoundException {
-        return null;
+    public InputStream download(String relativePath) throws IOException {
+        Assert.hasLength(relativePath, "relativePath must not be empty");
+        Path storePath = Path.of(localProperties.getDirectory(), relativePath);
+        if (!Files.exists(storePath)) {
+            throw new BusinessException("file is not exists");
+        }
+        return Files.newInputStream(storePath);
     }
 
     @Override
     public String getUrl(String relativePath) {
-        return null;
+        return localProperties.getUrlPrefix() + relativePath;
     }
 
     @Override

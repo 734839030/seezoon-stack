@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.seezoon.dao.modules.sys.SysFileDao">
     <resultMap id="BaseResultMap" type="com.seezoon.dao.modules.sys.entity.SysFile">
-        <id column="id" jdbcType="INTEGER" property="id"/>
+        <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="content_type" jdbcType="VARCHAR" property="contentType"/>
         <result column="file_size" jdbcType="INTEGER" property="fileSize"/>
@@ -68,12 +68,12 @@
         </foreach>
     </delete>
 
-    <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+    <insert id="insert">
         insert into sys_file
-        (name,content_type,file_size,relative_path,create_by,create_time,update_by,update_time,remarks)
+        (id,name,content_type,file_size,relative_path,create_by,create_time,update_by,update_time,remarks)
         values
         <foreach item="item" collection="array" separator=",">
-            (#{item.name},#{item.contentType},#{item.fileSize},#{item.relativePath},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remarks})
+            (#{item.id},#{item.name},#{item.contentType},#{item.fileSize},#{item.relativePath},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remarks})
         </foreach>
     </insert>
 

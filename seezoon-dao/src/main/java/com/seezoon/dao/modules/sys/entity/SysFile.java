@@ -1,7 +1,5 @@
 package com.seezoon.dao.modules.sys.entity;
 
-import java.util.Date;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -23,7 +21,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class SysFile extends BaseEntity<Integer> {
+public class SysFile extends BaseEntity<String> {
 
     @ApiModelProperty(value = "名称", required = true)
     @NotBlank
@@ -43,6 +41,5 @@ public class SysFile extends BaseEntity<Integer> {
     @NotBlank
     @Size(max = 200)
     private String relativePath;
-
 
 }

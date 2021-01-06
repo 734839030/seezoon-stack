@@ -1,6 +1,5 @@
 package com.seezoon.framework.component.file.handler;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -23,9 +22,9 @@ public interface FileHandler {
      *
      * @param relativePath
      * @return
-     * @throws FileNotFoundException
+     * @throws IOException
      */
-    InputStream download(String relativePath) throws FileNotFoundException;
+    InputStream download(String relativePath) throws IOException;
 
     /**
      * 文件可以访问的url路径

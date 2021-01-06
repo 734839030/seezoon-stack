@@ -51,5 +51,10 @@ public class ${className} extends BaseEntity<${pkPlan.dataType.javaType()}> {
     public ${pkPlan.dataType.javaType()} getId() {
         return ${pkPlan.javaFieldName};
     }
+
+    @Override
+    public void setId(${pkPlan.dataType.javaType()} ${pkPlan.javaFieldName}) {
+        this.id = ${pkPlan.javaFieldName}
+    }
 </#if>
 }
