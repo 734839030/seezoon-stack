@@ -61,7 +61,7 @@ public class LocalFileHandler implements FileHandler {
     }
 
     @Override
-    public void destroy() {
+    public void close() throws Exception {
 
     }
 }

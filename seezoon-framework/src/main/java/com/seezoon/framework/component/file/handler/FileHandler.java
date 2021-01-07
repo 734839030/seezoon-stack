@@ -6,7 +6,7 @@ import java.io.InputStream;
 /**
  * @author hdf
  */
-public interface FileHandler {
+public interface FileHandler extends AutoCloseable {
 
     /**
      * 文件上传
@@ -34,8 +34,4 @@ public interface FileHandler {
      */
     String getUrl(String relativePath);
 
-    /**
-     * 销毁
-     */
-    void destroy();
 }

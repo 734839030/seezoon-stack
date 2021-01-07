@@ -21,6 +21,7 @@ public class SeezoonProperties {
     private AsyncProperties async = new AsyncProperties();
     private CorsProperties cors = new CorsProperties();
     private ScheduledProperties scheduled = new ScheduledProperties();
+    private FileProperties file = new FileProperties();
 
     /**
      * 文档相关
@@ -120,9 +121,9 @@ public class SeezoonProperties {
     @Getter
     @Setter
     public static class FileProperties {
-        private StoreType storeType;
-        private LocalProperties local;
-        private AliyunOssProperties aliyun;
+        private StoreType storeType = StoreType.NONE;
+        private LocalProperties local = new LocalProperties();
+        private AliyunOssProperties aliyun = new AliyunOssProperties();
 
         @Getter
         @Setter
