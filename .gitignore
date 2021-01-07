@@ -29,13 +29,12 @@ logs/
 *.patch
 *.tmp
 
-node_modules
-/dist
-
 # web
 .env.local
 .env.*.local
 
+node_modules
+/dist
 # Log files
 npm-debug.log*
 yarn-debug.log*
