@@ -12,11 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import com.seezoon.admin.framework.file.FileService;
 import com.seezoon.admin.framework.service.AbstractCrudService;
 import com.seezoon.dao.modules.sys.SysFileDao;
 import com.seezoon.dao.modules.sys.entity.SysFile;
 import com.seezoon.framework.component.file.FileInfo;
-import com.seezoon.framework.component.file.handler.FileHandler;
 
 /**
  * 文件
@@ -27,7 +27,7 @@ import com.seezoon.framework.component.file.handler.FileHandler;
 public class SysFileService extends AbstractCrudService<SysFileDao, SysFile, String> {
 
     @Autowired
-    private FileHandler fileHandler;
+    private FileService fileService;
 
     public FileInfo upload(@NotEmpty String originalFilename, @NotEmpty String contentType, long size,
         @NotNull InputStream in) throws IOException {
@@ -35,7 +35,7 @@ public class SysFileService extends AbstractCrudService<SysFileDao, SysFile, Str
         String fileId = createFileId();
         String newName = rename(fileId, originalFilename);
         String relativePath = createRelativeDirectory() + newName;
-        fileHandler.upload(relativePath, in);
+        fileService.upload(relativePath, in);
         // 入库
         SysFile sysFile = new SysFile();
         sysFile.setId(fileId);
@@ -44,7 +44,7 @@ public class SysFileService extends AbstractCrudService<SysFileDao, SysFile, Str
         sysFile.setFileSize((int)size);
         sysFile.setRelativePath(relativePath);
         this.save(sysFile);
-        return new FileInfo(fileHandler.getUrl(relativePath), relativePath, originalFilename);
+        return new FileInfo(fileService.getUrl(relativePath), relativePath, originalFilename);
     }
 
     /**

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 import com.seezoon.framework.component.file.handler.FileHandler;
 import com.seezoon.framework.component.file.handler.LocalFileHandler;
@@ -28,6 +29,7 @@ public class FileHandlerConfiguration {
     }
 
     @Bean
+    @Primary
     @ConditionalOnProperty(name = "seezoon.file.store-type", havingValue = "local")
     public FileHandler localFileHandler() {
         return new LocalFileHandler(seezoonProperties.getFile().getLocal());

@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
 import com.seezoon.framework.exception.BusinessException;
@@ -57,7 +58,7 @@ public class LocalFileHandler implements FileHandler {
 
     @Override
     public String getUrl(String relativePath) {
-        return localProperties.getUrlPrefix() + relativePath;
+        return StringUtils.isNotBlank(relativePath) ? localProperties.getUrlPrefix() + relativePath : null;
     }
 
     @Override

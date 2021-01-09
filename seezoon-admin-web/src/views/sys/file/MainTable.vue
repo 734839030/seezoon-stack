@@ -20,16 +20,23 @@
         <a-space>
           <a-button type="primary" @click="handleQueryPage()">查询</a-button>
           <a-button type="default" @click="this.$refs.searchForm.resetFields();">重置</a-button>
-          <a-button type="default" @click="handleDataForm('添加')">
-            <CloudUploadOutlined/>
-          </a-button>
+          <a-upload
+              :customRequest="customRequest"
+              :multiple="true"
+              :showUploadList="false"
+              action="/sys/file/upload"
+              name="file">
+            <a-button :loading="uploadBtnLoading" type="default">
+              <CloudUploadOutlined/>
+            </a-button>
+          </a-upload>
         </a-space>
       </a-form-item>
     </a-form>
     <a-table :columns="columns" :data-source="data" :loading="loading" :pagination="pagination"
              :row-key="(record) => record.id" :scroll="{y: 600 }" bordered size="small" @change="handleTableChange">
       <template #action="{ record }">
-        <a>预览</a>
+        <a @click="preview(record.url)">预览</a>
         <a-divider type="vertical"/>
         <a>下载</a>
         <a-divider type="vertical"/>
@@ -79,12 +86,26 @@ export default {
           width: 140,
           slots: {customRender: 'action'},
         },
-      ]
+      ],
+      uploadBtnLoading: false
     }
   },
   mounted() {
     this.handleQueryPage();
   },
-  methods: {}
+  methods: {
+    preview(url) {
+      window.open(url, '_blank')
+    },
+    customRequest(formData) {
+      const form = new FormData();
+      form.append(formData.filename, formData.file);
+      this.uploadBtnLoading = true;
+      this.$http.post(formData.action, form).then(({data}) => {
+        this.$message.success(`${data.originalFilename} 上传成功`);
+        this.handleQueryPage();
+      }).finally(() => this.uploadBtnLoading = false);
+    }
+  }
 };
 </script>

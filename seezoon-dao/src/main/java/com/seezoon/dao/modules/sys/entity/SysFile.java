@@ -42,4 +42,7 @@ public class SysFile extends BaseEntity<String> {
     @Size(max = 200)
     private String relativePath;
 
+    // 以下为自定义字段
+    @ApiModelProperty(value = "访问路径")
+    private String url;
 }

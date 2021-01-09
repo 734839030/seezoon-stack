@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageSerializable;
 import com.google.common.collect.Lists;
+import com.seezoon.admin.framework.file.FileService;
 import com.seezoon.admin.modules.sys.service.SysFileService;
 import com.seezoon.dao.modules.sys.entity.SysFile;
 import com.seezoon.dao.modules.sys.entity.SysFileCondition;
@@ -37,6 +38,7 @@ import lombok.RequiredArgsConstructor;
 public class SysFileController extends BaseController {
 
     private final SysFileService sysFileService;
+    private final FileService fileService;
 
     @ApiOperation(value = "主键查询")
     @PreAuthorize("hasAuthority('sys:file:query')")
@@ -52,6 +54,9 @@ public class SysFileController extends BaseController {
     public Result<PageSerializable<SysFile>> query(@Valid @RequestBody SysFileCondition condition) {
         PageSerializable<SysFile> pageSerializable =
             sysFileService.find(condition, condition.getPage(), condition.getPageSize());
+        pageSerializable.getList().forEach((v) -> {
+            v.setUrl(this.fileService.getUrl(v.getRelativePath()));
+        });
         return Result.ok(pageSerializable);
     }
 

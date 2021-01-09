@@ -11,6 +11,11 @@
     <name>Seezoon Admin Server</name>
     <artifactId>seezoon-admin-server</artifactId>
 
+    <properties>
+        <!-- 本机开发环境默认的上传路径，${project.parent.basedir} 这里测试取不到-->
+        <local.upload.directory>${project.basedir}/../seezoon-admin-web/dist</local.upload.directory>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.seezoon</groupId>
@@ -26,16 +31,16 @@
         </dependency>
     </dependencies>
     <build>
+        <!--
+            排除环境依赖配置文件，不打入jar中，
+            如果是排除src/main/resources 可以配置
+            <build><resources></resources></build>
+            -->
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <!--
-            排除环境依赖配置文件，不打入jar中，
-            如果是排除src/main/resources 可以配置
-            <build><resources></resources></build>
-            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>

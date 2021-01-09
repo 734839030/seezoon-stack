@@ -134,6 +134,8 @@ public class SeezoonProperties {
             private String urlPrefix;
             /**
              * 存储目录，一般为可以处理静态容器的路径，如nginx,tomcat 下可以通过url访问的目录,如果/data/files
+             *
+             *
              */
             private String directory;
         }
