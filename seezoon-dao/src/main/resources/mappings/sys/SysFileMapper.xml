@@ -22,7 +22,7 @@
         sys_file t
     </sql>
 
-    <select id="selectByPrimaryKey" parameterType="Integer" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from

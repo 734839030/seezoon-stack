@@ -28,6 +28,10 @@ public class FileService extends AbstractBaseService {
         return this.fileHandler.download(relativePath);
     }
 
+    public void delete(String relativePath) throws IOException {
+        this.fileHandler.delete(relativePath);
+    }
+
     public String getUrl(String relativePath) {
         return this.fileHandler.getUrl(relativePath);
     }

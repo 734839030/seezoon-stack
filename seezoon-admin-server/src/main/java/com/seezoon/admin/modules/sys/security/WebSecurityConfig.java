@@ -93,6 +93,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             // respone cookie name XSRF-TOKEN
             // requst param _csrf or below;
             // request head HEADER_NAME = "X-CSRF-TOKEN";
+            // CsrfFilter 默认实现类是这个，不拦截get请求
             .and().csrf().ignoringAntMatchers(PUBLIC_ANT_PATH, LOGIN_URL)
             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());// .disable();
     }

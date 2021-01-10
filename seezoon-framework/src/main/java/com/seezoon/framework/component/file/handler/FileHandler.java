@@ -27,6 +27,14 @@ public interface FileHandler extends AutoCloseable {
     InputStream download(String relativePath) throws IOException;
 
     /**
+     * 删除文件
+     *
+     * @param relativePath
+     * @throws IOException
+     */
+    void delete(String relativePath) throws IOException;
+
+    /**
      * 文件可以访问的url路径
      *
      * @param relativePath

@@ -38,7 +38,7 @@
       <template #action="{ record }">
         <a @click="preview(record.url)">预览</a>
         <a-divider type="vertical"/>
-        <a>下载</a>
+        <a @click="download(record.id)">下载</a>
         <a-divider type="vertical"/>
         <a-popconfirm placement="left" title="确定删除？" @confirm="handleDelete('/sys/file/delete',record.id)">
           <a>删除</a>
@@ -96,6 +96,9 @@ export default {
   methods: {
     preview(url) {
       window.open(url, '_blank')
+    },
+    download(id) {
+      window.open(this.$http.defaults.baseURL + '/sys/file/download?id=' + id, '_blank')
     },
     customRequest(formData) {
       const form = new FormData();

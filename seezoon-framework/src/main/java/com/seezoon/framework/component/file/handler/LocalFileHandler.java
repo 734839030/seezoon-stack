@@ -57,6 +57,13 @@ public class LocalFileHandler implements FileHandler {
     }
 
     @Override
+    public void delete(String relativePath) throws IOException {
+        Assert.hasLength(relativePath, "relativePath must not be empty");
+        Path storePath = Path.of(localProperties.getDirectory(), relativePath);
+        Files.deleteIfExists(storePath);
+    }
+
+    @Override
     public String getUrl(String relativePath) {
         return StringUtils.isNotBlank(relativePath) ? localProperties.getUrlPrefix() + relativePath : null;
     }

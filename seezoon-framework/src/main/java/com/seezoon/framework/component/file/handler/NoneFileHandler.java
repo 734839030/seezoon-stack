@@ -21,6 +21,11 @@ public class NoneFileHandler implements FileHandler {
     }
 
     @Override
+    public void delete(String relativePath) throws IOException {
+        throw new RuntimeException("pls config FileHandler properties");
+    }
+
+    @Override
     public String getUrl(String relativePath) {
         throw new RuntimeException("pls config FileHandler properties");
     }

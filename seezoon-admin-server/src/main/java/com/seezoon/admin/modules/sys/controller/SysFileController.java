@@ -1,14 +1,19 @@
 package com.seezoon.admin.modules.sys.controller;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -86,10 +91,43 @@ public class SysFileController extends BaseController {
         return Result.ok(fileInfos);
     }
 
+    @ApiOperation(value = "下载")
+    @PreAuthorize("hasAuthority('sys:file:download')")
+    @GetMapping(value = "/download")
+    public void download(@NotBlank @RequestParam String id, HttpServletResponse response) throws IOException {
+        SysFile sysFile = sysFileService.find(id);
+        Assert.notNull(sysFile, "file record not exists");
+        try (InputStream inputStream = fileService.download(sysFile.getRelativePath());
+            OutputStream outputStream = response.getOutputStream();
+            BufferedOutputStream bos = new BufferedOutputStream(outputStream);
+            BufferedInputStream bin = new BufferedInputStream(inputStream)) {
+
+            // 第一步：设置响应类型
+            response.setContentLength(inputStream.available());
+            response.setContentType(sysFile.getContentType());
+            response.setHeader("Content-Disposition",
+                "attachment;filename=" + URLEncoder.encode(sysFile.getName(), StandardCharsets.UTF_8));
+            // 1M 一写
+            byte[] buffer = new byte[1024 * 1024];
+            int len = 0;
+            while (-1 != (len = bin.read(buffer))) {
+                bos.write(buffer, 0, len);
+            }
+        }
+
+    }
+
     @ApiOperation(value = "删除")
     @PreAuthorize("hasAuthority('sys:file:delete')")
     @PostMapping(value = "/delete")
     public Result delete(@RequestParam String id) {
+        SysFile sysFile = sysFileService.find(id);
+        Assert.notNull(sysFile, "file record not exists");
+        try {
+            fileService.delete(sysFile.getRelativePath());
+        } catch (IOException e) {
+            logger.error("remove file:" + sysFile.getRelativePath() + " error", e);
+        }
         sysFileService.delete(id);
         return Result.SUCCESS;
     }

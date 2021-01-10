@@ -1,11 +1,23 @@
 package com.seezoon.framework.component.file;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * 文件信息
  *
  * @author hdf 2018年4月15日
  */
+@AllArgsConstructor
+@Getter
+@Setter
 public class FileInfo {
+
+    /**
+     * 文件id
+     */
+    private String id;
 
     /**
      * 文件全路径
@@ -19,36 +31,5 @@ public class FileInfo {
      * 原始文件名
      */
     private String originalFilename;
-
-    public FileInfo(String fullUrl, String relativePath, String originalFilename) {
-        super();
-        this.fullUrl = fullUrl;
-        this.relativePath = relativePath;
-        this.originalFilename = originalFilename;
-    }
-
-    public String getFullUrl() {
-        return fullUrl;
-    }
-
-    public void setFullUrl(String fullUrl) {
-        this.fullUrl = fullUrl;
-    }
-
-    public String getRelativePath() {
-        return relativePath;
-    }
-
-    public void setRelativePath(String relativePath) {
-        this.relativePath = relativePath;
-    }
-
-    public String getOriginalFilename() {
-        return originalFilename;
-    }
-
-    public void setOriginalFilename(String originalFilename) {
-        this.originalFilename = originalFilename;
-    }
 
 }

@@ -44,7 +44,7 @@ public class SysFileService extends AbstractCrudService<SysFileDao, SysFile, Str
         sysFile.setFileSize((int)size);
         sysFile.setRelativePath(relativePath);
         this.save(sysFile);
-        return new FileInfo(fileService.getUrl(relativePath), relativePath, originalFilename);
+        return new FileInfo(fileId, fileService.getUrl(relativePath), relativePath, originalFilename);
     }
 
     /**
