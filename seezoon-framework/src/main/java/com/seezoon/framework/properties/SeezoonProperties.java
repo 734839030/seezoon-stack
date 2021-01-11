@@ -135,7 +135,7 @@ public class SeezoonProperties {
             /**
              * 存储目录，一般为可以处理静态容器的路径，如nginx,tomcat 下可以通过url访问的目录,如果/data/files
              *
-             *
+             * @local.upload.directory@ for local test
              */
             private String directory;
         }

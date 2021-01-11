@@ -55,6 +55,9 @@
         <!-- build-->
         <versions-maven-plugin.version>2.8.1</versions-maven-plugin.version>
         <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
+        <!-- aliyun-sdk-oss -->
+        <aliyun-sdk-oss.version>3.11.2</aliyun-sdk-oss.version>
+
     </properties>
     <dependencyManagement>
         <dependencies>

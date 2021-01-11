@@ -60,6 +60,10 @@ public class LocalFileHandler implements FileHandler {
     public void delete(String relativePath) throws IOException {
         Assert.hasLength(relativePath, "relativePath must not be empty");
         Path storePath = Path.of(localProperties.getDirectory(), relativePath);
+        // 文件不存在返回 false
+        if (Files.isDirectory(storePath)) {
+            throw new RuntimeException(storePath + " is directory,can not delete ");
+        }
         Files.deleteIfExists(storePath);
     }
 

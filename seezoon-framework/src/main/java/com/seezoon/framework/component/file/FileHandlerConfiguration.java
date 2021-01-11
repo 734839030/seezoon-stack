@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
+import com.seezoon.framework.component.file.handler.AliyunOssHandler;
 import com.seezoon.framework.component.file.handler.FileHandler;
 import com.seezoon.framework.component.file.handler.LocalFileHandler;
 import com.seezoon.framework.component.file.handler.NoneFileHandler;
@@ -38,6 +39,6 @@ public class FileHandlerConfiguration {
     @Bean
     @ConditionalOnProperty(name = "seezoon.file.store-type", havingValue = "aliyun_oss")
     public FileHandler aliyunOssFileHandler() {
-        return new NoneFileHandler();
+        return new AliyunOssHandler(seezoonProperties.getFile().getAliyun());
     }
 }

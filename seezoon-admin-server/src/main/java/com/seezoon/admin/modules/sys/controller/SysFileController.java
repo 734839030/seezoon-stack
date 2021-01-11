@@ -102,8 +102,8 @@ public class SysFileController extends BaseController {
             BufferedOutputStream bos = new BufferedOutputStream(outputStream);
             BufferedInputStream bin = new BufferedInputStream(inputStream)) {
 
-            // 第一步：设置响应类型
-            response.setContentLength(inputStream.available());
+            // 设置响应类型 available 在流式下载不准确，设置后下载数据不全
+            // response.setContentLength(inputStream.available());
             response.setContentType(sysFile.getContentType());
             response.setHeader("Content-Disposition",
                 "attachment;filename=" + URLEncoder.encode(sysFile.getName(), StandardCharsets.UTF_8));
