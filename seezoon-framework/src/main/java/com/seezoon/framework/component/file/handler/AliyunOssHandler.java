@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
 import com.aliyun.oss.OSS;
@@ -12,16 +11,19 @@ import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.OSSObject;
 import com.seezoon.framework.properties.SeezoonProperties;
 
-import lombok.RequiredArgsConstructor;
-
 /**
  * @author hdf
  */
-@RequiredArgsConstructor
-public class AliyunOssHandler implements FileHandler, InitializingBean {
+public class AliyunOssHandler implements FileHandler {
 
-    private final SeezoonProperties.FileProperties.AliyunOssProperties aliyunOssProperties;
+    private SeezoonProperties.FileProperties.AliyunOssProperties aliyunOssProperties;
     private OSS ossClient;
+
+    public AliyunOssHandler(SeezoonProperties.FileProperties.AliyunOssProperties aliyunOssProperties) {
+        this.aliyunOssProperties = aliyunOssProperties;
+        ossClient = new OSSClientBuilder().build(aliyunOssProperties.getEndpoint(),
+            aliyunOssProperties.getAccessKeyId(), aliyunOssProperties.getAccessKeySecret());
+    }
 
     @Override
     public void upload(String relativePath, InputStream in) throws IOException {
@@ -67,11 +69,5 @@ public class AliyunOssHandler implements FileHandler, InitializingBean {
             relativePath = relativePath.substring(1);
         }
         return relativePath;
-    }
-
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        ossClient = new OSSClientBuilder().build(aliyunOssProperties.getEndpoint(),
-            aliyunOssProperties.getAccessKeyId(), aliyunOssProperties.getAccessKeySecret());
     }
 }
