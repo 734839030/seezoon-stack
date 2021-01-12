@@ -82,7 +82,7 @@ export default {
         },
         {
           title: '操作',
-          fixd: 'right',
+          fixed: 'right',
           width: 140,
           slots: {customRender: 'action'},
         },

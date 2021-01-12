@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seezoon.dao.modules.sys.SysDeptDao">
+    <resultMap id="BaseResultMap" type="com.seezoon.dao.modules.sys.entity.SysDept">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result column="contact_user" jdbcType="VARCHAR" property="contactUser"/>
+        <result column="telephone" jdbcType="VARCHAR" property="telephone"/>
+        <result column="create_by" jdbcType="INTEGER" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="INTEGER" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        t.id,t.parent_id,t.name,t.sort,t.contact_user,t.telephone,t.create_by,t.create_time,t.update_by,t.update_time,t.remarks
+    </sql>
+
+    <sql id="Query_Table">
+        sys_dept t
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="Query_Table"/>
+        where t.id = #{id}
+    </select>
+
+    <select id="selectByCondition" parameterType="com.seezoon.dao.modules.sys.entity.SysDeptCondition"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="Query_Table"/>
+        <where>
+            <if test="parentId != null">
+                and t.parent_id = #{parentId}
+            </if>
+            <if test="name != null and name != ''">
+                and t.name = #{name}
+            </if>
+        </where>
+        <choose>
+            <when test="sortField != null and sortField != '' and sortOrder != null and sortOrder !=''">
+                order by t.${sortField} ${sortOrder}
+            </when>
+            <otherwise>
+                order by t.parent_id asc,t.sort desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <delete id="deleteByPrimaryKey">
+        delete t from sys_dept t
+        where t.id in
+        <foreach item="item" collection="array" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_dept
+        (parent_id,name,sort,contact_user,telephone,create_by,create_time,update_by,update_time,remarks)
+        values
+        <foreach item="item" collection="array" separator=",">
+            (#{item.parentId},#{item.name},#{item.sort},#{item.contactUser},#{item.telephone},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remarks})
+        </foreach>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.seezoon.dao.modules.sys.entity.SysDept">
+        update sys_dept t
+        <set>
+            <if test="parentId != null">
+                t.parent_id = #{parentId},
+            </if>
+            <if test="name != null">
+                t.name = #{name},
+            </if>
+            <if test="sort != null">
+                t.sort = #{sort},
+            </if>
+            <if test="contactUser != null">
+                t.contact_user = #{contactUser},
+            </if>
+            <if test="telephone != null">
+                t.telephone = #{telephone},
+            </if>
+            <if test="updateBy != null">
+                t.update_by = #{updateBy},
+            </if>
+            <if test="updateTime != null">
+                t.update_time = #{updateTime},
+            </if>
+            <if test="remarks != null">
+                t.remarks = #{remarks}
+            </if>
+        </set>
+        where t.id = #{id}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.seezoon.dao.modules.sys.entity.SysDept">
+        update sys_dept t set
+        t.parent_id = #{parentId}
+        ,t.name = #{name}
+        ,t.sort = #{sort}
+        ,t.contact_user = #{contactUser}
+        ,t.telephone = #{telephone}
+        ,t.update_by = #{updateBy}
+        ,t.update_time = #{updateTime}
+        ,t.remarks = #{remarks}
+        where t.id = #{id}
+    </update>
+</mapper>

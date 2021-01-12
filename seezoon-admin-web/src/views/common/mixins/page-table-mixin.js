@@ -43,10 +43,15 @@ export const pageTableMixin = {
                 ...filters
             })
         },
+        // 选择性覆写
+        handleDeleteCb() {
+
+        },
         handleDelete(url, id) {
             this.$http.post(url, `id=${id}`).then(() => {
                 this.$message.success('删除成功')
                 this.handleQueryPage()
+                this.handleDeleteCb();
             });
         },
     }

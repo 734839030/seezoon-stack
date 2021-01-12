@@ -83,8 +83,8 @@ public class SysDictController extends BaseController {
     @ApiOperation(value = "检查是否重复")
     @PreAuthorize("hasAuthority('sys:dict:query')")
     @PostMapping(value = "/checkTypeAndCode")
-    public Result checkTypeAndCode(@RequestParam(required = false) Integer id, @NotBlank @RequestParam String type,
-        @NotBlank @RequestParam String code) {
+    public Result<Boolean> checkTypeAndCode(@RequestParam(required = false) Integer id,
+        @NotBlank @RequestParam String type, @NotBlank @RequestParam String code) {
         SysDict sysDict = this.sysDictService.findByTypeAndCode(type, code);
         return Result.ok(null == sysDict || Objects.equals(sysDict.getId(), id));
     }

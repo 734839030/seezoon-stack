@@ -103,11 +103,15 @@ export default {
         {
           title: '创建时间',
           dataIndex: 'createTime',
+        },
+        {
+          title: '修改时间',
+          dataIndex: 'updateTime',
           sorter: true,
         },
         {
           title: '操作',
-          fixd: 'right',
+          fixed: 'right',
           width: 120,
           slots: {customRender: 'action'},
         },
