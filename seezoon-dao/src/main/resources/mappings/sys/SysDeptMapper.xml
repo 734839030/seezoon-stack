@@ -4,6 +4,7 @@
     <resultMap id="BaseResultMap" type="com.seezoon.dao.modules.sys.entity.SysDept">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
+        <result column="parent_ids" jdbcType="VARCHAR" property="parentIds"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="sort" jdbcType="INTEGER" property="sort"/>
         <result column="contact_user" jdbcType="VARCHAR" property="contactUser"/>
@@ -13,14 +14,19 @@
         <result column="update_by" jdbcType="INTEGER" property="updateBy"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
         <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <!--        join-->
+        <result column="parent_name" jdbcType="VARCHAR" property="parentName"/>
+
+
     </resultMap>
 
     <sql id="Base_Column_List">
-        t.id,t.parent_id,t.name,t.sort,t.contact_user,t.telephone,t.create_by,t.create_time,t.update_by,t.update_time,t.remarks
+        t.id,t.parent_id,t.parent_ids,t.name,t.sort,t.contact_user,t.telephone,t.create_by,t.create_time,t.update_by,t.update_time,t.remarks,
+        p.name parent_name
     </sql>
 
     <sql id="Query_Table">
-        sys_dept t
+        sys_dept t left join sys_dept p on t.parent_id = p.id
     </sql>
 
     <select id="selectByPrimaryKey" parameterType="Integer" resultMap="BaseResultMap">
@@ -40,6 +46,9 @@
         <where>
             <if test="parentId != null">
                 and t.parent_id = #{parentId}
+            </if>
+            <if test="parentIds != null and parentIds != ''">
+                and t.parent_ids like concat('%',#{parentIds},'%')
             </if>
             <if test="name != null and name != ''">
                 and t.name = #{name}
@@ -65,10 +74,10 @@
 
     <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
         insert into sys_dept
-        (parent_id,name,sort,contact_user,telephone,create_by,create_time,update_by,update_time,remarks)
+        (parent_id,parent_ids,name,sort,contact_user,telephone,create_by,create_time,update_by,update_time,remarks)
         values
         <foreach item="item" collection="array" separator=",">
-            (#{item.parentId},#{item.name},#{item.sort},#{item.contactUser},#{item.telephone},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remarks})
+            (#{item.parentId},#{item.parentIds},#{item.name},#{item.sort},#{item.contactUser},#{item.telephone},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remarks})
         </foreach>
     </insert>
 
@@ -77,6 +86,9 @@
         <set>
             <if test="parentId != null">
                 t.parent_id = #{parentId},
+            </if>
+            <if test="parentIds != null">
+                t.parent_ids = #{parentIds},
             </if>
             <if test="name != null">
                 t.name = #{name},
@@ -105,6 +117,7 @@
     <update id="updateByPrimaryKey" parameterType="com.seezoon.dao.modules.sys.entity.SysDept">
         update sys_dept t set
         t.parent_id = #{parentId}
+        ,t.parent_ids = #{parentIds}
         ,t.name = #{name}
         ,t.sort = #{sort}
         ,t.contact_user = #{contactUser}

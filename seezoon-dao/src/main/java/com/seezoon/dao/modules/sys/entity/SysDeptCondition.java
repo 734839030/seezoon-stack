@@ -28,4 +28,10 @@ public class SysDeptCondition extends PageCondition {
      */
     @ApiModelProperty(value = "部门名称")
     private String name;
+
+    /**
+     * like 查询 /a/
+     */
+    @ApiModelProperty(value = "父部门")
+    private String parentIds;
 }

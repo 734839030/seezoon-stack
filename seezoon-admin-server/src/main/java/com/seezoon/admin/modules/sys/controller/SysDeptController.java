@@ -1,11 +1,11 @@
 package com.seezoon.admin.modules.sys.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -79,19 +79,16 @@ public class SysDeptController extends BaseController {
     @ApiOperation(value = "检查是否重复")
     @PreAuthorize("hasAuthority('sys:dept:query')")
     @PostMapping(value = "/checkName")
-    public Result<Boolean> checkName(@RequestParam(required = false) Integer id, @NotBlank @RequestParam String name) {
-        SysDept sysDept = this.sysDeptService.findByName(name);
+    public Result<Boolean> checkName(@RequestParam(required = false) Integer id, @NotBlank @RequestParam String name,
+        @NotNull @RequestParam(defaultValue = "0") Integer parentId) {
+        SysDept sysDept = this.sysDeptService.findByNameAndParentId(name, parentId);
         return Result.ok(null == sysDept || Objects.equals(sysDept.getId(), id));
     }
 
-    @ApiOperation(value = "查询部门树")
-    @GetMapping(value = "/tree")
-    public Result<List<Tree>> tree(@RequestParam Integer parentId) {
-        List<Tree> trees = new ArrayList<>();
-        List<SysDept> depts = sysDeptService.findByParentId(parentId);
-        depts.forEach((dept) -> {
-            trees.add(Tree.builder().key(dept.getId()).title(dept.getName()).selectable(true).build());
-        });
-        return Result.ok(trees);
+    @ApiOperation(value = "按层级查询部门树")
+    @PostMapping(value = "/tree")
+    public Result<List<Tree>> tree(@RequestParam Integer parentId,
+        @RequestParam(required = false) boolean includeChild) {
+        return Result.ok(this.sysDeptService.findTree(parentId, includeChild));
     }
 }

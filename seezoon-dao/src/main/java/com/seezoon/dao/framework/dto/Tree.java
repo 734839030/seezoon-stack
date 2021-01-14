@@ -8,7 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 /**
- * 该结构默认适合antd vue tree 组件
+ * 该结构默认适合antd vue tree 及tree select 组件
  *
  * @author hdf
  */
@@ -17,7 +17,7 @@ import lombok.Getter;
 public class Tree {
 
     /**
-     * 一般为主键
+     * 一般为主键 tree 组件元素采用随机值，以免节点状态缓存，比如展开后，重新加载数据后，节点状态不变问题
      */
     private Object key;
     private String title;
@@ -26,4 +26,6 @@ public class Tree {
     private boolean selectable;
     @JsonProperty("isLeaf")
     private boolean leaf;
+    private Object value;
+
 }

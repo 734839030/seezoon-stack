@@ -16,23 +16,18 @@
       </a-form-item>
     </a-form>
     <a-row :gutter="16">
-      <a-col :span="6">
+      <a-col :span="4">
         <a-card size="small" title="部门">
           <a-tree :load-data="loadDeptData" :tree-data="deptTreeData" @select="onDeptTreeSelect"/>
         </a-card>
       </a-col>
-      <a-col :span="18">
+      <a-col :span="20">
         <a-table :columns="columns" :data-source="data" :loading="loading" :pagination="pagination"
                  :row-key="(record) => record.id" :scroll="{y: 600 }" bordered size="small" @change="handleTableChange">
-          <template #status="{ text }">
-            <a-tag :color="text == 1 ? 'blue' : 'red'">
-              {{ text == 1 ? "有效" : "无效" }}
-            </a-tag>
-          </template>
           <template #action="{ record }">
             <a @click="handleDataForm('编辑', record.id)">编辑</a>
             <a-divider type="vertical"/>
-            <a-popconfirm placement="left" title="确定删除？" @confirm="handleDelete('/sys/dept/delete',record.id)">
+            <a-popconfirm placement="left" title="确定删除本部门及下级部门？" @confirm="handleDelete('/sys/dept/delete',record.id)">
               <a>删除</a>
             </a-popconfirm>
           </template>
@@ -46,6 +41,7 @@
 <script>
 import {pageTableMixin} from "@/views/common/mixins/page-table-mixin";
 import DataFormModal from './DataFormModal';
+import {deptTree} from '@/api/dept'
 
 export default {
   name: 'MainTable',
@@ -58,6 +54,10 @@ export default {
         {
           title: '部门名称',
           dataIndex: 'name',
+        },
+        {
+          title: '父部门',
+          dataIndex: 'parentName',
         },
         {
           title: '联系人',
@@ -98,9 +98,13 @@ export default {
   },
   methods: {
     handleDataForm(title, id) {
+      this.$refs.dataFormModal.loadDeptData()
       if (id) {
         this.$http.get('/sys/dept/query/' + id).then(({data}) => {
           this.$refs.dataFormModal.show();
+          if (data.parentId === 0) {
+            data.parentId = undefined
+          }
           this.dataFormModal = {title: title, dataForm: data};
         });
       } else {
@@ -108,22 +112,22 @@ export default {
         this.dataFormModal = {title: title, dataForm: {sort: 10}};
       }
     },
-    handleDeleteCb() {
+    handleDeleteCb(id) {
+      this.searchForm.parentId = id === this.searchForm.parentId ? null : this.searchForm.parentId
       this.loadDeptData()
     },
-    onDeptTreeSelect(selectedKeys) {
-      this.searchForm.parentId = selectedKeys[0];
+    onDeptTreeSelect(selectedKeys, {node}) {
+      this.searchForm.parentId = node.dataRef.value;
       this.handleQueryPage()
     },
     //加载部门树
     loadDeptData(treeNode) {
-      console.log("treeNode", treeNode)
       return new Promise(resolve => {
         if (treeNode && treeNode.dataRef.children) {
           resolve();
           return;
         }
-        this.$http.get(`/sys/dept/tree?parentId=${treeNode ? treeNode.eventKey : 0}`)
+        deptTree(treeNode ? treeNode.dataRef.value : 0)
             .then(({data}) => {
               if (!treeNode) {
                 this.deptTreeData = data;
@@ -131,7 +135,6 @@ export default {
                 treeNode.dataRef.children = data;
               }
               resolve();
-              //this.deptTreeData = [...this.deptTreeData]
             });
       });
     }

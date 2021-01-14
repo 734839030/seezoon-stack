@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -35,7 +38,7 @@ public abstract class AbstractCrudService<D extends CrudDao<T, PK>, T extends Ba
      * @return
      */
     @Transactional(readOnly = true)
-    public T find(PK pk) {
+    public T find(@NotNull PK pk) {
         return this.d.selectByPrimaryKey(pk);
     }
 
@@ -106,7 +109,7 @@ public abstract class AbstractCrudService<D extends CrudDao<T, PK>, T extends Ba
      * @param records
      * @return
      */
-    public int save(T... records) {
+    public int save(@NotEmpty T... records) {
         Arrays.stream(records).forEach((t) -> {
             // 当为空且是字符串类型时候，默认为其生成主键
             if (null == t.getId() && t.getId() instanceof String) {
@@ -124,7 +127,7 @@ public abstract class AbstractCrudService<D extends CrudDao<T, PK>, T extends Ba
      * @param record
      * @return
      */
-    public int updateSelective(T record) {
+    public int updateSelective(@NotNull T record) {
         record.setUpdateTime(new Date());
         return this.d.updateByPrimaryKey(record);
     }
@@ -139,7 +142,7 @@ public abstract class AbstractCrudService<D extends CrudDao<T, PK>, T extends Ba
      * @param record
      * @return
      */
-    public int update(T record) {
+    public int update(@NotNull T record) {
         record.setUpdateTime(new Date());
         return this.d.updateByPrimaryKey(record);
     }
@@ -154,7 +157,7 @@ public abstract class AbstractCrudService<D extends CrudDao<T, PK>, T extends Ba
      * @param pks
      * @return
      */
-    public int delete(PK... pks) {
+    public int delete(@NotEmpty PK... pks) {
         return this.d.deleteByPrimaryKey(pks);
     }
 }

@@ -51,7 +51,7 @@ export const pageTableMixin = {
             this.$http.post(url, `id=${id}`).then(() => {
                 this.$message.success('删除成功')
                 this.handleQueryPage()
-                this.handleDeleteCb();
+                this.handleDeleteCb(id);
             });
         },
     }

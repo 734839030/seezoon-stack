@@ -9,10 +9,15 @@
       <a-row>
         <a-col :md="12" :xs="24">
           <a-form-item :rules="[
-              { min: 0, max: 50, message: '唯一键长度1-50' },
-            ]" label="唯一键" name="parentId">
-            <a-input v-model:value="dataForm.parentId" :maxlength="50" placeholder="唯一键">
-            </a-input>
+            ]" label="父部门" name="parentId">
+            <a-tree-select
+                v-model:value="dataForm.parentId"
+                :allowClear="true"
+                :load-data="loadDeptData"
+                :tree-data="deptTreeData"
+                placeholder="请选择上级部门"
+            >
+            </a-tree-select>
           </a-form-item>
         </a-col>
         <a-col :md="12" :xs="24">
@@ -62,11 +67,17 @@
 <script>
 import {dataFormModalMixin} from "@/views/common/mixins/data-form-mixin-modal";
 import qs from 'qs'
+import {deptTree} from "@/api/dept";
 
 export default {
   name: 'DataFormModal',
   mixins: [dataFormModalMixin],
   emits: ['refreshQueryPage', 'refreshDeptTree'],
+  data() {
+    return {
+      deptTreeData: []
+    }
+  },
   methods: {
     checkName(rule, value) {
       // 参数验证
@@ -77,16 +88,33 @@ export default {
         }
         this.$http.post(
             '/sys/dept/checkName',
-            qs.stringify({id: this.dataForm.id, name: value})
+            qs.stringify({id: this.dataForm.id, name: value, parentId: this.dataForm.parentId})
         ).then(({data}) => {
-          data ? resolve() : reject(`部门 ${value} 已存在`);
+          data ? resolve() : reject(`该层级部门 ${value} 已存在`);
         });
       });
     },
     // 保存后回调
     handleOkCb() {
-      this.$emit('refreshQueryPage');
-      this.$emit('refreshDeptTree');
+      this.$emit('refreshQueryPage')
+      this.$emit('refreshDeptTree')
+    },
+    loadDeptData(treeNode) {
+      return new Promise(resolve => {
+        if (treeNode && treeNode.dataRef.children) {
+          resolve();
+          return;
+        }
+        deptTree(treeNode ? treeNode.dataRef.value : 0, true)
+            .then(({data}) => {
+              if (!treeNode) {
+                this.deptTreeData = data;
+              } else {
+                treeNode.dataRef.children = data;
+              }
+              resolve();
+            });
+      });
     }
   },
 };
