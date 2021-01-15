@@ -42,7 +42,7 @@ public class AutoWebMvcConfigurer implements WebMvcConfigurer {
         FilterRegistrationBean<RequestFilter> registration = new FilterRegistrationBean<RequestFilter>();
         registration.setFilter(new RequestFilter());
         registration.setName(RequestFilter.class.getSimpleName());
-        registration.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        registration.setOrder(Ordered.LOWEST_PRECEDENCE);
         return registration;
     }
 

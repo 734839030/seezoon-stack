@@ -1,16 +1,26 @@
 package com.seezoon.framework.web.advice;
 
 import java.beans.PropertyEditorSupport;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.deser.std.StdScalarDeserializer;
+import com.seezoon.framework.exception.ServerRuntimeException;
 
 /**
  * @author hdf
@@ -34,7 +44,7 @@ public class ParamBindAdvice {
             @Override
             public String getAsText() {
                 Object value = getValue();
-                return value != null ? value.toString() : "";
+                return value != null ? value.toString().trim() : "";
             }
 
             @Override
@@ -49,9 +59,34 @@ public class ParamBindAdvice {
                 try {
                     setValue(DateUtils.parseDate(text, parsePatterns));
                 } catch (ParseException e) {
-                    throw new RuntimeException(e);
+                    throw new ServerRuntimeException(e);
                 }
             }
         });
+    }
+
+    /**
+     * json 反序列化trim
+     *
+     * @return
+     */
+    @Bean
+    public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
+        return new Jackson2ObjectMapperBuilderCustomizer() {
+            @Override
+            public void customize(Jackson2ObjectMapperBuilder jacksonObjectMapperBuilder) {
+                jacksonObjectMapperBuilder.deserializerByType(String.class,
+                    new StdScalarDeserializer<String>(String.class) {
+
+                        private static final long serialVersionUID = 1L;
+
+                        @Override
+                        public String deserialize(JsonParser jsonParser, DeserializationContext ctx)
+                            throws IOException {
+                            return StringUtils.trim(jsonParser.getValueAsString());
+                        }
+                    });
+            }
+        };
     }
 }

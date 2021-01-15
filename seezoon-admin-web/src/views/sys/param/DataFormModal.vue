@@ -22,7 +22,7 @@
           <a-form-item :rules="[
               { required: true, message: '唯一键不能为空', whitespace: true },
               { min: 1, max: 50, message: '唯一键长度1-50' },
-              { validator: checkParamKey }
+              { validator: checkParamKey,trigger: 'blur' }
             ]" label="唯一键" name="paramKey">
             <a-input v-model:value="dataForm.paramKey" :maxlength="50" placeholder="唯一键">
             </a-input>

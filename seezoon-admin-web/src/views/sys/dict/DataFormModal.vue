@@ -10,7 +10,7 @@
           <a-form-item :rules="[
               { required: true, message: '类型不能为空', whitespace: true },
               { min: 1, max: 50, message: '类型长度1-50' },
-              { validator: checkTypeAndCode }
+              { validator: checkTypeAndCode ,trigger: 'blur'}
             ]" label="类型" name="type">
             <a-input v-model:value="dataForm.type" :maxlength="50" placeholder="请输入类型"></a-input>
           </a-form-item>
@@ -19,7 +19,7 @@
           <a-form-item :rules="[
               { required: true, message: '编码不能为空', whitespace: true },
               { min: 1, max: 50, message: '编码长度1-50' },
-              { validator: checkTypeAndCode }
+              { validator: checkTypeAndCode ,trigger: 'blur'}
             ]" label="编码" name="code">
             <a-input v-model:value="dataForm.code" :maxlength="50" placeholder="请输入编码"></a-input>
           </a-form-item>

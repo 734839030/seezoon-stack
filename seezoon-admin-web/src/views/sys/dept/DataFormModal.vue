@@ -25,7 +25,7 @@
               :rules="[
               { required: true, message: '名称不能为空', whitespace: true },
               { min: 1, max: 50, message: '名称长度1-50' },
-              {validator:checkName}
+              {validator:checkName,trigger: 'blur'}
             ]" label="名称" name="name">
             <a-input
                 v-model:value="dataForm.name" :maxlength="50" placeholder="名称">
@@ -86,6 +86,7 @@ export default {
           resolve();
           return;
         }
+        console.log(qs.stringify({id: this.dataForm.id, name: value, parentId: this.dataForm.parentId}))
         this.$http.post(
             '/sys/dept/checkName',
             qs.stringify({id: this.dataForm.id, name: value, parentId: this.dataForm.parentId})

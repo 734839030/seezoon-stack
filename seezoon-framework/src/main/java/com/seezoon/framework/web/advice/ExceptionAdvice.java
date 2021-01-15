@@ -15,6 +15,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import com.seezoon.framework.api.DefaultCodeMsgBundle;
 import com.seezoon.framework.api.Result;
 import com.seezoon.framework.exception.BusinessException;
+import com.seezoon.framework.exception.ServerRuntimeException;
 
 /**
  * 异常advice
@@ -62,6 +63,11 @@ public class ExceptionAdvice {
     @ExceptionHandler(BusinessException.class)
     public Result businessException(BusinessException e) {
         return Result.error(e.getCode(), e.getMsg());
+    }
+
+    @ExceptionHandler(ServerRuntimeException.class)
+    public Result serverRuntimeException(ServerRuntimeException e) {
+        return Result.error(DefaultCodeMsgBundle.FAIL, e.getMessage());
     }
 
     /**
