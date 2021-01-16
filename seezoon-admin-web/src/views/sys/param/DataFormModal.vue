@@ -77,7 +77,7 @@
 </template>
 
 <script>
-import {dataFormModalMixin} from "@/views/common/mixins/data-form-mixin-modal";
+import {dataFormModalMixin} from "@/mixins/common/data-form-mixin-modal";
 import qs from 'qs'
 
 export default {

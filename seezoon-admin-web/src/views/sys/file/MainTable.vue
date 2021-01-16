@@ -48,7 +48,7 @@
   </a-space>
 </template>
 <script>
-import {pageTableMixin} from "@/views/common/mixins/page-table-mixin";
+import {pageTableMixin} from "@/mixins/common/page-table-mixin";
 import {CloudUploadOutlined} from '@ant-design/icons-vue';
 import moment from 'moment'
 

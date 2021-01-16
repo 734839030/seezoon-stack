@@ -65,19 +65,14 @@
 </template>
 
 <script>
-import {dataFormModalMixin} from "@/views/common/mixins/data-form-mixin-modal";
+import {dataFormModalMixin} from "@/mixins/common/data-form-mixin-modal";
 import qs from 'qs'
-import {deptTree} from "@/api/dept";
+import {deptTreeSelectMixin} from "@/mixins/sys/dept-tree-select-mixin";
 
 export default {
   name: 'DataFormModal',
-  mixins: [dataFormModalMixin],
+  mixins: [dataFormModalMixin, deptTreeSelectMixin],
   emits: ['refreshQueryPage', 'refreshDeptTree'],
-  data() {
-    return {
-      deptTreeData: []
-    }
-  },
   methods: {
     checkName(rule, value) {
       // 参数验证
@@ -86,7 +81,6 @@ export default {
           resolve();
           return;
         }
-        console.log(qs.stringify({id: this.dataForm.id, name: value, parentId: this.dataForm.parentId}))
         this.$http.post(
             '/sys/dept/checkName',
             qs.stringify({id: this.dataForm.id, name: value, parentId: this.dataForm.parentId})
@@ -99,23 +93,6 @@ export default {
     handleOkCb() {
       this.$emit('refreshQueryPage')
       this.$emit('refreshDeptTree')
-    },
-    loadDeptData(treeNode) {
-      return new Promise(resolve => {
-        if (treeNode && treeNode.dataRef.children) {
-          resolve();
-          return;
-        }
-        deptTree(treeNode ? treeNode.dataRef.value : 0, true)
-            .then(({data}) => {
-              if (!treeNode) {
-                this.deptTreeData = data;
-              } else {
-                treeNode.dataRef.children = data;
-              }
-              resolve();
-            });
-      });
     }
   },
 };

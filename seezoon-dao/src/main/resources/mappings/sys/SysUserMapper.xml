@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seezoon.dao.modules.sys.SysUserDao">
+    <resultMap id="BaseResultMap" type="com.seezoon.dao.modules.sys.entity.SysUser">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="dept_id" jdbcType="INTEGER" property="deptId"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="photo" jdbcType="VARCHAR" property="photo"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="create_by" jdbcType="INTEGER" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="INTEGER" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+        <!--        join-->
+        <result column="dept_name" jdbcType="VARCHAR" property="deptName"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        t.id,t.dept_id,t.username,t.password,t.name,t.mobile,t.photo,t.email,t.status,t.create_by,t.create_time,t.update_by,t.update_time,t.remarks,
+        d.dept_name
+
+    </sql>
+
+    <sql id="Query_Table">
+        sys_user t left join sys_dept d on t.dept_id = d.id
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="Query_Table"/>
+        where t.id = #{id}
+    </select>
+
+    <select id="selectByCondition" parameterType="com.seezoon.dao.modules.sys.entity.SysUserCondition"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="Query_Table"/>
+        <where>
+            <if test="deptId != null">
+                and t.dept_id = #{deptId}
+            </if>
+            <if test="username != null and username != ''">
+                and t.username = #{username}
+            </if>
+            <if test="mobile != null and mobile != ''">
+                and t.mobile = #{mobile}
+            </if>
+        </where>
+        <choose>
+            <when test="sortField != null and sortField != '' and sortOrder != null and sortOrder !=''">
+                order by t.${sortField} ${sortOrder}
+            </when>
+            <otherwise>
+                order by t.create_time desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <delete id="deleteByPrimaryKey">
+        delete t from sys_user t
+        where t.id in
+        <foreach item="item" collection="array" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert">
+        insert into sys_user
+        (id,dept_id,username,password,name,mobile,photo,email,status,create_by,create_time,update_by,update_time,remarks)
+        values
+        <foreach item="item" collection="array" separator=",">
+            (#{item.id},#{item.deptId},#{item.username},#{item.password},#{item.name},#{item.mobile},#{item.photo},#{item.email},#{item.status},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remarks})
+        </foreach>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.seezoon.dao.modules.sys.entity.SysUser">
+        update sys_user t
+        <set>
+            <if test="deptId != null">
+                t.dept_id = #{deptId},
+            </if>
+            <if test="username != null">
+                t.username = #{username},
+            </if>
+            <if test="password != null">
+                t.password = #{password},
+            </if>
+            <if test="name != null">
+                t.name = #{name},
+            </if>
+            <if test="mobile != null">
+                t.mobile = #{mobile},
+            </if>
+            <if test="photo != null">
+                t.photo = #{photo},
+            </if>
+            <if test="email != null">
+                t.email = #{email},
+            </if>
+            <if test="status != null">
+                t.status = #{status},
+            </if>
+            <if test="updateBy != null">
+                t.update_by = #{updateBy},
+            </if>
+            <if test="updateTime != null">
+                t.update_time = #{updateTime},
+            </if>
+            <if test="remarks != null">
+                t.remarks = #{remarks}
+            </if>
+        </set>
+        where t.id = #{id}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.seezoon.dao.modules.sys.entity.SysUser">
+        update sys_user t set
+        t.dept_id = #{deptId}
+        ,t.username = #{username}
+        ,t.password = #{password}
+        ,t.name = #{name}
+        ,t.mobile = #{mobile}
+        ,t.photo = #{photo}
+        ,t.email = #{email}
+        ,t.status = #{status}
+        ,t.update_by = #{updateBy}
+        ,t.update_time = #{updateTime}
+        ,t.remarks = #{remarks}
+        where t.id = #{id}
+    </update>
+</mapper>

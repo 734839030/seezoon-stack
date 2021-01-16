@@ -46,7 +46,7 @@
                    @refreshQueryPage="handleQueryPage"></data-form-modal>
 </template>
 <script>
-import {pageTableMixin} from "@/views/common/mixins/page-table-mixin";
+import {pageTableMixin} from "@/mixins/common/page-table-mixin";
 import DataFormModal from './DataFormModal';
 
 export default {

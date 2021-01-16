@@ -39,9 +39,9 @@
                    @refreshDeptTree="this.loadDeptData" @refreshQueryPage="handleQueryPage"></data-form-modal>
 </template>
 <script>
-import {pageTableMixin} from "@/views/common/mixins/page-table-mixin";
+import {pageTableMixin} from "@/mixins/common/page-table-mixin";
 import DataFormModal from './DataFormModal';
-import {deptTree} from '@/api/dept'
+import {deptTree} from '@/api/sys'
 
 export default {
   name: 'MainTable',
@@ -117,7 +117,7 @@ export default {
       this.loadDeptData()
     },
     onDeptTreeSelect(selectedKeys, {node}) {
-      this.searchForm.parentId = node.dataRef.value;
+      this.searchForm.parentId = node.selected ? undefined : node.dataRef.value;
       this.handleQueryPage()
     },
     //加载部门树

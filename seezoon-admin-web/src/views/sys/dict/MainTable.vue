@@ -57,10 +57,10 @@
                    @refreshQueryPage="handleQueryPage"></data-form-modal>
 </template>
 <script>
-import {pageTableMixin} from "@/views/common/mixins/page-table-mixin";
+import {pageTableMixin} from "@/mixins/common/page-table-mixin";
 import DataFormModal from './DataFormModal';
 import {onMounted, ref} from 'vue'
-import {getTypes} from "@/api/dict";
+import {getTypes} from "@/api/sys";
 
 export default {
   name: 'MainTable',
