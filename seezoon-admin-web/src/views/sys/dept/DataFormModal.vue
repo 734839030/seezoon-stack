@@ -66,7 +66,6 @@
 
 <script>
 import {dataFormModalMixin} from "@/mixins/common/data-form-mixin-modal";
-import qs from 'qs'
 import {deptTreeSelectMixin} from "@/mixins/sys/dept-tree-select-mixin";
 
 export default {
@@ -75,19 +74,11 @@ export default {
   emits: ['refreshQueryPage', 'refreshDeptTree'],
   methods: {
     checkName(rule, value) {
-      // 参数验证
-      return new Promise((resolve, reject) => {
-        if (!(value && value.trim())) {
-          resolve();
-          return;
-        }
-        this.$http.post(
-            '/sys/dept/checkName',
-            qs.stringify({id: this.dataForm.id, name: value, parentId: this.dataForm.parentId})
-        ).then(({data}) => {
-          data ? resolve() : reject(`该层级部门 ${value} 已存在`);
-        });
-      });
+      return this.uniqueFieldSimpleValidation('/sys/dept/checkName', value, {
+        id: this.dataForm.id,
+        name: value,
+        parentId: this.dataForm.parentId
+      }, `该层级部门 ${value} 已存在`)
     },
     // 保存后回调
     handleOkCb() {

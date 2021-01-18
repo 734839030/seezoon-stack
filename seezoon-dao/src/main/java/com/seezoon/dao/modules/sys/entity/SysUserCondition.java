@@ -1,9 +1,8 @@
 package com.seezoon.dao.modules.sys.entity;
 
-import java.util.Date;
-
 import com.seezoon.dao.framework.entity.PageCondition;
 import com.seezoon.dao.framework.sort.annotation.SortField;
+
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,12 +10,13 @@ import lombok.ToString;
 
 /**
  * 用户信息
+ *
  * @author seezoon-generator 2021年1月16日 下午11:55:54
  */
 @Getter
 @Setter
 @ToString
-@SortField({"deptId:t.dept_id","username:t.username","mobile:t.mobile"})
+@SortField({"deptId:t.dept_id", "username:t.username", "mobile:t.mobile"})
 public class SysUserCondition extends PageCondition {
 
     /**
@@ -34,5 +34,10 @@ public class SysUserCondition extends PageCondition {
      */
     @ApiModelProperty(value = "手机")
     private String mobile;
+    /**
+     * 手机
+     */
+    @ApiModelProperty(value = "状态1:正常,0:禁用")
+    private Integer status;
 
 }

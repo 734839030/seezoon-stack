@@ -22,7 +22,7 @@
 
     <sql id="Base_Column_List">
         t.id,t.dept_id,t.username,t.password,t.name,t.mobile,t.photo,t.email,t.status,t.create_by,t.create_time,t.update_by,t.update_time,t.remarks,
-        d.dept_name
+        d.name dept_name
 
     </sql>
 
@@ -53,6 +53,9 @@
             </if>
             <if test="mobile != null and mobile != ''">
                 and t.mobile = #{mobile}
+            </if>
+            <if test="status != null">
+                and t.status = #{status}
             </if>
         </where>
         <choose>

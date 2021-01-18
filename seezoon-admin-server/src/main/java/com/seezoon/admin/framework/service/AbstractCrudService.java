@@ -129,7 +129,7 @@ public abstract class AbstractCrudService<D extends CrudDao<T, PK>, T extends Ba
      */
     public int updateSelective(@NotNull T record) {
         record.setUpdateTime(new Date());
-        return this.d.updateByPrimaryKey(record);
+        return this.d.updateByPrimaryKeySelective(record);
     }
 
     /**

@@ -9,6 +9,7 @@ const routes = [
     {path: '/sys/dict', component: () => import('../views/sys/dict/index')},
     {path: '/sys/file', component: () => import('../views/sys/file/index')},
     {path: '/sys/dept', component: () => import('../views/sys/dept/index')},
+    {path: '/sys/user', component: () => import('../views/sys/user/index')},
 ]
 
 

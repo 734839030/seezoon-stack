@@ -105,7 +105,7 @@ export default {
         });
       } else {
         this.$refs.dataFormModal.show();
-        this.dataFormModal = {title: title, dataForm: {}};
+        this.dataFormModal = {title: title, dataForm: {status: 1}};
       }
 
     }

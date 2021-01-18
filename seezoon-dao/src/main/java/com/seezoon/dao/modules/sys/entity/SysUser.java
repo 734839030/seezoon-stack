@@ -1,11 +1,9 @@
 package com.seezoon.dao.modules.sys.entity;
 
-import java.util.Date;
-
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.seezoon.dao.framework.entity.BaseEntity;
 
 import io.swagger.annotations.ApiModel;
@@ -33,9 +31,10 @@ public class SysUser extends BaseEntity<Integer> {
     @Size(max = 50)
     private String username;
 
-    @ApiModelProperty(value = "密码", required = true)
-    @NotBlank
+    @ApiModelProperty(value = "密码,新增必输")
+    // @NotBlank
     @Size(max = 100)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @ApiModelProperty(value = "姓名", required = true)
@@ -52,5 +51,10 @@ public class SysUser extends BaseEntity<Integer> {
     @ApiModelProperty(value = "邮件")
     private String email;
 
+    /**
+     * 以下为join 字段
+     */
+    @ApiModelProperty(value = "父部门名称(只显示)")
+    private String deptName;
 
 }

@@ -1,6 +1,9 @@
 package com.seezoon.admin.modules.sys.controller;
 
+import java.util.Objects;
+
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * 用户信息
+ *
  * @author seezoon-generator 2021年1月16日 下午11:55:54
  */
 @Api(tags = "用户信息")
@@ -40,7 +44,8 @@ public class SysUserController extends BaseController {
     @PreAuthorize("hasAuthority('sys:user:query')")
     @PostMapping("/query")
     public Result<PageSerializable<SysUser>> query(@Valid @RequestBody SysUserCondition condition) {
-        PageSerializable<SysUser> pageSerializable = sysUserService.find(condition, condition.getPage(), condition.getPageSize());
+        PageSerializable<SysUser> pageSerializable =
+            sysUserService.find(condition, condition.getPage(), condition.getPageSize());
         return Result.ok(pageSerializable);
     }
 
@@ -66,5 +71,23 @@ public class SysUserController extends BaseController {
     public Result delete(@RequestParam Integer id) {
         sysUserService.delete(id);
         return Result.SUCCESS;
+    }
+
+    @ApiOperation(value = "检查登录名是否重复")
+    @PreAuthorize("hasAuthority('sys:user:query')")
+    @PostMapping(value = "/checkUsername")
+    public Result<Boolean> checkUsername(@RequestParam(required = false) Integer id,
+        @NotBlank @RequestParam String username) {
+        SysUser sysUser = this.sysUserService.findByUsername(username);
+        return Result.ok(null == sysUser || Objects.equals(sysUser.getId(), id));
+    }
+
+    @ApiOperation(value = "检查手机号是否重复")
+    @PreAuthorize("hasAuthority('sys:user:query')")
+    @PostMapping(value = "/checkMobile")
+    public Result<Boolean> checkMobile(@RequestParam(required = false) Integer id,
+        @NotBlank @RequestParam String mobile) {
+        SysUser sysUser = this.sysUserService.findByMobile(mobile);
+        return Result.ok(null == sysUser || Objects.equals(sysUser.getId(), id));
     }
 }

@@ -131,7 +131,7 @@ export default {
         });
       } else {
         this.$refs.dataFormModal.show();
-        this.dataFormModal = {title: title, dataForm: {sort: 10, type: this.searchForm.type}};
+        this.dataFormModal = {title: title, dataForm: {status: 1, sort: 10, type: this.searchForm.type}};
       }
     }
   }

@@ -78,7 +78,6 @@
 
 <script>
 import {dataFormModalMixin} from "@/mixins/common/data-form-mixin-modal";
-import qs from 'qs'
 
 export default {
   name: 'DataFormModal',
@@ -86,20 +85,10 @@ export default {
   emits: ['refreshQueryPage'],
   methods: {
     checkParamKey(rule, value) {
-      // 参数验证
-      return new Promise((resolve, reject) => {
-        if (!(value && value.trim())) {
-          resolve();
-          return;
-        }
-        this.$http
-            .post(
-                '/sys/param/checkParamKey',
-                qs.stringify({id: this.dataForm.id, paramKey: value})
-            ).then(({data}) => {
-          data ? resolve() : reject(`唯一键 ${value} 已存在`);
-        });
-      });
+      return this.uniqueFieldSimpleValidation('/sys/param/checkParamKey', value, {
+        id: this.dataForm.id,
+        paramKey: value
+      }, `唯一键 ${value} 已存在`)
     },
     // 保存后回调
     handleOkCb() {
