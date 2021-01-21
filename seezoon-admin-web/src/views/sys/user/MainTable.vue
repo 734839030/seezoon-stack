@@ -37,6 +37,9 @@
         <a-table :columns="columns" :data-source="data" :loading="loading" :pagination="pagination"
                  :row-key="(record) => record.id"
                  :scroll="{y: 600 }" bordered size="small" @change="handleTableChange">
+          <template #photoUrl="{text}">
+            <a-image v-if="text" :src="text" height="40px" width="40px"></a-image>
+          </template>
           <template #status="{ text }">
             <a-tag :color="text == 1 ? 'blue' : 'red'">
               {{ text == 1 ? "有效" : "禁用" }}
@@ -75,7 +78,8 @@ export default {
         },
         {
           title: '头像',
-          dataIndex: 'photo',
+          dataIndex: 'photoUrl',
+          slots: {customRender: 'photoUrl'}
         },
         {
           title: '姓名',

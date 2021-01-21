@@ -5,6 +5,6 @@
 import MainTable from './MainTable';
 
 export default {
-  components:{MainTable}
+  components: {MainTable},
 }
 </script>

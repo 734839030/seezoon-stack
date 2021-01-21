@@ -15,7 +15,6 @@ import org.apache.http.impl.client.StandardHttpRequestRetryHandler;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -27,16 +26,18 @@ import org.springframework.web.client.RestTemplate;
 
 import com.seezoon.framework.properties.SeezoonProperties;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * 优化原生无连接池问题
  *
  * @author hdf
  */
 @Configuration
+@RequiredArgsConstructor
 public class RestTemplateCustomConfiguration {
 
-    @Autowired
-    private SeezoonProperties seezoonProperties;
+    private final SeezoonProperties seezoonProperties;
 
     /**
      * 获取ssl的连接池,适合双向请求,微信开发常用,该对象较重请缓存使用

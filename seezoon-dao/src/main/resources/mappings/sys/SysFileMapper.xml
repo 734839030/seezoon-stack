@@ -48,7 +48,12 @@
                 and (t.create_time > #{createDateRange[0],javaType=String} and t.create_time < date_add(#{createDateRange[1],javaType=String}, interval 1 day))
 			    ]]>
             </if>
-
+            <if test="ids !=null and ids.size() > 0">
+                and t.id in
+                <foreach item="id" collection="ids" separator="," open="(" close=")">
+                    #{id}
+                </foreach>
+            </if>
         </where>
         <choose>
             <when test="sortField != null and sortField != '' and sortOrder != null and sortOrder !=''">

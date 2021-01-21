@@ -1,6 +1,5 @@
 package com.seezoon.framework.component.file;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,16 +11,18 @@ import com.seezoon.framework.component.file.handler.LocalFileHandler;
 import com.seezoon.framework.component.file.handler.NoneFileHandler;
 import com.seezoon.framework.properties.SeezoonProperties;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * 文件上传下载处理
  *
  * @author hdf
  */
 @Configuration(proxyBeanMethods = false)
+@RequiredArgsConstructor
 public class FileHandlerConfiguration {
 
-    @Autowired
-    private SeezoonProperties seezoonProperties;
+    private final SeezoonProperties seezoonProperties;
 
     @Bean
     @ConditionalOnProperty(name = "seezoon.file.store-type", havingValue = "none")

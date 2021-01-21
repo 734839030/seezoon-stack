@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.SchedulingConfigurer;
 import org.springframework.scheduling.config.ScheduledTaskRegistrar;
@@ -15,18 +14,20 @@ import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import com.seezoon.framework.properties.SeezoonProperties;
 import com.seezoon.framework.properties.SeezoonProperties.ScheduledProperties;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * 定时配置
  *
  * 如需要使用异步，springboot 要求显示的用{@code @EnableScheduling}
  */
 @Configuration
+@RequiredArgsConstructor
 public class ScheduledCustomConfiguration implements SchedulingConfigurer {
 
     private static Logger logger = LoggerFactory.getLogger(ScheduledCustomConfiguration.class);
 
-    @Autowired
-    private SeezoonProperties seezoonProperties;
+    private final SeezoonProperties seezoonProperties;
 
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {

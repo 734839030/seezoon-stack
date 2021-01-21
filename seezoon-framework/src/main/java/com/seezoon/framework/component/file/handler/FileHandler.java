@@ -3,6 +3,8 @@ package com.seezoon.framework.component.file.handler;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * @author hdf
  */
@@ -42,4 +44,18 @@ public interface FileHandler extends AutoCloseable {
      */
     String getUrl(String relativePath);
 
+    default String getId(String relativePath) {
+        if (StringUtils.isBlank(relativePath)) {
+            return null;
+        }
+        int start = relativePath.lastIndexOf("/");
+        if (-1 == start) {
+            throw new IllegalArgumentException("相对路径错误");
+        }
+        int end = relativePath.lastIndexOf(".");
+        if (-1 == end || end <= start) {
+            throw new IllegalArgumentException("相对路径错误");
+        }
+        return relativePath.substring(start + 1, end);
+    }
 }

@@ -1,5 +1,7 @@
 package com.seezoon.dao.modules.sys.entity;
 
+import java.util.Collection;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -40,5 +42,9 @@ public class SysFileCondition extends PageCondition {
     @Size(min = 2, max = 2)
     @ApiModelProperty(value = "上传日期")
     private String[] createDateRange;
+
+    @ApiModelProperty(value = "id查询")
+    @Size(max = 20)
+    private Collection<String> ids;
 
 }

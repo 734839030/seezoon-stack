@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.AsyncConfigurerSupport;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -17,18 +16,20 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import com.alibaba.fastjson.JSON;
 import com.seezoon.framework.properties.SeezoonProperties;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * 异步配置
  *
  * 如需要使用异步，springboot 要求显示的用{@code @EnableAsync}
  */
 @Configuration
+@RequiredArgsConstructor
 public class AsyncCustomConfiguration extends AsyncConfigurerSupport {
 
     private static Logger logger = LoggerFactory.getLogger(AsyncCustomConfiguration.class);
 
-    @Autowired
-    private SeezoonProperties seezoonProperties;
+    private final SeezoonProperties seezoonProperties;
 
     @Override
     public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {

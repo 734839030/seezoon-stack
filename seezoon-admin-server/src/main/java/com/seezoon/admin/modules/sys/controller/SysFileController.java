@@ -29,6 +29,7 @@ import com.seezoon.framework.web.BaseController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -63,6 +64,21 @@ public class SysFileController extends BaseController {
             v.setUrl(this.fileService.getUrl(v.getRelativePath()));
         });
         return Result.ok(pageSerializable);
+    }
+
+    /**
+     * 通常图片展不需要文件名，可以省DB交互
+     *
+     * @param relativePath
+     * @param includeFileName
+     * @return
+     */
+    @ApiOperation(value = "查询文件信息")
+    @PostMapping("/info")
+    public Result<List<FileInfo>> info(@NotBlank @ApiParam("相对路径,逗号分隔") @RequestParam String relativePath,
+        @ApiParam("是否包含文件名") @RequestParam(required = false) boolean includeFileName) {
+        List<FileInfo> fileInfos = this.sysFileService.info(relativePath, includeFileName);
+        return Result.ok(fileInfos);
     }
 
     @ApiOperation(value = "单个上传")

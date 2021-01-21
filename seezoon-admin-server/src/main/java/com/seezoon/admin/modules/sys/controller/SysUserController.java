@@ -9,6 +9,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.github.pagehelper.PageSerializable;
+import com.seezoon.admin.framework.file.FileService;
 import com.seezoon.admin.modules.sys.service.SysUserService;
 import com.seezoon.dao.modules.sys.entity.SysUser;
 import com.seezoon.dao.modules.sys.entity.SysUserCondition;
@@ -31,12 +32,14 @@ import lombok.RequiredArgsConstructor;
 public class SysUserController extends BaseController {
 
     private final SysUserService sysUserService;
+    private final FileService fileService;
 
     @ApiOperation(value = "主键查询")
     @PreAuthorize("hasAuthority('sys:user:query')")
     @GetMapping("/query/{id}")
     public Result<SysUser> query(@PathVariable Integer id) {
         SysUser sysUser = sysUserService.find(id);
+        sysUser.setPhotoUrl(fileService.getUrl(sysUser.getPhoto()));
         return Result.ok(sysUser);
     }
 
@@ -46,6 +49,9 @@ public class SysUserController extends BaseController {
     public Result<PageSerializable<SysUser>> query(@Valid @RequestBody SysUserCondition condition) {
         PageSerializable<SysUser> pageSerializable =
             sysUserService.find(condition, condition.getPage(), condition.getPageSize());
+        pageSerializable.getList().forEach(sysUser -> {
+            sysUser.setPhotoUrl(fileService.getUrl(sysUser.getPhoto()));
+        });
         return Result.ok(pageSerializable);
     }
 

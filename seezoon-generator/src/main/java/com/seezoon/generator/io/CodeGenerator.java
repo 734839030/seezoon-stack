@@ -11,5 +11,5 @@ import com.seezoon.generator.plan.TablePlan;
  */
 public interface CodeGenerator {
 
-    public void generate(TablePlan... tablePlans) throws IOException;
+    void generate(TablePlan... tablePlans) throws IOException;
 }

@@ -27,7 +27,7 @@
               action="/sys/file/upload"
               name="file">
             <a-button :loading="uploadBtnLoading" type="default">
-              <CloudUploadOutlined/>
+              <cloud-upload-outlined/>
             </a-button>
           </a-upload>
         </a-space>
@@ -105,7 +105,7 @@ export default {
       form.append(formData.filename, formData.file);
       this.uploadBtnLoading = true;
       this.$http.post(formData.action, form).then(({data}) => {
-        this.$message.success(`${data.originalFilename} 上传成功`);
+        this.$message.success(`${data.name} 上传成功`);
         this.handleQueryPage();
       }).finally(() => this.uploadBtnLoading = false);
     }

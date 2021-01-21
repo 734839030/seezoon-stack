@@ -17,6 +17,11 @@
             <a-input v-model:value="dataForm.username" :maxlength="50" placeholder="请输入登录名字符或者数字"></a-input>
           </a-form-item>
         </a-col>
+        <a-col :md="12" :xs="24">
+          <a-form-item label="头像">
+            <s-uploader v-model:value="dataForm.photo" accept="image/*" listType="picture-card"/>
+          </a-form-item>
+        </a-col>
       </a-row>
       <a-row>
         <a-col :md="12" :xs="24">
@@ -60,7 +65,7 @@
       <a-row>
         <a-col :md="12" :xs="24">
           <a-form-item :rules="passwordRules" label="密码" name="password">
-            <a-input-password v-model:value="dataForm.password" :maxlength="50" allow-clear
+            <a-input-password v-model:value="dataForm.password" :maxlength="50" allow-clear autocomplete='new-password'
                               placeholder="请输入密码"></a-input-password>
           </a-form-item>
         </a-col>
@@ -106,10 +111,13 @@
 <script>
 import {dataFormModalMixin} from "@/mixins/common/data-form-mixin-modal";
 import {deptTreeSelectMixin} from "@/mixins/sys/dept-tree-select-mixin";
+import {CloudUploadOutlined} from "@ant-design/icons-vue";
+import SUploader from '@/components/SUploader'
 
 export default {
   name: 'DataFormModal',
   mixins: [dataFormModalMixin, deptTreeSelectMixin],
+  components: {CloudUploadOutlined, SUploader},
   emits: ['refreshQueryPage'],
   computed: {
     passwordRules() {

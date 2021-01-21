@@ -52,9 +52,12 @@ public class SysUser extends BaseEntity<Integer> {
     private String email;
 
     /**
-     * 以下为join 字段
+     * 以下为扩展字段
      */
     @ApiModelProperty(value = "父部门名称(只显示)")
     private String deptName;
+
+    @ApiModelProperty(value = "头像url(只显示)")
+    private String photoUrl;
 
 }

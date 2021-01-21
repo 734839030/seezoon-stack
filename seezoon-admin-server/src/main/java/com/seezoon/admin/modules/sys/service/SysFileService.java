@@ -3,20 +3,27 @@ package com.seezoon.admin.modules.sys.service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.seezoon.admin.framework.file.FileService;
 import com.seezoon.admin.framework.service.AbstractCrudService;
 import com.seezoon.dao.modules.sys.SysFileDao;
 import com.seezoon.dao.modules.sys.entity.SysFile;
+import com.seezoon.dao.modules.sys.entity.SysFileCondition;
 import com.seezoon.framework.component.file.FileInfo;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * 文件
@@ -24,10 +31,11 @@ import com.seezoon.framework.component.file.FileInfo;
  * @author seezoon-generator 2021年1月2日 上午1:04:41
  */
 @Service
+@RequiredArgsConstructor
 public class SysFileService extends AbstractCrudService<SysFileDao, SysFile, String> {
 
-    @Autowired
-    private FileService fileService;
+    public static final String COMMA = ",";
+    private final FileService fileService;
 
     public FileInfo upload(@NotEmpty String originalFilename, @NotEmpty String contentType, long size,
         @NotNull InputStream in) throws IOException {
@@ -44,7 +52,27 @@ public class SysFileService extends AbstractCrudService<SysFileDao, SysFile, Str
         sysFile.setFileSize((int)size);
         sysFile.setRelativePath(relativePath);
         this.save(sysFile);
-        return new FileInfo(fileId, fileService.getUrl(relativePath), relativePath, originalFilename);
+        return new FileInfo(fileService.getUrl(relativePath), relativePath, originalFilename);
+    }
+
+    @Transactional(readOnly = true)
+    public List<FileInfo> info(@NotBlank String relativePath, boolean includeFileName) {
+        Map<String, String> idMapRelativePath = Arrays.stream(StringUtils.split(relativePath, COMMA))
+            .collect(Collectors.toMap(path -> fileService.getId(path), Function.identity(), (k1, k2) -> k1));
+        List<FileInfo> fileInfos = new ArrayList<>();
+        if (includeFileName) {
+            Set<String> ids = idMapRelativePath.keySet();
+            SysFileCondition sysFileCondition = new SysFileCondition();
+            sysFileCondition.setIds(ids);
+            this.find(sysFileCondition).forEach((v) -> {
+                fileInfos.add(new FileInfo(fileService.getUrl(v.getRelativePath()), v.getRelativePath(), v.getName()));
+            });
+        } else {
+            idMapRelativePath.entrySet().stream().forEach((v) -> {
+                fileInfos.add(new FileInfo(fileService.getUrl(v.getValue()), v.getValue(), null));
+            });
+        }
+        return fileInfos;
     }
 
     /**
@@ -64,7 +92,7 @@ public class SysFileService extends AbstractCrudService<SysFileDao, SysFile, Str
      * @return
      */
     public String rename(String fileId, String originalFileName) {
-        return fileId + getFilesuffix(originalFileName);
+        return fileId + getFileSuffix(originalFileName);
     }
 
     /**
@@ -74,7 +102,7 @@ public class SysFileService extends AbstractCrudService<SysFileDao, SysFile, Str
      *            包含后缀
      * @return
      */
-    public String getFilesuffix(String fileName) {
+    public String getFileSuffix(String fileName) {
         Assert.hasText(fileName, "fileName must not be empty");
         String suffix = "";
         int lastIndex = -1;

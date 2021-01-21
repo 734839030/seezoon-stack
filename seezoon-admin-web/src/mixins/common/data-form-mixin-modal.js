@@ -1,6 +1,6 @@
 import request from '@/utils/request.js'
 import qs from "qs";
-// 用于子组件的时候,prop 是只读的，所以visible 不能在prop
+// 用于子组件的时候,prop 是只读的，modal 自带的关闭方法无法扩展调用$emit('update:visible',false);
 export const dataFormModalMixin = {
     props: {
         title: String,
@@ -13,7 +13,6 @@ export const dataFormModalMixin = {
         }
     },
     methods: {
-        // visible 不能在prop
         show() {
             this.visible = true
         },
