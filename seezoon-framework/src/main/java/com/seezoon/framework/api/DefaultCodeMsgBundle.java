@@ -14,5 +14,8 @@ public class DefaultCodeMsgBundle {
     public static final CodeMsg UNKNOWN = new CodeMsg("90000", "Unregistered Error,%s");
     public static final CodeMsg PARAM_INVALID = new CodeMsg("90001", "Param Invalid,%s");
     public static final CodeMsg PARAM_BIND_ERROR = new CodeMsg("90002", "Param Bind Error,%s");
+    public static final CodeMsg SAVE_ERROR = new CodeMsg("80001", "保存失败，影响条数:%d,请联系管理员");
+    public static final CodeMsg UPDATE_ERROR = new CodeMsg("80002", "更新失败，影响条数:%d,请联系管理员");
+    public static final CodeMsg DELETE_ERROR = new CodeMsg("80003", "更新失败，影响条数:%d,请联系管理员");
 
 }

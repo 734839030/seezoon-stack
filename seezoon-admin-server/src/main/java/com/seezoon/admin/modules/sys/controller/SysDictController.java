@@ -13,6 +13,7 @@ import com.github.pagehelper.PageSerializable;
 import com.seezoon.admin.modules.sys.service.SysDictService;
 import com.seezoon.dao.modules.sys.entity.SysDict;
 import com.seezoon.dao.modules.sys.entity.SysDictCondition;
+import com.seezoon.framework.api.DefaultCodeMsgBundle;
 import com.seezoon.framework.api.Result;
 import com.seezoon.framework.web.BaseController;
 
@@ -60,24 +61,24 @@ public class SysDictController extends BaseController {
     @PreAuthorize("hasAuthority('sys:dict:save')")
     @PostMapping(value = "/save")
     public Result save(@Valid @RequestBody SysDict sysDict) {
-        sysDictService.save(sysDict);
-        return Result.SUCCESS;
+        int count = sysDictService.save(sysDict);
+        return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.SAVE_ERROR, count);
     }
 
     @ApiOperation(value = "更新")
     @PreAuthorize("hasAuthority('sys:dict:update')")
     @PostMapping(value = "/update")
     public Result update(@Valid @RequestBody SysDict sysDict) {
-        sysDictService.updateSelective(sysDict);
-        return Result.SUCCESS;
+        int count = sysDictService.updateSelective(sysDict);
+        return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.UPDATE_ERROR, count);
     }
 
     @ApiOperation(value = "删除")
     @PreAuthorize("hasAuthority('sys:dict:delete')")
     @PostMapping(value = "/delete")
     public Result delete(@RequestParam Integer id) {
-        sysDictService.delete(id);
-        return Result.SUCCESS;
+        int count = sysDictService.delete(id);
+        return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.DELETE_ERROR, count);
     }
 
     @ApiOperation(value = "检查是否重复")

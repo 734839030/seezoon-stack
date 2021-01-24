@@ -26,7 +26,7 @@ public abstract class AbstractGeneratorService {
     private GeneratorDao generatorDao;
 
     /**
-     * 生成，tableNames = null 时候生成全部
+     * 生成，{@code ArrayUtils.isEmpty(tableNames)} 时候生成全部
      *
      * @param tablePlanHandler
      * @param tableNames

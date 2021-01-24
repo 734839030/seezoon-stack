@@ -1,7 +1,7 @@
 package com.seezoon.generator.constants.db;
 
 /**
- * 默认表字段，框架推荐默认，除了ID 是约定必须的字段，其余建表都是可选
+ * 默认表字段，框架推荐默认,都是可选
  *
  * @author hdf
  */

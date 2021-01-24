@@ -10,6 +10,8 @@
     <router-link to="/sys/dept">部门管理</router-link>
     <br>
     <router-link to="/sys/user">用户管理</router-link>
+    <br>
+    <router-link to="/sys/role">角色管理</router-link>
   </div>
 
 </template>

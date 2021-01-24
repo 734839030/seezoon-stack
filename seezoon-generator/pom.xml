@@ -68,6 +68,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <!-- 可以执行jar不能被其他组件依赖,加上单独生成可执行jar 后缀加上exec-->
                     <classifier>exec</classifier>
                 </configuration>
             </plugin>

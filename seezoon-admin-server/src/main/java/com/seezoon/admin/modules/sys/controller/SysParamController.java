@@ -12,6 +12,7 @@ import com.github.pagehelper.PageSerializable;
 import com.seezoon.admin.modules.sys.service.SysParamService;
 import com.seezoon.dao.modules.sys.entity.SysParam;
 import com.seezoon.dao.modules.sys.entity.SysParamCondition;
+import com.seezoon.framework.api.DefaultCodeMsgBundle;
 import com.seezoon.framework.api.Result;
 import com.seezoon.framework.web.BaseController;
 
@@ -51,24 +52,24 @@ public class SysParamController extends BaseController {
     @PreAuthorize("hasAuthority('sys:param:save')")
     @PostMapping(value = "/save")
     public Result save(@Valid @RequestBody SysParam sysParam) {
-        sysParamService.save(sysParam);
-        return Result.SUCCESS;
+        int count = sysParamService.save(sysParam);
+        return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.SAVE_ERROR, count);
     }
 
     @ApiOperation(value = "更新")
     @PreAuthorize("hasAuthority('sys:param:update')")
     @PostMapping(value = "/update")
     public Result update(@Valid @RequestBody SysParam sysParam) {
-        sysParamService.updateSelective(sysParam);
-        return Result.SUCCESS;
+        int count = sysParamService.updateSelective(sysParam);
+        return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.UPDATE_ERROR, count);
     }
 
     @ApiOperation(value = "删除")
     @PreAuthorize("hasAuthority('sys:param:delete')")
     @PostMapping(value = "/delete")
     public Result delete(@RequestParam Integer id) {
-        sysParamService.delete(id);
-        return Result.SUCCESS;
+        int count = sysParamService.delete(id);
+        return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.DELETE_ERROR, count);
     }
 
     @ApiOperation(value = "检查是否重复")

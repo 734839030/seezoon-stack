@@ -15,6 +15,7 @@ import com.seezoon.admin.modules.sys.service.SysDeptService;
 import com.seezoon.dao.framework.dto.Tree;
 import com.seezoon.dao.modules.sys.entity.SysDept;
 import com.seezoon.dao.modules.sys.entity.SysDeptCondition;
+import com.seezoon.framework.api.DefaultCodeMsgBundle;
 import com.seezoon.framework.api.Result;
 import com.seezoon.framework.web.BaseController;
 
@@ -56,24 +57,24 @@ public class SysDeptController extends BaseController {
     @PreAuthorize("hasAuthority('sys:dept:save')")
     @PostMapping(value = "/save")
     public Result save(@Valid @RequestBody SysDept sysDept) {
-        sysDeptService.save(sysDept);
-        return Result.SUCCESS;
+        int count = sysDeptService.save(sysDept);
+        return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.SAVE_ERROR, count);
     }
 
     @ApiOperation(value = "更新")
     @PreAuthorize("hasAuthority('sys:dept:update')")
     @PostMapping(value = "/update")
     public Result update(@Valid @RequestBody SysDept sysDept) {
-        sysDeptService.updateSelective(sysDept);
-        return Result.SUCCESS;
+        int count = sysDeptService.updateSelective(sysDept);
+        return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.UPDATE_ERROR, count);
     }
 
     @ApiOperation(value = "删除")
     @PreAuthorize("hasAuthority('sys:dept:delete')")
     @PostMapping(value = "/delete")
     public Result delete(@RequestParam Integer id) {
-        sysDeptService.delete(id);
-        return Result.SUCCESS;
+        int count = sysDeptService.delete(id);
+        return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.DELETE_ERROR, count);
     }
 
     @ApiOperation(value = "检查是否重复")

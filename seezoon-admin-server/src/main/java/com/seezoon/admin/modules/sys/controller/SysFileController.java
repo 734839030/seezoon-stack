@@ -23,6 +23,7 @@ import com.seezoon.admin.framework.file.FileService;
 import com.seezoon.admin.modules.sys.service.SysFileService;
 import com.seezoon.dao.modules.sys.entity.SysFile;
 import com.seezoon.dao.modules.sys.entity.SysFileCondition;
+import com.seezoon.framework.api.DefaultCodeMsgBundle;
 import com.seezoon.framework.api.Result;
 import com.seezoon.framework.component.file.FileInfo;
 import com.seezoon.framework.web.BaseController;
@@ -144,7 +145,7 @@ public class SysFileController extends BaseController {
         } catch (IOException e) {
             logger.error("remove file:" + sysFile.getRelativePath() + " error", e);
         }
-        sysFileService.delete(id);
-        return Result.SUCCESS;
+        int count = sysFileService.delete(id);
+        return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.DELETE_ERROR, count);
     }
 }

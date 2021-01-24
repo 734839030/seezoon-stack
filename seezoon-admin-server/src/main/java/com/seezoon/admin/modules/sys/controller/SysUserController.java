@@ -13,6 +13,7 @@ import com.seezoon.admin.framework.file.FileService;
 import com.seezoon.admin.modules.sys.service.SysUserService;
 import com.seezoon.dao.modules.sys.entity.SysUser;
 import com.seezoon.dao.modules.sys.entity.SysUserCondition;
+import com.seezoon.framework.api.DefaultCodeMsgBundle;
 import com.seezoon.framework.api.Result;
 import com.seezoon.framework.web.BaseController;
 
@@ -59,24 +60,24 @@ public class SysUserController extends BaseController {
     @PreAuthorize("hasAuthority('sys:user:save')")
     @PostMapping(value = "/save")
     public Result save(@Valid @RequestBody SysUser sysUser) {
-        sysUserService.save(sysUser);
-        return Result.SUCCESS;
+        int count = sysUserService.save(sysUser);
+        return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.SAVE_ERROR, count);
     }
 
     @ApiOperation(value = "更新")
     @PreAuthorize("hasAuthority('sys:user:update')")
     @PostMapping(value = "/update")
     public Result update(@Valid @RequestBody SysUser sysUser) {
-        sysUserService.updateSelective(sysUser);
-        return Result.SUCCESS;
+        int count = sysUserService.updateSelective(sysUser);
+        return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.UPDATE_ERROR, count);
     }
 
     @ApiOperation(value = "删除")
     @PreAuthorize("hasAuthority('sys:user:delete')")
     @PostMapping(value = "/delete")
     public Result delete(@RequestParam Integer id) {
-        sysUserService.delete(id);
-        return Result.SUCCESS;
+        int count = sysUserService.delete(id);
+        return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.DELETE_ERROR, count);
     }
 
     @ApiOperation(value = "检查登录名是否重复")
