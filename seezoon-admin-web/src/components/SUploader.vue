@@ -57,7 +57,7 @@ export default {
       handler: function (val) {// 不能写成=> 这种函数，会导致this undefined
         // 首次回显
         if (val && this.fileList.length == 0) {
-          this.$http.post('/sys/file/info', qs.stringify({relativePath: val, includeFileName: true}))
+          this.$http.post('/sys/file/info', qs.stringify({relativePaths: val, includeFileName: true}))
               .then(({data}) => {
                 this.fileList = data
               })

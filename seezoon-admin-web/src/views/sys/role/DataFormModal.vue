@@ -34,11 +34,10 @@
         <a-col :md="12" :xs="24">
           <a-form-item
               :rules="[
-              { required: true, message: '数据范围不能为空', whitespace: true },
+              { required: true, type: 'number',message: '数据范围不能为空', whitespace: true },
             ]" label="数据范围" name="dataScope">
             <a-select
-                v-model:value="dataForm.dataScope" :allowClear="true" placeholder="请选择数据范围">
-              <a-select-option v-for="dict in dataScopeArray" :key="dict.code">{{ dict.name }}</a-select-option>
+                v-model:value="dataForm.dataScope" :allowClear="true" :options="dataScopeArray" placeholder="请选择数据范围">
             </a-select>
           </a-form-item>
         </a-col>

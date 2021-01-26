@@ -1,6 +1,8 @@
 package com.seezoon.admin.modules.sys.controller;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.github.pagehelper.PageSerializable;
 import com.seezoon.admin.framework.file.FileService;
+import com.seezoon.admin.modules.sys.security.PasswordEncoder;
+import com.seezoon.admin.modules.sys.service.SysUserRoleService;
 import com.seezoon.admin.modules.sys.service.SysUserService;
 import com.seezoon.dao.modules.sys.entity.SysUser;
 import com.seezoon.dao.modules.sys.entity.SysUserCondition;
@@ -34,6 +38,7 @@ public class SysUserController extends BaseController {
 
     private final SysUserService sysUserService;
     private final FileService fileService;
+    private final SysUserRoleService sysUserRoleService;
 
     @ApiOperation(value = "主键查询")
     @PreAuthorize("hasAuthority('sys:user:query')")
@@ -41,6 +46,9 @@ public class SysUserController extends BaseController {
     public Result<SysUser> query(@PathVariable Integer id) {
         SysUser sysUser = sysUserService.find(id);
         sysUser.setPhotoUrl(fileService.getUrl(sysUser.getPhoto()));
+        List<Integer> roleIds =
+            sysUserRoleService.findValid(sysUser.getId()).stream().map(v -> v.getRoleId()).collect(Collectors.toList());
+        sysUser.setRoleIds(roleIds);
         return Result.ok(sysUser);
     }
 
@@ -60,6 +68,7 @@ public class SysUserController extends BaseController {
     @PreAuthorize("hasAuthority('sys:user:save')")
     @PostMapping(value = "/save")
     public Result save(@Valid @RequestBody SysUser sysUser) {
+        sysUser.setPassword(PasswordEncoder.encode(sysUser.getPassword()));
         int count = sysUserService.save(sysUser);
         return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.SAVE_ERROR, count);
     }
@@ -68,6 +77,7 @@ public class SysUserController extends BaseController {
     @PreAuthorize("hasAuthority('sys:user:update')")
     @PostMapping(value = "/update")
     public Result update(@Valid @RequestBody SysUser sysUser) {
+        sysUser.setPassword(PasswordEncoder.encode(sysUser.getPassword()));
         int count = sysUserService.updateSelective(sysUser);
         return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.UPDATE_ERROR, count);
     }

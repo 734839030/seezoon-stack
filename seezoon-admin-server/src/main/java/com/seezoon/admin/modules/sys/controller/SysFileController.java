@@ -70,15 +70,15 @@ public class SysFileController extends BaseController {
     /**
      * 通常图片展不需要文件名，可以省DB交互
      *
-     * @param relativePath
+     * @param relativePaths
      * @param includeFileName
      * @return
      */
     @ApiOperation(value = "查询文件信息")
     @PostMapping("/info")
-    public Result<List<FileInfo>> info(@NotBlank @ApiParam("相对路径,逗号分隔") @RequestParam String relativePath,
+    public Result<List<FileInfo>> info(@NotBlank @ApiParam("相对路径,逗号分隔") @RequestParam String relativePaths,
         @ApiParam("是否包含文件名") @RequestParam(required = false) boolean includeFileName) {
-        List<FileInfo> fileInfos = this.sysFileService.info(relativePath, includeFileName);
+        List<FileInfo> fileInfos = this.sysFileService.info(relativePaths, includeFileName);
         return Result.ok(fileInfos);
     }
 

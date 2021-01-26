@@ -1,5 +1,7 @@
 package com.seezoon.dao.modules.sys.entity;
 
+import java.util.List;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -60,4 +62,6 @@ public class SysUser extends BaseEntity<Integer> {
     @ApiModelProperty(value = "头像url(只显示)")
     private String photoUrl;
 
+    @ApiModelProperty(value = "角色")
+    private List<Integer> roleIds;
 }

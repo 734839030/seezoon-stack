@@ -30,16 +30,9 @@
       </a-col>
     </a-row>
   </a-form>
-  <a-table
-      :columns="columns"
-      :data-source="data"
-      :loading="loading"
-      :pagination="pagination"
-      :row-key="(record) => record.id"
-      :scroll="{y: 600 }"
-      bordered
-      size="small"
-      @change="handleTableChange">
+  <a-table :columns="columns" :data-source="data" :loading="loading" :pagination="pagination"
+           :row-key="(record) => record.id" :scroll="{y: 600 }" bordered size="small"
+           @change="handleTableChange">
     <template #status="{ text }">
       <a-tag :color="text == 1 ? 'blue' : 'red'">
         {{ text == 1 ? "有效" : "无效" }}

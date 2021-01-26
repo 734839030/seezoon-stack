@@ -1,5 +1,6 @@
 package com.seezoon.admin.modules.sys.controller;
 
+import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
@@ -48,6 +49,12 @@ public class SysRoleController extends BaseController {
         PageSerializable<SysRole> pageSerializable =
             sysRoleService.find(condition, condition.getPage(), condition.getPageSize());
         return Result.ok(pageSerializable);
+    }
+
+    @ApiOperation(value = "查询全部角色")
+    @GetMapping("/query")
+    public Result<List<SysRole>> query() {
+        return Result.ok(sysRoleService.findAll());
     }
 
     @ApiOperation(value = "保存")

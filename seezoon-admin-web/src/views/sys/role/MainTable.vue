@@ -13,8 +13,7 @@
     </a-form-item>
     <a-form-item label="数据范围" name="dataScope">
       <a-select
-          v-model:value="searchForm.dataScope" :allowClear="true" placeholder="请选择数据范围">
-        <a-select-option v-for="dict in dataScopeArray" :key="dict.code">{{ dict.name }}</a-select-option>
+          v-model:value="searchForm.dataScope" :allowClear="true" :options="dataScopeArray" placeholder="请选择数据范围">
       </a-select>
     </a-form-item>
     <a-form-item label="状态" name="status">
@@ -33,7 +32,8 @@
     </a-form-item>
   </a-form>
   <a-table :columns="columns" :data-source="data" :loading="loading" :pagination="pagination"
-           :row-key="(record) => record.id" :scroll="{y: 600 }" bordered size="small" @change="handleTableChange">
+           :row-key="(record) => record.id" :scroll="{y: 600 }" bordered size="small"
+           @change="handleTableChange">
     <template #status="{ text }">
       <a-tag :color="text == 1 ? 'blue' : 'red'">
         {{ text == 1 ? "启用" : "停用" }}

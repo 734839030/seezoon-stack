@@ -1,5 +1,6 @@
 import request from "@/utils/request";
 import qs from 'qs'
+import {Dict} from "@/utils/dict";
 
 /**
  * 部门树
@@ -19,7 +20,20 @@ export async function getTypes() {
     let {data} = await request.get('/sys/dict/queryTypes');
     let dictTypes = [];
     for (let type of data.values()) {
-        dictTypes.push({value: type, label: type})
+        dictTypes.push(new Dict(type, type))
     }
     return dictTypes;
+}
+
+/**
+ * 获取全部角色
+ * @returns {Promise<[]>}
+ */
+export async function getRoles() {
+    let {data} = await request.get('/sys/role/query');
+    let roles = [];
+    for (let role of data.values()) {
+        roles.push(new Dict(role.name, role.id, role.status === 0))
+    }
+    return roles;
 }

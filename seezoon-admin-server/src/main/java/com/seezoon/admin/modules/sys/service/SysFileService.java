@@ -37,6 +37,13 @@ public class SysFileService extends AbstractCrudService<SysFileDao, SysFile, Str
     public static final String COMMA = ",";
     private final FileService fileService;
 
+    @Transactional(readOnly = true)
+    public List<SysFile> findByIds(@NotEmpty List<String> ids) {
+        SysFileCondition sysFileCondition = new SysFileCondition();
+        sysFileCondition.setIds(ids);
+        return this.find(sysFileCondition);
+    }
+
     public FileInfo upload(@NotEmpty String originalFilename, @NotEmpty String contentType, long size,
         @NotNull InputStream in) throws IOException {
         // 新命名
@@ -55,22 +62,36 @@ public class SysFileService extends AbstractCrudService<SysFileDao, SysFile, Str
         return new FileInfo(fileService.getUrl(relativePath), relativePath, originalFilename);
     }
 
+    /**
+     * 查询文件详细信息，会自动排序
+     *
+     * @param relativePaths
+     * @param includeFileName
+     * @return
+     */
     @Transactional(readOnly = true)
-    public List<FileInfo> info(@NotBlank String relativePath, boolean includeFileName) {
-        Map<String, String> idMapRelativePath = Arrays.stream(StringUtils.split(relativePath, COMMA))
-            .collect(Collectors.toMap(path -> fileService.getId(path), Function.identity(), (k1, k2) -> k1));
+    public List<FileInfo> info(@NotBlank String relativePaths, boolean includeFileName) {
+        String[] relativePathArray = StringUtils.split(relativePaths, COMMA);
+        List<String> ids = new ArrayList<>();
+        Map<String, String> idMapRelativePath = new HashMap<>();
         List<FileInfo> fileInfos = new ArrayList<>();
+        for (String relativePath : relativePathArray) {
+            String id = fileService.getId(relativePath);
+            ids.add(id);
+            idMapRelativePath.put(relativePath, id);
+            if (!includeFileName) {
+                fileInfos.add(new FileInfo(fileService.getUrl(relativePath), relativePath, null));
+            }
+        }
+
         if (includeFileName) {
-            Set<String> ids = idMapRelativePath.keySet();
-            SysFileCondition sysFileCondition = new SysFileCondition();
-            sysFileCondition.setIds(ids);
-            this.find(sysFileCondition).forEach((v) -> {
-                fileInfos.add(new FileInfo(fileService.getUrl(v.getRelativePath()), v.getRelativePath(), v.getName()));
-            });
-        } else {
-            idMapRelativePath.entrySet().stream().forEach((v) -> {
-                fileInfos.add(new FileInfo(fileService.getUrl(v.getValue()), v.getValue(), null));
-            });
+            Map<String, SysFile> relativePathMapFile = this.findByIds(ids).stream()
+                .collect(Collectors.toMap(SysFile::getRelativePath, Function.identity(), (k1, k2) -> k1));
+            for (String relativePath : relativePathArray) {
+                SysFile sysFile = relativePathMapFile.get(relativePath);
+                fileInfos.add(new FileInfo(fileService.getUrl(sysFile.getRelativePath()), sysFile.getRelativePath(),
+                    sysFile.getName()));
+            }
         }
         return fileInfos;
     }

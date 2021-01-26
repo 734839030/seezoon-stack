@@ -8,6 +8,11 @@
       <a-input v-model:value="dataForm.id" type="hidden"></a-input>
       <a-row>
         <a-col :md="12" :xs="24">
+          <a-form-item label="头像">
+            <s-uploader v-model:value="dataForm.photo" accept="image/*" listType="picture-card"/>
+          </a-form-item>
+        </a-col>
+        <a-col :md="12" :xs="24">
           <a-form-item
               :rules="[
               { required: true, message: '登录名不能为空', whitespace: true },
@@ -16,20 +21,22 @@
             ]" label="登录名" name="username">
             <a-input v-model:value="dataForm.username" :maxlength="50" placeholder="请输入登录名字符或者数字"></a-input>
           </a-form-item>
-        </a-col>
-        <a-col :md="12" :xs="24">
-          <a-form-item label="头像">
-            <s-uploader v-model:value="dataForm.photo" accept="image/*" listType="picture-card"/>
+          <a-form-item :rules="[
+              { required: true, message: '姓名不能为空', whitespace: true },
+              { min: 1, max: 50, message: '姓名长度1-50' },
+            ]" label="姓名" name="name">
+            <a-input v-model:value="dataForm.name" :maxlength="50" autocomplete="off" placeholder="请输入姓名"></a-input>
           </a-form-item>
         </a-col>
       </a-row>
       <a-row>
         <a-col :md="12" :xs="24">
           <a-form-item :rules="[
-              { required: true, message: '姓名不能为空', whitespace: true },
-              { min: 1, max: 50, message: '姓名长度1-50' },
-            ]" label="姓名" name="name">
-            <a-input v-model:value="dataForm.name" :maxlength="50" autocomplete="off" placeholder="请输入姓名"></a-input>
+              { required: true, message: '手机号不能为空', whitespace: true },
+              { len:11, message: '手机号长度为11位' },
+              { validator: checkMobile ,trigger: 'blur'}
+            ]" label="手机" name="mobile">
+            <a-input v-model:value="dataForm.mobile" :maxlength="11" placeholder="请输入11位手机号"></a-input>
           </a-form-item>
         </a-col>
         <a-col :md="12" :xs="24">
@@ -46,37 +53,11 @@
       </a-row>
       <a-row>
         <a-col :md="12" :xs="24">
-          <a-form-item :rules="[
-              { required: true, message: '手机号不能为空', whitespace: true },
-              { len:11, message: '手机号长度为11位' },
-              { validator: checkMobile ,trigger: 'blur'}
-            ]" label="手机" name="mobile">
-            <a-input v-model:value="dataForm.mobile" :maxlength="11" placeholder="请输入11位手机号"></a-input>
-          </a-form-item>
-        </a-col>
-        <a-col :md="12" :xs="24">
           <a-form-item :rules="[{type:'email', message: '请输入合法邮箱'}
             ]" label="邮箱" name="email">
             <a-input v-model:value="dataForm.email" :maxlength="50" placeholder="请输入合法邮箱"></a-input>
           </a-form-item>
         </a-col>
-      </a-row>
-
-      <a-row>
-        <a-col :md="12" :xs="24">
-          <a-form-item :rules="passwordRules" label="密码" name="password">
-            <a-input-password v-model:value="dataForm.password" :maxlength="50" allow-clear autocomplete='new-password'
-                              placeholder="请输入密码"></a-input-password>
-          </a-form-item>
-        </a-col>
-        <a-col :md="12" :xs="24">
-          <a-form-item :rules="passwordRules" label="确认密码" name="confirmPassword">
-            <a-input-password v-model:value="dataForm.confirmPassword" :maxlength="50"
-                              placeholder="请确认密码"></a-input-password>
-          </a-form-item>
-        </a-col>
-      </a-row>
-      <a-row>
         <a-col :md="12" :xs="24">
           <a-form-item
               :rules="[
@@ -97,6 +78,32 @@
             </a-radio-group>
           </a-form-item>
         </a-col>
+      </a-row>
+      <a-row>
+        <a-col :md="12" :xs="24">
+          <a-form-item :rules="passwordRules" label="密码" name="password">
+            <a-input-password v-model:value="dataForm.password" :maxlength="50" allow-clear autocomplete='new-password'
+                              placeholder="请输入密码"></a-input-password>
+          </a-form-item>
+        </a-col>
+        <a-col :md="12" :xs="24">
+          <a-form-item :rules="passwordRules" label="确认密码" name="confirmPassword">
+            <a-input-password v-model:value="dataForm.confirmPassword" :maxlength="50"
+                              placeholder="请确认密码"></a-input-password>
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-row>
+        <a-col :md="12" :xs="24">
+          <a-form-item label="角色">
+            <a-select
+                v-model:value="dataForm.roleIds"
+                :allowClear="true"
+                :options="roles" mode="multiple"
+                placeholder="请选择合适的角色">
+            </a-select>
+          </a-form-item>
+        </a-col>
         <a-col :md="12" :xs="24">
           <a-form-item label="备注" name="remarks">
             <a-textarea v-model:value="dataForm.remarks" :auto-size="{ minRows: 3, maxRows: 5 }" :maxlength="255"
@@ -113,12 +120,23 @@ import {dataFormModalMixin} from "@/mixins/common/data-form-mixin-modal";
 import {deptTreeSelectMixin} from "@/mixins/sys/dept-tree-select-mixin";
 import {CloudUploadOutlined} from "@ant-design/icons-vue";
 import SUploader from '@/components/SUploader'
+import {onMounted, ref} from 'vue'
+import {getRoles} from "@/api/sys";
 
 export default {
   name: 'DataFormModal',
   mixins: [dataFormModalMixin, deptTreeSelectMixin],
   components: {CloudUploadOutlined, SUploader},
   emits: ['refreshQueryPage'],
+  setup(props) {
+    const roles = ref([])
+    onMounted(async () => {
+      roles.value = await getRoles()
+    })
+    return {
+      roles
+    }
+  },
   computed: {
     passwordRules() {
       let passwordRules = []

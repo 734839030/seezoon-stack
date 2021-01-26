@@ -3,8 +3,6 @@ package com.seezoon.admin.modules.sys.service;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,13 +11,18 @@ import com.seezoon.dao.modules.sys.SysUserDao;
 import com.seezoon.dao.modules.sys.entity.SysUser;
 import com.seezoon.dao.modules.sys.entity.SysUserCondition;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * 用户信息
  *
  * @author seezoon-generator 2021年1月16日 下午11:55:54
  */
 @Service
+@RequiredArgsConstructor
 public class SysUserService extends AbstractCrudService<SysUserDao, SysUser, Integer> {
+
+    private final SysUserRoleService sysUserRoleService;
 
     @Transactional(readOnly = true)
     public SysUser findByUsername(@NotEmpty String username) {
@@ -37,20 +40,19 @@ public class SysUserService extends AbstractCrudService<SysUserDao, SysUser, Int
 
     @Override
     public int updateSelective(@NotNull SysUser record) {
-        if (StringUtils.isNotBlank(record.getPassword())) {
-            record.setPassword(new BCryptPasswordEncoder().encode(record.getPassword()));
-        } else {
-            record.setPassword(null);
+        int cnt = super.updateSelective(record);
+        if (cnt > 0) {
+            sysUserRoleService.saveOrUpdateUserRoles(record.getId(), record.getRoleIds());
         }
-        return super.updateSelective(record);
+        return cnt;
+
     }
 
     public int save(@NotNull SysUser record) {
-        if (StringUtils.isNotBlank(record.getPassword())) {
-            record.setPassword(new BCryptPasswordEncoder().encode(record.getPassword()));
-        } else {
-            record.setPassword(null);
+        int cnt = super.save(record);
+        if (cnt > 0) {
+            sysUserRoleService.saveOrUpdateUserRoles(record.getId(), record.getRoleIds());
         }
-        return super.save(record);
+        return cnt;
     }
 }

@@ -13,7 +13,7 @@
         </a-input>
       </a-form-item>
       <a-form-item label="上传日期" name="createDateRange">
-        <a-range-picker v-model:value="searchForm.createDateRange">
+        <a-range-picker v-model:value="searchForm.createDateRange" :allowClear="false">
         </a-range-picker>
       </a-form-item>
       <a-form-item>
@@ -34,7 +34,8 @@
       </a-form-item>
     </a-form>
     <a-table :columns="columns" :data-source="data" :loading="loading" :pagination="pagination"
-             :row-key="(record) => record.id" :scroll="{y: 600 }" bordered size="small" @change="handleTableChange">
+             :row-key="(record) => record.id" :scroll="{y: 600 }" bordered size="small"
+             @change="handleTableChange">
       <template #action="{ record }">
         <a @click="preview(record.url)">预览</a>
         <a-divider type="vertical"/>

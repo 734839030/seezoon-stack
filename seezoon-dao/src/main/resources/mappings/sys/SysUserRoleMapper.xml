@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seezoon.dao.modules.sys.SysUserRoleDao">
+    <resultMap id="BaseResultMap" type="com.seezoon.dao.modules.sys.entity.SysUserRole">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="role_id" jdbcType="INTEGER" property="roleId"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="create_by" jdbcType="INTEGER" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="INTEGER" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        t.id,t.user_id,t.role_id,t.status,t.create_by,t.create_time,t.update_by,t.update_time
+    </sql>
+
+    <sql id="Query_Table">
+        sys_user_role t
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="Query_Table"/>
+        where t.id = #{id}
+    </select>
+
+    <select id="selectByCondition" parameterType="com.seezoon.dao.modules.sys.entity.SysUserRoleCondition"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        <include refid="Query_Table"/>
+        <where>
+            <if test="userId != null">
+                and t.user_id = #{userId}
+            </if>
+            <if test="roleId != null">
+                and t.role_id = #{roleId}
+            </if>
+            <if test="status != null">
+                and t.status = #{status}
+            </if>
+        </where>
+        <choose>
+            <when test="sortField != null and sortField != '' and sortOrder != null and sortOrder !=''">
+                order by t.${sortField} ${sortOrder}
+            </when>
+            <otherwise>
+                order by t.update_time desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <delete id="deleteByPrimaryKey">
+        delete t from sys_user_role t
+        where t.id in
+        <foreach item="item" collection="array" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_user_role (user_id,role_id,status,create_by,create_time,update_by,update_time)
+        values
+        <foreach item="item" collection="array" separator=",">
+            (#{item.userId},#{item.roleId},#{item.status},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime})
+        </foreach>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.seezoon.dao.modules.sys.entity.SysUserRole">
+        update sys_user_role t
+        <set>
+            <if test="userId != null">
+                t.user_id = #{userId},
+            </if>
+            <if test="roleId != null">
+                t.role_id = #{roleId},
+            </if>
+            <if test="status != null">
+                t.status = #{status},
+            </if>
+            <if test="updateBy != null">
+                t.update_by = #{updateBy},
+            </if>
+            <if test="updateTime != null">
+                t.update_time = #{updateTime}
+            </if>
+        </set>
+        where t.id = #{id}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.seezoon.dao.modules.sys.entity.SysUserRole">
+        update sys_user_role t set
+        t.user_id = #{userId}
+        ,t.role_id = #{roleId}
+        ,t.status = #{status}
+        ,t.update_by = #{updateBy}
+        ,t.update_time = #{updateTime}
+        where t.id = #{id}
+    </update>
+</mapper>

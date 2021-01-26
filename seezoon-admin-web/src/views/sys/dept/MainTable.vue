@@ -23,7 +23,8 @@
       </a-col>
       <a-col :span="20">
         <a-table :columns="columns" :data-source="data" :loading="loading" :pagination="pagination"
-                 :row-key="(record) => record.id" :scroll="{y: 600 }" bordered size="small" @change="handleTableChange">
+                 :row-key="(record) => record.id" :scroll="{y: 600 }" bordered size="small"
+                 @change="handleTableChange">
           <template #action="{ record }">
             <a @click="handleDataForm('编辑', record.id)">编辑</a>
             <a-divider type="vertical"/>

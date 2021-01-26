@@ -1,5 +1,7 @@
 package com.seezoon.admin.modules.sys.service;
 
+import java.util.List;
+
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.stereotype.Service;
@@ -30,5 +32,10 @@ public class SysRoleService extends AbstractCrudService<SysRoleDao, SysRole, Int
         SysRoleCondition sysRoleCondition = new SysRoleCondition();
         sysRoleCondition.setName(name);
         return this.findOne(sysRoleCondition);
+    }
+
+    @Transactional(readOnly = true)
+    public List<SysRole> findAll() {
+        return this.find(new SysRoleCondition());
     }
 }
