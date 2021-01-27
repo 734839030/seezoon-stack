@@ -1,5 +1,7 @@
 package com.seezoon.dao.modules.sys;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +17,5 @@ import com.seezoon.dao.modules.sys.entity.SysUserRole;
 @Mapper
 public interface SysUserRoleDao extends CrudDao<SysUserRole, Integer> {
 
+    int deleteByRoleId(@NotNull Integer roleId);
 }

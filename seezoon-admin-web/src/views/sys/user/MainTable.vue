@@ -7,6 +7,11 @@
             v-model:value="searchForm.username" :maxlength="50" placeholder="请输入登录名">
         </a-input>
       </a-form-item>
+      <a-form-item label="姓名" name="name">
+        <a-input
+            v-model:value="searchForm.name" :maxlength="50" placeholder="请输入姓名">
+        </a-input>
+      </a-form-item>
       <a-form-item label="手机号" name="mobile">
         <a-input
             v-model:value="searchForm.mobile" :maxlength="20" placeholder="请输入手机号">

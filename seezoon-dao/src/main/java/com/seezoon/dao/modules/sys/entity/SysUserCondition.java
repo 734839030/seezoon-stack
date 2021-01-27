@@ -30,6 +30,11 @@ public class SysUserCondition extends PageCondition {
     @ApiModelProperty(value = "登录名")
     private String username;
     /**
+     * 姓名
+     */
+    @ApiModelProperty(value = "姓名")
+    private String name;
+    /**
      * 手机
      */
     @ApiModelProperty(value = "手机")
@@ -39,5 +44,8 @@ public class SysUserCondition extends PageCondition {
      */
     @ApiModelProperty(value = "状态1:正常,0:禁用")
     private Integer status;
+
+    @ApiModelProperty(value = "角色")
+    private Integer roleId;
 
 }

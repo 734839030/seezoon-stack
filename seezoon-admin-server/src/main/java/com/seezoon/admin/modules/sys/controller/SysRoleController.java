@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.github.pagehelper.PageSerializable;
+import com.seezoon.admin.modules.sys.dto.RoleAssignAo;
 import com.seezoon.admin.modules.sys.service.SysRoleService;
 import com.seezoon.dao.modules.sys.entity.SysRole;
 import com.seezoon.dao.modules.sys.entity.SysRoleCondition;
@@ -95,5 +96,13 @@ public class SysRoleController extends BaseController {
     public Result<Boolean> checkName(@RequestParam(required = false) Integer id, @NotBlank @RequestParam String name) {
         SysRole sysRole = this.sysRoleService.findByName(name);
         return Result.ok(null == sysRole || Objects.equals(sysRole.getId(), id));
+    }
+
+    @ApiOperation(value = "角色分配")
+    @PreAuthorize("hasAuthority('sys:role:assign')")
+    @PostMapping(value = "/assign")
+    public Result assign(@Valid @RequestBody RoleAssignAo roleAssignAo) {
+        int count = sysRoleService.assign(roleAssignAo);
+        return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.COMMON_DATA_CHANGE_ERROR, count);
     }
 }

@@ -19,7 +19,7 @@ public class SysUserRoleCondition extends PageCondition {
     /**
      * 用户编号
      */
-    private Integer userId;
+    private Integer[] userIds;
     /**
      * 角色编号
      */

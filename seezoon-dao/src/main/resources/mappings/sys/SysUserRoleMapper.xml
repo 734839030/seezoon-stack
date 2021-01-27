@@ -35,14 +35,17 @@
         from
         <include refid="Query_Table"/>
         <where>
-            <if test="userId != null">
-                and t.user_id = #{userId}
-            </if>
             <if test="roleId != null">
                 and t.role_id = #{roleId}
             </if>
             <if test="status != null">
                 and t.status = #{status}
+            </if>
+            <if test="userIds != null and userIds.length > 0">
+                and t.user_id in
+                <foreach item="userId" collection="userIds" separator="," open="(" close=")">
+                    #{userId}
+                </foreach>
             </if>
         </where>
         <choose>
@@ -62,6 +65,11 @@
             #{item}
         </foreach>
     </delete>
+
+    <delete id="deleteByRoleId" parameterType="Integer">
+        delete t from sys_user_role t where t.role_id = #{roleId}
+    </delete>
+
 
     <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
         insert into sys_user_role (user_id,role_id,status,create_by,create_time,update_by,update_time)
