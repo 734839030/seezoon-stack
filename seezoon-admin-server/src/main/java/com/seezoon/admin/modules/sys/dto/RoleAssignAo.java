@@ -26,6 +26,6 @@ public class RoleAssignAo {
 
     @ApiModelProperty(value = "分配true,移除false", required = true)
     @NotNull
-    private Boolean assign;
+    private Boolean addUser;
 
 }

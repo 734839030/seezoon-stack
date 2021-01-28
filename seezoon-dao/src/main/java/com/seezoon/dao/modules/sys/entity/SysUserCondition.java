@@ -48,4 +48,7 @@ public class SysUserCondition extends PageCondition {
     @ApiModelProperty(value = "角色")
     private Integer roleId;
 
+    @ApiModelProperty(value = "拥有该角色true,不包含该角色false,和roleId一起使用才有效")
+    private Boolean hasThisRole;
+
 }

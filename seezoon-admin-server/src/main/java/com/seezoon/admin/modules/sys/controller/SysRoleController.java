@@ -102,7 +102,7 @@ public class SysRoleController extends BaseController {
     @PreAuthorize("hasAuthority('sys:role:assign')")
     @PostMapping(value = "/assign")
     public Result assign(@Valid @RequestBody RoleAssignAo roleAssignAo) {
-        int count = sysRoleService.assign(roleAssignAo);
-        return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.COMMON_DATA_CHANGE_ERROR, count);
+        sysRoleService.assign(roleAssignAo);
+        return Result.SUCCESS;
     }
 }

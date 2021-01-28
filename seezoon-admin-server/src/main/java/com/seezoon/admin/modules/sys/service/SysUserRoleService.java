@@ -91,7 +91,7 @@ public class SysUserRoleService extends AbstractCrudService<SysUserRoleDao, SysU
 
     public int assign(@NotNull @Valid RoleAssignAo roleAssignAo) {
         // 分配角色
-        if (roleAssignAo.getAssign()) {
+        if (roleAssignAo.getAddUser()) {
             List<SysUserRole> sysUserRoles = this.find(roleAssignAo.getUserIds(), null, roleAssignAo.getRoleId());
             List<Integer> handledUserIds = new ArrayList<>();
             for (SysUserRole sysUserRole : sysUserRoles) {

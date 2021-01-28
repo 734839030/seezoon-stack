@@ -61,8 +61,17 @@
                 and t.status = #{status}
             </if>
             <if test="roleId != null">
-                and exists (select 1 from sys_user_role sur where sur.user_id = t.id and sur.role_id = #{roleId}
-                and sur.status = 1)
+                and
+                <choose>
+                    <when test="hasThisRole != null and !hasThisRole">
+                        not exists
+                    </when>
+                    <otherwise>
+                        exists
+                    </otherwise>
+                </choose>
+                (select 1 from sys_user_role sur where sur.user_id = t.id and sur.role_id = #{roleId}
+                and sur.role_id = #{roleId} and sur.status = 1)
             </if>
         </where>
         <choose>
