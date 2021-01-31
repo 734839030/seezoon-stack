@@ -11,6 +11,7 @@ const routes = [
     {path: '/sys/dept', component: () => import('../views/sys/dept/index')},
     {path: '/sys/user', component: () => import('../views/sys/user/index')},
     {path: '/sys/role', component: () => import('../views/sys/role/index')},
+    {path: '/sys/menu', component: () => import('../views/sys/menu/index')},
 ]
 
 

@@ -21,7 +21,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@SortField({"createTime:create_time"})
+@SortField({"createTime:t.create_time"})
 public class SysFileCondition extends PageCondition {
 
     /**

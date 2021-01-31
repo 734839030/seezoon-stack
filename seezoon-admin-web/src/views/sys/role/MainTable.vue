@@ -26,7 +26,7 @@
       </a-form-item>
       <a-form-item>
         <a-space>
-          <a-button type="primary" @click="handleQueryPage()">查询</a-button>
+          <a-button type="primary" @click="handleQuery()">查询</a-button>
           <a-button type="default" @click="this.$refs.searchForm.resetFields();">重置</a-button>
           <a-button type="default" @click="handleDataForm('添加')">添加</a-button>
         </a-space>
@@ -41,7 +41,7 @@
         </a-tag>
       </template>
       <template #action="{ record }">
-        <a @click="this.$refs.roleAssignModal.show(record.id);">分配</a>
+        <a @click="this.$refs.roleAssignModal.show(record.id,record.name);">分配</a>
         <a-divider type="vertical"/>
         <a @click="handleDataForm('编辑', record.id)">编辑</a>
         <a-divider type="vertical"/>
@@ -52,12 +52,12 @@
     </a-table>
   </a-space>
   <data-form-modal ref="dataFormModal" :data-form="dataFormModal.dataForm" :title="dataFormModal.title"
-                   @refreshQueryPage="handleQueryPage"></data-form-modal>
+                   @refreshQuery="handleQuery"></data-form-modal>
   <role-assign-modal ref="roleAssignModal"></role-assign-modal>
 
 </template>
 <script>
-import {pageTableMixin} from "@/mixins/common/page-table-mixin";
+import {queryTableMixin} from "@/mixins/common/query-table-mixin";
 import DataFormModal from './DataFormModal';
 import {dataScopeArray, dataScopeMap} from "@/views/sys/role/data";
 import RoleAssignModal from "@/views/sys/role/RoleAssignModal";
@@ -65,7 +65,7 @@ import RoleAssignModal from "@/views/sys/role/RoleAssignModal";
 export default {
   name: 'MainTable',
   components: {DataFormModal, RoleAssignModal},
-  mixins: [pageTableMixin],
+  mixins: [queryTableMixin],
   data() {
     return {
       url: '/sys/role/query',
@@ -111,7 +111,7 @@ export default {
     }
   },
   mounted() {
-    this.handleQueryPage();
+    this.handleQuery();
   },
   methods: {
     handleDataForm(title, id) {

@@ -127,7 +127,7 @@ export default {
   name: 'DataFormModal',
   mixins: [dataFormModalMixin, deptTreeSelectMixin],
   components: {CloudUploadOutlined, SUploader},
-  emits: ['refreshQueryPage'],
+  emits: ['refreshQuery'],
   setup(props) {
     const roles = ref([])
     onMounted(async () => {
@@ -177,7 +177,7 @@ export default {
     },
     // 保存后回调
     handleOkCb() {
-      this.$emit('refreshQueryPage');
+      this.$emit('refreshQuery');
     }
   },
 };

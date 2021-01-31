@@ -9,7 +9,7 @@
       </a-form-item>
       <a-form-item>
         <a-space>
-          <a-button type="primary" @click="handleQueryPage()">查询</a-button>
+          <a-button type="primary" @click="handleQuery()">查询</a-button>
           <a-button type="default" @click="this.$refs.searchForm.resetFields()">重置</a-button>
           <a-button type="default" @click="handleDataForm('添加')">添加</a-button>
         </a-space>
@@ -37,17 +37,17 @@
     </a-row>
   </a-space>
   <data-form-modal ref="dataFormModal" :data-form="dataFormModal.dataForm" :title="dataFormModal.title"
-                   @refreshDeptTree="this.loadDeptData" @refreshQueryPage="handleQueryPage"></data-form-modal>
+                   @refreshDeptTree="this.loadDeptData" @refreshQuery="handleQuery"></data-form-modal>
 </template>
 <script>
-import {pageTableMixin} from "@/mixins/common/page-table-mixin";
+import {queryTableMixin} from "@/mixins/common/query-table-mixin";
 import DataFormModal from './DataFormModal';
 import {deptTree} from '@/api/sys'
 
 export default {
   name: 'MainTable',
   components: {DataFormModal},
-  mixins: [pageTableMixin],
+  mixins: [queryTableMixin],
   data() {
     return {
       url: '/sys/dept/query',
@@ -93,7 +93,7 @@ export default {
     }
   },
   mounted() {
-    this.handleQueryPage();
+    this.handleQuery();
     // 加载部门树
     this.loadDeptData()
   },
@@ -119,7 +119,7 @@ export default {
     },
     onDeptTreeSelect(selectedKeys, {node}) {
       this.searchForm.parentId = node.selected ? undefined : node.dataRef.value;
-      this.handleQueryPage()
+      this.handleQuery()
     },
     //加载部门树
     loadDeptData(treeNode) {

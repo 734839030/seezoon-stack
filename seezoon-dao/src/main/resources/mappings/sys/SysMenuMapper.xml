@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.seezoon.dao.modules.sys.SysDictDao">
-    <resultMap id="BaseResultMap" type="com.seezoon.dao.modules.sys.entity.SysDict">
+<mapper namespace="com.seezoon.dao.modules.sys.SysMenuDao">
+    <resultMap id="BaseResultMap" type="com.seezoon.dao.modules.sys.entity.SysMenu">
         <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="type" jdbcType="VARCHAR" property="type"/>
-        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
+        <result column="parent_ids" jdbcType="VARCHAR" property="parentIds"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result column="target" jdbcType="VARCHAR" property="target"/>
+        <result column="type" jdbcType="TINYINT" property="type"/>
+        <result column="icon" jdbcType="VARCHAR" property="icon"/>
         <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="permission" jdbcType="VARCHAR" property="permission"/>
         <result column="create_by" jdbcType="INTEGER" property="createBy"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_by" jdbcType="INTEGER" property="updateBy"/>
@@ -16,11 +20,11 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        t.id,t.type,t.code,t.name,t.sort,t.status,t.create_by,t.create_time,t.update_by,t.update_time,t.remarks
+        t.id,t.parent_id,t.parent_ids,t.name,t.sort,t.target,t.type,t.icon,t.status,t.permission,t.create_by,t.create_time,t.update_by,t.update_time,t.remarks
     </sql>
 
     <sql id="Query_Table">
-        sys_dict t
+        sys_menu t
     </sql>
 
     <select id="selectByPrimaryKey" parameterType="Integer" resultMap="BaseResultMap">
@@ -31,18 +35,21 @@
         where t.id = #{id}
     </select>
 
-    <select id="selectByCondition" parameterType="com.seezoon.dao.modules.sys.entity.SysDictCondition"
+    <select id="selectByCondition" parameterType="com.seezoon.dao.modules.sys.entity.SysMenuCondition"
             resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from
         <include refid="Query_Table"/>
         <where>
-            <if test="type != null and type != ''">
-                and t.type = #{type}
+            <if test="parentId != null">
+                and t.parent_id = #{parentId}
             </if>
-            <if test="code != null and code != ''">
-                and t.code = #{code}
+            <if test="parentIds != null and parentIds != ''">
+                and t.parent_ids = #{parentIds}
+            </if>
+            <if test="name != null and name != ''">
+                and t.name = #{name}
             </if>
         </where>
         <choose>
@@ -50,39 +57,36 @@
                 order by ${sortField} ${sortOrder}
             </when>
             <otherwise>
-                order by t.type desc, t.sort asc
+                order by t.parent_id , t.sort asc
             </otherwise>
         </choose>
     </select>
 
-    <select id="selectTypes" resultType="java.lang.String">
-        select distinct type from sys_dict
-    </select>
-
     <delete id="deleteByPrimaryKey">
-        delete t from sys_dict t
+        delete t from sys_menu t
         where t.id in
         <foreach item="item" collection="array" separator="," open="(" close=")">
             #{item}
         </foreach>
     </delete>
 
-    <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
-        insert into sys_dict (type,code,name,sort,status,create_by,create_time,update_by,update_time,remarks)
+    <insert id="insert">
+        insert into sys_menu
+        (id,parent_id,parent_ids,name,sort,target,type,icon,status,permission,create_by,create_time,update_by,update_time,remarks)
         values
         <foreach item="item" collection="array" separator=",">
-            (#{item.type},#{item.code},#{item.name},#{item.sort},#{item.status},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remarks})
+            (#{item.id},#{item.parentId},#{item.parentIds},#{item.name},#{item.sort},#{item.target},#{item.type},#{item.icon},#{item.status},#{item.permission},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remarks})
         </foreach>
     </insert>
 
-    <update id="updateByPrimaryKeySelective" parameterType="com.seezoon.dao.modules.sys.entity.SysDict">
-        update sys_dict t
+    <update id="updateByPrimaryKeySelective" parameterType="com.seezoon.dao.modules.sys.entity.SysMenu">
+        update sys_menu t
         <set>
-            <if test="type != null">
-                t.type = #{type},
+            <if test="parentId != null">
+                t.parent_id = #{parentId},
             </if>
-            <if test="code != null">
-                t.code = #{code},
+            <if test="parentIds != null">
+                t.parent_ids = #{parentIds},
             </if>
             <if test="name != null">
                 t.name = #{name},
@@ -90,8 +94,20 @@
             <if test="sort != null">
                 t.sort = #{sort},
             </if>
+            <if test="target != null">
+                t.target = #{target},
+            </if>
+            <if test="type != null">
+                t.type = #{type},
+            </if>
+            <if test="icon != null">
+                t.icon = #{icon},
+            </if>
             <if test="status != null">
                 t.status = #{status},
+            </if>
+            <if test="permission != null">
+                t.permission = #{permission},
             </if>
             <if test="updateBy != null">
                 t.update_by = #{updateBy},
@@ -105,13 +121,17 @@
         </set>
         where t.id = #{id}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.seezoon.dao.modules.sys.entity.SysDict">
-        update sys_dict t set
-        t.type = #{type}
-        ,t.code = #{code}
+    <update id="updateByPrimaryKey" parameterType="com.seezoon.dao.modules.sys.entity.SysMenu">
+        update sys_menu t set
+        t.parent_id = #{parentId}
+        ,t.parent_ids = #{parentIds}
         ,t.name = #{name}
         ,t.sort = #{sort}
+        ,t.target = #{target}
+        ,t.type = #{type}
+        ,t.icon = #{icon}
         ,t.status = #{status}
+        ,t.permission = #{permission}
         ,t.update_by = #{updateBy}
         ,t.update_time = #{updateTime}
         ,t.remarks = #{remarks}

@@ -82,7 +82,7 @@ import {dataScopeArray} from "@/views/sys/role/data";
 export default {
   name: 'DataFormModal',
   mixins: [dataFormModalMixin],
-  emits: ['refreshQueryPage'],
+  emits: ['refreshQuery'],
   data() {
     return {
       dataScopeArray
@@ -103,7 +103,7 @@ export default {
     },
     // 保存后回调
     handleOkCb() {
-      this.$emit('refreshQueryPage');
+      this.$emit('refreshQuery');
     }
   },
 };

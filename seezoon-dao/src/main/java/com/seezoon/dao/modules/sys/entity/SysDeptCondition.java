@@ -32,6 +32,6 @@ public class SysDeptCondition extends PageCondition {
     /**
      * like 查询 /a/
      */
-    @ApiModelProperty(value = "父部门")
+    @ApiModelProperty(value = "父部门,like查询eg:/a/")
     private String parentIds;
 }

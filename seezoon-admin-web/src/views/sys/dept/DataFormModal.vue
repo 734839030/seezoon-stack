@@ -71,7 +71,7 @@ import {deptTreeSelectMixin} from "@/mixins/sys/dept-tree-select-mixin";
 export default {
   name: 'DataFormModal',
   mixins: [dataFormModalMixin, deptTreeSelectMixin],
-  emits: ['refreshQueryPage', 'refreshDeptTree'],
+  emits: ['refreshQuery', 'refreshDeptTree'],
   methods: {
     checkName(rule, value) {
       return this.uniqueFieldSimpleValidation('/sys/dept/checkName', value, {
@@ -82,7 +82,7 @@ export default {
     },
     // 保存后回调
     handleOkCb() {
-      this.$emit('refreshQueryPage')
+      this.$emit('refreshQuery')
       this.$emit('refreshDeptTree')
     }
   },

@@ -18,7 +18,7 @@
       </a-form-item>
       <a-form-item>
         <a-space>
-          <a-button type="primary" @click="handleQueryPage()">查询</a-button>
+          <a-button type="primary" @click="handleQuery()">查询</a-button>
           <a-button type="default" @click="this.$refs.searchForm.resetFields();">重置</a-button>
           <a-upload
               :customRequest="customRequest"
@@ -49,14 +49,14 @@
   </a-space>
 </template>
 <script>
-import {pageTableMixin} from "@/mixins/common/page-table-mixin";
+import {queryTableMixin} from "@/mixins/common/query-table-mixin";
 import {CloudUploadOutlined} from '@ant-design/icons-vue';
 import moment from 'moment'
 
 export default {
   name: 'MainTable',
   components: {CloudUploadOutlined},
-  mixins: [pageTableMixin],
+  mixins: [queryTableMixin],
   data() {
     return {
       searchForm: {
@@ -92,7 +92,7 @@ export default {
     }
   },
   mounted() {
-    this.handleQueryPage();
+    this.handleQuery();
   },
   methods: {
     preview(url) {
@@ -107,7 +107,7 @@ export default {
       this.uploadBtnLoading = true;
       this.$http.post(formData.action, form).then(({data}) => {
         this.$message.success(`${data.name} 上传成功`);
-        this.handleQueryPage();
+        this.handleQuery();
       }).finally(() => this.uploadBtnLoading = false);
     }
   }

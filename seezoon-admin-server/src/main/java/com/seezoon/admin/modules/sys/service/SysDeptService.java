@@ -113,11 +113,11 @@ public class SysDeptService extends AbstractCrudService<SysDeptDao, SysDept, Int
      * @return
      */
     public int delete(@NotNull @Min(1) Integer id) {
-        SysDeptCondition sysDeptCondition = new SysDeptCondition();
-        sysDeptCondition.setParentIds(TreeHelper.getQueryParentIds(id));
         List<Integer> childrenIds = this.findAllChildren(id).stream().map(SysDept::getId).collect(Collectors.toList());
         childrenIds.add(id);
-        return super.delete(childrenIds.toArray(new Integer[childrenIds.size()]));
+        int cnt = super.delete(childrenIds.toArray(Integer[]::new));
+        logger.info("delete dept size:[{}]", cnt);
+        return cnt;
     }
 
     /**

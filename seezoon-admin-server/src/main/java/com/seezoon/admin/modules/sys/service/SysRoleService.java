@@ -48,8 +48,8 @@ public class SysRoleService extends AbstractCrudService<SysRoleDao, SysRole, Int
     }
 
     public int delete(@NotNull Integer roleId) {
-        int cnt = sysUserRoleService.deleteByRoleId(roleId);
-        logger.debug("delete user role cnt={}", cnt);
+        // int cnt = sysUserRoleService.deleteByRoleId(roleId);
+        // logger.debug("delete user role cnt={}", cnt);
         return super.delete(roleId);
     }
 

@@ -75,7 +75,7 @@ import qs from 'qs'
 export default {
   name: 'DataFormModal',
   mixins: [dataFormModalMixin],
-  emits: ['refreshQueryPage'],
+  emits: ['refreshQuery'],
   methods: {
     checkTypeAndCode(rule, value) {
       // 参数验证
@@ -100,7 +100,7 @@ export default {
     },
     // 保存后回调
     handleOkCb() {
-      this.$emit('refreshQueryPage');
+      this.$emit('refreshQuery');
     }
   },
 };

@@ -1,7 +1,7 @@
 import request from '@/utils/request.js'
 // 通过混入使用，必须覆盖url，columns属性，data中key已外部组件优先，同名会全被外部对象覆盖
-// page的属性
-export const pageTableMixin = {
+// page的属性 可以分宜也可以不分页，由a-table 中参数决定
+export const queryTableMixin = {
     data() {
         return {
             url: '', // 请求地址
@@ -20,10 +20,17 @@ export const pageTableMixin = {
         }
     },
     methods: {
-        handleQueryPage(params = {...this.searchForm, page: 1, pageSize: this.pagination.pageSize}) {
+        handleQuery(params = {...this.searchForm, page: 1, pageSize: this.pagination.pageSize}) {
             this.loading = true
-            request.post(this.url, params).then(({data: {total, list}}) => {
+            // 本可以函数参数多重解构,但分分页场景没有total和list  ({data: {total, list}}
+            request.post(this.url, params).then(({data}) => {
                 this.loading = false
+                // 兼容不分页的
+                if (data instanceof Array) {
+                    this.data = data;
+                    return;
+                }
+                let {total, list} = data
                 this.data = list
                 this.pagination.total = total
                 this.pagination.current = params.page
@@ -34,7 +41,7 @@ export const pageTableMixin = {
         },
         handleTableChange(pagination, filters, sorter) {
             this.loading = true
-            this.handleQueryPage({
+            this.handleQuery({
                 pageSize: pagination.pageSize,
                 page: pagination.current,
                 sortField: sorter.field,
@@ -50,7 +57,7 @@ export const pageTableMixin = {
         handleDelete(url, id) {
             this.$http.post(url, `id=${id}`).then(() => {
                 this.$message.success('删除成功')
-                this.handleQueryPage()
+                this.handleQuery()
                 this.handleDeleteCb();
             });
         },

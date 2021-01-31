@@ -57,7 +57,7 @@
         </where>
         <choose>
             <when test="sortField != null and sortField != '' and sortOrder != null and sortOrder !=''">
-                order by t.${sortField} ${sortOrder}
+                order by ${sortField} ${sortOrder}
             </when>
             <otherwise>
                 order by t.create_time desc

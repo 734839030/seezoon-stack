@@ -1,6 +1,7 @@
 <template>
   <a-modal
-      v-model:visible="visible" :destroyOnClose="true" :footer="null" :maskClosable="false" :title="this.addUser ? '可分配角色':'已分配角色'"
+      v-model:visible="visible" :destroyOnClose="true" :footer="null" :maskClosable="false"
+      :title="(this.addUser ? '可分配角色':'已分配角色' )+ '【' + this.roleName + '】' "
       :width="1200">
     <a-space direction="vertical">
       <!-- 查询表单 -->
@@ -22,15 +23,15 @@
         </a-form-item>
         <a-form-item>
           <a-space>
-            <a-button type="primary" @click="handleQueryPage()">查询</a-button>
+            <a-button type="primary" @click="handleQuery()">查询</a-button>
             <a-button :disabled="this.userTableSelectedRowKeys.length === 0" type="default"
                       @click="handleAssign()">{{ this.addUser ? "分配" : "移除" }}
             </a-button>
             <a-button v-if="!this.addUser" type="default"
-                      @click="this.searchForm.hasThisRole = false;this.handleQueryPage()">可分配用户
+                      @click="this.searchForm.hasThisRole = false;this.handleQuery()">可分配用户
             </a-button>
             <a-button v-else type="default"
-                      @click="this.searchForm.hasThisRole = true;this.handleQueryPage()">查看已分配
+                      @click="this.searchForm.hasThisRole = true;this.handleQuery()">查看已分配
             </a-button>
           </a-space>
         </a-form-item>
@@ -47,15 +48,16 @@
 </template>
 
 <script>
-import {pageTableMixin} from "@/mixins/common/page-table-mixin";
+import {queryTableMixin} from "@/mixins/common/query-table-mixin";
 
 export default {
   name: "RoleAssignModal",
-  mixins: [pageTableMixin],
+  mixins: [queryTableMixin],
   data() {
     return {
       visible: false,
       roleId: undefined,
+      roleName: undefined,
       userTableSelectedRowKeys: [],
       url: `/sys/user/query`,
       columns: [
@@ -84,12 +86,13 @@ export default {
     }
   },
   methods: {
-    show(roleId) {
+    show(roleId, roleName) {
       this.visible = true
       this.roleId = roleId
+      this.roleName = roleName
       this.searchForm.roleId = roleId
       this.searchForm.hasThisRole = true
-      this.handleQueryPage()
+      this.handleQuery()
     },
     handleAssign() { //处理分配
       if (this.userTableSelectedRowKeys.length == 0) {
@@ -101,7 +104,7 @@ export default {
           addUser: this.addUser
         }).then(() => {
           this.userTableSelectedRowKeys = []
-          this.handleQueryPage();
+          this.handleQuery();
           this.$message.success("操作成功");
         })
       }

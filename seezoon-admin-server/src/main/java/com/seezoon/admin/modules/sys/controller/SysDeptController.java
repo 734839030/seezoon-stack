@@ -74,7 +74,7 @@ public class SysDeptController extends BaseController {
     @PostMapping(value = "/delete")
     public Result delete(@RequestParam Integer id) {
         int count = sysDeptService.delete(id);
-        return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.DELETE_ERROR, count);
+        return count >= 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.DELETE_ERROR, count);
     }
 
     @ApiOperation(value = "检查是否重复")
