@@ -58,6 +58,10 @@ export default {
           dataIndex: 'name',
         },
         {
+          title: '地址',
+          dataIndex: 'url',
+        },
+        {
           title: '图标',
           dataIndex: 'icon',
         },
@@ -109,7 +113,7 @@ export default {
         });
       } else {
         this.$refs.dataFormModal.show();
-        this.dataFormModal = {title: title, dataForm: {status: 1}};
+        this.dataFormModal = {title: title, dataForm: {status: 1, type: 1, sort: 10}};
       }
 
     }

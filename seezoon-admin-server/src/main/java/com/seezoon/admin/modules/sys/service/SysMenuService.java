@@ -1,9 +1,6 @@
 package com.seezoon.admin.modules.sys.service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.Min;
@@ -14,9 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import com.seezoon.admin.framework.service.AbstractCrudService;
+import com.seezoon.dao.framework.dto.Tree;
 import com.seezoon.dao.modules.sys.SysMenuDao;
 import com.seezoon.dao.modules.sys.entity.SysMenu;
 import com.seezoon.dao.modules.sys.entity.SysMenuCondition;
+import com.seezoon.framework.utils.IdGen;
 import com.seezoon.framework.utils.TreeHelper;
 
 /**
@@ -33,7 +32,7 @@ public class SysMenuService extends AbstractCrudService<SysMenuDao, SysMenu, Int
      * @return
      */
     @Transactional(readOnly = true)
-    public List<SysMenu> findTree() {
+    public List<SysMenu> findTreeTable() {
         List<SysMenu> sysMenus = this.find(new SysMenuCondition());
         Map<Integer, List<SysMenu>> parentIdGroup =
             sysMenus.stream().collect(Collectors.groupingBy(sysMenu -> sysMenu.getParentId()));
@@ -41,6 +40,39 @@ public class SysMenuService extends AbstractCrudService<SysMenuDao, SysMenu, Int
         List<SysMenu> root = parentIdGroup.get(TreeHelper.DEFAULT_PARENT_ID);
         this.setChildren(root, parentIdGroup);
         return root == null ? Collections.emptyList() : root;
+    }
+
+    /**
+     * 查询子节点
+     *
+     * @param parentId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<SysMenu> findByParentId(@NotNull Integer parentId) {
+        SysMenuCondition sysMenuCondition = new SysMenuCondition();
+        sysMenuCondition.setParentId(parentId);
+        return this.find(sysMenuCondition);
+    }
+
+    /**
+     * 查询树结构
+     *
+     * @param parentId
+     * @param includeChild
+     *            是否包含子节点的子节点
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<Tree> findTree(@NotNull Integer parentId, boolean includeChild) {
+        List<Tree> trees = new ArrayList<>();
+        List<SysMenu> menus = this.findByParentId(parentId);
+        menus.forEach((menu) -> {
+            Tree tree = Tree.builder().key(IdGen.uuid()).value(menu.getId()).title(menu.getName())
+                .children(includeChild ? this.findTree(menu.getId(), includeChild) : null).selectable(true).build();
+            trees.add(tree);
+        });
+        return trees;
     }
 
     /**
@@ -121,4 +153,5 @@ public class SysMenuService extends AbstractCrudService<SysMenuDao, SysMenu, Int
             record.setParentIds(TreeHelper.getCurrentParentIds(record.getId(), parentId, parent.getParentIds()));
         }
     }
+
 }

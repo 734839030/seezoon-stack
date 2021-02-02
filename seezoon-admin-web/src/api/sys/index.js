@@ -13,6 +13,16 @@ export function deptTree(parentId, includeChild) {
 }
 
 /**
+ * menu树
+ * @param parentId
+ * @param includeChild
+ * @returns {Promise<AxiosResponse<any>>}
+ */
+export function menuTree(parentId, includeChild) {
+    return request.post('/sys/menu/tree', qs.stringify({parentId: parentId, includeChild: includeChild}))
+}
+
+/**
  * 获取全部字典类型
  * @returns {Promise<[]>}
  */

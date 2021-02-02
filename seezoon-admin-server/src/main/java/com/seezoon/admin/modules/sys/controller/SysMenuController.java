@@ -8,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.seezoon.admin.modules.sys.service.SysMenuService;
+import com.seezoon.dao.framework.dto.Tree;
 import com.seezoon.dao.modules.sys.entity.SysMenu;
 import com.seezoon.framework.api.DefaultCodeMsgBundle;
 import com.seezoon.framework.api.Result;
@@ -42,7 +43,7 @@ public class SysMenuController extends BaseController {
     @PreAuthorize("hasAuthority('sys:menu:query')")
     @PostMapping("/query")
     public Result<List<SysMenu>> query() {
-        return Result.ok(sysMenuService.findTree());
+        return Result.ok(sysMenuService.findTreeTable());
     }
 
     @ApiOperation(value = "保存")
@@ -68,4 +69,12 @@ public class SysMenuController extends BaseController {
         int count = sysMenuService.delete(id);
         return count >= 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.DELETE_ERROR, count);
     }
+
+    @ApiOperation(value = "按层级查询")
+    @PostMapping(value = "/tree")
+    public Result<List<Tree>> tree(@RequestParam Integer parentId,
+        @RequestParam(required = false) boolean includeChild) {
+        return Result.ok(this.sysMenuService.findTree(parentId, includeChild));
+    }
+
 }

@@ -24,6 +24,7 @@ public class Tree {
     private List<Tree> children;
     private boolean disabled;
     private boolean selectable;
+    private boolean checkable;
     @JsonProperty("isLeaf")
     private boolean leaf;
     private Object value;

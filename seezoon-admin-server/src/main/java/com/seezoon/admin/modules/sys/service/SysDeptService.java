@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.seezoon.admin.framework.service.AbstractCrudService;
 import com.seezoon.dao.framework.dto.Tree;
@@ -42,7 +41,6 @@ public class SysDeptService extends AbstractCrudService<SysDeptDao, SysDept, Int
      * 查询子节点
      *
      * @param parentId
-     *            为null查询 父节点为空的部门
      * @return
      */
     @Transactional(readOnly = true)
@@ -129,8 +127,7 @@ public class SysDeptService extends AbstractCrudService<SysDeptDao, SysDept, Int
      * @return
      */
     @Transactional(readOnly = true)
-    public List<Tree> findTree(@RequestParam @NotNull Integer parentId,
-        @RequestParam(required = false) boolean includeChild) {
+    public List<Tree> findTree(@NotNull Integer parentId, boolean includeChild) {
         List<Tree> trees = new ArrayList<>();
         List<SysDept> depts = this.findByParentId(parentId);
         depts.forEach((dept) -> {

@@ -7,6 +7,7 @@
         <result column="parent_ids" jdbcType="VARCHAR" property="parentIds"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
         <result column="target" jdbcType="VARCHAR" property="target"/>
         <result column="type" jdbcType="TINYINT" property="type"/>
         <result column="icon" jdbcType="VARCHAR" property="icon"/>
@@ -20,7 +21,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        t.id,t.parent_id,t.parent_ids,t.name,t.sort,t.target,t.type,t.icon,t.status,t.permission,t.create_by,t.create_time,t.update_by,t.update_time,t.remarks
+        t.id,t.parent_id,t.parent_ids,t.name,t.sort,t.url,t.target,t.type,t.icon,t.status,t.permission,t.create_by,t.create_time,t.update_by,t.update_time,t.remarks
     </sql>
 
     <sql id="Query_Table">
@@ -72,10 +73,10 @@
 
     <insert id="insert">
         insert into sys_menu
-        (id,parent_id,parent_ids,name,sort,target,type,icon,status,permission,create_by,create_time,update_by,update_time,remarks)
+        (id,parent_id,parent_ids,name,sort,url,target,type,icon,status,permission,create_by,create_time,update_by,update_time,remarks)
         values
         <foreach item="item" collection="array" separator=",">
-            (#{item.id},#{item.parentId},#{item.parentIds},#{item.name},#{item.sort},#{item.target},#{item.type},#{item.icon},#{item.status},#{item.permission},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remarks})
+            (#{item.id},#{item.parentId},#{item.parentIds},#{item.name},#{item.sort},#{item.url},#{item.target},#{item.type},#{item.icon},#{item.status},#{item.permission},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remarks})
         </foreach>
     </insert>
 
@@ -93,6 +94,9 @@
             </if>
             <if test="sort != null">
                 t.sort = #{sort},
+            </if>
+            <if test="url != null">
+                t.url = #{url},
             </if>
             <if test="target != null">
                 t.target = #{target},
@@ -127,6 +131,7 @@
         ,t.parent_ids = #{parentIds}
         ,t.name = #{name}
         ,t.sort = #{sort}
+        ,t.url = #{url}
         ,t.target = #{target}
         ,t.type = #{type}
         ,t.icon = #{icon}

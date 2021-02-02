@@ -53,8 +53,9 @@
         <a-col :md="12" :xs="24">
           <a-form-item :rules="[
               { required: true, type:'number', message: '请输入数字', whitespace: true },
-            ]" help="顺序越大显示越前" label="顺序" name="sort">
-            <a-input-number v-model:value="dataForm.sort" :precision="0" placeholder="请输入顺序"></a-input-number>
+            ]" help="顺序越小显示越前" label="顺序" name="sort">
+            <a-input-number v-model:value="dataForm.sort" :max="10000" :precision="0" :step="10"
+                            placeholder="请输入顺序"></a-input-number>
           </a-form-item>
         </a-col>
         <a-col :md="12" :xs="24">

@@ -29,9 +29,9 @@ public class SysMenu extends BaseEntity<Integer> {
     @NotNull
     private Integer parentId = 0;
 
-    @ApiModelProperty(value = "所有父级编号", required = true)
-    @NotBlank
-    @Size(max = 200)
+    @ApiModelProperty(value = "所有父节点，自动计算")
+    // @NotBlank
+    @Size(max = 255)
     private String parentIds;
 
     @ApiModelProperty(value = "名称", required = true)
@@ -43,7 +43,12 @@ public class SysMenu extends BaseEntity<Integer> {
     @NotNull
     private Integer sort;
 
-    @ApiModelProperty(value = "目标地址")
+    @ApiModelProperty(value = "地址")
+    @Size(max = 255)
+    private String url;
+
+    @ApiModelProperty(value = "目标地址main,_blank")
+    @Size(max = 20)
     private String target;
 
     @ApiModelProperty(value = "1:目录2:菜单3:按钮", required = true)
