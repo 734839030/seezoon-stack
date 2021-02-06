@@ -119,11 +119,11 @@
 
 <script>
 import {dataFormModalMixin} from "@/mixins/common/data-form-mixin-modal";
-import {menuTreeSelectMixin} from "@/mixins/sys/menu-tree-select-mixin";
+import {menuTreeMixin} from "@/mixins/sys/menu-tree-mixin";
 
 export default {
   name: 'DataFormModal',
-  mixins: [dataFormModalMixin, menuTreeSelectMixin],
+  mixins: [dataFormModalMixin, menuTreeMixin],
   emits: ['refreshQuery'],
   data() {
     return {

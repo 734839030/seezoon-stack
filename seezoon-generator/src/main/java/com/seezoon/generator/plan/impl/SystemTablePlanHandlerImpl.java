@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.CaseUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.seezoon.generator.constants.InputType;
 import com.seezoon.generator.constants.QueryType;
@@ -32,6 +34,7 @@ import com.seezoon.generator.plan.TablePlanHandler;
  */
 public class SystemTablePlanHandlerImpl implements TablePlanHandler {
 
+    private static final Logger logger = LoggerFactory.getLogger(SystemTablePlanHandlerImpl.class);
     /**
      * DB 及表字段的分隔符
      */
@@ -84,18 +87,19 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
             // 主键
             if (columnPlan.getColumnKey().equals(ColumnKey.PRI)) {
                 if (null != tablePlan.getPkPlan()) {
-                    throw new IllegalArgumentException(
-                        String.format("table[%s] must have only one primary key", tablePlan.getTableName()));
+                    logger.warn("table[{}] must have only one primary key,otherwise generator select last primary key",
+                        tablePlan.getTableName());
+                } else {
+                    columnPlan.setInputType(InputType.HIDDEN);
+                    columnPlan.setList(false);
+                    tablePlan.setPkPlan(new PkPlan(columnPlan.getDbColumnName(), columnPlan.getJavaFieldName(),
+                        columnPlan.getDataType(), DefaultColumns.id.name().equals(columnPlan.getJavaFieldName()),
+                        ColumnExtra.auto_increment.equals(columnPlan.getExtra())));
+                    // 自增不可插入
+                    columnPlan.setInsert(!tablePlan.getPkPlan().isAutoIncrement());
+                    // 主键也不可更新
+                    columnPlan.setUpdate(false);
                 }
-                columnPlan.setInputType(InputType.HIDDEN);
-                columnPlan.setList(false);
-                tablePlan.setPkPlan(new PkPlan(columnPlan.getDbColumnName(), columnPlan.getJavaFieldName(),
-                    columnPlan.getDataType(), DefaultColumns.id.name().equals(columnPlan.getJavaFieldName()),
-                    ColumnExtra.auto_increment.equals(columnPlan.getExtra())));
-                // 自增不可插入
-                columnPlan.setInsert(!tablePlan.getPkPlan().isAutoIncrement());
-                // 主键也不可更新
-                columnPlan.setUpdate(false);
             }
 
             // 默认文本域

@@ -1,6 +1,6 @@
 import {menuTree} from "@/api/sys";
 
-export const menuTreeSelectMixin = {
+export const menuTreeMixin = {
     mounted() {
         this.loadMenuData()
     },

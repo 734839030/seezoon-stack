@@ -106,9 +106,13 @@ export default {
   },
   methods: {
     handleDataForm(title, id) {
+      this.$refs.dataFormModal.loadMenuData();
       if (id) {
         this.$http.get('/sys/menu/query/' + id).then(({data}) => {
           this.$refs.dataFormModal.show();
+          if (data.parentId === 0) {
+            data.parentId = undefined
+          }
           this.dataFormModal = {title: title, dataForm: data};
         });
       } else {

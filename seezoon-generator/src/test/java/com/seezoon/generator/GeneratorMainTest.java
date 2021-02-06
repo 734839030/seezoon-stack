@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  * @author hdf
  */
-@SpringBootTest(args = {"sys_menu"})
+@SpringBootTest(args = {"sys_role_menu"})
 @Slf4j
 class GeneratorMainTest {
 

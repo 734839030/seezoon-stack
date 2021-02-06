@@ -9,13 +9,13 @@ import javax.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 import com.seezoon.admin.framework.service.AbstractCrudService;
 import com.seezoon.dao.framework.dto.Tree;
 import com.seezoon.dao.modules.sys.SysMenuDao;
 import com.seezoon.dao.modules.sys.entity.SysMenu;
 import com.seezoon.dao.modules.sys.entity.SysMenuCondition;
-import com.seezoon.framework.utils.IdGen;
 import com.seezoon.framework.utils.TreeHelper;
 
 /**
@@ -68,8 +68,12 @@ public class SysMenuService extends AbstractCrudService<SysMenuDao, SysMenu, Int
         List<Tree> trees = new ArrayList<>();
         List<SysMenu> menus = this.findByParentId(parentId);
         menus.forEach((menu) -> {
-            Tree tree = Tree.builder().key(IdGen.uuid()).value(menu.getId()).title(menu.getName())
-                .children(includeChild ? this.findTree(menu.getId(), includeChild) : null).selectable(true).build();
+            Tree tree = Tree.builder().key(menu.getId()).value(menu.getId()).title(menu.getName())
+                .children(includeChild ? this.findTree(menu.getId(), includeChild) : null).selectable(true)
+                .checkable(true).build();
+            if (includeChild) {
+                tree.setLeaf(CollectionUtils.isEmpty(tree.getChildren()) ? true : false);
+            }
             trees.add(tree);
         });
         return trees;

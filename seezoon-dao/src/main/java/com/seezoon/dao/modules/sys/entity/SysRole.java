@@ -1,6 +1,6 @@
 package com.seezoon.dao.modules.sys.entity;
 
-import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -39,5 +39,7 @@ public class SysRole extends BaseEntity<Integer> {
     @NotNull
     private Integer dataScope;
 
+    @ApiModelProperty(value = "角色菜单")
+    private List<Integer> menuIds;
 
 }

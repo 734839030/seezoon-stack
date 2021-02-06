@@ -64,7 +64,15 @@
         </a-col>
       </a-row>
       <a-row>
-        <a-col :span="24">
+        <a-col :md="12" :xs="24">
+          <a-form-item label="菜单" name="menuIds">
+            <a-tree v-model:checkedKeys="dataForm.menuIds" :checkable="true"
+                    :load-data="loadMenuData"
+                    :selectable="false"
+                    :tree-data="menuTreeData"/>
+          </a-form-item>
+        </a-col>
+        <a-col :md="12" :xs="24">
           <a-form-item :label-col="{ span: 3 }" :wrapper-col="{ span: 21 }" label="备注" name="remarks">
             <a-textarea v-model:value="dataForm.remarks" :auto-size="{ minRows: 3, maxRows: 5 }" :maxlength="255"
                         placeholder="备注"/>
@@ -78,10 +86,11 @@
 <script>
 import {dataFormModalMixin} from "@/mixins/common/data-form-mixin-modal";
 import {dataScopeArray} from "@/views/sys/role/data";
+import {menuTreeMixin} from "@/mixins/sys/menu-tree-mixin";
 
 export default {
   name: 'DataFormModal',
-  mixins: [dataFormModalMixin],
+  mixins: [dataFormModalMixin, menuTreeMixin],
   emits: ['refreshQuery'],
   data() {
     return {
@@ -105,6 +114,6 @@ export default {
     handleOkCb() {
       this.$emit('refreshQuery');
     }
-  },
-};
+  }
+}
 </script>
