@@ -1,5 +1,6 @@
 package com.seezoon.admin.modules.sys.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,9 +16,11 @@ import com.seezoon.admin.framework.service.AbstractCrudService;
 import com.seezoon.admin.modules.sys.dto.RoleAssignAo;
 import com.seezoon.dao.modules.sys.SysRoleDao;
 import com.seezoon.dao.modules.sys.SysRoleMenuDao;
+import com.seezoon.dao.modules.sys.SysUserRoleDao;
 import com.seezoon.dao.modules.sys.entity.SysRole;
 import com.seezoon.dao.modules.sys.entity.SysRoleCondition;
 import com.seezoon.dao.modules.sys.entity.SysRoleMenu;
+import com.seezoon.dao.modules.sys.entity.SysUserRole;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,8 +33,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class SysRoleService extends AbstractCrudService<SysRoleDao, SysRole, Integer> {
 
-    private final SysUserRoleService sysUserRoleService;
     private final SysRoleMenuDao sysRoleMenuDao;
+    private final SysUserRoleDao sysUserRoleDao;
 
     @Override
     public SysRole find(@NotNull Integer integer) {
@@ -84,13 +87,20 @@ public class SysRoleService extends AbstractCrudService<SysRoleDao, SysRole, Int
         }
     }
 
-    public int delete(@NotNull Integer roleId) {
-        int count = sysRoleMenuDao.deleteByRole(roleId);
-        logger.debug("deleted {} sys_role_menu roleId={}", count, roleId);
-        return super.delete(roleId);
+    @Override
+    public int delete(@NotNull Integer... roleIds) {
+        sysRoleMenuDao.deleteByRole(roleIds);
+        return super.delete(roleIds);
     }
 
     public int assign(@Valid @NotNull RoleAssignAo roleAssignAo) {
-        return this.sysUserRoleService.assign(roleAssignAo);
+        if (roleAssignAo.getAddUser()) {
+            List<SysUserRole> sysUserRoles = Arrays.stream(roleAssignAo.getUserIds())
+                .map(userId -> new SysUserRole(userId, roleAssignAo.getRoleId())).collect(Collectors.toList());
+            sysUserRoleDao.insert(sysUserRoles.toArray(SysUserRole[]::new));
+        } else {
+            sysUserRoleDao.deleteByRoleAndUser(roleAssignAo.getRoleId(), roleAssignAo.getUserIds());
+        }
+        return 0;
     }
 }

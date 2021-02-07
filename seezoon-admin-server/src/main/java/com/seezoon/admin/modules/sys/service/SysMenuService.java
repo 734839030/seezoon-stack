@@ -68,6 +68,7 @@ public class SysMenuService extends AbstractCrudService<SysMenuDao, SysMenu, Int
         List<Tree> trees = new ArrayList<>();
         List<SysMenu> menus = this.findByParentId(parentId);
         menus.forEach((menu) -> {
+            // selectable checkable 在树上还有总空开关
             Tree tree = Tree.builder().key(menu.getId()).value(menu.getId()).title(menu.getName())
                 .children(includeChild ? this.findTree(menu.getId(), includeChild) : null).selectable(true)
                 .checkable(true).build();

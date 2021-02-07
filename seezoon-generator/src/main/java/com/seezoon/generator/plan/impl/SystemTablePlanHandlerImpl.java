@@ -87,7 +87,7 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
             // 主键
             if (columnPlan.getColumnKey().equals(ColumnKey.PRI)) {
                 if (null != tablePlan.getPkPlan()) {
-                    logger.warn("table[{}] must have only one primary key,otherwise generator select last primary key",
+                    logger.warn("table[{}] must have only one primary key,otherwise generator select first primary key",
                         tablePlan.getTableName());
                 } else {
                     columnPlan.setInputType(InputType.HIDDEN);

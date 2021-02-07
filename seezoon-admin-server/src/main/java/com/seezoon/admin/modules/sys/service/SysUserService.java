@@ -1,15 +1,21 @@
 package com.seezoon.admin.modules.sys.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import com.seezoon.admin.framework.service.AbstractCrudService;
 import com.seezoon.dao.modules.sys.SysUserDao;
+import com.seezoon.dao.modules.sys.SysUserRoleDao;
 import com.seezoon.dao.modules.sys.entity.SysUser;
 import com.seezoon.dao.modules.sys.entity.SysUserCondition;
+import com.seezoon.dao.modules.sys.entity.SysUserRole;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +28,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SysUserService extends AbstractCrudService<SysUserDao, SysUser, Integer> {
 
-    private final SysUserRoleService sysUserRoleService;
+    private final SysUserRoleDao sysUserRoleDao;
+
+    @Override
+    public SysUser find(@NotNull Integer integer) {
+        SysUser sysUser = super.find(integer);
+        if (null != sysUser) {
+            sysUser.setRoleIds(sysUserRoleDao.selectRoleIdsByUserId(sysUser.getId()));
+        }
+        return sysUser;
+    }
 
     @Transactional(readOnly = true)
     public SysUser findByUsername(@NotEmpty String username) {
@@ -41,18 +56,29 @@ public class SysUserService extends AbstractCrudService<SysUserDao, SysUser, Int
     @Override
     public int updateSelective(@NotNull SysUser record) {
         int cnt = super.updateSelective(record);
-        if (cnt > 0) {
-            sysUserRoleService.saveOrUpdateUserRoles(record.getId(), record.getRoleIds());
-        }
+        sysUserRoleDao.deleteByUser(record.getId());
+        this.saveUserRoles(record.getRoleIds(), record.getId());
         return cnt;
+    }
 
+    @Override
+    public int delete(@NotEmpty Integer... userIds) {
+        sysUserRoleDao.deleteByUser(userIds);
+        return super.delete(userIds);
     }
 
     public int save(@NotNull SysUser record) {
         int cnt = super.save(record);
-        if (cnt > 0) {
-            sysUserRoleService.saveOrUpdateUserRoles(record.getId(), record.getRoleIds());
-        }
+        this.saveUserRoles(record.getRoleIds(), record.getId());
         return cnt;
+    }
+
+    private void saveUserRoles(List<Integer> roleIds, Integer userId) {
+        if (!CollectionUtils.isEmpty(roleIds)) {
+            List<SysUserRole> sysUserRoles =
+                roleIds.stream().map(roleId -> new SysUserRole(userId, roleId)).collect(Collectors.toList());
+            int count = sysUserRoleDao.insert(sysUserRoles.toArray(SysUserRole[]::new));
+            logger.info("saved {} t_user_role userId={}", count, userId);
+        }
     }
 }

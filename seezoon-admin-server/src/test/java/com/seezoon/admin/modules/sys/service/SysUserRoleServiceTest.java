@@ -1,8 +1,5 @@
 package com.seezoon.admin.modules.sys.service;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.seezoon.admin.BaseSpringBootTest;
 
 /**
@@ -10,11 +7,4 @@ import com.seezoon.admin.BaseSpringBootTest;
  */
 class SysUserRoleServiceTest extends BaseSpringBootTest {
 
-    @Autowired
-    private SysUserRoleService sysUserRoleService;
-
-    @Test
-    void roleAssign() {
-        sysUserRoleService.assign(null);
-    }
 }

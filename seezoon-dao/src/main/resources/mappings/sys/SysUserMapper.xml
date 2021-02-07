@@ -71,7 +71,7 @@
                     </otherwise>
                 </choose>
                 (select 1 from sys_user_role sur where sur.user_id = t.id and sur.role_id = #{roleId}
-                and sur.role_id = #{roleId} and sur.status = 1)
+                and sur.role_id = #{roleId})
             </if>
         </where>
         <choose>
