@@ -12,7 +12,7 @@
         <jdbcConnection
                 connectionURL="jdbc:mysql://127.0.0.1:3306/seezoon-stack"
                 driverClass="com.mysql.cj.jdbc.Driver"
-                password=""
+                password="12345678"
                 userId="root">
             <!-- 只获取当前指定库的表-->
             <property name="nullCatalogMeansCurrent" value="true"/>
@@ -36,9 +36,11 @@
         </javaClientGenerator>
         <table enableCountByExample="false" enableDeleteByExample="false"
                enableSelectByExample="false" enableUpdateByExample="false"
-               tableName="sys_param">
+               tableName="%">
             <!-- 自增返回主键使用 -->
+            <!--
             <generatedKey column="id" sqlStatement="JDBC"/>
+            -->
         </table>
     </context>
 </generatorConfiguration>
