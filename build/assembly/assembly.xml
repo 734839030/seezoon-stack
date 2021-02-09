@@ -9,7 +9,7 @@
         <format>dir</format>
     </formats>
 
-    <includeBaseDirectory>true</includeBaseDirectory>
+    <includeBaseDirectory>false</includeBaseDirectory>
 
     <fileSets>
         <!--

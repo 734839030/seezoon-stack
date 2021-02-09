@@ -48,7 +48,12 @@ else
 fi
 
 echo "SERVER_OTPS=${SERVER_OTPS}"
-nohup $RUN_JAVA -jar ${JAVA_OPTS} ${ROOT}/bin/${APP_NAME}*.jar ${SERVER_OTPS} >logs/catalina.out 2>&1 &
+
+if [ "${daemon}" = true ]; then
+  nohup $RUN_JAVA -jar ${JAVA_OPTS} ${ROOT}/bin/${APP_NAME}*.jar ${SERVER_OTPS} >logs/catalina.out 2>&1 &
+else
+  $RUN_JAVA -jar ${JAVA_OPTS} ${ROOT}/bin/${APP_NAME}*.jar ${SERVER_OTPS} >logs/catalina.out 2>&1
+fi
 sleep 3
 ./bin/check.sh
 echo "Application Started"
