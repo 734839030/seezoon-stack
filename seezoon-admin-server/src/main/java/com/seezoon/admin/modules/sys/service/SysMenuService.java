@@ -6,25 +6,33 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import com.seezoon.admin.framework.service.AbstractCrudService;
+import com.seezoon.dao.framework.constants.EntityStatus;
 import com.seezoon.dao.framework.dto.Tree;
 import com.seezoon.dao.modules.sys.SysMenuDao;
+import com.seezoon.dao.modules.sys.SysRoleMenuDao;
 import com.seezoon.dao.modules.sys.entity.SysMenu;
 import com.seezoon.dao.modules.sys.entity.SysMenuCondition;
 import com.seezoon.framework.utils.TreeHelper;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * 菜单管理
  *
  * @author seezoon-generator 2021年1月31日 上午12:21:33
  */
+@RequiredArgsConstructor
 @Service
 public class SysMenuService extends AbstractCrudService<SysMenuDao, SysMenu, Integer> {
+
+    private final SysRoleMenuDao sysRoleMenuDao;
 
     /**
      * 返回全部菜单的
@@ -100,7 +108,9 @@ public class SysMenuService extends AbstractCrudService<SysMenuDao, SysMenu, Int
     public int delete(@NotNull @Min(1) Integer id) {
         List<Integer> childrenIds = this.findAllChildren(id).stream().map(SysMenu::getId).collect(Collectors.toList());
         childrenIds.add(id);
-        int cnt = super.delete(childrenIds.toArray(Integer[]::new));
+        Integer[] menuIds = childrenIds.toArray(Integer[]::new);
+        int cnt = super.delete(menuIds);
+        sysRoleMenuDao.deleteByMenu(menuIds);
         logger.info("delete menu size:[{}]", cnt);
         return cnt;
     }
@@ -165,10 +175,27 @@ public class SysMenuService extends AbstractCrudService<SysMenuDao, SysMenu, Int
      * @param userId
      * @return
      */
+    @Transactional(readOnly = true)
     public List<SysMenu> findByUserId(@NotNull Integer userId) {
         List<SysMenu> sysMenus = this.d.selectByUserId(userId);
+        if (sysMenus.isEmpty()) {
+            return Collections.emptyList();
+        }
+        Set<Integer> menuIds = new HashSet<>();
+        // 前端勾选限制，如果子节点没有勾选全，则不包含父节点，需要根据子节点自动加上父节点权限
         // 获取所有的父类
-        return null;
+        sysMenus.stream().forEach(sysMenu -> {
+            menuIds.add(sysMenu.getId());
+            String[] parentIds = StringUtils.split(sysMenu.getParentIds(), TreeHelper.SEPARATOR);
+            for (String parentId : parentIds) {
+                menuIds.add(Integer.valueOf(parentId));
+            }
+        });
+        SysMenuCondition sysMenuCondition = new SysMenuCondition();
+        sysMenuCondition.setStatus(EntityStatus.NORMAL.status());
+        List<SysMenu> all = this.find(sysMenuCondition);
+        List<SysMenu> userMenus = all.stream().filter(v -> menuIds.contains(v.getId())).collect(Collectors.toList());
+        return userMenus;
     }
 
 }

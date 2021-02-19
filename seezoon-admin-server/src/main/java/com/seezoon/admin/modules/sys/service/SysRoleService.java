@@ -14,6 +14,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.seezoon.admin.framework.service.AbstractCrudService;
 import com.seezoon.admin.modules.sys.dto.RoleAssignAo;
+import com.seezoon.dao.framework.constants.EntityStatus;
 import com.seezoon.dao.modules.sys.SysRoleDao;
 import com.seezoon.dao.modules.sys.SysRoleMenuDao;
 import com.seezoon.dao.modules.sys.SysUserRoleDao;
@@ -90,6 +91,7 @@ public class SysRoleService extends AbstractCrudService<SysRoleDao, SysRole, Int
     @Override
     public int delete(@NotNull Integer... roleIds) {
         sysRoleMenuDao.deleteByRole(roleIds);
+        sysUserRoleDao.deleteByRole(roleIds);
         return super.delete(roleIds);
     }
 
@@ -102,5 +104,19 @@ public class SysRoleService extends AbstractCrudService<SysRoleDao, SysRole, Int
             sysUserRoleDao.deleteByRoleAndUser(roleAssignAo.getRoleId(), roleAssignAo.getUserIds());
         }
         return 0;
+    }
+
+    /**
+     * 查询用户有效的角色
+     *
+     * @param userId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<SysRole> findByUserId(@NotNull Integer userId) {
+        SysRoleCondition sysRoleCondition = new SysRoleCondition();
+        sysRoleCondition.setStatus(EntityStatus.NORMAL.status());
+        sysRoleCondition.setUserId(userId);
+        return this.find(sysRoleCondition);
     }
 }

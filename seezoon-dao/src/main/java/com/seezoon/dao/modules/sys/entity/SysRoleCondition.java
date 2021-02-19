@@ -38,4 +38,7 @@ public class SysRoleCondition extends PageCondition {
     @ApiModelProperty(value = "状态1启用0停用")
     private Integer status;
 
+    @ApiModelProperty(value = "用户Id")
+    private Integer userId;
+
 }
