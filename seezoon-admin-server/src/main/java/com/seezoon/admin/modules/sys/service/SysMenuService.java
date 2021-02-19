@@ -68,7 +68,7 @@ public class SysMenuService extends AbstractCrudService<SysMenuDao, SysMenu, Int
         List<Tree> trees = new ArrayList<>();
         List<SysMenu> menus = this.findByParentId(parentId);
         menus.forEach((menu) -> {
-            // selectable checkable 在树上还有总空开关
+            // selectable checkable 在树上还有总控开关
             Tree tree = Tree.builder().key(menu.getId()).value(menu.getId()).title(menu.getName())
                 .children(includeChild ? this.findTree(menu.getId(), includeChild) : null).selectable(true)
                 .checkable(true).build();
@@ -157,6 +157,18 @@ public class SysMenuService extends AbstractCrudService<SysMenuDao, SysMenu, Int
             Assert.notNull(parent, "父节点不存在");
             record.setParentIds(TreeHelper.getCurrentParentIds(record.getId(), parentId, parent.getParentIds()));
         }
+    }
+
+    /**
+     * 根据用户Id 查询所有角色.
+     *
+     * @param userId
+     * @return
+     */
+    public List<SysMenu> findByUserId(@NotNull Integer userId) {
+        List<SysMenu> sysMenus = this.d.selectByUserId(userId);
+        // 获取所有的父类
+        return null;
     }
 
 }

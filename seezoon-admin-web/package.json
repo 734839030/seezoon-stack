@@ -16,7 +16,8 @@
     "qs": "^6.9.4",
     "vue": "^3.0.2",
     "vue-axios": "^3.2.0",
-    "vue-router": "^4.0.0-rc.5"
+    "vue-router": "^4.0.0-rc.5",
+    "yarn": "^1.22.10"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

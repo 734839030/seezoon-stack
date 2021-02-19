@@ -30,6 +30,7 @@ public class SysUserService extends AbstractCrudService<SysUserDao, SysUser, Int
 
     private final SysUserRoleDao sysUserRoleDao;
 
+    @Transactional(readOnly = true)
     @Override
     public SysUser find(@NotNull Integer integer) {
         SysUser sysUser = super.find(integer);

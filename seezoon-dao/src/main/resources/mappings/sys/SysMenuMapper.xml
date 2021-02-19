@@ -47,7 +47,7 @@
                 and t.parent_id = #{parentId}
             </if>
             <if test="parentIds != null and parentIds != ''">
-                and t.parent_ids = #{parentIds}
+                and t.parent_ids like concat('%',#{parentIds},'%')
             </if>
             <if test="name != null and name != ''">
                 and t.name = #{name}
@@ -61,6 +61,16 @@
                 order by t.parent_id , t.sort asc
             </otherwise>
         </choose>
+    </select>
+
+    <select id="selectByUserId" parameterType="Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_menu t where
+        EXISTS (SELECT 1 FROM sys_role_menu rm WHERE t.id=rm.menu_id AND
+        EXISTS (SELECT 1 FROM sys_user_role ur WHERE rm.role_id=ur.role_id AND ur.user_id=#{userId})
+        ) and t.status = 1
+        order by sort asc
     </select>
 
     <delete id="deleteByPrimaryKey">
