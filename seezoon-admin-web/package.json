@@ -16,8 +16,7 @@
     "qs": "^6.9.4",
     "vue": "^3.0.2",
     "vue-axios": "^3.2.0",
-    "vue-router": "^4.0.0-rc.5",
-    "yarn": "^1.22.10"
+    "vue-router": "^4.0.0-rc.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
@@ -28,7 +27,8 @@
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.3.0",
     "less": "^4.0.0",
-    "less-loader": "^7.2.1"
+    "less-loader": "^7.2.1",
+    "yarn": "^1.22.10"
   },
   "eslintConfig": {
     "root": true,

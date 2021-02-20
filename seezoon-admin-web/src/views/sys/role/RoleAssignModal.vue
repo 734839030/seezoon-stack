@@ -28,10 +28,12 @@
                       @click="handleAssign()">{{ this.addUser ? "分配" : "移除" }}
             </a-button>
             <a-button v-if="!this.addUser" type="default"
-                      @click="this.searchForm.hasThisRole = false;this.handleQuery()">可分配用户
+                      @click="this.userTableSelectedRowKeys=[];this.searchForm.hasThisRole = false;this.handleQuery()">
+              可分配用户
             </a-button>
             <a-button v-else type="default"
-                      @click="this.searchForm.hasThisRole = true;this.handleQuery()">查看已分配
+                      @click="this.userTableSelectedRowKeys=[];this.searchForm.hasThisRole = true;this.handleQuery()">
+              查看已分配
             </a-button>
           </a-space>
         </a-form-item>
