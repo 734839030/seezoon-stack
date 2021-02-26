@@ -14,9 +14,12 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class AdminUserDetails implements UserDetails {
 
+    private Integer userId;
+    private Integer deptId;
     private String username;
     private String passowrd;
     private boolean locked;
+
     private List<GrantedAuthority> authorities;
 
     @Override
@@ -52,5 +55,13 @@ public class AdminUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public Integer getDeptId() {
+        return deptId;
     }
 }

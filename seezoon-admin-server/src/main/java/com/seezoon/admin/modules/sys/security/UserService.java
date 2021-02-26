@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.seezoon.admin.framework.service.AbstractTransactionService;
+import com.seezoon.admin.modules.sys.dto.UserInfoVo;
 import com.seezoon.admin.modules.sys.service.SysMenuService;
 import com.seezoon.admin.modules.sys.service.SysRoleService;
 import com.seezoon.dao.framework.constants.EntityStatus;
@@ -26,14 +27,12 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class UserService extends AbstractTransactionService {
 
-    private static final Integer SUPER_ADMIN_USER_ID = 0;
-
     private final SysRoleService sysRoleService;
     private final SysMenuService sysMenuService;
 
     @Transactional(readOnly = true)
     public List<SysRole> findRolesByUserId(@NotNull Integer userId) {
-        if (Objects.equals(SUPER_ADMIN_USER_ID, userId)) {
+        if (Objects.equals(SecurityUtils.SUPER_ADMIN_USER_ID, userId)) {
             SysRoleCondition sysRoleCondition = new SysRoleCondition();
             sysRoleCondition.setStatus(EntityStatus.NORMAL.status());
             return sysRoleService.find(sysRoleCondition);
@@ -43,11 +42,18 @@ public class UserService extends AbstractTransactionService {
 
     @Transactional(readOnly = true)
     public List<SysMenu> findMenusByUserId(@NotNull Integer userId) {
-        if (Objects.equals(SUPER_ADMIN_USER_ID, userId)) {
+        if (Objects.equals(SecurityUtils.SUPER_ADMIN_USER_ID, userId)) {
             SysMenuCondition sysMenuCondition = new SysMenuCondition();
             sysMenuCondition.setStatus(EntityStatus.NORMAL.status());
             return sysMenuService.find(sysMenuCondition);
         }
         return sysMenuService.findByUserId(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public UserInfoVo userInfo(@NotNull Integer userId) {
+        UserInfoVo userInfo = new UserInfoVo();
+
+        return userInfo;
     }
 }

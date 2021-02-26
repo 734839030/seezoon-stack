@@ -53,7 +53,8 @@ public class AdminUserDetailsServiceImpl implements UserDetailsService {
         userMenus.stream().filter(v -> StringUtils.isNotBlank(v.getPermission())).forEach(v -> {
             authorities.add(new UserGrantedAuthority(v.getPermission()));
         });
-        AdminUserDetails adminUserDetails = new AdminUserDetails(username, user.getPassword(), false, authorities);
+        AdminUserDetails adminUserDetails =
+            new AdminUserDetails(user.getId(), user.getDeptId(), username, user.getPassword(), false, authorities);
         return adminUserDetails;
     }
 }
