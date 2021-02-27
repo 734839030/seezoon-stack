@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -123,7 +122,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         // 默认 DaoAuthenticationProvider的userDetailsService，自定义其他登录方式还得在provider中设置
-        auth.userDetailsService(adminUserDetailsService()).passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(adminUserDetailsService()).passwordEncoder(AdminPasswordEncoder.getEncoder());
     }
 
     @Bean

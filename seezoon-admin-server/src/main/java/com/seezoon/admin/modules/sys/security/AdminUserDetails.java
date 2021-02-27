@@ -6,25 +6,30 @@ import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import lombok.AllArgsConstructor;
+import com.seezoon.admin.modules.sys.dto.UserInfo;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * @author hdf
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AdminUserDetails implements UserDetails {
 
-    private Integer userId;
-    private Integer deptId;
-    private String username;
-    private String passowrd;
-    private boolean locked;
+    private final UserInfo userInfo;
+    private final String username;
+    private final String passowrd;
+    private final boolean locked;
 
     private List<GrantedAuthority> authorities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
+    }
+
+    public void setAuthorities(List<GrantedAuthority> authorities) {
+        this.authorities = authorities;
     }
 
     @Override
@@ -57,11 +62,8 @@ public class AdminUserDetails implements UserDetails {
         return true;
     }
 
-    public Integer getUserId() {
-        return userId;
+    public UserInfo getUserInfo() {
+        return userInfo;
     }
 
-    public Integer getDeptId() {
-        return deptId;
-    }
 }

@@ -9,6 +9,6 @@ class PasswordEncoderTest {
 
     @Test
     void encode() {
-        System.out.println(PasswordEncoder.encode("123456"));
+        System.out.println(AdminPasswordEncoder.encode("123456"));
     }
 }

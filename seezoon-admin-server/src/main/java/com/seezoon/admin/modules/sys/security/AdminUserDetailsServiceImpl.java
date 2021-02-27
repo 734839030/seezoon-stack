@@ -1,20 +1,15 @@
 package com.seezoon.admin.modules.sys.security;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import com.seezoon.admin.modules.sys.dto.UserInfo;
 import com.seezoon.admin.modules.sys.service.SysUserService;
 import com.seezoon.dao.framework.constants.EntityStatus;
-import com.seezoon.dao.modules.sys.entity.SysMenu;
-import com.seezoon.dao.modules.sys.entity.SysRole;
 import com.seezoon.dao.modules.sys.entity.SysUser;
 
 /**
@@ -43,18 +38,10 @@ public class AdminUserDetailsServiceImpl implements UserDetailsService {
             throw new DisabledException(username + " disabled");
         }
 
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        // 角色处理
-        List<SysRole> userRoles = userService.findRolesByUserId(user.getId());
-        userRoles.stream().filter(v -> StringUtils.isNotBlank(v.getCode())).forEach(v -> {
-            authorities.add(new UserGrantedAuthority(v.getCode(), true));
-        });
-        List<SysMenu> userMenus = userService.findMenusByUserId(user.getId());
-        userMenus.stream().filter(v -> StringUtils.isNotBlank(v.getPermission())).forEach(v -> {
-            authorities.add(new UserGrantedAuthority(v.getPermission()));
-        });
+        // 角色及权限信息登录成功后放入
         AdminUserDetails adminUserDetails =
-            new AdminUserDetails(user.getId(), user.getDeptId(), username, user.getPassword(), false, authorities);
+            new AdminUserDetails(new UserInfo(user.getId(), user.getDeptId(), user.getUsername(), user.getName()),
+                username, user.getPassword(), false);
         return adminUserDetails;
     }
 }

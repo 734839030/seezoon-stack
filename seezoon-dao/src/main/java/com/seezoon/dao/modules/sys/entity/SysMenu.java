@@ -25,6 +25,12 @@ import lombok.ToString;
 @ToString
 public class SysMenu extends BaseEntity<Integer> {
 
+    public static final int MENU_TYPE_DIRECTORY = 1;
+    public static final int MENU_TYPE_MENU = 2;
+    public static final int MENU_TYPE_BUTTON = 3;
+
+    public static final String TARGET_MAIN = "main";
+
     @ApiModelProperty(value = "上级", required = true)
     @NotNull
     private Integer parentId = 0;

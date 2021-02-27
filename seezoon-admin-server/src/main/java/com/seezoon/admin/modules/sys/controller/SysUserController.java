@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.github.pagehelper.PageSerializable;
 import com.seezoon.admin.framework.file.FileService;
-import com.seezoon.admin.modules.sys.security.PasswordEncoder;
+import com.seezoon.admin.modules.sys.security.AdminPasswordEncoder;
 import com.seezoon.admin.modules.sys.service.SysUserService;
 import com.seezoon.dao.modules.sys.entity.SysUser;
 import com.seezoon.dao.modules.sys.entity.SysUserCondition;
@@ -61,7 +61,7 @@ public class SysUserController extends BaseController {
     @PreAuthorize("hasAuthority('sys:user:save')")
     @PostMapping(value = "/save")
     public Result save(@Valid @RequestBody SysUser sysUser) {
-        sysUser.setPassword(PasswordEncoder.encode(sysUser.getPassword()));
+        sysUser.setPassword(AdminPasswordEncoder.encode(sysUser.getPassword()));
         int count = sysUserService.save(sysUser);
         return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.SAVE_ERROR, count);
     }
@@ -70,7 +70,7 @@ public class SysUserController extends BaseController {
     @PreAuthorize("hasAuthority('sys:user:update')")
     @PostMapping(value = "/update")
     public Result update(@Valid @RequestBody SysUser sysUser) {
-        sysUser.setPassword(PasswordEncoder.encode(sysUser.getPassword()));
+        sysUser.setPassword(AdminPasswordEncoder.encode(sysUser.getPassword()));
         int count = sysUserService.updateSelective(sysUser);
         return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.UPDATE_ERROR, count);
     }

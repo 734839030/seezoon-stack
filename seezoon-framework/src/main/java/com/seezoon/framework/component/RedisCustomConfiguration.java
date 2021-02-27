@@ -29,7 +29,6 @@ public class RedisCustomConfiguration {
         redisTemplate.setDefaultSerializer(genericJackson2JsonRedisSerializer);
         redisTemplate.setValueSerializer(genericJackson2JsonRedisSerializer);
         redisTemplate.setHashValueSerializer(genericJackson2JsonRedisSerializer);
-        redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }
 }

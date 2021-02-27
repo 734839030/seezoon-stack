@@ -52,7 +52,7 @@ public class UserService extends AbstractTransactionService {
 
     @Transactional(readOnly = true)
     public UserInfoVo userInfo(@NotNull Integer userId) {
-        UserInfoVo userInfo = new UserInfoVo();
+        UserInfoVo userInfo = null;
 
         return userInfo;
     }

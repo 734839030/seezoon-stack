@@ -11,6 +11,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class VueRouteMenu {
+
+    public static final String COMPONENT_LAYOUT = "LAYOUT";
+    public static final String COMPONENT_IFRAME = "IFrame";
+
     private String path;
     private String name;
     private String component;
