@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import com.seezoon.admin.framework.file.FileService;
 import com.seezoon.admin.modules.sys.dto.UserInfo;
 import com.seezoon.admin.modules.sys.service.SysUserService;
 import com.seezoon.dao.framework.constants.EntityStatus;
@@ -23,6 +24,8 @@ public class AdminUserDetailsServiceImpl implements UserDetailsService {
     private UserService userService;
     @Autowired
     private SysUserService sysUserService;
+    @Autowired
+    private FileService fileService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -38,10 +41,11 @@ public class AdminUserDetailsServiceImpl implements UserDetailsService {
             throw new DisabledException(username + " disabled");
         }
 
+        UserInfo userInfo = new UserInfo(user.getId(), user.getDeptId(), user.getUsername(), user.getName());
+        userInfo.setDeptName(user.getDeptName());
+        userInfo.setPhoto(fileService.getUrl(user.getPhoto()));
         // 角色及权限信息登录成功后放入
-        AdminUserDetails adminUserDetails =
-            new AdminUserDetails(new UserInfo(user.getId(), user.getDeptId(), user.getUsername(), user.getName()),
-                username, user.getPassword(), false);
+        AdminUserDetails adminUserDetails = new AdminUserDetails(userInfo, username, user.getPassword(), false);
         return adminUserDetails;
     }
 }

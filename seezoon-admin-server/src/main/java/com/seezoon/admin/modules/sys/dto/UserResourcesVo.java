@@ -16,10 +16,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class UserInfoVo {
-    private Integer userId;
-    private String username;
-    private String name;
+public class UserResourcesVo {
     private Set<String> roles;
     private Set<String> permissions;
     // 树结构

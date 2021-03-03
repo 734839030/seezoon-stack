@@ -2,9 +2,8 @@ package com.seezoon.admin.modules.sys.dto;
 
 import java.io.Serializable;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -12,13 +11,14 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class UserInfo implements Serializable {
 
-    private Integer userId;
-    private Integer deptId;
-    private String username;
-    private String name;
+    private final Integer userId;
+    private final Integer deptId;
+    private final String username;
+    private final String name;
+    private String deptName;
+    private String photo;
 
 }

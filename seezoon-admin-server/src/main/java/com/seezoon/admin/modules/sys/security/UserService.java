@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.seezoon.admin.framework.service.AbstractTransactionService;
-import com.seezoon.admin.modules.sys.dto.UserInfoVo;
+import com.seezoon.admin.modules.sys.dto.UserResourcesVo;
 import com.seezoon.admin.modules.sys.service.SysMenuService;
 import com.seezoon.admin.modules.sys.service.SysRoleService;
 import com.seezoon.dao.framework.constants.EntityStatus;
@@ -51,8 +51,8 @@ public class UserService extends AbstractTransactionService {
     }
 
     @Transactional(readOnly = true)
-    public UserInfoVo userInfo(@NotNull Integer userId) {
-        UserInfoVo userInfo = null;
+    public UserResourcesVo userInfo(@NotNull Integer userId) {
+        UserResourcesVo userInfo = null;
 
         return userInfo;
     }

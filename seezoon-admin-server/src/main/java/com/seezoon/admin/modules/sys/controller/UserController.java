@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.seezoon.admin.modules.sys.dto.UserInfo;
-import com.seezoon.admin.modules.sys.dto.UserInfoVo;
+import com.seezoon.admin.modules.sys.dto.UserResourcesVo;
 import com.seezoon.admin.modules.sys.dto.vue.RouteMeta;
 import com.seezoon.admin.modules.sys.dto.vue.VueRouteMenu;
 import com.seezoon.admin.modules.sys.security.SecurityUtils;
@@ -33,7 +33,14 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "获取用户信息")
     @GetMapping("/getInfo")
-    public Result<UserInfoVo> getUserInfo() {
+    public Result<UserInfo> getUserInfo() {
+        UserInfo user = SecurityUtils.getUser();
+        return Result.ok(user);
+    }
+
+    @ApiOperation(value = "获取资源")
+    @GetMapping("/getResources")
+    public Result<UserResourcesVo> getResources() {
         UserInfo user = SecurityUtils.getUser();
         // 角色
         Set<String> roles =
@@ -44,10 +51,9 @@ public class UserController extends BaseController {
         Set<String> permissions = menus.stream().filter(v -> StringUtils.isNotBlank(v.getPermission()))
             .map(v -> StringUtils.trim(v.getPermission())).collect(Collectors.toSet());
 
-        UserInfoVo userInfoVo = new UserInfoVo(user.getUserId(), user.getUsername(), user.getName(), roles, permissions,
-            this.getRoutes(menus));
+        UserResourcesVo userResourcesVo = new UserResourcesVo(roles, permissions, this.getRoutes(menus));
 
-        return Result.ok(userInfoVo);
+        return Result.ok(userResourcesVo);
     }
 
     private List<VueRouteMenu> getRoutes(List<SysMenu> menus) {
@@ -65,20 +71,22 @@ public class UserController extends BaseController {
         List<VueRouteMenu> vueRouteMenus = new ArrayList<>();
         sysMenus.forEach(menu -> {
             VueRouteMenu route = new VueRouteMenu();
-            route.setName(menu.getUrl());
             route.setMeta(new RouteMeta(menu.getName(), menu.getIcon()));
             if (menu.getType() == SysMenu.MENU_TYPE_DIRECTORY) {
-                route.setPath(menu.getUrl());
                 route.setComponent(VueRouteMenu.COMPONENT_LAYOUT);
-            } else if (menu.getType() == SysMenu.MENU_TYPE_BUTTON) {
+            } else if (menu.getType() == SysMenu.MENU_TYPE_MENU) {
+                route.setName(menu.getUrl());
                 if (null != menu.getUrl() && !menu.getUrl().startsWith("https://")
                     && !menu.getUrl().startsWith("http://")) {
-                    route.setComponent(menu.getUrl());
+                    route.setComponent(menu.getUrl() + "/index");
+                    route.setPath(menu.getUrl());
                 } else { // 外部链接
                     route.setComponent(VueRouteMenu.COMPONENT_IFRAME);
                     if (SysMenu.TARGET_MAIN.equals(menu.getTarget())) {// 内部特殊结构,外部前端自动处理
                         route.setPath("/" + menu.getId());
                         route.getMeta().setFrameSrc(menu.getUrl());
+                    } else {
+                        route.setPath(menu.getUrl());
                     }
                 }
             }
