@@ -1,8 +1,12 @@
-.DS_Store
 node_modules
+.DS_Store
 dist
+.npmrc
+.cache
 
+test/upload-server/static
 
+.local
 # local env files
 .env.local
 .env.*.local
@@ -15,7 +19,7 @@ pnpm-debug.log*
 
 # Editor directories and files
 .idea
-.vscode
+# .vscode
 *.suo
 *.ntvs*
 *.njsproj

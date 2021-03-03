@@ -1,32 +1,35 @@
 <template>
-  <!--  <pro-layout>-->
-  <a-config-provider :locale="locale">
-    <router-view></router-view>
-  </a-config-provider>
-  <!--  </pro-layout>-->
+  <ConfigProvider v-bind="lockEvent" :locale="getAntdLocale">
+    <AppProvider>
+      <RouterView />
+    </AppProvider>
+  </ConfigProvider>
 </template>
-<script>
-import zhCN from 'ant-design-vue/es/locale/zh_CN';
-// import ProLayout, {PageContainer} from '@ant-design-vue/pro-layout';
 
-export default {
-  name: 'App',
-  // components: {ProLayout, PageContainer},
-  data() {
-    return {
-      locale: zhCN
-    }
-  }
-}
+<script lang="ts">
+  import { defineComponent } from 'vue';
+  import { ConfigProvider } from 'ant-design-vue';
+  import { AppProvider } from '/@/components/Application';
+
+  import { initAppConfigStore } from '/@/logics/initAppConfig';
+
+  import { useLockPage } from '/@/hooks/web/useLockPage';
+  import { useLocale } from '/@/locales/useLocale';
+
+  export default defineComponent({
+    name: 'App',
+    components: { ConfigProvider, AppProvider },
+    setup() {
+      // support Multi-language
+      const { getAntdLocale } = useLocale();
+
+      // Initialize vuex internal system configuration
+      initAppConfigStore();
+
+      // Create a lock screen monitor
+      const lockEvent = useLockPage();
+
+      return { getAntdLocale, lockEvent };
+    },
+  });
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  /*text-align: center;*/
-  color: #2c3e50;
-  /*margin-top: 20px;*/
-}
-</style>

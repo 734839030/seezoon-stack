@@ -1,10 +1,13 @@
 <template>
-  <main-table></main-table>
+  <page-wrapper contentBackground contentClass="p-4">
+    <main-table />
+  </page-wrapper>
 </template>
 <script>
-import MainTable from './MainTable';
+  import MainTable from './MainTable.vue';
+  import { PageWrapper } from '../../../components/Page';
 
-export default {
-  components: {MainTable},
-}
+  export default {
+    components: { MainTable, PageWrapper },
+  };
 </script>

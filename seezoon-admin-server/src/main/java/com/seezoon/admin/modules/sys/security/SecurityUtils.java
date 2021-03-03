@@ -9,7 +9,7 @@ import com.seezoon.admin.modules.sys.dto.UserInfo;
 
 public class SecurityUtils {
 
-    public static final Integer SUPER_ADMIN_USER_ID = 0;
+    public static final Integer SUPER_ADMIN_USER_ID = 1;
 
     public static Integer getUserId() {
         return getUser().getUserId();
