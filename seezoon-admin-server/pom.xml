@@ -13,7 +13,8 @@
 
     <properties>
         <!-- 本机开发环境默认的上传路径，${project.parent.basedir} 这里测试取不到-->
-        <local.upload.directory>${project.basedir}/../seezoon-admin-web/dist</local.upload.directory>
+        <local.upload.directory>${project.basedir}/../seezoon-admin-web/test/upload-server/static
+        </local.upload.directory>
     </properties>
 
     <dependencies>
