@@ -59,7 +59,7 @@
                 order by ${sortField} ${sortOrder}
             </when>
             <otherwise>
-                order by t.parent_id asc,t.sort desc
+                order by t.parent_id asc,t.sort asc
             </otherwise>
         </choose>
     </select>

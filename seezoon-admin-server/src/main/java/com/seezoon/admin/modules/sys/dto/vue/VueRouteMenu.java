@@ -13,12 +13,12 @@ import lombok.Setter;
 @Getter
 @Setter
 public class VueRouteMenu {
-
     public static final String COMPONENT_LAYOUT = "LAYOUT";
-    public static final String COMPONENT_IFRAME = "IFrame";
+    // 前端问题，没有定义常量
+    public static final String COMPONENT_IFRAME = "/sys/iframe/FrameBlank";
 
     private String path = "/";
-    private String name = RandomStringUtils.randomNumeric(10);
+    private String name = RandomStringUtils.randomAlphanumeric(10);
     private String component;
     private RouteMeta meta;
     private List<VueRouteMenu> children;

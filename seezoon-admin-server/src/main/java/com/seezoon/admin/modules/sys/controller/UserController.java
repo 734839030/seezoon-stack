@@ -75,7 +75,6 @@ public class UserController extends BaseController {
             if (menu.getType() == SysMenu.MENU_TYPE_DIRECTORY) {
                 route.setComponent(VueRouteMenu.COMPONENT_LAYOUT);
             } else if (menu.getType() == SysMenu.MENU_TYPE_MENU) {
-                route.setName(menu.getUrl());
                 if (null != menu.getUrl() && !menu.getUrl().startsWith("https://")
                     && !menu.getUrl().startsWith("http://")) {
                     route.setComponent(menu.getUrl() + "/index");
