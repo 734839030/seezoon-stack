@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 import com.seezoon.admin.framework.service.AbstractCrudService;
 import com.seezoon.dao.framework.dto.Tree;
@@ -133,6 +134,9 @@ public class SysDeptService extends AbstractCrudService<SysDeptDao, SysDept, Int
         depts.forEach((dept) -> {
             Tree tree = Tree.builder().key(IdGen.uuid()).value(dept.getId()).title(dept.getName())
                 .children(includeChild ? this.findTree(dept.getId(), includeChild) : null).selectable(true).build();
+            if (includeChild) {
+                tree.setLeaf(CollectionUtils.isEmpty(tree.getChildren()) ? true : false);
+            }
             trees.add(tree);
         });
         return trees;
