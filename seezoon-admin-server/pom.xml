@@ -58,6 +58,7 @@
                 <configuration>
                     <attach>false</attach>
                     <appendAssemblyId>false</appendAssemblyId>
+                    <finalName>${project.artifactId}</finalName>
                     <descriptors>
                         <descriptor>${project.parent.basedir}/build/assembly/assembly.xml</descriptor>
                     </descriptors>
