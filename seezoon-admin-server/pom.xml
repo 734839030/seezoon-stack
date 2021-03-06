@@ -90,7 +90,7 @@
                     <repository>${docker.repository}/${project.artifactId}</repository>
                     <tag>${project.version}</tag>
                     <buildArgs>
-                        <src>target/${project.build.finalName}</src>
+                        <src>target/${project.artifactId}</src>
                         <dest>/data/${project.artifactId}/</dest>
                     </buildArgs>
                 </configuration>

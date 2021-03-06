@@ -39,7 +39,7 @@ fi
 if [ -n "${JAVA_OPTS}" ]; then
   echo "JAVA_OPTS=${JAVA_OPTS}"
 fi
-echo "***Print Application Start Parameters***"
+echo "***      Print Application Start Parameters      ***"
 
 if [ -n "${SERVER_OTPS}" ]; then
   SERVER_OTPS="${SERVER_OTPS} ${CONF_OPTS}"
@@ -56,4 +56,5 @@ else
 fi
 sleep 3
 ./bin/check.sh
+tail -n 20 logs/catalina.out
 echo "Application Started"
