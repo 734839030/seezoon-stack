@@ -54,7 +54,7 @@ if [ "${daemon}" = false ]; then
 else
     nohup $RUN_JAVA -jar ${JAVA_OPTS} ${ROOT}/bin/${APP_NAME}*.jar ${SERVER_OTPS} >logs/catalina.out 2>&1 &
 fi
-sleep 60
+sleep 10
 ./bin/check.sh
 tail -n 20 logs/seezoon.log
 echo "Application Started"

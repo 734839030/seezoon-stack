@@ -27,7 +27,7 @@ public class NoneFileHandler implements FileHandler {
 
     @Override
     public String getUrl(String relativePath) {
-        throw new RuntimeException("pls config FileHandler properties");
+        return relativePath;
     }
 
     @Override

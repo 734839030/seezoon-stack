@@ -25,13 +25,13 @@ public class FileHandlerConfiguration {
     private final SeezoonProperties seezoonProperties;
 
     @Bean
+    @Primary
     @ConditionalOnProperty(name = "seezoon.file.store-type", havingValue = "none")
     public FileHandler noneFileHandler() {
         return new NoneFileHandler();
     }
 
     @Bean
-    @Primary
     @ConditionalOnProperty(name = "seezoon.file.store-type", havingValue = "local")
     public FileHandler localFileHandler() {
         return new LocalFileHandler(seezoonProperties.getFile().getLocal());
