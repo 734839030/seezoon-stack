@@ -17,5 +17,4 @@ if [ $pid -eq 0 ]; then
   exit 1
 else
   echo "${APP_NAME} is running,pid is $pid"
-  exit 0
 fi

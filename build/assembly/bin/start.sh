@@ -54,7 +54,7 @@ if [ "${daemon}" = true ]; then
 else
   $RUN_JAVA -jar ${JAVA_OPTS} ${ROOT}/bin/${APP_NAME}*.jar ${SERVER_OTPS} >logs/catalina.out 2>&1
 fi
-sleep 3
+sleep 60
 ./bin/check.sh
 tail -n 20 logs/catalina.out
 echo "Application Started"
