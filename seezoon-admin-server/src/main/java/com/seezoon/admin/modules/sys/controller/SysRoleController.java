@@ -23,11 +23,11 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 
 /**
- * 角色表
+ * 角色管理
  *
  * @author seezoon-generator 2021年1月25日 上午12:14:26
  */
-@Api(tags = "角色表")
+@Api(tags = "角色管理")
 @RestController
 @RequestMapping("/sys/role")
 @RequiredArgsConstructor

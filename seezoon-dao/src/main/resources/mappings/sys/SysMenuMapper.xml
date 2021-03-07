@@ -49,6 +49,9 @@
             <if test="parentIds != null and parentIds != ''">
                 and t.parent_ids like concat('%',#{parentIds},'%')
             </if>
+            <if test="status != null">
+                and t.status = #{status}
+            </if>
             <if test="name != null and name != ''">
                 and t.name = #{name}
             </if>

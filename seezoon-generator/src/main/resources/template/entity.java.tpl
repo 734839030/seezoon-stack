@@ -24,7 +24,7 @@ import lombok.ToString;
  *
  * @author seezoon-generator ${.now}
  */
-@ApiModel
+@ApiModel(value = "${menuName!}")
 @Getter
 @Setter
 @ToString

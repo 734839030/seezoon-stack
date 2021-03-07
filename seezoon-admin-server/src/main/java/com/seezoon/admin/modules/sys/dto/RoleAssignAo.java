@@ -11,7 +11,7 @@ import lombok.Setter;
 /**
  * @author hdf
  */
-@ApiModel
+@ApiModel(value = "角色分配")
 @Getter
 @Setter
 public class RoleAssignAo {

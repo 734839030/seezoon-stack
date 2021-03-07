@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import com.github.pagehelper.PageSerializable;
 import com.seezoon.admin.framework.file.FileService;
 import com.seezoon.admin.modules.sys.security.AdminPasswordEncoder;
+import com.seezoon.admin.modules.sys.security.SecurityUtils;
 import com.seezoon.admin.modules.sys.service.SysUserService;
 import com.seezoon.dao.modules.sys.entity.SysUser;
 import com.seezoon.dao.modules.sys.entity.SysUserCondition;
@@ -70,6 +71,9 @@ public class SysUserController extends BaseController {
     @PreAuthorize("hasAuthority('sys:user:update')")
     @PostMapping(value = "/update")
     public Result update(@Valid @RequestBody SysUser sysUser) {
+        if (SecurityUtils.isSuperAdmin(sysUser.getId()) && !SecurityUtils.isSuperAdmin()) {
+            return Result.error("只有系统管理员才能修改");
+        }
         sysUser.setPassword(AdminPasswordEncoder.encode(sysUser.getPassword()));
         int count = sysUserService.updateSelective(sysUser);
         return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.UPDATE_ERROR, count);
@@ -79,6 +83,9 @@ public class SysUserController extends BaseController {
     @PreAuthorize("hasAuthority('sys:user:delete')")
     @PostMapping(value = "/delete")
     public Result delete(@RequestParam Integer id) {
+        if (SecurityUtils.isSuperAdmin(id)) {
+            return Result.error("系统管理员不能删除");
+        }
         int count = sysUserService.delete(id);
         return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.DELETE_ERROR, count);
     }

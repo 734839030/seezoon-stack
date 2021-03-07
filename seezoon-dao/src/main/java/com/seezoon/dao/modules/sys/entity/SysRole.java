@@ -15,11 +15,11 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
- * 角色表
+ * 角色
  *
  * @author seezoon-generator 2021年1月25日 上午12:14:26
  */
-@ApiModel
+@ApiModel(value = "角色")
 @Getter
 @Setter
 @ToString
