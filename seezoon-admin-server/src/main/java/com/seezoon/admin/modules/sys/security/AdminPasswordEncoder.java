@@ -17,6 +17,10 @@ public class AdminPasswordEncoder {
         }
     }
 
+    public static boolean matches(CharSequence rawPassword, String encodedPassword) {
+        return getEncoder().matches(rawPassword, encodedPassword);
+    }
+
     public static PasswordEncoder getEncoder() {
         return new BCryptPasswordEncoder();
     }

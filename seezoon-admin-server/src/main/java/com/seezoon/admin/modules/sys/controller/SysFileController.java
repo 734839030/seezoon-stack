@@ -93,7 +93,7 @@ public class SysFileController extends BaseController {
 
     @ApiOperation(value = "批量上传")
     @PreAuthorize("hasAuthority('sys:file:upload')")
-    @PostMapping(value = "/uploadBatch")
+    @PostMapping(value = "/upload_batch")
     public Result<List<FileInfo>> upload(@NotEmpty @RequestParam MultipartFile[] files) {
         List<FileInfo> fileInfos = Lists.newArrayList();
         Arrays.stream(files).forEach((file) -> {

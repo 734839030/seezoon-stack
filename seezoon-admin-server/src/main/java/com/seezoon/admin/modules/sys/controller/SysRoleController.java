@@ -92,7 +92,7 @@ public class SysRoleController extends BaseController {
 
     @ApiOperation(value = "检查名称是否重复")
     @PreAuthorize("hasAuthority('sys:role:query')")
-    @PostMapping(value = "/checkName")
+    @PostMapping(value = "/check_name")
     public Result<Boolean> checkName(@RequestParam(required = false) Integer id, @NotBlank @RequestParam String name) {
         SysRole sysRole = this.sysRoleService.findByName(name);
         return Result.ok(null == sysRole || Objects.equals(sysRole.getId(), id));

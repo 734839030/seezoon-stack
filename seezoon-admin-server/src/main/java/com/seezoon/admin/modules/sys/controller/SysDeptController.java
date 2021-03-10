@@ -79,7 +79,7 @@ public class SysDeptController extends BaseController {
 
     @ApiOperation(value = "检查是否重复")
     @PreAuthorize("hasAuthority('sys:dept:query')")
-    @PostMapping(value = "/checkName")
+    @PostMapping(value = "/check_name")
     public Result<Boolean> checkName(@RequestParam(required = false) Integer id, @NotBlank @RequestParam String name,
         @NotNull @RequestParam(defaultValue = "0") Integer parentId) {
         SysDept sysDept = this.sysDeptService.findByNameAndParentId(name, parentId);

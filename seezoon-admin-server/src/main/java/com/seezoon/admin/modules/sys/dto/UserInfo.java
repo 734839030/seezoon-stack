@@ -27,7 +27,13 @@ public class UserInfo implements Serializable {
     private final String name;
     @ApiModelProperty(value = "部门名称")
     private String deptName;
-    @ApiModelProperty(value = "头像")
+    @ApiModelProperty(value = "头像存储地址")
     private String photo;
+    @ApiModelProperty(value = "头像")
+    private String photoUrl;
+    @ApiModelProperty(value = "手机号")
+    private String mobile;
+    @ApiModelProperty(value = "邮箱")
+    private String email;
 
 }

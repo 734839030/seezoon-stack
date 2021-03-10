@@ -52,7 +52,7 @@ public class SysDictController extends BaseController {
     }
 
     @ApiOperation(value = "查询所有分类")
-    @GetMapping("/queryTypes")
+    @GetMapping("/query_types")
     public Result<List<String>> queryTypes() {
         return Result.ok(sysDictService.findTypes());
     }
@@ -83,7 +83,7 @@ public class SysDictController extends BaseController {
 
     @ApiOperation(value = "检查是否重复")
     @PreAuthorize("hasAuthority('sys:dict:query')")
-    @PostMapping(value = "/checkTypeAndCode")
+    @PostMapping(value = "/check_type_and_code")
     public Result<Boolean> checkTypeAndCode(@RequestParam(required = false) Integer id,
         @NotBlank @RequestParam String type, @NotBlank @RequestParam String code) {
         SysDict sysDict = this.sysDictService.findByTypeAndCode(type, code);

@@ -74,7 +74,7 @@ public class SysParamController extends BaseController {
 
     @ApiOperation(value = "检查是否重复")
     @PreAuthorize("hasAuthority('sys:param:query')")
-    @PostMapping(value = "/checkParamKey")
+    @PostMapping(value = "/check_param_key")
     public Result<Boolean> checkParamKey(@RequestParam(required = false) Integer id,
         @NotBlank @RequestParam String paramKey) {
         SysParam sysParam = this.sysParamService.findByParamKey(paramKey);

@@ -89,6 +89,7 @@ public class SysFileService extends AbstractCrudService<SysFileDao, SysFile, Str
                 .collect(Collectors.toMap(SysFile::getRelativePath, Function.identity(), (k1, k2) -> k1));
             for (String relativePath : relativePathArray) {
                 SysFile sysFile = relativePathMapFile.get(relativePath);
+                Assert.notNull(sysFile, "file not exists");
                 fileInfos.add(new FileInfo(fileService.getUrl(sysFile.getRelativePath()), sysFile.getRelativePath(),
                     sysFile.getName()));
             }

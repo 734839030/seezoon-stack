@@ -11,7 +11,7 @@
  Target Server Version : 50633
  File Encoding         : 65001
 
- Date: 08/02/2021 00:41:31
+ Date: 11/03/2021 02:01:50
 */
 
 SET NAMES utf8mb4;
@@ -38,13 +38,14 @@ CREATE TABLE `sys_dept` (
   UNIQUE KEY `parent_id_and_ name` (`parent_id`,`name`) USING BTREE,
   KEY `create_by` (`create_by`),
   KEY `create_time` (`create_time`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT COMMENT='部门';
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT COMMENT='部门';
 
 -- ----------------------------
 -- Records of sys_dept
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_dept` VALUES (11, 0, '/0/', '1111111111', 10, NULL, NULL, NULL, '2021-01-14 01:03:33', NULL, '2021-01-15 03:20:26', NULL);
+INSERT INTO `sys_dept` VALUES (11, 0, '/0/', '总公司', 10, NULL, NULL, NULL, '2021-01-14 01:03:33', NULL, '2021-03-06 00:28:58', NULL);
+INSERT INTO `sys_dept` VALUES (20, 11, '/0/11/', '分公司1', 1000, NULL, NULL, NULL, '2021-03-06 00:29:17', NULL, '2021-03-06 00:29:17', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -120,6 +121,7 @@ INSERT INTO `sys_file` VALUES ('1372d8ae101340dca190fb749cd799f7', '2 (7).jpg', 
 INSERT INTO `sys_file` VALUES ('15abcfe8f03642e198ee3c13d08ee800', '1 (1).jpeg', 'image/jpeg', 882, '/2021/1/20/15abcfe8f03642e198ee3c13d08ee800.jpeg', NULL, '2021-01-20 01:23:06', NULL, '2021-01-20 01:23:06', NULL);
 INSERT INTO `sys_file` VALUES ('172fe3e10e4042fe9a180f47415d25df', '001 (1).png', 'image/png', 173918, '/2021/1/19/172fe3e10e4042fe9a180f47415d25df.png', NULL, '2021-01-19 23:24:22', NULL, '2021-01-19 23:24:22', NULL);
 INSERT INTO `sys_file` VALUES ('19e127a69de14a608db2ab444e01a30e', '1.jpg', 'image/jpeg', 242908, '/2021/1/20/19e127a69de14a608db2ab444e01a30e.jpg', NULL, '2021-01-20 01:52:45', NULL, '2021-01-20 01:52:45', NULL);
+INSERT INTO `sys_file` VALUES ('1a10a7441fa54b46bd630751a4f2211d', 'favicon (1).ico', 'image/vnd.microsoft.icon', 894, '/2021/3/3/1a10a7441fa54b46bd630751a4f2211d.ico', NULL, '2021-03-03 21:48:05', NULL, '2021-03-03 21:48:05', NULL);
 INSERT INTO `sys_file` VALUES ('1c53e7459a86485291c62e619d5383bc', 'themePluginConfig.js', 'text/javascript', 2116, '/2021/1/9/1c53e7459a86485291c62e619d5383bc.js', NULL, '2021-01-09 23:24:33', NULL, '2021-01-09 23:24:33', NULL);
 INSERT INTO `sys_file` VALUES ('1d210155179947b587a84391f0009eea', '1.jpg', 'image/jpeg', 242908, '/2021/1/22/1d210155179947b587a84391f0009eea.jpg', NULL, '2021-01-22 00:24:50', NULL, '2021-01-22 00:24:50', NULL);
 INSERT INTO `sys_file` VALUES ('1d6f64a619d142baa44700932bd833dc', '1 (2).jpg', 'image/jpeg', 242908, '/2021/1/20/1d6f64a619d142baa44700932bd833dc.jpg', NULL, '2021-01-20 22:55:05', NULL, '2021-01-20 22:55:05', NULL);
@@ -140,6 +142,7 @@ INSERT INTO `sys_file` VALUES ('3822095a4a484b4fa577f36549388c42', '1.jpg', 'ima
 INSERT INTO `sys_file` VALUES ('39b438f07de84e0987915f89f791bc8b', '1 (2).jpg', 'image/jpeg', 242908, '/2021/1/20/39b438f07de84e0987915f89f791bc8b.jpg', NULL, '2021-01-20 22:49:26', NULL, '2021-01-20 22:49:26', NULL);
 INSERT INTO `sys_file` VALUES ('3a4a56bcf5da44afa0fb8575515b6ad9', 'themePluginConfig.js', 'text/javascript', 2116, '/2021/1/10/3a4a56bcf5da44afa0fb8575515b6ad9.js', NULL, '2021-01-10 00:13:32', NULL, '2021-01-10 00:13:32', NULL);
 INSERT INTO `sys_file` VALUES ('3b96e4918d024e0ca8c74604cc8225e7', '1.jpg', 'image/jpeg', 242908, '/2021/1/19/3b96e4918d024e0ca8c74604cc8225e7.jpg', NULL, '2021-01-19 23:39:33', NULL, '2021-01-19 23:39:33', NULL);
+INSERT INTO `sys_file` VALUES ('3bcc72bc91e54a1f9a37b2542cb35bb0', '2+(8).jpg', 'image/jpeg', 115420, '/2021/3/3/3bcc72bc91e54a1f9a37b2542cb35bb0.jpg', NULL, '2021-03-03 23:28:21', NULL, '2021-03-03 23:28:21', NULL);
 INSERT INTO `sys_file` VALUES ('4249bdeaf0164a85877d82e9a0a17499', '1 (2).jpg', 'image/jpeg', 242908, '/2021/1/20/4249bdeaf0164a85877d82e9a0a17499.jpg', NULL, '2021-01-20 01:53:14', NULL, '2021-01-20 01:53:14', NULL);
 INSERT INTO `sys_file` VALUES ('42696c1d9be840fa926a8bc13a60281e', '1 (1).jpg', 'image/jpeg', 242908, '/2021/1/20/42696c1d9be840fa926a8bc13a60281e.jpg', NULL, '2021-01-20 01:42:53', NULL, '2021-01-20 01:42:53', NULL);
 INSERT INTO `sys_file` VALUES ('448a293c540f4715862ded2704bb1b48', '1.jpg', 'image/jpeg', 242908, '/2021/1/20/448a293c540f4715862ded2704bb1b48.jpg', NULL, '2021-01-20 01:50:11', NULL, '2021-01-20 01:50:11', NULL);
@@ -150,6 +153,7 @@ INSERT INTO `sys_file` VALUES ('4906f4cef4ee4c88b3019eaf6d0f9caf', '1 (2).jpg', 
 INSERT INTO `sys_file` VALUES ('4ccb07106417427887e40dc2758c244b', '1 (2).jpg', 'image/jpeg', 242908, '/2021/1/19/4ccb07106417427887e40dc2758c244b.jpg', NULL, '2021-01-19 23:52:44', NULL, '2021-01-19 23:52:44', NULL);
 INSERT INTO `sys_file` VALUES ('4e71546496a04e6881995083abac9aa4', '1.jpg', 'image/jpeg', 242908, '/2021/1/22/4e71546496a04e6881995083abac9aa4.jpg', NULL, '2021-01-22 00:26:34', NULL, '2021-01-22 00:26:34', NULL);
 INSERT INTO `sys_file` VALUES ('52c5f64ca7be4c4785348086d9258f44', '1 (2).jpg', 'image/jpeg', 242908, '/2021/1/20/52c5f64ca7be4c4785348086d9258f44.jpg', NULL, '2021-01-20 22:50:12', NULL, '2021-01-20 22:50:12', NULL);
+INSERT INTO `sys_file` VALUES ('52da250dff614b3faabf5f891233b20f', '2+(8).jpg', 'image/jpeg', 115420, '/2021/3/11/52da250dff614b3faabf5f891233b20f.jpg', NULL, '2021-03-11 00:52:05', NULL, '2021-03-11 00:52:05', NULL);
 INSERT INTO `sys_file` VALUES ('56c7b12417654b2784716ab7af3715af', '11.png', 'image/png', 38181, '/2021/1/22/56c7b12417654b2784716ab7af3715af.png', NULL, '2021-01-22 00:26:43', NULL, '2021-01-22 00:26:43', NULL);
 INSERT INTO `sys_file` VALUES ('577193bd325e43d5904e7c73329164d7', '1.jpg', 'image/jpeg', 242908, '/2021/1/20/577193bd325e43d5904e7c73329164d7.jpg', NULL, '2021-01-20 01:46:34', NULL, '2021-01-20 01:46:34', NULL);
 INSERT INTO `sys_file` VALUES ('58354e78f706434eb2d7de904a9f8852', '2 (3).jpg', 'image/jpeg', 115420, '/2021/1/20/58354e78f706434eb2d7de904a9f8852.jpg', NULL, '2021-01-20 01:52:49', NULL, '2021-01-20 01:52:49', NULL);
@@ -158,21 +162,26 @@ INSERT INTO `sys_file` VALUES ('5db97d7b813e4b40ab7588f06613857f', '1 (2).jpg', 
 INSERT INTO `sys_file` VALUES ('5dcd434519eb4f0498578d39205e1c73', '1.jpeg', 'image/jpeg', 111413, '/2021/1/20/5dcd434519eb4f0498578d39205e1c73.jpeg', NULL, '2021-01-20 23:10:59', NULL, '2021-01-20 23:10:59', NULL);
 INSERT INTO `sys_file` VALUES ('613bf391feb1424ba84f78eec2e242e6', '1.jpg', 'image/jpeg', 242908, '/2021/1/20/613bf391feb1424ba84f78eec2e242e6.jpg', NULL, '2021-01-20 01:50:23', NULL, '2021-01-20 01:50:23', NULL);
 INSERT INTO `sys_file` VALUES ('62b52640348c4a29a46644a57379b7aa', '1 (1).jpg', 'image/jpeg', 242908, '/2021/1/19/62b52640348c4a29a46644a57379b7aa.jpg', NULL, '2021-01-19 23:57:07', NULL, '2021-01-19 23:57:07', NULL);
+INSERT INTO `sys_file` VALUES ('630d06bcd6ba4169898a03a0f52dbc77', 'testName.txt', 'text/plain', 12, '/2021/3/3/630d06bcd6ba4169898a03a0f52dbc77.txt', NULL, '2021-03-03 23:16:35', NULL, '2021-03-03 23:16:35', NULL);
 INSERT INTO `sys_file` VALUES ('6798bbca0fe54f3e9e4537d2efe3863b', '1 (2).jpg', 'image/jpeg', 242908, '/2021/1/20/6798bbca0fe54f3e9e4537d2efe3863b.jpg', NULL, '2021-01-20 23:28:02', NULL, '2021-01-20 23:28:02', NULL);
 INSERT INTO `sys_file` VALUES ('6847245f3a6e483ab000355ce89fcb2b', '1.jpg', 'image/jpeg', 242908, '/2021/1/20/6847245f3a6e483ab000355ce89fcb2b.jpg', NULL, '2021-01-20 01:30:21', NULL, '2021-01-20 01:30:21', NULL);
 INSERT INTO `sys_file` VALUES ('698751481dbb445f9f80e33aebf1e1f6', '1 (2).jpg', 'image/jpeg', 242908, '/2021/1/19/698751481dbb445f9f80e33aebf1e1f6.jpg', NULL, '2021-01-19 23:25:24', NULL, '2021-01-19 23:25:24', NULL);
 INSERT INTO `sys_file` VALUES ('6c14cc0e0e274948b47376ce537b5aa0', '1 (1).jpg', 'image/jpeg', 242908, '/2021/1/20/6c14cc0e0e274948b47376ce537b5aa0.jpg', NULL, '2021-01-20 01:22:27', NULL, '2021-01-20 01:22:27', NULL);
 INSERT INTO `sys_file` VALUES ('6cb7362d896f47bd813472db5b656d59', '1 (2).jpg', 'image/jpeg', 242908, '/2021/1/20/6cb7362d896f47bd813472db5b656d59.jpg', NULL, '2021-01-20 01:43:37', NULL, '2021-01-20 01:43:37', NULL);
 INSERT INTO `sys_file` VALUES ('6d6b11be5752482287807fa8c745e6f0', '1.jpg', 'image/jpeg', 242908, '/2021/1/20/6d6b11be5752482287807fa8c745e6f0.jpg', NULL, '2021-01-20 01:57:23', NULL, '2021-01-20 01:57:23', NULL);
+INSERT INTO `sys_file` VALUES ('6e4d51f5b5934e5eaa29e515037e865f', '1 (1).jpg', 'image/jpeg', 242908, '/2021/3/11/6e4d51f5b5934e5eaa29e515037e865f.jpg', NULL, '2021-03-11 01:02:12', NULL, '2021-03-11 01:02:12', NULL);
 INSERT INTO `sys_file` VALUES ('6f36e39f667d4fa181406404de9a58a5', '1.jpeg', 'image/jpeg', 111413, '/2021/1/22/6f36e39f667d4fa181406404de9a58a5.jpeg', NULL, '2021-01-22 01:28:45', NULL, '2021-01-22 01:28:45', NULL);
 INSERT INTO `sys_file` VALUES ('70edb0b3220c4a2fabf575fb50b39423', '1 (2).jpg', 'image/jpeg', 242908, '/2021/1/19/70edb0b3220c4a2fabf575fb50b39423.jpg', NULL, '2021-01-19 23:23:12', NULL, '2021-01-19 23:23:12', NULL);
 INSERT INTO `sys_file` VALUES ('719030a2e7364decb93afb940b2a05f3', '2 (1).jpg', 'image/jpeg', 883, '/2021/1/22/719030a2e7364decb93afb940b2a05f3.jpg', NULL, '2021-01-22 00:24:56', NULL, '2021-01-22 00:24:56', NULL);
 INSERT INTO `sys_file` VALUES ('722674931ce246b6bf391f0adae288c9', '2 (3).jpg', 'image/jpeg', 115420, '/2021/1/20/722674931ce246b6bf391f0adae288c9.jpg', NULL, '2021-01-20 01:46:40', NULL, '2021-01-20 01:46:40', NULL);
 INSERT INTO `sys_file` VALUES ('72288969e1264d20abe11722123d66ec', '1.jpeg', 'image/jpeg', 111413, '/2021/1/22/72288969e1264d20abe11722123d66ec.jpeg', NULL, '2021-01-22 00:24:32', NULL, '2021-01-22 00:24:32', NULL);
+INSERT INTO `sys_file` VALUES ('73aff9b5770740228a385f7c9c2fd101', '2+(8).jpg', 'image/jpeg', 115420, '/2021/3/11/73aff9b5770740228a385f7c9c2fd101.jpg', NULL, '2021-03-11 00:51:09', NULL, '2021-03-11 00:51:09', NULL);
 INSERT INTO `sys_file` VALUES ('74ea3515f4fc41f68e9c5a1cf6877d4d', '1.jpg', 'image/jpeg', 242908, '/2021/1/20/74ea3515f4fc41f68e9c5a1cf6877d4d.jpg', NULL, '2021-01-20 01:24:14', NULL, '2021-01-20 01:24:14', NULL);
 INSERT INTO `sys_file` VALUES ('7e018773933b44798210f4b9c12158b6', '1.jpeg', 'image/jpeg', 111413, '/2021/1/19/7e018773933b44798210f4b9c12158b6.jpeg', NULL, '2021-01-19 23:59:02', NULL, '2021-01-19 23:59:02', NULL);
+INSERT INTO `sys_file` VALUES ('7f043ce3125a449da02aa1421cfd3bcd', '2+(8).jpg', 'image/jpeg', 115420, '/2021/3/11/7f043ce3125a449da02aa1421cfd3bcd.jpg', NULL, '2021-03-11 00:43:18', NULL, '2021-03-11 00:43:18', NULL);
 INSERT INTO `sys_file` VALUES ('826c3222b5b246dbae66204fba8757c6', '1.jpg', 'image/jpeg', 242908, '/2021/1/19/826c3222b5b246dbae66204fba8757c6.jpg', NULL, '2021-01-19 23:34:42', NULL, '2021-01-19 23:34:42', NULL);
 INSERT INTO `sys_file` VALUES ('83208660c39149f083afd098b4e812e5', '1 (2).jpg', 'image/jpeg', 242908, '/2021/1/22/83208660c39149f083afd098b4e812e5.jpg', NULL, '2021-01-22 00:24:21', NULL, '2021-01-22 00:24:21', NULL);
+INSERT INTO `sys_file` VALUES ('8454d10632c14d1fbbff333a52c17978', 'testName.txt', 'text/plain', 12, '/2021/3/3/8454d10632c14d1fbbff333a52c17978.txt', NULL, '2021-03-03 21:47:49', NULL, '2021-03-03 21:47:49', NULL);
 INSERT INTO `sys_file` VALUES ('86cea642b7054e7b87179d3ffba367d5', '1 (2).jpg', 'image/jpeg', 242908, '/2021/1/20/86cea642b7054e7b87179d3ffba367d5.jpg', NULL, '2021-01-20 01:12:47', NULL, '2021-01-20 01:12:47', NULL);
 INSERT INTO `sys_file` VALUES ('86e0aa4653bd415f937a8a6644ab0179', '1 (2).jpg', 'image/jpeg', 242908, '/2021/1/19/86e0aa4653bd415f937a8a6644ab0179.jpg', NULL, '2021-01-19 23:58:21', NULL, '2021-01-19 23:58:21', NULL);
 INSERT INTO `sys_file` VALUES ('910d208ecf414b66bcf5276e7ee01fa5', '2 (3).jpg', 'image/jpeg', 115420, '/2021/1/20/910d208ecf414b66bcf5276e7ee01fa5.jpg', NULL, '2021-01-20 01:50:07', NULL, '2021-01-20 01:50:07', NULL);
@@ -180,6 +189,7 @@ INSERT INTO `sys_file` VALUES ('991f1f24be9141e985ac72f282acfa48', '1 (2).jpg', 
 INSERT INTO `sys_file` VALUES ('9bde3f447e28417db28649d5eb347064', 'themePluginConfig.js', 'text/javascript', 2116, '/2021/1/9/9bde3f447e28417db28649d5eb347064.js', NULL, '2021-01-09 23:27:28', NULL, '2021-01-09 23:27:28', NULL);
 INSERT INTO `sys_file` VALUES ('9c2edd2cbb79415db94ec77f8da6d9f8', '1 (1).jpg', 'image/jpeg', 242908, '/2021/1/20/9c2edd2cbb79415db94ec77f8da6d9f8.jpg', NULL, '2021-01-20 01:22:06', NULL, '2021-01-20 01:22:06', NULL);
 INSERT INTO `sys_file` VALUES ('9ca00bad3c8f4ec1b921d350e15a04ba', '1 (2).jpg', 'image/jpeg', 242908, '/2021/1/20/9ca00bad3c8f4ec1b921d350e15a04ba.jpg', NULL, '2021-01-20 01:48:20', NULL, '2021-01-20 01:48:20', NULL);
+INSERT INTO `sys_file` VALUES ('9e14b7cd9ac646e1bb243e3946c956b4', '2+(8).jpg', 'image/jpeg', 115420, '/2021/3/11/9e14b7cd9ac646e1bb243e3946c956b4.jpg', NULL, '2021-03-11 00:44:26', NULL, '2021-03-11 00:44:26', NULL);
 INSERT INTO `sys_file` VALUES ('9fb33a064c114820a5a40a3c9a915e49', '1 (2).jpg', 'image/jpeg', 242908, '/2021/1/20/9fb33a064c114820a5a40a3c9a915e49.jpg', NULL, '2021-01-20 23:28:08', NULL, '2021-01-20 23:28:08', NULL);
 INSERT INTO `sys_file` VALUES ('9ff342a586a04d4c8bbe5da81198d9fe', '1 (2).jpg', 'image/jpeg', 242908, '/2021/1/20/9ff342a586a04d4c8bbe5da81198d9fe.jpg', NULL, '2021-01-20 01:43:56', NULL, '2021-01-20 01:43:56', NULL);
 INSERT INTO `sys_file` VALUES ('a170a579bc5f46ad855042c2774dd553', '1 (2).jpg', 'image/jpeg', 242908, '/2021/1/20/a170a579bc5f46ad855042c2774dd553.jpg', NULL, '2021-01-20 23:27:49', NULL, '2021-01-20 23:27:49', NULL);
@@ -208,6 +218,7 @@ INSERT INTO `sys_file` VALUES ('c3b0aa577ff5411fbc3b9445488f256c', '1.jpg', 'ima
 INSERT INTO `sys_file` VALUES ('c565d568efa44995bc889d6e6d2be34c', 'themePluginConfig.js', 'text/javascript', 2116, '/2021/1/10/c565d568efa44995bc889d6e6d2be34c.js', NULL, '2021-01-10 00:21:56', NULL, '2021-01-10 00:21:56', NULL);
 INSERT INTO `sys_file` VALUES ('cfe94691eeb14519b00f42ee67933ec8', '2 (3).jpg', 'image/jpeg', 115420, '/2021/1/20/cfe94691eeb14519b00f42ee67933ec8.jpg', NULL, '2021-01-20 01:44:31', NULL, '2021-01-20 01:44:31', NULL);
 INSERT INTO `sys_file` VALUES ('d55f9ed747334c29b74d60a2fcff6647', '1 (2).jpg', 'image/jpeg', 242908, '/2021/1/21/d55f9ed747334c29b74d60a2fcff6647.jpg', NULL, '2021-01-21 02:11:14', NULL, '2021-01-21 02:11:14', NULL);
+INSERT INTO `sys_file` VALUES ('d5c224bd31e741a8b5fad46ce74b8e7a', 'favicon.ico', 'image/vnd.microsoft.icon', 894, '/2021/3/11/d5c224bd31e741a8b5fad46ce74b8e7a.ico', NULL, '2021-03-11 00:54:06', NULL, '2021-03-11 00:54:06', NULL);
 INSERT INTO `sys_file` VALUES ('d8e286da2b1d476aa098d621221495c3', 'plugin.config.js', 'text/javascript', 3507, '/2021/1/9/d8e286da2b1d476aa098d621221495c3.js', NULL, '2021-01-09 23:30:10', NULL, '2021-01-09 23:30:10', NULL);
 INSERT INTO `sys_file` VALUES ('dde744cc7ede442b9be9c60aeeed2354', '3.jpg', 'image/jpeg', 139720, '/2021/1/20/dde744cc7ede442b9be9c60aeeed2354.jpg', NULL, '2021-01-20 23:30:45', NULL, '2021-01-20 23:30:45', NULL);
 INSERT INTO `sys_file` VALUES ('e4d0a06f3b7a4e84b657448f2b15252f', '2.png', 'image/png', 814531, '/2021/1/20/e4d0a06f3b7a4e84b657448f2b15252f.png', NULL, '2021-01-20 01:51:31', NULL, '2021-01-20 01:51:31', NULL);
@@ -245,21 +256,110 @@ CREATE TABLE `sys_menu` (
   `update_time` datetime NOT NULL COMMENT '更新时间',
   `remarks` varchar(255) DEFAULT NULL COMMENT '备注信息',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `parent_and_name` (`parent_id`,`name`) USING BTREE,
   KEY `parent_id` (`parent_id`) USING BTREE,
   KEY `parent_ids` (`parent_ids`(191)),
   KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COMMENT='菜单管理';
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COMMENT='菜单管理';
 
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_menu` VALUES (1, 0, '/0/', '测试目录', 1010, NULL, NULL, 1, NULL, 0, 'p1', NULL, '2021-02-01 01:31:39', NULL, '2021-02-03 02:21:54', NULL);
-INSERT INTO `sys_menu` VALUES (2, 1, '/0/1/', '菜单1', 0, NULL, NULL, 3, 'icon', 1, 'p2', NULL, '2021-02-01 01:32:25', NULL, '2021-02-07 03:04:30', NULL);
-INSERT INTO `sys_menu` VALUES (3, 1, '/0/1/', '菜单2', 10, NULL, NULL, 3, NULL, 1, NULL, NULL, '2021-02-07 01:55:34', NULL, '2021-02-07 01:55:34', NULL);
-INSERT INTO `sys_menu` VALUES (4, 3, '/0/1/3/', '添加', 10, NULL, NULL, 3, NULL, 1, NULL, NULL, '2021-02-07 01:56:04', NULL, '2021-02-07 01:56:04', NULL);
-INSERT INTO `sys_menu` VALUES (5, 4, '/0/1/3/4/', '11111', 10, NULL, NULL, 1, NULL, 1, NULL, NULL, '2021-02-07 03:05:38', NULL, '2021-02-07 03:05:38', NULL);
+INSERT INTO `sys_menu` VALUES (6, 0, '/0/', '系统管理', 10, NULL, NULL, 1, 'ion:settings-outline', 1, NULL, NULL, '2021-03-03 23:49:58', NULL, '2021-03-04 00:46:16', '');
+INSERT INTO `sys_menu` VALUES (7, 6, '/0/6/', '部门管理', 10, '/sys/dept', 'main', 2, 'clarity:organization-line', 1, 'sys:dept:query', NULL, '2021-03-04 00:55:33', NULL, '2021-03-06 00:35:13', NULL);
+INSERT INTO `sys_menu` VALUES (8, 0, '/0/', '首页', 9, '/sys/home', 'main', 2, 'bx:bx-home', 1, NULL, NULL, '2021-03-04 01:08:27', NULL, '2021-03-04 01:08:27', NULL);
+INSERT INTO `sys_menu` VALUES (9, 6, '/0/6/', '用户管理', 1000, '/sys/user', 'main', 2, 'ant-design:user-switch-outlined', 1, 'sys:user:query', NULL, '2021-03-04 22:25:41', NULL, '2021-03-06 00:34:49', NULL);
+INSERT INTO `sys_menu` VALUES (10, 6, '/0/6/', '角色管理', 1010, '/sys/role', 'main', 2, 'carbon:user-role', 1, 'sys:role:query', NULL, '2021-03-04 22:26:30', NULL, '2021-03-06 00:52:45', NULL);
+INSERT INTO `sys_menu` VALUES (11, 6, '/0/6/', '菜单管理', 1019, '/sys/menu', 'main', 2, 'ic:sharp-menu-book', 1, 'sys:menu:query', NULL, '2021-03-04 22:27:15', NULL, '2021-03-06 00:52:54', NULL);
+INSERT INTO `sys_menu` VALUES (12, 6, '/0/6/', '系统参数', 1020, '/sys/param', 'main', 2, 'zmdi:code-setting', 1, 'sys:param:query', NULL, '2021-03-04 22:27:45', NULL, '2021-03-06 00:53:03', NULL);
+INSERT INTO `sys_menu` VALUES (13, 6, '/0/6/', '系统字典', 1030, '/sys/dict', 'main', 2, 'raphael:books', 1, 'sys:dict:query', NULL, '2021-03-04 22:29:43', NULL, '2021-03-06 00:53:14', NULL);
+INSERT INTO `sys_menu` VALUES (14, 6, '/0/6/', '文件管理', 1040, '/sys/file', 'main', 2, 'akar-icons:file', 1, 'sys:file:query', NULL, '2021-03-04 22:30:25', NULL, '2021-03-06 00:53:22', NULL);
+INSERT INTO `sys_menu` VALUES (17, 7, '/0/6/7/', '添加', 1000, NULL, 'main', 3, NULL, 1, 'sys:dept:save', NULL, '2021-03-07 23:51:47', NULL, '2021-03-08 00:42:09', NULL);
+INSERT INTO `sys_menu` VALUES (18, 7, '/0/6/7/', '修改', 1010, NULL, 'main', 3, NULL, 1, 'sys:dept:update', NULL, '2021-03-07 23:52:14', NULL, '2021-03-07 23:52:14', NULL);
+INSERT INTO `sys_menu` VALUES (19, 7, '/0/6/7/', '删除', 1020, NULL, 'main', 3, NULL, 1, 'sys:dept:delete', NULL, '2021-03-07 23:52:50', NULL, '2021-03-07 23:52:50', NULL);
+INSERT INTO `sys_menu` VALUES (20, 9, '/0/6/9/', '添加', 1000, NULL, 'main', 3, NULL, 1, 'sys:user:save', NULL, '2021-03-07 23:54:06', NULL, '2021-03-07 23:54:06', NULL);
+INSERT INTO `sys_menu` VALUES (21, 9, '/0/6/9/', '修改', 1020, NULL, 'main', 3, NULL, 1, 'sys:user:update', NULL, '2021-03-07 23:54:25', NULL, '2021-03-07 23:57:30', NULL);
+INSERT INTO `sys_menu` VALUES (22, 9, '/0/6/9/', '删除', 1030, NULL, 'main', 3, NULL, 1, 'sys:user:delete', NULL, '2021-03-07 23:54:47', NULL, '2021-03-07 23:54:47', NULL);
+INSERT INTO `sys_menu` VALUES (25, 10, '/0/6/10/', '添加', 1000, NULL, 'main', 3, NULL, 1, 'sys:role:save', NULL, '2021-03-07 23:58:04', NULL, '2021-03-07 23:58:04', NULL);
+INSERT INTO `sys_menu` VALUES (26, 10, '/0/6/10/', '修改', 1020, NULL, 'main', 3, NULL, 1, 'sys:role:update', NULL, '2021-03-07 23:58:27', NULL, '2021-03-07 23:58:27', NULL);
+INSERT INTO `sys_menu` VALUES (27, 10, '/0/6/10/', '分配', 1030, NULL, 'main', 3, NULL, 1, 'sys:role:assign', NULL, '2021-03-07 23:59:34', NULL, '2021-03-07 23:59:34', NULL);
+INSERT INTO `sys_menu` VALUES (28, 10, '/0/6/10/', '删除', 1040, NULL, 'main', 3, NULL, 1, 'sys:role:delete', NULL, '2021-03-07 23:59:58', NULL, '2021-03-07 23:59:58', NULL);
+INSERT INTO `sys_menu` VALUES (29, 11, '/0/6/11/', '添加', 1000, NULL, 'main', 3, NULL, 1, 'sys:menu:save', NULL, '2021-03-08 00:00:42', NULL, '2021-03-08 00:00:42', NULL);
+INSERT INTO `sys_menu` VALUES (30, 11, '/0/6/11/', '修改', 1020, NULL, 'main', 3, NULL, 1, 'sys:menu:update', NULL, '2021-03-08 00:01:08', NULL, '2021-03-08 00:01:08', NULL);
+INSERT INTO `sys_menu` VALUES (31, 11, '/0/6/11/', '删除', 1030, NULL, 'main', 3, NULL, 0, 'sys:menu:delete', NULL, '2021-03-08 00:01:33', NULL, '2021-03-08 01:07:31', NULL);
+INSERT INTO `sys_menu` VALUES (32, 12, '/0/6/12/', '添加', 1000, NULL, 'main', 3, NULL, 1, 'sys:param:save', NULL, '2021-03-08 00:02:00', NULL, '2021-03-08 00:02:00', NULL);
+INSERT INTO `sys_menu` VALUES (33, 12, '/0/6/12/', '修改', 1020, NULL, 'main', 3, NULL, 1, 'sys:param:update', NULL, '2021-03-08 00:02:29', NULL, '2021-03-08 00:02:29', NULL);
+INSERT INTO `sys_menu` VALUES (34, 12, '/0/6/12/', '删除', 1030, NULL, 'main', 3, NULL, 1, 'sys:param:delete', NULL, '2021-03-08 00:02:53', NULL, '2021-03-08 00:02:59', NULL);
+INSERT INTO `sys_menu` VALUES (35, 13, '/0/6/13/', '添加', 1000, NULL, 'main', 3, NULL, 1, 'sys:dict:save', NULL, '2021-03-08 00:03:25', NULL, '2021-03-08 00:03:25', NULL);
+INSERT INTO `sys_menu` VALUES (36, 13, '/0/6/13/', '修改', 1020, NULL, 'main', 3, NULL, 1, 'sys:dict:update', NULL, '2021-03-08 00:03:45', NULL, '2021-03-08 00:04:16', NULL);
+INSERT INTO `sys_menu` VALUES (37, 13, '/0/6/13/', '删除', 1030, NULL, 'main', 3, NULL, 1, 'sys:dict:delete', NULL, '2021-03-08 00:04:09', NULL, '2021-03-08 00:04:09', NULL);
+INSERT INTO `sys_menu` VALUES (38, 14, '/0/6/14/', '上传', 1000, NULL, 'main', 3, NULL, 1, 'sys:file:save', NULL, '2021-03-08 00:05:18', NULL, '2021-03-08 00:05:18', NULL);
+INSERT INTO `sys_menu` VALUES (39, 14, '/0/6/14/', '删除', 1030, NULL, 'main', 3, NULL, 1, 'sys:file:delete', NULL, '2021-03-08 00:05:40', NULL, '2021-03-08 00:05:40', NULL);
+INSERT INTO `sys_menu` VALUES (40, 14, '/0/6/14/', '下载', 1020, NULL, 'main', 3, NULL, 1, 'sys:file:download', NULL, '2021-03-08 00:06:28', NULL, '2021-03-08 00:06:28', NULL);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for sys_menu_copy1
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_menu_copy1`;
+CREATE TABLE `sys_menu_copy1` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `parent_id` int(11) NOT NULL COMMENT '上级',
+  `parent_ids` varchar(255) NOT NULL COMMENT '所有父级编号',
+  `name` varchar(50) NOT NULL COMMENT '名称',
+  `sort` int(10) NOT NULL COMMENT '排序',
+  `url` varchar(255) DEFAULT NULL COMMENT '地址',
+  `target` varchar(20) DEFAULT NULL COMMENT '目标位置main,_blank',
+  `type` tinyint(4) NOT NULL COMMENT '1:目录2:菜单3:按钮',
+  `icon` varchar(50) DEFAULT NULL COMMENT '图标',
+  `status` tinyint(4) NOT NULL COMMENT '状态1.启用,0.停用',
+  `permission` varchar(200) DEFAULT NULL COMMENT '权限标识',
+  `create_by` int(11) DEFAULT NULL COMMENT '创建者',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_by` int(32) DEFAULT NULL COMMENT '更新者',
+  `update_time` datetime NOT NULL COMMENT '更新时间',
+  `remarks` varchar(255) DEFAULT NULL COMMENT '备注信息',
+  PRIMARY KEY (`id`),
+  KEY `parent_id` (`parent_id`) USING BTREE,
+  KEY `parent_ids` (`parent_ids`(191)),
+  KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COMMENT='菜单管理';
+
+-- ----------------------------
+-- Records of sys_menu_copy1
+-- ----------------------------
+BEGIN;
+INSERT INTO `sys_menu_copy1` VALUES (6, 0, '/0/', '系统管理', 10, NULL, NULL, 1, 'ion:settings-outline', 1, NULL, NULL, '2021-03-03 23:49:58', NULL, '2021-03-04 00:46:16', '');
+INSERT INTO `sys_menu_copy1` VALUES (7, 6, '/0/6/', '部门管理', 10, '/sys/dept', 'main', 2, 'clarity:organization-line', 1, 'sys:dept:query', NULL, '2021-03-04 00:55:33', NULL, '2021-03-06 00:35:13', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (8, 0, '/0/', '首页', 9, '/sys/home', 'main', 2, 'bx:bx-home', 1, NULL, NULL, '2021-03-04 01:08:27', NULL, '2021-03-04 01:08:27', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (9, 6, '/0/6/', '用户管理', 1000, '/sys/user', 'main', 2, 'ant-design:user-switch-outlined', 1, 'sys:user:query', NULL, '2021-03-04 22:25:41', NULL, '2021-03-06 00:34:49', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (10, 6, '/0/6/', '角色管理', 1010, '/sys/role', 'main', 2, 'carbon:user-role', 1, 'sys:role:query', NULL, '2021-03-04 22:26:30', NULL, '2021-03-06 00:52:45', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (11, 6, '/0/6/', '菜单管理', 1019, '/sys/menu', 'main', 2, 'ic:sharp-menu-book', 1, 'sys:menu:query', NULL, '2021-03-04 22:27:15', NULL, '2021-03-06 00:52:54', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (12, 6, '/0/6/', '系统参数', 1020, '/sys/param', 'main', 2, 'zmdi:code-setting', 1, 'sys:param:query', NULL, '2021-03-04 22:27:45', NULL, '2021-03-06 00:53:03', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (13, 6, '/0/6/', '系统字典', 1030, '/sys/dict', 'main', 2, 'raphael:books', 1, 'sys:dict:query', NULL, '2021-03-04 22:29:43', NULL, '2021-03-06 00:53:14', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (14, 6, '/0/6/', '文件管理', 1040, '/sys/file', 'main', 2, 'akar-icons:file', 1, 'sys:file:query', NULL, '2021-03-04 22:30:25', NULL, '2021-03-06 00:53:22', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (17, 7, '/0/6/7/', '添加', 1000, NULL, 'main', 3, NULL, 1, 'sys:dept:save', NULL, '2021-03-07 23:51:47', NULL, '2021-03-08 00:42:09', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (18, 7, '/0/6/7/', '修改', 1010, NULL, 'main', 3, NULL, 1, 'sys:dept:update', NULL, '2021-03-07 23:52:14', NULL, '2021-03-07 23:52:14', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (19, 7, '/0/6/7/', '删除', 1020, NULL, 'main', 3, NULL, 1, 'sys:dept:delete', NULL, '2021-03-07 23:52:50', NULL, '2021-03-07 23:52:50', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (20, 9, '/0/6/9/', '添加', 1000, NULL, 'main', 3, NULL, 1, 'sys:user:save', NULL, '2021-03-07 23:54:06', NULL, '2021-03-07 23:54:06', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (21, 9, '/0/6/9/', '修改', 1020, NULL, 'main', 3, NULL, 1, 'sys:user:update', NULL, '2021-03-07 23:54:25', NULL, '2021-03-07 23:57:30', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (22, 9, '/0/6/9/', '删除', 1030, NULL, 'main', 3, NULL, 1, 'sys:user:delete', NULL, '2021-03-07 23:54:47', NULL, '2021-03-07 23:54:47', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (25, 10, '/0/6/10/', '添加', 1000, NULL, 'main', 3, NULL, 1, 'sys:role:save', NULL, '2021-03-07 23:58:04', NULL, '2021-03-07 23:58:04', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (26, 10, '/0/6/10/', '修改', 1020, NULL, 'main', 3, NULL, 1, 'sys:role:update', NULL, '2021-03-07 23:58:27', NULL, '2021-03-07 23:58:27', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (27, 10, '/0/6/10/', '分配', 1030, NULL, 'main', 3, NULL, 1, 'sys:role:assign', NULL, '2021-03-07 23:59:34', NULL, '2021-03-07 23:59:34', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (28, 10, '/0/6/10/', '删除', 1040, NULL, 'main', 3, NULL, 1, 'sys:role:delete', NULL, '2021-03-07 23:59:58', NULL, '2021-03-07 23:59:58', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (29, 11, '/0/6/11/', '添加', 1000, NULL, 'main', 3, NULL, 1, 'sys:menu:save', NULL, '2021-03-08 00:00:42', NULL, '2021-03-08 00:00:42', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (30, 11, '/0/6/11/', '修改', 1020, NULL, 'main', 3, NULL, 1, 'sys:menu:update', NULL, '2021-03-08 00:01:08', NULL, '2021-03-08 00:01:08', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (31, 11, '/0/6/11/', '删除', 1030, NULL, 'main', 3, NULL, 0, 'sys:menu:delete', NULL, '2021-03-08 00:01:33', NULL, '2021-03-08 01:07:31', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (32, 12, '/0/6/12/', '添加', 1000, NULL, 'main', 3, NULL, 1, 'sys:param:save', NULL, '2021-03-08 00:02:00', NULL, '2021-03-08 00:02:00', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (33, 12, '/0/6/12/', '修改', 1020, NULL, 'main', 3, NULL, 1, 'sys:param:update', NULL, '2021-03-08 00:02:29', NULL, '2021-03-08 00:02:29', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (34, 12, '/0/6/12/', '删除', 1030, NULL, 'main', 3, NULL, 1, 'sys:param:delete', NULL, '2021-03-08 00:02:53', NULL, '2021-03-08 00:02:59', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (35, 13, '/0/6/13/', '添加', 1000, NULL, 'main', 3, NULL, 1, 'sys:dict:save', NULL, '2021-03-08 00:03:25', NULL, '2021-03-08 00:03:25', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (36, 13, '/0/6/13/', '修改', 1020, NULL, 'main', 3, NULL, 1, 'sys:dict:update', NULL, '2021-03-08 00:03:45', NULL, '2021-03-08 00:04:16', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (37, 13, '/0/6/13/', '删除', 1030, NULL, 'main', 3, NULL, 1, 'sys:dict:delete', NULL, '2021-03-08 00:04:09', NULL, '2021-03-08 00:04:09', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (38, 14, '/0/6/14/', '上传', 1000, NULL, 'main', 3, NULL, 1, 'sys:file:save', NULL, '2021-03-08 00:05:18', NULL, '2021-03-08 00:05:18', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (39, 14, '/0/6/14/', '删除', 1030, NULL, 'main', 3, NULL, 1, 'sys:file:delete', NULL, '2021-03-08 00:05:40', NULL, '2021-03-08 00:05:40', NULL);
+INSERT INTO `sys_menu_copy1` VALUES (40, 14, '/0/6/14/', '下载', 1020, NULL, 'main', 3, NULL, 1, 'sys:file:download', NULL, '2021-03-08 00:06:28', NULL, '2021-03-08 00:06:28', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -281,7 +381,7 @@ CREATE TABLE `sys_param` (
   UNIQUE KEY `param_key` (`param_key`) USING BTREE,
   KEY `create_by` (`create_by`),
   KEY `create_date` (`create_time`)
-) ENGINE=InnoDB AUTO_INCREMENT=222 DEFAULT CHARSET=utf8mb4 COMMENT='系统参数';
+) ENGINE=InnoDB AUTO_INCREMENT=216 DEFAULT CHARSET=utf8mb4 COMMENT='系统参数';
 
 -- ----------------------------
 -- Records of sys_param
@@ -469,7 +569,6 @@ INSERT INTO `sys_param` VALUES (200, 'key-n-198', 'key-k198', '1', 1, 1, '2020-1
 INSERT INTO `sys_param` VALUES (201, 'key-n-199', 'key-k199', '1', 1, 1, '2020-12-01 00:09:18', 1, '2020-12-21 01:55:49', NULL);
 INSERT INTO `sys_param` VALUES (203, '黄登峰', '1', '1', 1, NULL, '2020-12-23 12:46:32', NULL, '2020-12-23 12:46:32', NULL);
 INSERT INTO `sys_param` VALUES (215, '111', '黄', '11', 1, NULL, '2020-12-23 12:52:29', NULL, '2021-01-15 03:11:25', '111');
-INSERT INTO `sys_param` VALUES (221, '1', '2', '1', 1, NULL, '2020-12-23 23:22:06', NULL, '2020-12-31 01:45:23', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -493,15 +592,15 @@ CREATE TABLE `sys_role` (
   UNIQUE KEY `code` (`code`) USING BTREE,
   KEY `create_by` (`create_by`),
   KEY `data_scope` (`data_scope`)
-) ENGINE=InnoDB AUTO_INCREMENT=129 DEFAULT CHARSET=utf8mb4 COMMENT='角色表';
+) ENGINE=InnoDB AUTO_INCREMENT=128 DEFAULT CHARSET=utf8mb4 COMMENT='角色表';
 
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_role` VALUES (125, '222', '系统管理员', 3, 1, NULL, '2021-01-26 01:19:35', NULL, '2021-01-26 01:19:35', NULL);
+INSERT INTO `sys_role` VALUES (125, '222', '系统管理员', 3, 1, NULL, '2021-01-26 01:19:35', NULL, '2021-03-05 00:05:58', NULL);
 INSERT INTO `sys_role` VALUES (126, '333', '管理员222', 4, 1, NULL, '2021-01-26 01:19:51', NULL, '2021-01-27 01:29:27', NULL);
-INSERT INTO `sys_role` VALUES (127, '44', '部门管理员', 0, 1, NULL, '2021-01-26 01:22:33', NULL, '2021-02-07 23:49:12', NULL);
+INSERT INTO `sys_role` VALUES (127, '44', '部门管理员', 0, 1, NULL, '2021-01-26 01:22:33', NULL, '2021-03-03 00:21:07', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -538,9 +637,12 @@ CREATE TABLE `sys_role_menu` (
 -- Records of sys_role_menu
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_role_menu` VALUES (127, 3);
-INSERT INTO `sys_role_menu` VALUES (127, 4);
-INSERT INTO `sys_role_menu` VALUES (127, 5);
+INSERT INTO `sys_role_menu` VALUES (125, 9);
+INSERT INTO `sys_role_menu` VALUES (125, 10);
+INSERT INTO `sys_role_menu` VALUES (125, 11);
+INSERT INTO `sys_role_menu` VALUES (125, 12);
+INSERT INTO `sys_role_menu` VALUES (125, 13);
+INSERT INTO `sys_role_menu` VALUES (125, 14);
 COMMIT;
 
 -- ----------------------------
@@ -575,8 +677,8 @@ CREATE TABLE `sys_user` (
 -- Records of sys_user
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_user` VALUES (1, 11, '黄灯南', '$2a$10$j50Q.X3QJGK7GyCBclAJJ.TSbBjlsZgX.Hc5jOCwqgms1aaDPvZuy', '黄登峰', '13249074472', NULL, NULL, 1, NULL, '2021-01-18 23:13:51', NULL, '2021-01-28 23:39:37', NULL);
-INSERT INTO `sys_user` VALUES (2, 14, 'admin', '1234567', 'aaa', '13249073372', '/2021/1/22/1d210155179947b587a84391f0009eea.jpg', 'admin@11.com', 1, NULL, '2021-01-19 00:57:42', NULL, '2021-01-31 00:41:42', '');
+INSERT INTO `sys_user` VALUES (1, NULL, 'admin', '$2a$10$9SUnFeHnLZm4evVsyIOLkuftrQOUiuMh52MMLAuAVI9Li29SyuNJi', '888882q31', '13249073372', '/2021/3/11/6e4d51f5b5934e5eaa29e515037e865f.jpg', '21221@qq.com', 1, NULL, '2021-01-19 00:57:42', NULL, '2021-03-11 02:00:56', '');
+INSERT INTO `sys_user` VALUES (2, 11, '黄灯南', '$2a$10$j50Q.X3QJGK7GyCBclAJJ.TSbBjlsZgX.Hc5jOCwqgms1aaDPvZuy', '黄登峰', '13249074472', NULL, NULL, 1, NULL, '2021-01-18 23:13:51', NULL, '2021-03-03 00:05:50', NULL);
 COMMIT;
 
 -- ----------------------------

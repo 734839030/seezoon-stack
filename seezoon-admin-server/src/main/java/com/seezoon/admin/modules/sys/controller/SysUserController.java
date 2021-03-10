@@ -92,7 +92,7 @@ public class SysUserController extends BaseController {
 
     @ApiOperation(value = "检查登录名是否重复")
     @PreAuthorize("hasAuthority('sys:user:query')")
-    @PostMapping(value = "/checkUsername")
+    @PostMapping(value = "/check_user_name")
     public Result<Boolean> checkUsername(@RequestParam(required = false) Integer id,
         @NotBlank @RequestParam String username) {
         SysUser sysUser = this.sysUserService.findByUsername(username);
@@ -101,7 +101,7 @@ public class SysUserController extends BaseController {
 
     @ApiOperation(value = "检查手机号是否重复")
     @PreAuthorize("hasAuthority('sys:user:query')")
-    @PostMapping(value = "/checkMobile")
+    @PostMapping(value = "/check_mobile")
     public Result<Boolean> checkMobile(@RequestParam(required = false) Integer id,
         @NotBlank @RequestParam String mobile) {
         SysUser sysUser = this.sysUserService.findByMobile(mobile);

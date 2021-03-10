@@ -1,5 +1,19 @@
 
 
+前端基于vue3+vite+antd-vue2.x ,主体框架为typescript，业务模块采用js 写较快.
+
+后台基于spring boot ,spring session, spring Security等.
+
+
+
+代码高速迭代中...，目前完成基本功能，还差一个前端代码生成器，完成后就release 一个版本.
+
+前端地址[seezoon-admin-web](https://github.com/734839030/seezoon-admin-web)，感谢[vue-vben-admin][https://github.com/anncwb/vue-vben-admin]项目提供的主体框架，业务模块采用原生antdv开发，更容易上手.
+
+体验地址:[https://stack.seezoon.com](https://stack.seezoon.com) admin/123456  屏蔽了菜单删除权限，麻烦不要修改密码，每晚重置数据库.
+
+
+
 # 1、介绍
 
 ## 1.1、背景
@@ -46,6 +60,7 @@
     │   └── mybatis-generator-config.xml  原生mybatis-generator 描述文件(可选)
     ├── doc 项目文档及资料维护目录
     ├── seezoon-admin-server  管理端服务
+    ├── seezoon-admin-web  后台页面目前fork上游,代码库单独维护稳定后合并
     ├── seezoon-dao    DAO层，方便管理端和C端引用
     ├── seezoon-framework  管理端和C端通用框架层(基础中间件,参数验证，安全控制)
     ├── seezoon-generator  通用代码生成器，可以单独使用也可以供其他组件继承使用

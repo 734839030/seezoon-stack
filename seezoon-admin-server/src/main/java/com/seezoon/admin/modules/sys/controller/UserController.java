@@ -3,11 +3,14 @@ package com.seezoon.admin.modules.sys.controller;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.bind.annotation.*;
+
+import com.seezoon.admin.modules.sys.dto.UserAo;
 import com.seezoon.admin.modules.sys.dto.UserInfo;
 import com.seezoon.admin.modules.sys.dto.UserResourcesVo;
 import com.seezoon.admin.modules.sys.dto.vue.RouteMeta;
@@ -32,14 +35,32 @@ public class UserController extends BaseController {
     private final UserService userService;
 
     @ApiOperation(value = "获取用户信息")
-    @GetMapping("/getInfo")
+    @GetMapping("/info")
     public Result<UserInfo> getUserInfo() {
-        UserInfo user = SecurityUtils.getUser();
+        UserInfo user = userService.userInfo(SecurityUtils.getUserId());
         return Result.ok(user);
     }
 
+    @ApiOperation(value = "获取用户信息")
+    @PostMapping("/save_user_info")
+    public Result saveUserInfo(@Valid @RequestBody UserAo userAo) {
+        userService.saveUserInfo(SecurityUtils.getUserId(), userAo);
+        return Result.SUCCESS;
+    }
+
+    @ApiOperation(value = "更新密码")
+    @PostMapping("/update_password")
+    public Result updatePassword(@NotEmpty @Size(min = 6, max = 50) String oldPassword,
+        @NotEmpty @Size(min = 6, max = 50) String newPassword) {
+        boolean result = userService.updatePassword(SecurityUtils.getUserId(), oldPassword, newPassword);
+        if (!result) {
+            return Result.error("原密码错误");
+        }
+        return Result.SUCCESS;
+    }
+
     @ApiOperation(value = "获取资源")
-    @GetMapping("/getResources")
+    @GetMapping("/get_resources")
     public Result<UserResourcesVo> getResources() {
         UserInfo user = SecurityUtils.getUser();
         // 角色
