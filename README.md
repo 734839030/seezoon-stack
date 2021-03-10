@@ -8,7 +8,7 @@
 
 代码高速迭代中...，目前完成基本功能，还差一个前端代码生成器，完成后就release 一个版本.
 
-前端地址[seezoon-admin-web](https://github.com/734839030/seezoon-admin-web)，感谢[vue-vben-admin][https://github.com/anncwb/vue-vben-admin]项目提供的主体框架，业务模块采用原生antdv开发，更容易上手.
+前端地址[seezoon-admin-web](https://github.com/734839030/seezoon-admin-web)，感谢[vue-vben-admin](https://github.com/anncwb/vue-vben-admin)项目提供的主体框架，业务模块采用原生antdv开发，更容易上手.
 
 体验地址:[https://stack.seezoon.com](https://stack.seezoon.com) admin/123456  屏蔽了菜单删除权限，麻烦不要修改密码，每晚重置数据库.
 
