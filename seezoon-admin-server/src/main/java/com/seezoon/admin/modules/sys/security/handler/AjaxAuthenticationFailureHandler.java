@@ -26,13 +26,16 @@ public class AjaxAuthenticationFailureHandler extends AbstractJsonResponeHandler
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
         AuthenticationException exception) throws IOException {
         Result result = null;
-        if (exception instanceof UsernameNotFoundException) {
+
+        Throwable cause = exception.getCause() == null ? exception : exception.getCause();
+
+        if (cause instanceof UsernameNotFoundException) {
             result = Result.error(AdminCodeMsgBundle.USERNAME_NOT_FOUND);
-        } else if (exception instanceof BadCredentialsException) {
+        } else if (cause instanceof BadCredentialsException) {
             result = Result.error(AdminCodeMsgBundle.BAD_CREDENTIALS);
-        } else if (exception instanceof LockedException) {
+        } else if (cause instanceof LockedException) {
             result = Result.error(AdminCodeMsgBundle.LOCKED);
-        } else if (exception instanceof DisabledException) {
+        } else if (cause instanceof DisabledException) {
             result = Result.error(AdminCodeMsgBundle.DISABLED);
         } else {
             result = Result.error(AdminCodeMsgBundle.UNKOWN_LOGIN, exception.getMessage());
