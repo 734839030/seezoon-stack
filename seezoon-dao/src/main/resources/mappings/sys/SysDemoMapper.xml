@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seezoon.dao.modules.sys.SysDemoDao">
+    <resultMap id="BaseResultMap" type="com.seezoon.dao.modules.sys.entity.SysDemo">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="input_text" jdbcType="VARCHAR" property="inputText"/>
+        <result column="input_select" jdbcType="VARCHAR" property="inputSelect"/>
+        <result column="input_radio" jdbcType="VARCHAR" property="inputRadio"/>
+        <result column="input_checkbox" jdbcType="VARCHAR" property="inputCheckbox"/>
+        <result column="input_textarea" jdbcType="LONGVARCHAR" property="inputTextarea"/>
+        <result column="input_date" jdbcType="TIMESTAMP" property="inputDate"/>
+        <result column="input_zhengshu" jdbcType="INTEGER" property="inputZhengshu"/>
+        <result column="input_xiaoshu" jdbcType="DOUBLE" property="inputXiaoshu"/>
+        <result column="rich_text" jdbcType="LONGVARCHAR" property="richText"/>
+        <result column="image" jdbcType="VARCHAR" property="image"/>
+        <result column="file" jdbcType="VARCHAR" property="file"/>
+        <result column="create_by" jdbcType="INTEGER" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="INTEGER" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    t.id,t.input_text,t.input_select,t.input_radio,t.input_checkbox,t.input_date,t.input_zhengshu,t.input_xiaoshu,t.image,t.file,t.create_by,t.create_time,t.update_by,t.update_time,t.remarks
+    </sql>
+
+    <sql id="Blob_Column_List" >
+    t.input_textarea,t.rich_text
+    </sql>
+    <sql id="Query_Table" >
+    sys_demo t
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        ,<include refid="Blob_Column_List"/>
+        from <include refid="Query_Table" />
+        where t.id = #{id}
+    </select>
+
+    <select id="selectByCondition" parameterType="com.seezoon.dao.modules.sys.entity.SysDemoCondition" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from <include refid="Query_Table" />
+        <where>
+            <if test="inputText != null and inputText != ''">
+            and t.input_text = #{inputText}
+            </if>
+        </where>
+        <choose>
+            <when test="sortField != null and sortField != '' and sortOrder != null and sortOrder !=''">
+                order by ${sortField} ${sortOrder}
+            </when>
+            <otherwise>
+                order by t.create_time desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <delete id="deleteByPrimaryKey">
+        delete t from sys_demo t
+        where t.id in
+        <foreach item="item" collection="array" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_demo (input_text,input_select,input_radio,input_checkbox,input_textarea,input_date,input_zhengshu,input_xiaoshu,rich_text,image,file,create_by,create_time,update_by,update_time,remarks)
+        values
+        <foreach item="item" collection="array" separator=",">
+            (#{item.inputText},#{item.inputSelect},#{item.inputRadio},#{item.inputCheckbox},#{item.inputTextarea},#{item.inputDate},#{item.inputZhengshu},#{item.inputXiaoshu},#{item.richText},#{item.image},#{item.file},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remarks})
+        </foreach>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.seezoon.dao.modules.sys.entity.SysDemo">
+        update sys_demo t
+        <set>
+            <if test="inputText != null">
+                t.input_text = #{inputText},
+            </if>
+            <if test="inputSelect != null">
+                t.input_select = #{inputSelect},
+            </if>
+            <if test="inputRadio != null">
+                t.input_radio = #{inputRadio},
+            </if>
+            <if test="inputCheckbox != null">
+                t.input_checkbox = #{inputCheckbox},
+            </if>
+            <if test="inputTextarea != null">
+                t.input_textarea = #{inputTextarea},
+            </if>
+            <if test="inputDate != null">
+                t.input_date = #{inputDate},
+            </if>
+            <if test="inputZhengshu != null">
+                t.input_zhengshu = #{inputZhengshu},
+            </if>
+            <if test="inputXiaoshu != null">
+                t.input_xiaoshu = #{inputXiaoshu},
+            </if>
+            <if test="richText != null">
+                t.rich_text = #{richText},
+            </if>
+            <if test="image != null">
+                t.image = #{image},
+            </if>
+            <if test="file != null">
+                t.file = #{file},
+            </if>
+            <if test="updateBy != null">
+                t.update_by = #{updateBy},
+            </if>
+            <if test="updateTime != null">
+                t.update_time = #{updateTime},
+            </if>
+            <if test="remarks != null">
+                t.remarks = #{remarks}
+            </if>
+        </set>
+        where t.id = #{id}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.seezoon.dao.modules.sys.entity.SysDemo">
+        update sys_demo t set
+        t.input_text = #{inputText}
+        ,t.input_select = #{inputSelect}
+        ,t.input_radio = #{inputRadio}
+        ,t.input_checkbox = #{inputCheckbox}
+        ,t.input_textarea = #{inputTextarea}
+        ,t.input_date = #{inputDate}
+        ,t.input_zhengshu = #{inputZhengshu}
+        ,t.input_xiaoshu = #{inputXiaoshu}
+        ,t.rich_text = #{richText}
+        ,t.image = #{image}
+        ,t.file = #{file}
+        ,t.update_by = #{updateBy}
+        ,t.update_time = #{updateTime}
+        ,t.remarks = #{remarks}
+        where t.id = #{id}
+    </update>
+</mapper>

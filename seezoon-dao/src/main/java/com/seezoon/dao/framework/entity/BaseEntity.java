@@ -6,6 +6,8 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -42,6 +44,7 @@ public class BaseEntity<PK> {
      * 保存方法自动处理
      */
     @ApiModelProperty("*内置*-创建人")
+    @JsonIgnore
     private Integer createBy;
     /**
      * 保存方法自动处理
@@ -52,6 +55,7 @@ public class BaseEntity<PK> {
      * 更新方法自动处理
      */
     @ApiModelProperty("*内置*-更新人")
+    @JsonIgnore
     private Integer updateBy;
     /**
      * 更新方法自动处理

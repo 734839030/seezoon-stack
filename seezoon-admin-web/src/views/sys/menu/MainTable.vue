@@ -3,7 +3,6 @@
     <a-form-item>
       <a-space>
         <a-button v-auth="'sys:menu:query'" type="primary" @click="handleQuery()"> 查询</a-button>
-        <a-button type="default" @click="this.$refs.searchForm.resetFields()">重置</a-button>
         <a-button v-auth="'sys:menu:save'" type="default" @click="handleDataForm('添加')"
           >添加
         </a-button>

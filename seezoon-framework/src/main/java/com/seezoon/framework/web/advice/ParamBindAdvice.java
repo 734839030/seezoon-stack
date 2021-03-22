@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Date;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
@@ -83,7 +82,11 @@ public class ParamBindAdvice {
                         @Override
                         public String deserialize(JsonParser jsonParser, DeserializationContext ctx)
                             throws IOException {
-                            return StringUtils.trim(jsonParser.getValueAsString());
+                            String valueAsString = jsonParser.getValueAsString();
+                            if (null != valueAsString) {
+                                valueAsString = StringEscapeUtils.escapeHtml4(valueAsString.trim());
+                            }
+                            return valueAsString;
                         }
                     });
             }

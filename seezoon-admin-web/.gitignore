@@ -4,7 +4,7 @@ dist
 .npmrc
 .cache
 
-test/upload-server/static
+/test/server/upload/static/
 
 .local
 # local env files
@@ -25,3 +25,4 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+

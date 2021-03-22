@@ -1,7 +1,8 @@
-import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import axios from 'axios';
+import type { AxiosRequestConfig, AxiosInstance, AxiosResponse } from 'axios';
 import type { RequestOptions, Result, UploadFileParams } from './types';
 import type { CreateAxiosOptions } from './axiosTransform';
+
+import axios from 'axios';
 import qs from 'qs';
 import { AxiosCanceler } from './axiosCancel';
 import { isFunction } from '/@/utils/is';
@@ -26,6 +27,18 @@ export class VAxios {
     this.setupInterceptors();
   }
 
+  /**
+   * @description:  Create axios instance
+   */
+  private createAxios(config: CreateAxiosOptions): void {
+    this.axiosInstance = axios.create(config);
+  }
+
+  private getTransform() {
+    const { transform } = this.options;
+    return transform;
+  }
+
   getAxios(): AxiosInstance {
     return this.axiosInstance;
   }
@@ -48,6 +61,62 @@ export class VAxios {
       return;
     }
     Object.assign(this.axiosInstance.defaults.headers, headers);
+  }
+
+  /**
+   * @description: Interceptor configuration
+   */
+  private setupInterceptors() {
+    const transform = this.getTransform();
+    if (!transform) {
+      return;
+    }
+    const {
+      requestInterceptors,
+      requestInterceptorsCatch,
+      responseInterceptors,
+      responseInterceptorsCatch,
+    } = transform;
+
+    const axiosCanceler = new AxiosCanceler();
+
+    // Request interceptor configuration processing
+    this.axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
+      // If cancel repeat request is turned on, then cancel repeat request is prohibited
+      const {
+        headers: { ignoreCancelToken },
+      } = config;
+
+      const ignoreCancel =
+        ignoreCancelToken !== undefined
+          ? ignoreCancelToken
+          : this.options.requestOptions?.ignoreCancelToken;
+
+      !ignoreCancel && axiosCanceler.addPending(config);
+      if (requestInterceptors && isFunction(requestInterceptors)) {
+        config = requestInterceptors(config);
+      }
+      return config;
+    }, undefined);
+
+    // Request interceptor error capture
+    requestInterceptorsCatch &&
+      isFunction(requestInterceptorsCatch) &&
+      this.axiosInstance.interceptors.request.use(undefined, requestInterceptorsCatch);
+
+    // Response result interceptor processing
+    this.axiosInstance.interceptors.response.use((res: AxiosResponse<any>) => {
+      res && axiosCanceler.removePending(res.config);
+      if (responseInterceptors && isFunction(responseInterceptors)) {
+        res = responseInterceptors(res);
+      }
+      return res;
+    }, undefined);
+
+    // Response result interceptor error capture
+    responseInterceptorsCatch &&
+      isFunction(responseInterceptorsCatch) &&
+      this.axiosInstance.interceptors.response.use(undefined, responseInterceptorsCatch);
   }
 
   /**
@@ -171,73 +240,5 @@ export class VAxios {
           reject(e);
         });
     });
-  }
-
-  /**
-   * @description:  Create axios instance
-   */
-  private createAxios(config: CreateAxiosOptions): void {
-    this.axiosInstance = axios.create(config);
-  }
-
-  private getTransform() {
-    const { transform } = this.options;
-    return transform;
-  }
-
-  /**
-   * @description: Interceptor configuration
-   */
-  private setupInterceptors() {
-    const transform = this.getTransform();
-    if (!transform) {
-      return;
-    }
-    const {
-      requestInterceptors,
-      requestInterceptorsCatch,
-      responseInterceptors,
-      responseInterceptorsCatch,
-    } = transform;
-
-    const axiosCanceler = new AxiosCanceler();
-
-    // Request interceptor configuration processing
-    this.axiosInstance.interceptors.request.use((config: AxiosRequestConfig) => {
-      // If cancel repeat request is turned on, then cancel repeat request is prohibited
-      const {
-        headers: { ignoreCancelToken },
-      } = config;
-
-      const ignoreCancel =
-        ignoreCancelToken !== undefined
-          ? ignoreCancelToken
-          : this.options.requestOptions?.ignoreCancelToken;
-
-      !ignoreCancel && axiosCanceler.addPending(config);
-      if (requestInterceptors && isFunction(requestInterceptors)) {
-        config = requestInterceptors(config);
-      }
-      return config;
-    }, undefined);
-
-    // Request interceptor error capture
-    requestInterceptorsCatch &&
-      isFunction(requestInterceptorsCatch) &&
-      this.axiosInstance.interceptors.request.use(undefined, requestInterceptorsCatch);
-
-    // Response result interceptor processing
-    this.axiosInstance.interceptors.response.use((res: AxiosResponse<any>) => {
-      res && axiosCanceler.removePending(res.config);
-      if (responseInterceptors && isFunction(responseInterceptors)) {
-        res = responseInterceptors(res);
-      }
-      return res;
-    }, undefined);
-
-    // Response result interceptor error capture
-    responseInterceptorsCatch &&
-      isFunction(responseInterceptorsCatch) &&
-      this.axiosInstance.interceptors.response.use(undefined, responseInterceptorsCatch);
   }
 }

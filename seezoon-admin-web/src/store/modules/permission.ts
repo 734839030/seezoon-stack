@@ -12,14 +12,14 @@ import { userStore } from '/@/store/modules/user';
 import { asyncRoutes } from '/@/router/routes';
 import { filter } from '/@/utils/helper/treeHelper';
 
-import { transformObjToRoute } from '/@/router/helper/routeHelper';
+import { transformObjToRoute, flatRoutes } from '/@/router/helper/routeHelper';
 import { transformRouteToMenu } from '/@/router/helper/menuHelper';
 
 import { useMessage } from '/@/hooks/web/useMessage';
 import { useI18n } from '/@/hooks/web/useI18n';
-import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/constant';
 import { getUserResources } from '/@/api/sys/user';
 import { RoleEnum } from '/@/enums/roleEnum';
+import { ERROR_LOG_ROUTE, PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 
 const { createMessage } = useMessage();
 const NAME = 'app-permission';
@@ -84,6 +84,11 @@ class Permission extends VuexModule {
   }
 
   @Action
+  async changePermissionCode(codeList: string[]) {
+    this.commitPermCodeListState(codeList);
+  }
+
+  @Action
   async buildRoutesAction(id?: number | string): Promise<AppRouteRecordRaw[]> {
     const { t } = useI18n();
     let routes: AppRouteRecordRaw[] = [];
@@ -127,11 +132,12 @@ class Permission extends VuexModule {
 
       // Dynamically introduce components
       routeList = transformObjToRoute(routeList);
+
       //  Background routing to menu structure
       const backMenuList = transformRouteToMenu(routeList);
-
       this.commitBackMenuListState(backMenuList);
 
+      flatRoutes(routeList);
       routes = [PAGE_NOT_FOUND_ROUTE, ...routeList];
     }
     routes.push(ERROR_LOG_ROUTE);

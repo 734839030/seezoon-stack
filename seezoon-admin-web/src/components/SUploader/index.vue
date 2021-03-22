@@ -7,9 +7,10 @@
     :multiple="multiple"
     action="/sys/file/upload"
     name="file"
+    :disabled="disabled"
     @change="handleChange"
   >
-    <div v-if="fileList.length < limit">
+    <div v-if="fileList.length < limit && !disabled">
       <a-button :loading="uploadBtnLoading" type="dashed">
         <cloud-upload-outlined />
       </a-button>
@@ -44,8 +45,12 @@
       value: {
         type: String,
       },
+      disabled: {
+        type: Boolean,
+        default: false,
+      },
     },
-    emits: ['update:value'],
+    emits: ['update:value', 'change'],
     data() {
       return {
         uploadBtnLoading: false,
@@ -79,7 +84,9 @@
         this.fileList.forEach((val) => {
           paths.push(val.relativePath);
         });
-        this.$emit('update:value', paths.join(','));
+        const value = paths.join(',');
+        this.$emit('update:value', value);
+        this.$emit('change', value);
       },
       customRequest(formData) {
         const form = new FormData();

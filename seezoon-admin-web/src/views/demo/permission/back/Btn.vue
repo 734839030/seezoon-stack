@@ -75,6 +75,7 @@
         permissionStore.commitPermCodeListState(permissions);
       }
 
+
       // 默认初始化为1
       changePermissionCode();
       return {

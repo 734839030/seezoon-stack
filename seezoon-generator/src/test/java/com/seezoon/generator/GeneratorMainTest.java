@@ -8,11 +8,11 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * 通过main 生成代码，args 为空时候生成全部
  *
- * 改测试会执行执行{@link GeneratorMain}
+ * 该测试会执行执行{@link GeneratorMain}
  *
  * @author hdf
  */
-@SpringBootTest(args = {"sys_role_menu"})
+@SpringBootTest(args = {"sys_demo"})
 @Slf4j
 class GeneratorMainTest {
 

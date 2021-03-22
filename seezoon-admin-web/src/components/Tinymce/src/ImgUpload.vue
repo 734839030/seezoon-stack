@@ -3,59 +3,55 @@
     <Upload
       name="file"
       multiple
-      @change="handleChange"
-      :action="uploadUrl"
+      :customRequest="customRequest"
+      action="/sys/file/upload"
       :showUploadList="false"
       accept=".jpg,.jpeg,.gif,.png,.webp"
     >
-      <a-button type="primary">
+      <a-button type="primary" :loading="uploadBtnLoading">
         {{ t('component.upload.imgUpload') }}
       </a-button>
     </Upload>
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
+  import { defineComponent, ref } from 'vue';
 
   import { Upload } from 'ant-design-vue';
+  import { message } from 'ant-design-vue';
+
   import { useDesign } from '/@/hooks/web/useDesign';
-  import { useGlobSetting } from '/@/hooks/setting';
+  //import { useGlobSetting } from '/@/hooks/setting';
   import { useI18n } from '/@/hooks/web/useI18n';
+  import { defHttp } from '/@/utils/http/axios';
 
   export default defineComponent({
     name: 'TinymceImageUpload',
     components: { Upload },
     emits: ['uploading', 'done', 'error'],
     setup(_, { emit }) {
-      let uploading = false;
-
-      const { uploadUrl } = useGlobSetting();
+      const uploadBtnLoading = ref(false);
       const { t } = useI18n();
       const { prefixCls } = useDesign('tinymce-img-upload');
-      function handleChange(info: Recordable) {
-        const file = info.file;
-        const status = file?.status;
-
-        const url = file?.response?.url;
-        const name = file?.name;
-        if (status === 'uploading') {
-          if (!uploading) {
-            emit('uploading', name);
-            uploading = true;
-          }
-        } else if (status === 'done') {
-          emit('done', name, url);
-          uploading = false;
-        } else if (status === 'error') {
-          emit('error');
-          uploading = false;
-        }
+      function customRequest(formData) {
+        const form = new FormData();
+        form.append(formData.filename, formData.file);
+        uploadBtnLoading.value = true;
+        emit('uploading', formData.file.name);
+        defHttp
+          .postFile(formData.action, form)
+          .then((data) => {
+            emit('done', data.name, data.url);
+          })
+          .catch(function (e) {
+            message.error('上传失败:' + e);
+          })
+          .finally(() => (uploadBtnLoading.value = false));
       }
-
       return {
         prefixCls,
-        handleChange,
-        uploadUrl,
+        uploadBtnLoading,
+        customRequest,
         t,
       };
     },
