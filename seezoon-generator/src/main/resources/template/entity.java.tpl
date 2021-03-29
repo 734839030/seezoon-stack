@@ -36,6 +36,7 @@ public class ${className} extends BaseEntity<${pkPlan.dataType.javaType()}> {
       <#if !columnPlan.nullable>
         <#if columnPlan.stringType>
     @NotBlank
+    <#setting number_format="#">
     @Size(max = ${columnPlan.maxLength})
         <#else>
     @NotNull

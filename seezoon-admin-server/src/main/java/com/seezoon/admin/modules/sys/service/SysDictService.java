@@ -32,4 +32,11 @@ public class SysDictService extends AbstractCrudService<SysDictDao, SysDict, Int
     public List<String> findTypes() {
         return this.d.selectTypes();
     }
+
+    @Transactional(readOnly = true)
+    public List<SysDict> findByType(String type) {
+        SysDictCondition condition = new SysDictCondition();
+        condition.setType(type);
+        return this.find(condition);
+    }
 }

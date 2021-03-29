@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  * @author hdf
  */
-@SpringBootTest(args = {"sys_demo"})
+@SpringBootTest(args = {"sys_gen"})
 @Slf4j
 class GeneratorMainTest {
 

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seezoon.dao.modules.sys.SysGenDao">
+    <resultMap id="BaseResultMap" type="com.seezoon.dao.modules.sys.entity.SysGen">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="table_name" jdbcType="VARCHAR" property="tableName"/>
+        <result column="pk_type" jdbcType="VARCHAR" property="pkType"/>
+        <result column="menu_name" jdbcType="VARCHAR" property="menuName"/>
+        <result column="module_name" jdbcType="VARCHAR" property="moduleName"/>
+        <result column="function_name" jdbcType="VARCHAR" property="functionName"/>
+        <result column="template" jdbcType="TINYINT" property="template"/>
+        <result column="class_name" jdbcType="VARCHAR" property="className"/>
+        <result column="columns" jdbcType="LONGVARCHAR" property="columns"/>
+        <result column="create_by" jdbcType="INTEGER" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="INTEGER" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    t.id,t.table_name,t.pk_type,t.menu_name,t.module_name,t.function_name,t.template,t.class_name,t.create_by,t.create_time,t.update_by,t.update_time,t.remarks
+    </sql>
+
+    <sql id="Blob_Column_List" >
+    t.columns
+    </sql>
+    <sql id="Query_Table" >
+    sys_gen t
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        ,<include refid="Blob_Column_List"/>
+        from <include refid="Query_Table" />
+        where t.id = #{id}
+    </select>
+
+    <select id="selectByCondition" parameterType="com.seezoon.dao.modules.sys.entity.SysGenCondition" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from <include refid="Query_Table" />
+        <where>
+            <if test="tableName != null and tableName != ''">
+            and t.table_name = #{tableName}
+            </if>
+        </where>
+        <choose>
+            <when test="sortField != null and sortField != '' and sortOrder != null and sortOrder !=''">
+                order by ${sortField} ${sortOrder}
+            </when>
+            <otherwise>
+                order by t.create_time desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <delete id="deleteByPrimaryKey">
+        delete t from sys_gen t
+        where t.id in
+        <foreach item="item" collection="array" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
+        insert into sys_gen (table_name,pk_type,menu_name,module_name,function_name,template,class_name,columns,create_by,create_time,update_by,update_time,remarks)
+        values
+        <foreach item="item" collection="array" separator=",">
+            (#{item.tableName},#{item.pkType},#{item.menuName},#{item.moduleName},#{item.functionName},#{item.template},#{item.className},#{item.columns},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remarks})
+        </foreach>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.seezoon.dao.modules.sys.entity.SysGen">
+        update sys_gen t
+        <set>
+            <if test="tableName != null">
+                t.table_name = #{tableName},
+            </if>
+            <if test="pkType != null">
+                t.pk_type = #{pkType},
+            </if>
+            <if test="menuName != null">
+                t.menu_name = #{menuName},
+            </if>
+            <if test="moduleName != null">
+                t.module_name = #{moduleName},
+            </if>
+            <if test="functionName != null">
+                t.function_name = #{functionName},
+            </if>
+            <if test="template != null">
+                t.template = #{template},
+            </if>
+            <if test="className != null">
+                t.class_name = #{className},
+            </if>
+            <if test="columns != null">
+                t.columns = #{columns},
+            </if>
+            <if test="updateBy != null">
+                t.update_by = #{updateBy},
+            </if>
+            <if test="updateTime != null">
+                t.update_time = #{updateTime},
+            </if>
+            <if test="remarks != null">
+                t.remarks = #{remarks}
+            </if>
+        </set>
+        where t.id = #{id}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.seezoon.dao.modules.sys.entity.SysGen">
+        update sys_gen t set
+        t.table_name = #{tableName}
+        ,t.pk_type = #{pkType}
+        ,t.menu_name = #{menuName}
+        ,t.module_name = #{moduleName}
+        ,t.function_name = #{functionName}
+        ,t.template = #{template}
+        ,t.class_name = #{className}
+        ,t.columns = #{columns}
+        ,t.update_by = #{updateBy}
+        ,t.update_time = #{updateTime}
+        ,t.remarks = #{remarks}
+        where t.id = #{id}
+    </update>
+</mapper>

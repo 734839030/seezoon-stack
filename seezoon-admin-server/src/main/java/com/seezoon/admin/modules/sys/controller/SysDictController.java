@@ -51,6 +51,13 @@ public class SysDictController extends BaseController {
         return Result.ok(pageSerializable);
     }
 
+    @ApiOperation(value = "按字典名查询")
+    @GetMapping("/query_by_type")
+    public Result<List<SysDict>> queryByType(String type) {
+        List<SysDict> sysDicts = sysDictService.findByType(type);
+        return Result.ok(sysDicts);
+    }
+
     @ApiOperation(value = "查询所有分类")
     @GetMapping("/query_types")
     public Result<List<String>> queryTypes() {

@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class FileCodeGenerator implements CodeGenerator {
 
     public static final String TARGET = "target";
+    public static final String CLASSES = "classes";
     public static final String GENERATED_SOURCES_FOLDER = "seezoon-generated";
 
     private static final String ZIP_NAME = "all-sources-in-one.zip";
@@ -66,12 +67,13 @@ public class FileCodeGenerator implements CodeGenerator {
     private void createSourceFile(TablePlan tablePlan, Path generatedFolderPath, CodeTemplate ct) {
         try {
             // 得到生成文件的完成目录
-            Path fileParentPath = generatedFolderPath.resolve(String.format(ct.path(), tablePlan.getModuleName()));
+            Path fileParentPath =
+                generatedFolderPath.resolve(FreeMarkerRender.renderStringTemplate(ct.path(), tablePlan));
             if (!Files.exists(fileParentPath)) {
                 Files.createDirectories(fileParentPath);
             }
             // 得到生成文件路径
-            Path filePath = fileParentPath.resolve(String.format(ct.fileName(), tablePlan.getClassName()));
+            Path filePath = fileParentPath.resolve(FreeMarkerRender.renderStringTemplate(ct.fileName(), tablePlan));
             Files.createFile(filePath);
             String content = FreeMarkerRender.renderTemplate(ct.tplName(), tablePlan);
             Files.writeString(filePath, content);
@@ -90,13 +92,20 @@ public class FileCodeGenerator implements CodeGenerator {
         ApplicationHome applicationHome = new ApplicationHome(FileCodeGenerator.class);
         // 工程路径或者jar所在目录
         Path usrDir = applicationHome.getDir().toPath();
+        log.info("generator user dir:{}", usrDir);
         // 在jar 中不为null，不在jar中dir 则为项目目录
-        Path generatedFolderPath = usrDir.resolve(TARGET);
+        Path generatedFolderPath = usrDir;
         if (null != applicationHome.getSource()) {
-            // 替换target 路径
-            generatedFolderPath = generatedFolderPath.resolveSibling(GENERATED_SOURCES_FOLDER);
+            // main idea main 方法运行
+            if (generatedFolderPath.endsWith(TARGET + File.separator + CLASSES)) {
+                generatedFolderPath = generatedFolderPath.resolveSibling(GENERATED_SOURCES_FOLDER);
+            } else {
+                // 独立jar运行
+                generatedFolderPath = generatedFolderPath.resolve(GENERATED_SOURCES_FOLDER);
+            }
         } else {
-            generatedFolderPath = generatedFolderPath.resolve(GENERATED_SOURCES_FOLDER);
+            // junit test 运行
+            generatedFolderPath = generatedFolderPath.resolve(TARGET + File.separator + GENERATED_SOURCES_FOLDER);
         }
         this.initGeneratedFolder(generatedFolderPath);
         return generatedFolderPath;
