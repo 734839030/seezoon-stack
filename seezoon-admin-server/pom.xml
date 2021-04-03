@@ -27,6 +27,10 @@
             <artifactId>seezoon-framework</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.seezoon</groupId>
+            <artifactId>seezoon-generator</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>

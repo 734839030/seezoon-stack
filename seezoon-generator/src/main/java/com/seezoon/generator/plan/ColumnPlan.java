@@ -44,6 +44,7 @@ public class ColumnPlan implements Comparable<ColumnPlan> {
      * 数据类型eg DB:varchar jdbcType:VARCHAR,javaType:String
      */
     private ColumnDataType dataType;
+
     /**
      * 字段长度eg:64
      */
@@ -114,4 +115,7 @@ public class ColumnPlan implements Comparable<ColumnPlan> {
         return this.sort - o.getSort();
     }
 
+    public String getJavaType() {
+        return null == dataType ? null : dataType.javaType();
+    }
 }

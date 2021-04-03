@@ -9,7 +9,6 @@ import org.springframework.util.CollectionUtils;
 
 import com.seezoon.generator.constants.InputType;
 import com.seezoon.generator.constants.QueryType;
-import com.seezoon.generator.constants.TemplateType;
 import com.seezoon.generator.constants.db.DefaultColumns;
 import com.seezoon.generator.dto.db.DbTable;
 import com.seezoon.generator.dto.db.DbTableColumn;
@@ -39,7 +38,7 @@ public class UserTablePlanHandlerImpl implements TablePlanHandler {
             tablePlan.setMenuName(userTablePlanParam.getMenuName());
             tablePlan.setModuleName(userTablePlanParam.getModuleName());
             tablePlan.setFunctionName(userTablePlanParam.getFunctionName());
-            tablePlan.setTemplateType(TemplateType.valueOf(userTablePlanParam.getTemplateType()));
+            tablePlan.setTemplateType(userTablePlanParam.getTemplateType());
             tablePlan.setClassName(userTablePlanParam.getClassName());
             // 默认方案会自动判断是否search
             tablePlan.setHasSearch(false);
@@ -64,10 +63,10 @@ public class UserTablePlanHandlerImpl implements TablePlanHandler {
                     columnPlan.setSortable(u.isSortable());
                     columnPlan.setSearch(u.isSearch());
                     columnPlan.setQueryType(QueryType.valueOf(u.getQueryType()));
-                    columnPlan.setInputType(InputType.parse(u.getInputType()));
+                    columnPlan.setInputType(InputType.valueOf(u.getInputType()));
                     columnPlan.setDictType(u.getDictType());
 
-                    if (InputType.RICHTEXT.equals(u.getInputType()) && !tablePlan.isHasRichTextWidget()) {
+                    if (InputType.RICH_TEXT.equals(u.getInputType()) && !tablePlan.isHasRichTextWidget()) {
                         tablePlan.setHasRichTextWidget(true);
                     }
                     if (InputType.DATE.equals(u.getInputType()) && !tablePlan.isHasDateWidget()) {

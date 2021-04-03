@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.seezoon.generator.constants.TemplateType;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -45,7 +43,7 @@ public class TablePlan {
     /**
      * 生成模板,保留,方便未来生成树结构等
      */
-    private TemplateType templateType;
+    private Integer templateType;
 
     /**
      * 类名，默认表名转大驼峰

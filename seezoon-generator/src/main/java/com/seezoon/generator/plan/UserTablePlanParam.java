@@ -3,7 +3,10 @@ package com.seezoon.generator.plan;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -24,37 +27,37 @@ public class UserTablePlanParam {
     /**
      * 表名
      */
-    @NotEmpty
-    @Length(min = 1, max = 50)
+    @NotBlank
+    @Size(max = 50)
     private String tableName;
     /**
      * 菜单名
      */
-    @NotEmpty
-    @Length(min = 1, max = 50)
+    @NotBlank
+    @Size(max = 50)
     private String menuName;
     /**
      * 模块名
      */
-    @NotEmpty
-    @Length(min = 1, max = 10)
+    @NotBlank
+    @Size(max = 10)
     private String moduleName;
     /**
      * 功能模块
      */
-    @NotEmpty
-    @Length(min = 1, max = 20)
+    @NotBlank
+    @Size(max = 20)
     private String functionName;
     /**
      * 生成模板,保留,方便未来生成树结构等 {@link TemplateType}
      */
-    @NotEmpty
-    private String templateType;
+    @NotNull
+    private Integer templateType;
     /**
      * 类名
      */
-    @NotEmpty
-    @Length(min = 1, max = 50)
+    @NotBlank
+    @Length(max = 50)
     private String className;
 
     @Valid

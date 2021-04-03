@@ -1,11 +1,5 @@
 package com.seezoon.generator.constants;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.util.Assert;
-
 /**
  * 前端表单类型
  *
@@ -13,57 +7,32 @@ import org.springframework.util.Assert;
  */
 public enum InputType {
 
-    TEXT("text"),
+    TEXT,
 
-    SELECT("select"),
+    SELECT,
 
-    HIDDEN("hidden"),
+    HIDDEN,
     // 整数
-    INTEGRAL_NUMBER("integral_number"),
+    INTEGRAL_NUMBER,
     // 小数
-    DECIMAL("decimal"),
+    DECIMAL,
 
-    CHECKBOX("checkbox"),
+    CHECKBOX,
 
-    RADIO("radio"),
+    RADIO,
 
-    DATE("date"),
+    DATE,
 
-    DATETIME("datetime"),
+    DATETIME,
 
-    TEXTAREA("textarea"),
+    TEXTAREA,
 
-    RICHTEXT("richtext"),
+    RICH_TEXT,
 
-    IMAGE("image"),
+    IMAGE,
 
-    FILE("file"),;
+    FILE,
 
-    private static final Map<String, InputType> INPUT_TYPES = new HashMap<>();
+    NONE,;
 
-    static {
-        Arrays.stream(InputType.values()).forEach((v) -> {
-            INPUT_TYPES.put(v.inputName(), v);
-        });
-    }
-
-    /**
-     * 名称
-     */
-    private String inputName;
-
-    InputType(String inputName) {
-        this.inputName = inputName;
-    }
-
-    public static InputType parse(String inputName) {
-        InputType inputType = INPUT_TYPES.get(inputName);
-        Assert.isTrue(null != inputType,
-            String.format("inputName[%s] not support,pls supplement enum InputType", inputName));
-        return inputType;
-    }
-
-    public String inputName() {
-        return inputName;
-    }
 }

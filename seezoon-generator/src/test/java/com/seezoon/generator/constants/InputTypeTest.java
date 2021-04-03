@@ -11,7 +11,7 @@ class InputTypeTest {
 
     @Test
     void parse() {
-        final boolean equals = InputType.parse(InputType.IMAGE.inputName()).equals(InputType.IMAGE);
+        final boolean equals = InputType.valueOf(InputType.IMAGE.name()).equals(InputType.IMAGE);
         assertTrue(equals);
     }
 }

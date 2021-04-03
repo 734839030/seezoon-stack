@@ -53,7 +53,7 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
         List<String> moduleAndFuntion = extractModuleAndFuntion(dbTable.getName());
         tablePlan.setModuleName(moduleAndFuntion.get(0));
         tablePlan.setFunctionName(moduleAndFuntion.get(1));
-        tablePlan.setTemplateType(TemplateType.CRUD);
+        tablePlan.setTemplateType(TemplateType.CRUD.ordinal());
         tablePlan.setClassName(CaseUtils.toCamelCase(dbTable.getName(), true, DB_DELIMITER.toCharArray()));
         tablePlan.setColumnPlans(this.createColumnPlan(tablePlan, dbTableColumns));
         return tablePlan;
@@ -75,7 +75,9 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
                     .javaFieldName(CaseUtils.toCamelCase(v.getName(), false, DB_DELIMITER.toCharArray()))
                     .nullable(v.getNullable())
                     .sort(v.getSort())
+                    .list(true)
                     .sortable(DefaultColumns.create_time.name() == v.getName() ) // 创建时间默认可以排序
+                    .inputType(InputType.NONE)
                     .build();
             // @formatter:on
             columnPlan.setInsert(true);
@@ -101,6 +103,10 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
                     columnPlan.setUpdate(false);
                 }
             }
+            // 默认文本框
+            if (String.class.getSimpleName().equals(columnPlan.getDataType().javaType())) {
+                columnPlan.setInputType(InputType.TEXT);
+            }
 
             // 默认文本域
             if (DefaultColumns.remarks.name().equals(columnPlan.getDbColumnName())) {
@@ -108,10 +114,13 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
                 columnPlan.setList(false);
             }
             // 时间框
-            if (Date.class.getSimpleName().equals(columnPlan.getDataType().javaType())) {
+            if (Date.class.getSimpleName().equals(columnPlan.getDataType().javaType()) && !ArrayUtils.contains(
+                new String[] {DefaultColumns.create_time.name(), DefaultColumns.update_time.name()},
+                columnPlan.getDbColumnName())) {
                 columnPlan.setInputType(InputType.DATE);
                 tablePlan.setImportDate(true);
             }
+
             // jdbcType = LONGVARCHAR的为大文本
             if (ColumnDataType.TEXT.jdbcType().equals(columnPlan.getDataType().jdbcType())) {
                 columnPlan.setInputType(InputType.TEXTAREA);
@@ -123,8 +132,12 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
 
             // 数值字段
             if (!DefaultColumns.id.name().equals(columnPlan.getDbColumnName())) {
-                if (ArrayUtils.contains(new String[] {Integer.class.getSimpleName(), Long.class.getSimpleName(),
-                    Short.class.getSimpleName()}, columnPlan.getDataType().javaType())) {
+                if (ArrayUtils
+                    .contains(new String[] {Integer.class.getSimpleName(), Long.class.getSimpleName(),
+                        Short.class.getSimpleName()}, columnPlan.getDataType().javaType())
+                    && !ArrayUtils.contains(
+                        new String[] {DefaultColumns.create_by.name(), DefaultColumns.update_by.name()},
+                        columnPlan.getDbColumnName())) {
                     columnPlan.setInputType(InputType.INTEGRAL_NUMBER);
                 } else if (ArrayUtils.contains(new String[] {Float.class.getSimpleName(), Double.class.getSimpleName(),
                     BigDecimal.class.getSimpleName()}, columnPlan.getDataType().javaType())) {
@@ -142,6 +155,7 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
                 columnPlan.setQueryType(QueryType.EQUAL);
                 tablePlan.setHasSearch(true);
             }
+
             columnPlans.add(columnPlan);
         });
         tablePlan.setSortable(columnPlans.stream().anyMatch(columnPlan -> columnPlan.isSortable()));

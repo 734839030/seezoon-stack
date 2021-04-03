@@ -1,7 +1,7 @@
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.seezoon.framework.autoconfigure.SeezoonFrameworkAutoConfiguration
+com.seezoon.framework.autoconfigure.SeezoonFrameworkAutoConfiguration
 org.springframework.context.ApplicationListener=\
-  com.seezoon.framework.event.ApplicationStartingEventListener,\
-  com.seezoon.framework.event.ApplicationFailedEventListener,\
-  com.seezoon.framework.event.ApplicationReadyEventListener
+com.seezoon.framework.event.ApplicationStartingEventListener,\
+com.seezoon.framework.event.ApplicationFailedEventListener,\
+com.seezoon.framework.event.ApplicationReadyEventListener

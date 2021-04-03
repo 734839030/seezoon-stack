@@ -1,6 +1,9 @@
 package com.seezoon.admin.modules.sys.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +15,7 @@ import com.seezoon.dao.modules.sys.entity.SysGenCondition;
 import com.seezoon.framework.api.DefaultCodeMsgBundle;
 import com.seezoon.framework.api.Result;
 import com.seezoon.framework.web.BaseController;
+import com.seezoon.generator.plan.TablePlan;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * 代码生成
+ *
  * @author seezoon-generator 2021年3月29日 下午11:27:05
  */
 @Api(tags = "代码生成")
@@ -37,11 +42,28 @@ public class SysGenController extends BaseController {
         return Result.ok(sysGen);
     }
 
+    @ApiOperation(value = "查询默认生成方案")
+    @PreAuthorize("hasAuthority('sys:gen:query')")
+    @GetMapping("/query")
+    public Result<TablePlan> query(@NotBlank @RequestParam String tableName) {
+        TablePlan defaultTablePlan = sysGenService.findDefaultTablePlan(tableName);
+        return Result.ok(defaultTablePlan);
+    }
+
+    @ApiOperation(value = "数据库表")
+    @PreAuthorize("hasAuthority('sys:gen:query')")
+    @GetMapping("/tables")
+    public Result<List<String>> tables() {
+        List<String> tables = sysGenService.findTables();
+        return Result.ok(tables);
+    }
+
     @ApiOperation(value = "分页查询")
     @PreAuthorize("hasAuthority('sys:gen:query')")
     @PostMapping("/query")
     public Result<PageSerializable<SysGen>> query(@Valid @RequestBody SysGenCondition condition) {
-        PageSerializable<SysGen> pageSerializable = sysGenService.find(condition, condition.getPage(), condition.getPageSize());
+        PageSerializable<SysGen> pageSerializable =
+            sysGenService.find(condition, condition.getPage(), condition.getPageSize());
         return Result.ok(pageSerializable);
     }
 
