@@ -2,10 +2,8 @@ package com.seezoon.generator.plan.impl;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -39,10 +37,8 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
      * DB 及表字段的分隔符
      */
     private static final String DB_DELIMITER = "_";
-    private static final String[] DEFAULT_NOT_UPDATE_COLUMNS = {"create_by", "create_time"};
     private static final String[] DEFAULT_COLUMNS =
         {"id", "status", "create_by", "create_time", "update_by", "update_time", "remarks"};
-    private static final String[] DEFAULT_LIST_COLUMNS = {"create_time"};
 
     @Override
     public TablePlan generate(DbTable dbTable, List<DbTableColumn> dbTableColumns) {
@@ -75,17 +71,81 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
                     .javaFieldName(CaseUtils.toCamelCase(v.getName(), false, DB_DELIMITER.toCharArray()))
                     .nullable(v.getNullable())
                     .sort(v.getSort())
+                    .sortable(false)
+                    .insert(true)
+                    .update(true)
                     .list(true)
-                    .sortable(DefaultColumns.create_time.name() == v.getName() ) // 创建时间默认可以排序
                     .inputType(InputType.NONE)
                     .build();
             // @formatter:on
-            columnPlan.setInsert(true);
-            columnPlan.setUpdate(!ArrayUtils.contains(DEFAULT_NOT_UPDATE_COLUMNS, columnPlan.getDbColumnName()));
-            columnPlan.setDefaultField(ArrayUtils.contains(DEFAULT_COLUMNS, columnPlan.getDbColumnName()));
-            columnPlan.setList(ArrayUtils.contains(DEFAULT_LIST_COLUMNS, columnPlan.getDbColumnName()));
             // 是否String 类型
             columnPlan.setStringType(columnPlan.getDataType().javaType().equals(String.class.getSimpleName()));
+            columnPlan.setInsert(true);
+            columnPlan.setUpdate(true);
+            columnPlan.setList(true);
+            columnPlan.setDefaultField(ArrayUtils.contains(DEFAULT_COLUMNS, columnPlan.getDbColumnName()));
+
+            // 针对默认字段的处理
+            if (columnPlan.isDefaultField()) {
+                if (DefaultColumns.id.name().equals(columnPlan.getDbColumnName())) {
+                    columnPlan.setInputType(InputType.HIDDEN);
+                    columnPlan.setList(false);
+                    columnPlan.setInsert(false);
+                } else if (DefaultColumns.status.name().equals(columnPlan.getDbColumnName())) {
+                    columnPlan.setInputType(InputType.RADIO);
+                } else if (DefaultColumns.create_time.name().equals(columnPlan.getDbColumnName())) {
+                    columnPlan.setSortable(true);
+                    columnPlan.setUpdate(false);
+                } else if (DefaultColumns.update_time.name().equals(columnPlan.getDbColumnName())) {
+                    columnPlan.setList(false);
+                } else if (DefaultColumns.create_by.name().equals(columnPlan.getDbColumnName())) {
+                    columnPlan.setList(false);
+                    columnPlan.setUpdate(false);
+                } else if (DefaultColumns.update_by.name().equals(columnPlan.getDbColumnName())) {
+                    columnPlan.setList(false);
+                } else if (DefaultColumns.remarks.name().equals(columnPlan.getDbColumnName())) {
+                    columnPlan.setInputType(InputType.TEXTAREA);
+                    columnPlan.setList(false);
+                }
+            } else {
+                // 默认文本框
+                if (String.class.getSimpleName().equals(columnPlan.getDataType().javaType())) {
+                    columnPlan.setInputType(InputType.TEXT);
+                }
+                // 时间框
+                if (Date.class.getSimpleName().equals(columnPlan.getDataType().javaType())) {
+                    columnPlan.setInputType(InputType.DATE);
+                    tablePlan.setImportDate(true);
+                }
+
+                // jdbcType = LONGVARCHAR的为大文本
+                if (ColumnDataType.TEXT.jdbcType().equals(columnPlan.getDataType().jdbcType())) {
+                    columnPlan.setInputType(InputType.TEXTAREA);
+                    // 列表默认也不展示
+                    columnPlan.setList(false);
+                    columnPlan.setBlobType(true);
+                    tablePlan.setHasBlob(true);
+                }
+
+                // 数值
+                if (ArrayUtils.contains(new String[] {Integer.class.getSimpleName(), Long.class.getSimpleName(),
+                    Short.class.getSimpleName()}, columnPlan.getDataType().javaType())) {
+                    columnPlan.setInputType(InputType.INTEGRAL_NUMBER);
+                } else if (ArrayUtils.contains(new String[] {Float.class.getSimpleName(), Double.class.getSimpleName(),
+                    BigDecimal.class.getSimpleName()}, columnPlan.getDataType().javaType())) {
+                    columnPlan.setInputType(InputType.DECIMAL);
+                    tablePlan.setImportBigDecimal(true);
+                }
+
+                if ((ColumnKey.MUL.equals(columnPlan.getColumnKey())
+                    || ColumnKey.UNI.equals(columnPlan.getColumnKey()))) {
+                    columnPlan.setSearch(true);
+                    columnPlan.setSortable(true);
+                    columnPlan.setQueryType(QueryType.EQUAL);
+                    tablePlan.setHasSearch(true);
+                }
+            }
+
             // 主键
             if (columnPlan.getColumnKey().equals(ColumnKey.PRI)) {
                 if (null != tablePlan.getPkPlan()) {
@@ -103,59 +163,6 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
                     columnPlan.setUpdate(false);
                 }
             }
-            // 默认文本框
-            if (String.class.getSimpleName().equals(columnPlan.getDataType().javaType())) {
-                columnPlan.setInputType(InputType.TEXT);
-            }
-
-            // 默认文本域
-            if (DefaultColumns.remarks.name().equals(columnPlan.getDbColumnName())) {
-                columnPlan.setInputType(InputType.TEXTAREA);
-                columnPlan.setList(false);
-            }
-            // 时间框
-            if (Date.class.getSimpleName().equals(columnPlan.getDataType().javaType()) && !ArrayUtils.contains(
-                new String[] {DefaultColumns.create_time.name(), DefaultColumns.update_time.name()},
-                columnPlan.getDbColumnName())) {
-                columnPlan.setInputType(InputType.DATE);
-                tablePlan.setImportDate(true);
-            }
-
-            // jdbcType = LONGVARCHAR的为大文本
-            if (ColumnDataType.TEXT.jdbcType().equals(columnPlan.getDataType().jdbcType())) {
-                columnPlan.setInputType(InputType.TEXTAREA);
-                // 列表默认也不展示
-                columnPlan.setList(false);
-                columnPlan.setBlobType(true);
-                tablePlan.setHasBlob(true);
-            }
-
-            // 数值字段
-            if (!DefaultColumns.id.name().equals(columnPlan.getDbColumnName())) {
-                if (ArrayUtils
-                    .contains(new String[] {Integer.class.getSimpleName(), Long.class.getSimpleName(),
-                        Short.class.getSimpleName()}, columnPlan.getDataType().javaType())
-                    && !ArrayUtils.contains(
-                        new String[] {DefaultColumns.create_by.name(), DefaultColumns.update_by.name()},
-                        columnPlan.getDbColumnName())) {
-                    columnPlan.setInputType(InputType.INTEGRAL_NUMBER);
-                } else if (ArrayUtils.contains(new String[] {Float.class.getSimpleName(), Double.class.getSimpleName(),
-                    BigDecimal.class.getSimpleName()}, columnPlan.getDataType().javaType())) {
-                    columnPlan.setInputType(InputType.DECIMAL);
-                    tablePlan.setImportBigDecimal(true);
-                }
-            }
-
-            // 有索引并且不在默认字段内
-            if ((ColumnKey.MUL.equals(columnPlan.getColumnKey()) || ColumnKey.UNI.equals(columnPlan.getColumnKey()))
-                && !Arrays.stream(DefaultColumns.values()).map((defaultColumn) -> defaultColumn.name())
-                    .collect(Collectors.toList()).contains(columnPlan.getDbColumnName())) {
-                columnPlan.setSearch(true);
-                columnPlan.setSortable(true);
-                columnPlan.setQueryType(QueryType.EQUAL);
-                tablePlan.setHasSearch(true);
-            }
-
             columnPlans.add(columnPlan);
         });
         tablePlan.setSortable(columnPlans.stream().anyMatch(columnPlan -> columnPlan.isSortable()));
