@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.seezoon.generator.constants.InputType;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -54,12 +56,13 @@ public class TablePlan {
      * 字段方案
      */
     private List<ColumnPlan> columnPlans;
+
     /**
-     * 是否引入Date
+     * 是否引入Date DB类型决定
      */
     private boolean importDate;
     /**
-     * 是否引入BigDecimal
+     * 是否引入BigDecimal DB 类型决定
      */
     private boolean importBigDecimal;
 
@@ -68,7 +71,7 @@ public class TablePlan {
      */
     private boolean sortable;
     /**
-     * 是否有大字段
+     * 是否有大字段 DB 类型决定
      */
     private boolean hasBlob;
     /**
@@ -92,6 +95,33 @@ public class TablePlan {
      * 图片上传
      */
     private boolean hasImageUploadWidget;
+
+    public void adjust() {
+        if (null != this.getColumnPlans()) {
+
+            for (ColumnPlan columnPlan : this.getColumnPlans()) {
+                if (!this.isSortable()) {
+                    this.setSortable(columnPlan.isSortable());
+                }
+                if (!this.isHasSearch()) {
+                    this.setHasSearch(columnPlan.isSearch());
+                }
+                if (!this.isHasRichTextWidget()) {
+                    this.setHasRichTextWidget(columnPlan.getInputType().equals(InputType.RICH_TEXT));
+                }
+                if (!this.isHasDateWidget()) {
+                    this.setHasDateWidget(columnPlan.getInputType().equals(InputType.DATE)
+                        || columnPlan.getInputType().equals(InputType.DATETIME));
+                }
+                if (!this.isHasFileUploadWidget()) {
+                    this.setHasFileUploadWidget(columnPlan.getInputType().equals(InputType.FILE));
+                }
+                if (!this.isHasImageUploadWidget()) {
+                    this.setHasImageUploadWidget(columnPlan.getInputType().equals(InputType.IMAGE));
+                }
+            }
+        }
+    }
 
     /**
      * 为了让freemark读取到{@code defaultTableAlias}

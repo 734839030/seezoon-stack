@@ -4,7 +4,6 @@
     <resultMap id="BaseResultMap" type="com.seezoon.dao.modules.sys.entity.SysGen">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="table_name" jdbcType="VARCHAR" property="tableName"/>
-        <result column="pk_type" jdbcType="VARCHAR" property="pkType"/>
         <result column="menu_name" jdbcType="VARCHAR" property="menuName"/>
         <result column="module_name" jdbcType="VARCHAR" property="moduleName"/>
         <result column="function_name" jdbcType="VARCHAR" property="functionName"/>
@@ -19,31 +18,35 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-    t.id,t.table_name,t.pk_type,t.menu_name,t.module_name,t.function_name,t.template,t.class_name,t.create_by,t.create_time,t.update_by,t.update_time,t.remarks
+        t.id,t.table_name,t.menu_name,t.module_name,t.function_name,t.template,t.class_name,t.create_by,t.create_time,t.update_by,t.update_time,t.remarks
     </sql>
 
-    <sql id="Blob_Column_List" >
-    t.columns
+    <sql id="Blob_Column_List">
+        t.columns
     </sql>
-    <sql id="Query_Table" >
-    sys_gen t
+    <sql id="Query_Table">
+        sys_gen t
     </sql>
 
     <select id="selectByPrimaryKey" parameterType="Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        ,<include refid="Blob_Column_List"/>
-        from <include refid="Query_Table" />
+        ,
+        <include refid="Blob_Column_List"/>
+        from
+        <include refid="Query_Table"/>
         where t.id = #{id}
     </select>
 
-    <select id="selectByCondition" parameterType="com.seezoon.dao.modules.sys.entity.SysGenCondition" resultMap="BaseResultMap">
+    <select id="selectByCondition" parameterType="com.seezoon.dao.modules.sys.entity.SysGenCondition"
+            resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from <include refid="Query_Table" />
+        from
+        <include refid="Query_Table"/>
         <where>
             <if test="tableName != null and tableName != ''">
-            and t.table_name = #{tableName}
+                and t.table_name = #{tableName}
             </if>
         </where>
         <choose>
@@ -65,10 +68,11 @@
     </delete>
 
     <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
-        insert into sys_gen (table_name,pk_type,menu_name,module_name,function_name,template,class_name,columns,create_by,create_time,update_by,update_time,remarks)
+        insert into sys_gen
+        (table_name,menu_name,module_name,function_name,template,class_name,columns,create_by,create_time,update_by,update_time,remarks)
         values
         <foreach item="item" collection="array" separator=",">
-            (#{item.tableName},#{item.pkType},#{item.menuName},#{item.moduleName},#{item.functionName},#{item.template},#{item.className},#{item.columns},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remarks})
+            (#{item.tableName},#{item.menuName},#{item.moduleName},#{item.functionName},#{item.template},#{item.className},#{item.columns},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remarks})
         </foreach>
     </insert>
 
@@ -77,9 +81,6 @@
         <set>
             <if test="tableName != null">
                 t.table_name = #{tableName},
-            </if>
-            <if test="pkType != null">
-                t.pk_type = #{pkType},
             </if>
             <if test="menuName != null">
                 t.menu_name = #{menuName},
@@ -114,7 +115,6 @@
     <update id="updateByPrimaryKey" parameterType="com.seezoon.dao.modules.sys.entity.SysGen">
         update sys_gen t set
         t.table_name = #{tableName}
-        ,t.pk_type = #{pkType}
         ,t.menu_name = #{menuName}
         ,t.module_name = #{moduleName}
         ,t.function_name = #{functionName}

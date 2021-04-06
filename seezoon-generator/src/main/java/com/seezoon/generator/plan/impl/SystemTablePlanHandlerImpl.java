@@ -114,8 +114,12 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
                 }
                 // 时间框
                 if (Date.class.getSimpleName().equals(columnPlan.getDataType().javaType())) {
-                    columnPlan.setInputType(InputType.DATE);
                     tablePlan.setImportDate(true);
+                    if (ColumnDataType.DATE.dbType().equals(columnPlan.getDataType().dbType())) {
+                        columnPlan.setInputType(InputType.DATE);
+                    } else {
+                        columnPlan.setInputType(InputType.DATETIME);
+                    }
                 }
 
                 // jdbcType = LONGVARCHAR的为大文本
@@ -131,12 +135,15 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
                 if (ArrayUtils.contains(new String[] {Integer.class.getSimpleName(), Long.class.getSimpleName(),
                     Short.class.getSimpleName()}, columnPlan.getDataType().javaType())) {
                     columnPlan.setInputType(InputType.INTEGRAL_NUMBER);
-                } else if (ArrayUtils.contains(new String[] {Float.class.getSimpleName(), Double.class.getSimpleName(),
-                    BigDecimal.class.getSimpleName()}, columnPlan.getDataType().javaType())) {
+                } else if (ArrayUtils.contains(new String[] {Float.class.getSimpleName(), Double.class.getSimpleName()},
+                    columnPlan.getDataType().javaType())) {
+                    columnPlan.setInputType(InputType.DECIMAL);
+                } else if (BigDecimal.class.getSimpleName().equals(columnPlan.getDataType().javaType())) {
                     columnPlan.setInputType(InputType.DECIMAL);
                     tablePlan.setImportBigDecimal(true);
                 }
 
+                // 有索引的
                 if ((ColumnKey.MUL.equals(columnPlan.getColumnKey())
                     || ColumnKey.UNI.equals(columnPlan.getColumnKey()))) {
                     columnPlan.setSearch(true);

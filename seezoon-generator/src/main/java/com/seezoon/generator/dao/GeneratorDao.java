@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
+import com.seezoon.generator.dto.db.DbPk;
 import com.seezoon.generator.dto.db.DbTable;
 import com.seezoon.generator.dto.db.DbTableColumn;
 
@@ -51,11 +52,13 @@ public interface GeneratorDao {
     public List<DbTableColumn> findColumnByTableName(String tableName);
 
     @Select({"<script>",
-            "select t.data_type dataType",
+            "select t.column_name name,",
+            "t.data_type dataType,",
+            "if(t.extra = 'auto_increment' , true , false) autoIncrement",
             "from information_schema.`columns` t",
             "where table_name = upper(#{tableName}) and t.table_schema = (select database()) and t.column_key = 'PRI'",
             "order by t.ordinal_position asc limit 0,1",
             "</script>"})
-    public String findPkType(String tableName);
+    public DbPk findPk(String tableName);
     // @formatter:on
 }

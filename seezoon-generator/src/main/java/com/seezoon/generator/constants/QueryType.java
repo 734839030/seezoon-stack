@@ -7,6 +7,8 @@ package com.seezoon.generator.constants;
  */
 public enum QueryType {
 
+    NONE,
+
     EQUAL,
 
     NOT_EQUAL,

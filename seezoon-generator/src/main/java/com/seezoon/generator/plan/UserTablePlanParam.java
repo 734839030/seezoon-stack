@@ -62,5 +62,6 @@ public class UserTablePlanParam {
 
     @Valid
     @NotEmpty
-    private List<UserColumnPlanParam> userColumnPlanParams;
+    private List<UserColumnPlanParam> columnPlans;
+
 }

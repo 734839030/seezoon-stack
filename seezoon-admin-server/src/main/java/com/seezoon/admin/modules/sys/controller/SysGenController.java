@@ -16,6 +16,7 @@ import com.seezoon.framework.api.DefaultCodeMsgBundle;
 import com.seezoon.framework.api.Result;
 import com.seezoon.framework.web.BaseController;
 import com.seezoon.generator.plan.TablePlan;
+import com.seezoon.generator.plan.UserTablePlanParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -37,9 +38,9 @@ public class SysGenController extends BaseController {
     @ApiOperation(value = "主键查询")
     @PreAuthorize("hasAuthority('sys:gen:query')")
     @GetMapping("/query/{id}")
-    public Result<SysGen> query(@PathVariable Integer id) {
-        SysGen sysGen = sysGenService.find(id);
-        return Result.ok(sysGen);
+    public Result<TablePlan> query(@PathVariable Integer id) {
+        TablePlan customTablePlan = sysGenService.findCustomTablePlan(id);
+        return Result.ok(customTablePlan);
     }
 
     @ApiOperation(value = "查询默认生成方案")
@@ -70,16 +71,16 @@ public class SysGenController extends BaseController {
     @ApiOperation(value = "保存")
     @PreAuthorize("hasAuthority('sys:gen:save')")
     @PostMapping(value = "/save")
-    public Result save(@Valid @RequestBody SysGen sysGen) {
-        int count = sysGenService.save(sysGen);
+    public Result save(@Valid @RequestBody UserTablePlanParam userTablePlanParam) {
+        int count = sysGenService.save(null, userTablePlanParam);
         return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.SAVE_ERROR, count);
     }
 
     @ApiOperation(value = "更新")
     @PreAuthorize("hasAuthority('sys:gen:update')")
-    @PostMapping(value = "/update")
-    public Result update(@Valid @RequestBody SysGen sysGen) {
-        int count = sysGenService.updateSelective(sysGen);
+    @PostMapping(value = "/update/{id}")
+    public Result update(@PathVariable Integer id, @Valid @RequestBody UserTablePlanParam userTablePlanParam) {
+        int count = sysGenService.save(id, userTablePlanParam);
         return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.UPDATE_ERROR, count);
     }
 

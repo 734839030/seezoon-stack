@@ -7,6 +7,8 @@ package com.seezoon.generator.constants;
  */
 public enum InputType {
 
+    NONE,
+
     TEXT,
 
     SELECT,
@@ -31,8 +33,6 @@ public enum InputType {
 
     IMAGE,
 
-    FILE,
-
-    NONE,;
+    FILE;
 
 }

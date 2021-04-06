@@ -1,6 +1,5 @@
 package com.seezoon.framework.web;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,14 +12,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.seezoon.framework.properties.SeezoonProperties;
 import com.seezoon.framework.web.servlet.RequestFilter;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * @author hdf
  */
 @Configuration
+@RequiredArgsConstructor
 public class AutoWebMvcConfigurer implements WebMvcConfigurer {
 
-    @Autowired
-    private SeezoonProperties seezoonProperties;
+    private final SeezoonProperties seezoonProperties;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

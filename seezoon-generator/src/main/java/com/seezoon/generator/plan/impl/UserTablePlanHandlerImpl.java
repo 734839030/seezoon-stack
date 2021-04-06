@@ -51,8 +51,8 @@ public class UserTablePlanHandlerImpl implements TablePlanHandler {
             tablePlan.getPkPlan().setJavaFieldName(pkColumnPlan.getJavaFieldName());
             tablePlan.getPkPlan()
                 .setDefaultJavaPkName(DefaultColumns.id.name().equals(pkColumnPlan.getJavaFieldName()));
-            if (!CollectionUtils.isEmpty(userTablePlanParam.getUserColumnPlanParams())) {
-                userTablePlanParam.getUserColumnPlanParams().forEach((u) -> {
+            if (!CollectionUtils.isEmpty(userTablePlanParam.getColumnPlans())) {
+                userTablePlanParam.getColumnPlans().forEach((u) -> {
                     ColumnPlan columnPlan = columnPlanMapping.get(u.getDbColumnName());
                     Assert.notNull(columnPlan, String.format("can't find DbColumnName[%s]", u.getDbColumnName()));
                     columnPlan.setFieldName(u.getFieldName());

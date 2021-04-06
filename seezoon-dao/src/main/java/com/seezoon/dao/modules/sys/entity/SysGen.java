@@ -28,11 +28,6 @@ public class SysGen extends BaseEntity<Integer> {
     @Size(max = 32)
     private String tableName;
 
-    @ApiModelProperty(value = "主键类型", required = true)
-    @NotBlank
-    @Size(max = 10)
-    private String pkType;
-
     @ApiModelProperty(value = "菜单名", required = true)
     @NotBlank
     @Size(max = 50)
