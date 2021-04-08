@@ -4,18 +4,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
 
 import com.seezoon.generator.constants.InputType;
 import com.seezoon.generator.constants.QueryType;
-import com.seezoon.generator.constants.db.DefaultColumns;
 import com.seezoon.generator.dto.db.DbTable;
 import com.seezoon.generator.dto.db.DbTableColumn;
-import com.seezoon.generator.plan.ColumnPlan;
-import com.seezoon.generator.plan.TablePlan;
-import com.seezoon.generator.plan.TablePlanHandler;
-import com.seezoon.generator.plan.UserTablePlanParam;
+import com.seezoon.generator.plan.*;
 
 /**
  * 用户自定义生成方案
@@ -25,7 +21,6 @@ import com.seezoon.generator.plan.UserTablePlanParam;
 public class UserTablePlanHandlerImpl implements TablePlanHandler {
 
     private UserTablePlanParam userTablePlanParam;
-    private TablePlanHandler systemTablePlanHandler = new SystemTablePlanHandlerImpl();
 
     public UserTablePlanHandlerImpl(UserTablePlanParam userTablePlanParam) {
         this.userTablePlanParam = userTablePlanParam;
@@ -33,61 +28,40 @@ public class UserTablePlanHandlerImpl implements TablePlanHandler {
 
     @Override
     public TablePlan generate(DbTable dbTable, List<DbTableColumn> dbTableColumns) {
+        TablePlanHandler systemTablePlanHandler = new SystemTablePlanHandlerImpl();
         TablePlan tablePlan = systemTablePlanHandler.generate(dbTable, dbTableColumns);
-        if (null != userTablePlanParam) {
-            tablePlan.setMenuName(userTablePlanParam.getMenuName());
-            tablePlan.setModuleName(userTablePlanParam.getModuleName());
-            tablePlan.setFunctionName(userTablePlanParam.getFunctionName());
-            tablePlan.setTemplateType(userTablePlanParam.getTemplateType());
-            tablePlan.setClassName(userTablePlanParam.getClassName());
-            // 默认方案会自动判断是否search
-            tablePlan.setHasSearch(false);
-            // 默认方法会对有所以的非默认字段排序
-            tablePlan.setSortable(false);
-            Map<String, ColumnPlan> columnPlanMapping =
-                tablePlan.getColumnPlans().stream().collect(Collectors.toMap(ColumnPlan::getDbColumnName, v -> v));
-            // 主键字段名改写
-            ColumnPlan pkColumnPlan = columnPlanMapping.get(tablePlan.getPkPlan().getDbColumnName());
-            tablePlan.getPkPlan().setJavaFieldName(pkColumnPlan.getJavaFieldName());
-            tablePlan.getPkPlan()
-                .setDefaultJavaPkName(DefaultColumns.id.name().equals(pkColumnPlan.getJavaFieldName()));
-            if (!CollectionUtils.isEmpty(userTablePlanParam.getColumnPlans())) {
-                userTablePlanParam.getColumnPlans().forEach((u) -> {
-                    ColumnPlan columnPlan = columnPlanMapping.get(u.getDbColumnName());
-                    Assert.notNull(columnPlan, String.format("can't find DbColumnName[%s]", u.getDbColumnName()));
-                    columnPlan.setFieldName(u.getFieldName());
-                    columnPlan.setSort(u.getSort());
-                    columnPlan.setInsert(u.isInsert());
-                    columnPlan.setUpdate(u.isUpdate());
-                    columnPlan.setList(u.isList());
-                    columnPlan.setSortable(u.isSortable());
-                    columnPlan.setSearch(u.isSearch());
-                    columnPlan.setQueryType(QueryType.valueOf(u.getQueryType()));
-                    columnPlan.setInputType(InputType.valueOf(u.getInputType()));
-                    columnPlan.setDictType(u.getDictType());
+        // 主基础字段
+        tablePlan.setTableName(userTablePlanParam.getTableName());
+        tablePlan.setMenuName(userTablePlanParam.getMenuName());
+        tablePlan.setModuleName(userTablePlanParam.getModuleName());
+        tablePlan.setFunctionName(userTablePlanParam.getFunctionName());
+        tablePlan.setTemplateType(userTablePlanParam.getTemplateType());
+        tablePlan.setClassName(userTablePlanParam.getClassName());
 
-                    if (InputType.RICH_TEXT.equals(u.getInputType()) && !tablePlan.isHasRichTextWidget()) {
-                        tablePlan.setHasRichTextWidget(true);
-                    }
-                    if (InputType.DATE.equals(u.getInputType()) && !tablePlan.isHasDateWidget()) {
-                        tablePlan.setHasDateWidget(true);
-                    }
-                    if (InputType.FILE.equals(u.getInputType()) && !tablePlan.isHasFileUploadWidget()) {
-                        tablePlan.setHasFileUploadWidget(true);
-                    }
-                    if (InputType.IMAGE.equals(u.getInputType()) && tablePlan.isHasImageUploadWidget()) {
-                        tablePlan.setHasImageUploadWidget(true);
-                    }
+        // 列属性
+        Map<String, ColumnPlan> defaultColumnPlans =
+            tablePlan.getColumnPlans().stream().collect(Collectors.toMap(ColumnPlan::getDbColumnName, v -> v));
 
-                    if (u.isSearch() && !tablePlan.isHasSearch()) {
-                        tablePlan.setHasSearch(true);
-                    }
-                    if (u.isSortable() && !tablePlan.isSortable()) {
-                        tablePlan.setSortable(true);
-                    }
-                });
-            }
+        for (UserColumnPlanParam userColumnPlanParam : userTablePlanParam.getColumnPlans()) {
+            ColumnPlan columnPlan = defaultColumnPlans.get(userColumnPlanParam.getDbColumnName());
+            Assert.notNull(columnPlan, String.format("[%s] column not exists", columnPlan.getDbColumnName()));
+            columnPlan.setFieldName(userColumnPlanParam.getFieldName());
+            columnPlan.setJavaFieldName(userColumnPlanParam.getJavaFieldName());
+            columnPlan.setSort(userColumnPlanParam.getSort());
+            columnPlan.setInsert(userColumnPlanParam.isInsert());
+            columnPlan.setUpdate(userColumnPlanParam.isUpdate());
+            columnPlan.setList(userColumnPlanParam.isList());
+            columnPlan.setSortable(userColumnPlanParam.isSortable());
+            columnPlan.setSearch(userColumnPlanParam.isSearch());
+            columnPlan.setQueryType(StringUtils.isNotBlank(userColumnPlanParam.getQueryType())
+                ? QueryType.valueOf(userColumnPlanParam.getQueryType()) : QueryType.NONE);
+            columnPlan.setInputType(StringUtils.isNotBlank(userColumnPlanParam.getInputType())
+                ? InputType.valueOf(userColumnPlanParam.getInputType()) : InputType.NONE);
+            columnPlan.setDictType(userColumnPlanParam.getDictType());
+
         }
+        // 处理更新列而引起的生成方案的变更
+        tablePlan.adjust();
         return tablePlan;
     }
 }

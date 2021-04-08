@@ -13,6 +13,7 @@ import org.hibernate.validator.constraints.Length;
 import com.seezoon.generator.constants.TemplateType;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -22,6 +23,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 public class UserTablePlanParam {
 
     /**

@@ -6,8 +6,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageSerializable;
 import com.seezoon.admin.modules.sys.service.SysGenService;
 import com.seezoon.dao.modules.sys.entity.SysGen;
@@ -16,7 +18,9 @@ import com.seezoon.framework.api.DefaultCodeMsgBundle;
 import com.seezoon.framework.api.Result;
 import com.seezoon.framework.web.BaseController;
 import com.seezoon.generator.plan.TablePlan;
+import com.seezoon.generator.plan.UserColumnPlanParam;
 import com.seezoon.generator.plan.UserTablePlanParam;
+import com.seezoon.generator.service.UserGeneratorService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,20 +38,21 @@ import lombok.RequiredArgsConstructor;
 public class SysGenController extends BaseController {
 
     private final SysGenService sysGenService;
+    private final UserGeneratorService userGeneratorService;
 
     @ApiOperation(value = "主键查询")
     @PreAuthorize("hasAuthority('sys:gen:query')")
     @GetMapping("/query/{id}")
     public Result<TablePlan> query(@PathVariable Integer id) {
-        TablePlan customTablePlan = sysGenService.findCustomTablePlan(id);
-        return Result.ok(customTablePlan);
+        TablePlan tablePlan = getCustomTablePlan(id);
+        return Result.ok(tablePlan);
     }
 
     @ApiOperation(value = "查询默认生成方案")
     @PreAuthorize("hasAuthority('sys:gen:query')")
     @GetMapping("/query")
     public Result<TablePlan> query(@NotBlank @RequestParam String tableName) {
-        TablePlan defaultTablePlan = sysGenService.findDefaultTablePlan(tableName);
+        TablePlan defaultTablePlan = userGeneratorService.findDefaultTablePlan(tableName);
         return Result.ok(defaultTablePlan);
     }
 
@@ -55,7 +60,7 @@ public class SysGenController extends BaseController {
     @PreAuthorize("hasAuthority('sys:gen:query')")
     @GetMapping("/tables")
     public Result<List<String>> tables() {
-        List<String> tables = sysGenService.findTables();
+        List<String> tables = userGeneratorService.findTables();
         return Result.ok(tables);
     }
 
@@ -90,5 +95,29 @@ public class SysGenController extends BaseController {
     public Result delete(@RequestParam Integer id) {
         int count = sysGenService.delete(id);
         return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.DELETE_ERROR, count);
+    }
+
+    @ApiOperation(value = "生成")
+    @PreAuthorize("hasAuthority('sys:gen:generate')")
+    @PostMapping(value = "/generate/{id}")
+    public void generate(@PathVariable Integer id) {
+        TablePlan customTablePlan = this.getCustomTablePlan(id);
+        Assert.notNull(customTablePlan, "generate plan not found");
+
+    }
+
+    private TablePlan getCustomTablePlan(Integer id) {
+        SysGen sysGen = this.sysGenService.find(id);
+        Assert.notNull(sysGen, "sys gen data not exist");
+        UserTablePlanParam userTablePlanParam = new UserTablePlanParam();
+        userTablePlanParam.setTableName(sysGen.getTableName());
+        userTablePlanParam.setMenuName(sysGen.getMenuName());
+        userTablePlanParam.setModuleName(sysGen.getModuleName());
+        userTablePlanParam.setFunctionName(sysGen.getFunctionName());
+        userTablePlanParam.setTemplateType(sysGen.getTemplate());
+        userTablePlanParam.setClassName(sysGen.getClassName());
+        userTablePlanParam.setColumnPlans(JSON.parseArray(sysGen.getColumns(), UserColumnPlanParam.class));
+        TablePlan tablePlan = userGeneratorService.customTablePlan(userTablePlanParam);
+        return tablePlan;
     }
 }

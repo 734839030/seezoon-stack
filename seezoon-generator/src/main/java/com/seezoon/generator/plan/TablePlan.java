@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import com.seezoon.generator.constants.InputType;
+import com.seezoon.generator.constants.db.ColumnKey;
+import com.seezoon.generator.constants.db.DefaultColumns;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -98,8 +100,13 @@ public class TablePlan {
 
     public void adjust() {
         if (null != this.getColumnPlans()) {
-
             for (ColumnPlan columnPlan : this.getColumnPlans()) {
+
+                if (ColumnKey.PRI.name().equals(columnPlan.getColumnKey())) {
+                    this.getPkPlan().setJavaFieldName(columnPlan.getJavaFieldName());
+                    this.getPkPlan()
+                        .setDefaultJavaPkName(columnPlan.getJavaFieldName().equals(DefaultColumns.id.name()));
+                }
                 if (!this.isSortable()) {
                     this.setSortable(columnPlan.isSortable());
                 }
@@ -120,6 +127,7 @@ public class TablePlan {
                     this.setHasImageUploadWidget(columnPlan.getInputType().equals(InputType.IMAGE));
                 }
             }
+            this.columnPlans.sort(null);
         }
     }
 
