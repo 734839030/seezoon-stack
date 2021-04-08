@@ -1,7 +1,12 @@
 package com.seezoon.admin.modules.sys.controller;
 
+import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
@@ -16,6 +21,7 @@ import com.seezoon.dao.modules.sys.entity.SysGen;
 import com.seezoon.dao.modules.sys.entity.SysGenCondition;
 import com.seezoon.framework.api.DefaultCodeMsgBundle;
 import com.seezoon.framework.api.Result;
+import com.seezoon.framework.exception.BusinessException;
 import com.seezoon.framework.web.BaseController;
 import com.seezoon.generator.plan.TablePlan;
 import com.seezoon.generator.plan.UserColumnPlanParam;
@@ -99,14 +105,29 @@ public class SysGenController extends BaseController {
 
     @ApiOperation(value = "生成")
     @PreAuthorize("hasAuthority('sys:gen:generate')")
-    @PostMapping(value = "/generate/{id}")
-    public void generate(@PathVariable Integer id) {
-        TablePlan customTablePlan = this.getCustomTablePlan(id);
-        Assert.notNull(customTablePlan, "generate plan not found");
+    @GetMapping(value = "/generate/{id}")
+    public void generate(@PathVariable Integer id, HttpServletResponse response) {
+        UserTablePlanParam userTablePlanParam = this.getUserTablePlanParam(id);
+        try (ServletOutputStream outputStream = response.getOutputStream();) {
+            response.setContentType("application/zip");
+            response.setHeader("Content-Disposition",
+                "attachment;filename=" + URLEncoder.encode(
+                    userTablePlanParam.getTableName() + "_" + userTablePlanParam.getMenuName() + "_" + id + ".zip",
+                    StandardCharsets.UTF_8));
+            userGeneratorService.generate(userTablePlanParam, outputStream);
+        } catch (IOException e) {
+            throw new BusinessException("下载文件出错:%s", e.getMessage());
+        }
 
     }
 
     private TablePlan getCustomTablePlan(Integer id) {
+        UserTablePlanParam userTablePlanParam = getUserTablePlanParam(id);
+        TablePlan tablePlan = userGeneratorService.customTablePlan(userTablePlanParam);
+        return tablePlan;
+    }
+
+    private UserTablePlanParam getUserTablePlanParam(Integer id) {
         SysGen sysGen = this.sysGenService.find(id);
         Assert.notNull(sysGen, "sys gen data not exist");
         UserTablePlanParam userTablePlanParam = new UserTablePlanParam();
@@ -117,7 +138,6 @@ public class SysGenController extends BaseController {
         userTablePlanParam.setTemplateType(sysGen.getTemplate());
         userTablePlanParam.setClassName(sysGen.getClassName());
         userTablePlanParam.setColumnPlans(JSON.parseArray(sysGen.getColumns(), UserColumnPlanParam.class));
-        TablePlan tablePlan = userGeneratorService.customTablePlan(userTablePlanParam);
-        return tablePlan;
+        return userTablePlanParam;
     }
 }

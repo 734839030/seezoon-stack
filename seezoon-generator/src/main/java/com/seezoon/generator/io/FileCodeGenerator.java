@@ -52,11 +52,12 @@ public class FileCodeGenerator implements CodeGenerator {
                     String relativePath = generatedFolderPath.relativize(f).toString();
                     zipOutputStream.putNextEntry(new ZipEntry(relativePath));
                     // 写入文件
-                    byte[] buff = new byte[(int)FileUtils.ONE_KB];
+                    byte[] buff = new byte[(int)FileUtils.ONE_KB * 8];
                     int len = 0;
                     while (-1 != (len = bins.read(buff))) {
                         zipOutputStream.write(buff, 0, len);
                     }
+                    zipOutputStream.closeEntry();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
