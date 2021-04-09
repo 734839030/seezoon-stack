@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +24,6 @@ import com.seezoon.dao.modules.sys.entity.SysGen;
 import com.seezoon.dao.modules.sys.entity.SysGenCondition;
 import com.seezoon.framework.api.DefaultCodeMsgBundle;
 import com.seezoon.framework.api.Result;
-import com.seezoon.framework.exception.BusinessException;
 import com.seezoon.framework.web.BaseController;
 import com.seezoon.generator.plan.TablePlan;
 import com.seezoon.generator.plan.UserColumnPlanParam;
@@ -103,20 +105,41 @@ public class SysGenController extends BaseController {
         return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.DELETE_ERROR, count);
     }
 
+    /**
+     * ajax 下载的所以不设置contentType ,因为全局异常是返回json的类型的响应，设置后无匹配的转化器
+     *
+     * @param ids
+     * @param response
+     */
     @ApiOperation(value = "生成")
     @PreAuthorize("hasAuthority('sys:gen:generate')")
-    @GetMapping(value = "/generate/{id}")
-    public void generate(@PathVariable Integer id, HttpServletResponse response) {
-        UserTablePlanParam userTablePlanParam = this.getUserTablePlanParam(id);
+    @PostMapping(value = "/generate")
+    public void generate(@NotEmpty @RequestBody List<Integer> ids, HttpServletResponse response) throws IOException {
+        // try with resource 出异常会关闭流，spring 会标记response 不可以在提交数据
         try (ServletOutputStream outputStream = response.getOutputStream();) {
             response.setContentType("application/zip");
+
+            String fileName = null;
+            if (ids.size() > 1) {
+                fileName = "批量生成-" + ids.size() + "个";
+            } else {
+                UserTablePlanParam userTablePlanParam = this.getUserTablePlanParam(ids.get(0));
+                fileName = userTablePlanParam.getTableName() + "_" + userTablePlanParam.getMenuName() + "_" + ids.get(0)
+                    + ".zip";
+            }
+            // 浏览器自动下载
             response.setHeader("Content-Disposition",
-                "attachment;filename=" + URLEncoder.encode(
-                    userTablePlanParam.getTableName() + "_" + userTablePlanParam.getMenuName() + "_" + id + ".zip",
-                    StandardCharsets.UTF_8));
-            userGeneratorService.generate(userTablePlanParam, outputStream);
-        } catch (IOException e) {
-            throw new BusinessException("下载文件出错:%s", e.getMessage());
+                "attachment;filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8));
+            try {
+                List<UserTablePlanParam> UserTablePlanParams =
+                    ids.stream().map(id -> this.getUserTablePlanParam(id)).collect(Collectors.toList());
+                userGeneratorService.generate(UserTablePlanParams, outputStream);
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                outputStream.write(
+                    (JSON.toJSONString(Result.error("下载文件出错:%s", e.getMessage()))).getBytes(StandardCharsets.UTF_8));
+            }
         }
 
     }

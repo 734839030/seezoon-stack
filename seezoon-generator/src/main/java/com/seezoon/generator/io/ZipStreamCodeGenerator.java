@@ -37,7 +37,6 @@ public class ZipStreamCodeGenerator implements CodeGenerator {
                     String content = FreeMarkerRender.renderTemplate(ct.tplName(), tablePlan);
                     String path = FreeMarkerRender.renderStringTemplate(ct.path(), tablePlan);
                     String name = FreeMarkerRender.renderStringTemplate(ct.fileName(), tablePlan);
-                    System.out.println(Path.of(path, name).toString());
                     addNextEntry(zipOutputStream, Path.of(path, name).toString(), content);
                 });
             }

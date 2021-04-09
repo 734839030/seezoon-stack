@@ -28,10 +28,9 @@ public class BusinessException extends RuntimeException {
      * 默认错误码
      *
      * @param msg
-     * @param args
      */
-    public BusinessException(String msg, Object... args) {
-        this(DefaultCodeMsgBundle.FAIL.code(), msg, args);
+    public BusinessException(String msg) {
+        this(DefaultCodeMsgBundle.FAIL.code(), msg);
     }
 
     public BusinessException(CodeMsg codeMsg, Object... agrs) {

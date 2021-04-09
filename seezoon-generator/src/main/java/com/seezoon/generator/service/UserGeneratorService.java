@@ -2,11 +2,13 @@ package com.seezoon.generator.service;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Service;
@@ -62,10 +64,15 @@ public class UserGeneratorService extends AbstractGeneratorService {
         return tablePlan;
     }
 
-    public void generate(@Valid @NotNull UserTablePlanParam userTablePlanParam, OutputStream outputStream)
+    public void generate(@Valid @NotEmpty List<UserTablePlanParam> userTablePlanParams, OutputStream outputStream)
         throws IOException {
-        TablePlanHandler tablePlanHandler = new UserTablePlanHandlerImpl(userTablePlanParam);
-
-        super.generate(new ZipStreamCodeGenerator(outputStream), tablePlanHandler, userTablePlanParam.getTableName());
+        List<TablePlan> tablePlans = new ArrayList<>();
+        userTablePlanParams.forEach((userTablePlanParam) -> {
+            TablePlanHandler tablePlanHandler = new UserTablePlanHandlerImpl(userTablePlanParam);
+            tablePlans.add(tablePlanHandler.generate(this.findTable(userTablePlanParam.getTableName()),
+                this.findDbTableColumns(userTablePlanParam.getTableName())));
+        });
+        ZipStreamCodeGenerator zipStreamCodeGenerator = new ZipStreamCodeGenerator(outputStream);
+        zipStreamCodeGenerator.generate(tablePlans.toArray(TablePlan[]::new));
     }
 }
