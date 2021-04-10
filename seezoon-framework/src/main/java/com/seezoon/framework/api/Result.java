@@ -45,8 +45,8 @@ public class Result<T> {
         return result;
     }
 
-    public static <T> Result<T> error(String msg, Object... agrs) {
-        Result<T> result = new Result<T>(DefaultCodeMsgBundle.FAIL.code(), msg, agrs);
+    public static <T> Result<T> error(String msg) {
+        Result<T> result = new Result<T>(DefaultCodeMsgBundle.FAIL.code(), msg);
         return result;
     }
 

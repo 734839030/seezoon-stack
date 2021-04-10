@@ -13,6 +13,8 @@ public enum InputType {
 
     SELECT,
 
+    SELECT_MULTIPLE,
+
     HIDDEN,
     // 整数
     INTEGRAL_NUMBER,

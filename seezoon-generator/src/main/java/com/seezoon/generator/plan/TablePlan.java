@@ -2,9 +2,11 @@ package com.seezoon.generator.plan;
 
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import com.seezoon.generator.constants.InputType;
+import com.seezoon.generator.constants.QueryType;
 import com.seezoon.generator.constants.db.ColumnKey;
 import com.seezoon.generator.constants.db.DefaultColumns;
 
@@ -82,6 +84,11 @@ public class TablePlan {
     private boolean hasSearch;
 
     /**
+     * 是否有字典组件(下拉，单选，多选)
+     */
+    private boolean hasDictWidget;
+
+    /**
      * 是否富文本
      */
     private boolean hasRichTextWidget;
@@ -102,6 +109,23 @@ public class TablePlan {
         if (null != this.getColumnPlans()) {
             for (ColumnPlan columnPlan : this.getColumnPlans()) {
 
+                boolean allowSearchAndListAndSortable = !ArrayUtils.contains(
+                    new String[] {InputType.RICH_TEXT.name(), InputType.IMAGE.name(), InputType.FILE.name()},
+                    columnPlan.getInputType());
+
+                if (!allowSearchAndListAndSortable) {
+                    columnPlan.setSearch(false);
+                    columnPlan.setList(false);
+                    columnPlan.setSortable(false);
+                    columnPlan.setQueryType(QueryType.NONE);
+                }
+                boolean allowDict =
+                    ArrayUtils.contains(new String[] {InputType.SELECT.name(), InputType.SELECT_MULTIPLE.name(),
+                        InputType.RADIO.name(), InputType.CHECKBOX.name()}, columnPlan.getInputType());
+                if (!allowDict) {
+                    columnPlan.setDictType(null);
+                }
+
                 if (ColumnKey.PRI.name().equals(columnPlan.getColumnKey())) {
                     this.getPkPlan().setJavaFieldName(columnPlan.getJavaFieldName());
                     this.getPkPlan()
@@ -113,18 +137,23 @@ public class TablePlan {
                 if (!this.isHasSearch()) {
                     this.setHasSearch(columnPlan.isSearch());
                 }
+                if (!this.hasDictWidget) {
+                    this.setHasDictWidget(
+                        ArrayUtils.contains(new String[] {InputType.SELECT.name(), InputType.SELECT_MULTIPLE.name(),
+                            InputType.RADIO.name(), InputType.CHECKBOX.name()}, columnPlan.getInputType()));
+                }
                 if (!this.isHasRichTextWidget()) {
-                    this.setHasRichTextWidget(columnPlan.getInputType().equals(InputType.RICH_TEXT));
+                    this.setHasRichTextWidget(columnPlan.getInputType().equals(InputType.RICH_TEXT.name()));
                 }
                 if (!this.isHasDateWidget()) {
-                    this.setHasDateWidget(columnPlan.getInputType().equals(InputType.DATE)
-                        || columnPlan.getInputType().equals(InputType.DATETIME));
+                    this.setHasDateWidget(columnPlan.getInputType().equals(InputType.DATE.name())
+                        || columnPlan.getInputType().equals(InputType.DATETIME.name()));
                 }
                 if (!this.isHasFileUploadWidget()) {
-                    this.setHasFileUploadWidget(columnPlan.getInputType().equals(InputType.FILE));
+                    this.setHasFileUploadWidget(columnPlan.getInputType().equals(InputType.FILE.name()));
                 }
                 if (!this.isHasImageUploadWidget()) {
-                    this.setHasImageUploadWidget(columnPlan.getInputType().equals(InputType.IMAGE));
+                    this.setHasImageUploadWidget(columnPlan.getInputType().equals(InputType.IMAGE.name()));
                 }
             }
             this.columnPlans.sort(null);

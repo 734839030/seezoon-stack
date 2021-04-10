@@ -117,28 +117,28 @@ public class SysGenController extends BaseController {
     public void generate(@NotEmpty @RequestBody List<Integer> ids, HttpServletResponse response) throws IOException {
         // try with resource 出异常会关闭流，spring 会标记response 不可以在提交数据
         try (ServletOutputStream outputStream = response.getOutputStream();) {
-            response.setContentType("application/zip");
-
-            String fileName = null;
-            if (ids.size() > 1) {
-                fileName = "批量生成-" + ids.size() + "个";
-            } else {
-                UserTablePlanParam userTablePlanParam = this.getUserTablePlanParam(ids.get(0));
-                fileName = userTablePlanParam.getTableName() + "_" + userTablePlanParam.getMenuName() + "_" + ids.get(0)
-                    + ".zip";
-            }
-            // 浏览器自动下载
-            response.setHeader("Content-Disposition",
-                "attachment;filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8));
             try {
+                response.setContentType("application/zip");
+                String fileName = null;
+                if (ids.size() > 1) {
+                    fileName = "批量生成-" + ids.size() + "个";
+                } else {
+                    UserTablePlanParam userTablePlanParam = this.getUserTablePlanParam(ids.get(0));
+                    fileName = userTablePlanParam.getTableName() + "_" + userTablePlanParam.getMenuName() + "_"
+                        + ids.get(0) + ".zip";
+                }
+                // 浏览器自动下载
+                response.setHeader("Content-Disposition",
+                    "attachment;filename=" + URLEncoder.encode(fileName, StandardCharsets.UTF_8));
+
                 List<UserTablePlanParam> UserTablePlanParams =
                     ids.stream().map(id -> this.getUserTablePlanParam(id)).collect(Collectors.toList());
                 userGeneratorService.generate(UserTablePlanParams, outputStream);
             } catch (Exception e) {
                 logger.error(e.getMessage());
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-                outputStream.write(
-                    (JSON.toJSONString(Result.error("下载文件出错:%s", e.getMessage()))).getBytes(StandardCharsets.UTF_8));
+                outputStream.write((JSON.toJSONString(Result.error(String.format("下载文件出错:%s", e.getMessage()))))
+                    .getBytes(StandardCharsets.UTF_8));
             }
         }
 
