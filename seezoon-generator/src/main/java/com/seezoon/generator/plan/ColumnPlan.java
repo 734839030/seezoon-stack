@@ -1,10 +1,13 @@
 package com.seezoon.generator.plan;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.seezoon.generator.constants.InputType;
 import com.seezoon.generator.constants.QueryType;
 import com.seezoon.generator.constants.db.ColumnDataType;
 import com.seezoon.generator.constants.db.ColumnExtra;
 import com.seezoon.generator.constants.db.ColumnKey;
+import com.seezoon.generator.constants.db.DefaultColumns;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -117,5 +120,21 @@ public class ColumnPlan implements Comparable<ColumnPlan> {
 
     public String getJavaType() {
         return null == dataType ? null : dataType.javaType();
+    }
+
+    public boolean isDictField() {
+        return ArrayUtils.contains(new String[] {InputType.SELECT.name(), InputType.SELECT_MULTIPLE.name(),
+            InputType.CHECKBOX.name(), InputType.RADIO.name()}, this.getInputType().name());
+    }
+
+    public boolean isShowDataForm() {
+        return !ArrayUtils.contains(new String[] {DefaultColumns.create_time.name(), DefaultColumns.create_by.name(),
+            DefaultColumns.update_time.name(), DefaultColumns.update_by.name()}, this.getDbColumnName());
+    }
+
+    public boolean isShowView() {
+        return !ArrayUtils.contains(
+            new String[] {DefaultColumns.create_by.name(), DefaultColumns.id.name(), DefaultColumns.update_by.name()},
+            this.getDbColumnName());
     }
 }

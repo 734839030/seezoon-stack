@@ -71,6 +71,7 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
                     .javaFieldName(CaseUtils.toCamelCase(v.getName(), false, DB_DELIMITER.toCharArray()))
                     .nullable(v.getNullable())
                     .sort(v.getSort())
+                    .queryType(QueryType.NONE)
                     .sortable(false)
                     .insert(true)
                     .update(true)
@@ -91,17 +92,22 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
                     columnPlan.setInputType(InputType.HIDDEN);
                     columnPlan.setList(false);
                     columnPlan.setInsert(false);
+                    columnPlan.setUpdate(false);
                 } else if (DefaultColumns.status.name().equals(columnPlan.getDbColumnName())) {
                     columnPlan.setInputType(InputType.RADIO);
                 } else if (DefaultColumns.create_time.name().equals(columnPlan.getDbColumnName())) {
                     columnPlan.setSortable(true);
                     columnPlan.setUpdate(false);
+                    columnPlan.setInputType(InputType.DATETIME);
                 } else if (DefaultColumns.update_time.name().equals(columnPlan.getDbColumnName())) {
                     columnPlan.setList(false);
+                    columnPlan.setInputType(InputType.DATETIME);
                 } else if (DefaultColumns.create_by.name().equals(columnPlan.getDbColumnName())) {
+                    columnPlan.setInputType(InputType.INTEGRAL_NUMBER);
                     columnPlan.setList(false);
                     columnPlan.setUpdate(false);
                 } else if (DefaultColumns.update_by.name().equals(columnPlan.getDbColumnName())) {
+                    columnPlan.setInputType(InputType.INTEGRAL_NUMBER);
                     columnPlan.setList(false);
                 } else if (DefaultColumns.remarks.name().equals(columnPlan.getDbColumnName())) {
                     columnPlan.setInputType(InputType.TEXTAREA);

@@ -4,11 +4,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
 import com.seezoon.generator.constants.InputType;
 import com.seezoon.generator.constants.QueryType;
+import com.seezoon.generator.constants.db.ColumnKey;
+import com.seezoon.generator.constants.db.DefaultColumns;
 import com.seezoon.generator.dto.db.DbTable;
 import com.seezoon.generator.dto.db.DbTableColumn;
 import com.seezoon.generator.plan.*;
@@ -61,7 +64,61 @@ public class UserTablePlanHandlerImpl implements TablePlanHandler {
 
         }
         // 处理更新列而引起的生成方案的变更
-        tablePlan.adjust();
+        this.adjust(tablePlan);
         return tablePlan;
+    }
+
+    private void adjust(TablePlan tablePlan) {
+        if (null != tablePlan.getColumnPlans()) {
+            for (ColumnPlan columnPlan : tablePlan.getColumnPlans()) {
+
+                boolean allowSearchAndListAndSortable =
+                    !ArrayUtils.contains(new InputType[] {InputType.RICH_TEXT, InputType.IMAGE, InputType.FILE},
+                        columnPlan.getInputType());
+
+                if (!allowSearchAndListAndSortable) {
+                    columnPlan.setSearch(false);
+                    columnPlan.setList(false);
+                    columnPlan.setSortable(false);
+                    columnPlan.setQueryType(QueryType.NONE);
+                }
+                boolean allowDict = ArrayUtils.contains(
+                    new InputType[] {InputType.SELECT, InputType.SELECT_MULTIPLE, InputType.RADIO, InputType.CHECKBOX},
+                    columnPlan.getInputType());
+                if (!allowDict) {
+                    columnPlan.setDictType(null);
+                }
+
+                if (ColumnKey.PRI.equals(columnPlan.getColumnKey())) {
+                    tablePlan.getPkPlan().setJavaFieldName(columnPlan.getJavaFieldName());
+                    tablePlan.getPkPlan()
+                        .setDefaultJavaPkName(columnPlan.getJavaFieldName().equals(DefaultColumns.id.name()));
+                }
+                if (!tablePlan.isSortable()) {
+                    tablePlan.setSortable(columnPlan.isSortable());
+                }
+                if (!tablePlan.isHasSearch()) {
+                    tablePlan.setHasSearch(columnPlan.isSearch());
+                }
+                if (!tablePlan.isHasDictWidget()) {
+                    tablePlan.setHasDictWidget(ArrayUtils.contains(new InputType[] {InputType.SELECT,
+                        InputType.SELECT_MULTIPLE, InputType.RADIO, InputType.CHECKBOX}, columnPlan.getInputType()));
+                }
+                if (!tablePlan.isHasRichTextWidget()) {
+                    tablePlan.setHasRichTextWidget(columnPlan.getInputType().equals(InputType.RICH_TEXT));
+                }
+                if (!tablePlan.isHasDateWidget()) {
+                    tablePlan.setHasDateWidget(columnPlan.getInputType().equals(InputType.DATE)
+                        || columnPlan.getInputType().equals(InputType.DATETIME));
+                }
+                if (!tablePlan.isHasFileUploadWidget()) {
+                    tablePlan.setHasFileUploadWidget(columnPlan.getInputType().equals(InputType.FILE));
+                }
+                if (!tablePlan.isHasImageUploadWidget()) {
+                    tablePlan.setHasImageUploadWidget(columnPlan.getInputType().equals(InputType.IMAGE));
+                }
+            }
+            tablePlan.getColumnPlans().sort(null);
+        }
     }
 }

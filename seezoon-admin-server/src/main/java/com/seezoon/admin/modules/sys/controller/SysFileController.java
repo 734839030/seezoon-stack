@@ -148,4 +148,10 @@ public class SysFileController extends BaseController {
         int count = sysFileService.delete(id);
         return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.DELETE_ERROR, count);
     }
+
+    @ApiOperation(value = "文件url前缀")
+    @GetMapping(value = "/url_prefix")
+    public Result<String> urlPrefix() {
+        return Result.ok(fileService.getUrlPrefix());
+    }
 }

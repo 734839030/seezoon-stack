@@ -44,6 +44,8 @@ public interface FileHandler extends AutoCloseable {
      */
     String getUrl(String relativePath);
 
+    String getUrlPrefix();
+
     default String getId(String relativePath) {
         if (StringUtils.isBlank(relativePath)) {
             return null;

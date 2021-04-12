@@ -1,5 +1,10 @@
 package com.seezoon.dao.modules.sys.entity;
 
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.seezoon.dao.framework.entity.PageCondition;
 import com.seezoon.dao.framework.sort.annotation.SortField;
 
@@ -32,5 +37,9 @@ public class SysDemoCondition extends PageCondition {
 
     @ApiModelProperty(value = "多选")
     private String inputCheckbox;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+    private Date createTime;
 
 }

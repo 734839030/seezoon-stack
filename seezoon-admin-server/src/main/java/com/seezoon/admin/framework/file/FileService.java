@@ -41,4 +41,8 @@ public class FileService extends AbstractBaseService {
         return this.fileHandler.getId(relativePath);
     }
 
+    public String getUrlPrefix() {
+        return this.fileHandler.getUrlPrefix();
+    }
+
 }

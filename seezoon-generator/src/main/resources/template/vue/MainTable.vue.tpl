@@ -12,7 +12,7 @@
     <#if columnPlan.search>
     <a-form-item label="${columnPlan.fieldName!}" name="${columnPlan.javaFieldName}">
         <#if columnPlan.inputType.name() == "TEXT">
-      <a-input v-model:value="searchForm.${columnPlan.javaFieldName}" <#if columnPlan.stringType>:maxlength="50"</#if> placeholder=""/>
+      <a-input v-model:value="searchForm.${columnPlan.javaFieldName}" <#if columnPlan.stringType>:maxlength="${columnPlan.maxLength}"</#if> placeholder=""/>
         </#if>
         <#if columnPlan.inputType.name() == "SELECT">
       <a-select
@@ -49,37 +49,37 @@
         <#if columnPlan.inputType.name() == "RADIO">
       <a-radio-group v-model:value="searchForm.${columnPlan.javaFieldName}" :options="${columnPlan.javaFieldName}Dicts"/>
         </#if>
+        <#if columnPlan.inputType.name() == "DATE">
+      <a-date-picker v-model:value="searchForm.${columnPlan.javaFieldName}" valueFormat="YYYY-MM-DD" />
+        </#if>
+        <#if columnPlan.inputType.name() == "DATETIME">
+      <a-date-picker v-model:value="searchForm.${columnPlan.javaFieldName}" :showTime="true" valueFormat="YYYY-MM-DD HH:mm:ss" />
+        </#if>
+        <#if columnPlan.inputType.name() == "TEXTAREA">
+      <a-textarea
+        v-model:value="dataForm.${columnPlan.javaFieldName}"
+        <#if columnPlan.stringType>
+        :maxlength="${columnPlan.maxLength}"
+        </#if>
+        placeholder=""
+      />
+        </#if>
     </a-form-item>
-
    </#if>
 </#list>
 </#if>
-    <a-form-item label="单选" name="inputRadio">
-      <a-radio-group v-model:value="searchForm.inputRadio" :options="inputRadioDicts"/>
-    </a-form-item>
-    <a-form-item label="状态" name="status">
-      <a-radio-group v-model:value="searchForm.status" :options="statusDicts"/>
-    </a-form-item>
-    <a-form-item label="多选" name="inputCheckbox">
-      <a-checkbox-group
-          v-model:value="searchForm.inputCheckboxTODO"
-          :options="inputCheckboxDicts"
-      />
-    </a-form-item>
-
-    <a-form-item label="日期" name="inputDateRange">
-      <a-range-picker
-          v-model:value="searchForm.inputDateRange"
-          :allowClear="false"
-          valueFormat="YYYY-MM-DD"
-      />
-    </a-form-item>
     <a-form-item>
       <a-space>
-        <a-button v-auth="'sys:demo:query'" type="primary" @click="handleQuery()">查询</a-button>
+      <#if !hasSearch>
+      <!--
+      </#if>
+        <a-button v-auth="'${moduleName}:${functionName}:query'" type="primary" @click="handleQuery()">查询</a-button>
+      <#if !hasSearch>
+      -->
+      </#if>
         <a-button type="default" @click="this.$refs.searchForm.resetFields()">重置</a-button>
         <a-button
-            v-auth="'sys:demo:save'"
+            v-auth="'${moduleName}:${functionName}:save'"
             type="default"
             @click="this.$refs.dataFormModal.open('添加')"
         >添加
@@ -92,7 +92,7 @@
       :data-source="data"
       :loading="loading"
       :pagination="pagination"
-      :row-key="(record) => record.id"
+      :row-key="(record) => record.${pkPlan.javaFieldName}"
       bordered
       class="mt-4"
       size="small"
@@ -102,16 +102,16 @@
       <a @click="this.$refs.dataViewModal.open(record.id)">{{ text ? text : '查看' }}</a>
     </template>
     <template #action="{ record }">
-      <a v-auth="'sys:demo:update'" @click="this.$refs.dataFormModal.open('编辑', record.id)"
+      <a v-auth="'${moduleName}:${functionName}:update'" @click="this.$refs.dataFormModal.open('编辑', record.id)"
       >编辑</a
       >
       <a-divider type="vertical"/>
       <a-popconfirm
           placement="left"
-          title="确定删除本部门及下级部门？"
-          @confirm="handleDelete('/sys/demo/delete', record.id)"
+          title="确定删除？"
+          @confirm="handleDelete('/${moduleName}/${functionName}/delete', record.id)"
       >
-        <a v-auth="'sys:demo:delete'">删除</a>
+        <a v-auth="'${moduleName}:${functionName}:delete'">删除</a>
       </a-popconfirm>
     </template>
   </a-table>
@@ -119,85 +119,51 @@
   <data-view ref="dataViewModal"/>
 </template>
 <script>
-import DataFormModal from './DataFormModal.vue.tpl';
-import DataView from './DataViewModal.vue.tpl';
-import {queryTableMixin} from '../../../mixins/common/query-table-mixin';
-import {
-  inputCheckboxDicts,
-  inputRadioDicts,
-  inputRadioDictsMap,
-  inputSelectDicts,
-  inputSelectDictsMap,
-  statusDicts,
-} from './data.ts.tpl';
-import moment from 'moment';
+  import DataFormModal from './DataFormModal.vue';
+  import DataView from './DataViewModal.vue';
+  import {queryTableMixin} from '../../../mixins/common/query-table-mixin';
+  <#if hasDictWidget>
+  import {
+    <#list columnPlans as columnPlan>
+      <#if columnPlan.dictField>
+    ${columnPlan.javaFieldName}Dicts,
+    ${columnPlan.javaFieldName}DictsMap,
+      </#if>
+    </#list>
+  } from './data.ts';
+  </#if>
 
 export default {
   name: 'MainTable',
   components: {DataFormModal, DataView},
   mixins: [queryTableMixin],
   setup() {
-    return {inputSelectDicts, inputRadioDicts, inputCheckboxDicts, statusDicts};
+    <#assign firstItem = true>
+    return {<#if hasDictWidget><#list columnPlans as columnPlan><#if columnPlan.dictField>${firstItem?string(""," ,")}${columnPlan.javaFieldName}Dicts, ${columnPlan.javaFieldName}DictsMap<#assign firstItem = false></#if></#list></#if>};
   },
   data() {
     return {
-      searchForm: {
-        inputDateRange: [moment().day(-7).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')],
-      },
-      url: '/sys/demo/query',
+      url: '/${moduleName}/${functionName}/query',
       columns: [
+      <#assign firstItem = true>
+      <#list columnPlans as columnPlan>
+        <#if columnPlan.list>
         {
-          title: '文本',
-          dataIndex: 'inputText',
+          title: '${columnPlan.fieldName}',
+          dataIndex: '${columnPlan.javaFieldName}',
+          ellipsis: true,
+          <#if columnPlan.dictField>
+          customRender: function ({text}) {
+            return ${columnPlan.javaFieldName}DictsMap.get(text);
+          },
+          </#if>
+          <#if firstItem>
           slots: {customRender: 'view'},
+          </#if>
         },
-        {
-          title: '下拉',
-          dataIndex: 'inputSelect',
-          ellipsis: true,
-          customRender: function ({text}) {
-            return inputSelectDictsMap.get(text);
-          },
-        },
-        {
-          title: '单选',
-          dataIndex: 'inputRadio',
-          ellipsis: true,
-          customRender: function ({text}) {
-            return inputRadioDictsMap.get(text);
-          },
-        },
-        {
-          title: '文本域',
-          dataIndex: 'inputTextarea',
-          ellipsis: true,
-        },
-        {
-          title: '日期',
-          dataIndex: 'inputDate',
-          ellipsis: true,
-        },
-        {
-          title: '整数',
-          dataIndex: 'inputZhengshu',
-          ellipsis: true,
-        },
-        {
-          title: '小数',
-          dataIndex: 'inputXiaoshu',
-          ellipsis: true,
-        },
-        {
-          title: '创建时间',
-          dataIndex: 'createTime',
-          ellipsis: true,
-          sorter: true,
-        },
-        {
-          title: '修改时间',
-          dataIndex: 'updateTime',
-          ellipsis: true,
-        },
+          <#assign firstItem = false>
+        </#if>
+      </#list>
         {
           title: '操作',
           fixed: 'right',

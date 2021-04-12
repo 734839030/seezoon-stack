@@ -4,6 +4,16 @@ package com.seezoon.dao.modules.${moduleName}.entity;
 import java.util.Date;
 </#if>
 
+<#list columnPlans as columnPlan>
+  <#if columnPlan.dataType.javaType() == "Date" && columnPlan.search>
+import org.springframework.format.annotation.DateTimeFormat;
+// DateTimeFormat 针对RequestBody 接收无效，实际会使用JsonFormat
+// DateTimeFormat 针对form表单时间格式化有效
+import com.fasterxml.jackson.annotation.JsonFormat;
+  <#break>
+  </#if>
+</#list>
+
 import com.seezoon.dao.framework.entity.PageCondition;
 <#if sortable>
 import com.seezoon.dao.framework.sort.annotation.SortField;
@@ -34,6 +44,14 @@ public class ${className}Condition extends PageCondition {
      * ${columnPlan.fieldName!}
      */
     @ApiModelProperty(value = "${columnPlan.fieldName!}")
+          <#if columnPlan.inputType.name() == "DATE">
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+          <#elseif columnPlan.inputType.name() == "DATETIME">
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+          </#if>
+
     private ${columnPlan.dataType.javaType()} ${columnPlan.javaFieldName};
         </#if>
     </#list>

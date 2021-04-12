@@ -31,6 +31,11 @@ public class NoneFileHandler implements FileHandler {
     }
 
     @Override
+    public String getUrlPrefix() {
+        throw new RuntimeException("pls config FileHandler properties");
+    }
+
+    @Override
     public void close() throws Exception {
 
     }

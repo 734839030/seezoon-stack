@@ -70,4 +70,9 @@ public class AliyunOssHandler implements FileHandler {
         }
         return relativePath;
     }
+
+    @Override
+    public String getUrlPrefix() {
+        return aliyunOssProperties.getUrlPrefix();
+    }
 }

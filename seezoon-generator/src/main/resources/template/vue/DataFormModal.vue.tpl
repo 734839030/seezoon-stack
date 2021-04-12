@@ -8,7 +8,7 @@
     :title="title"
     :width="this.width"
     okText="保存"
-    @ok="handleOk(this.dataForm.id === undefined ? '/sys/demo/save' : '/sys/demo/update')"
+    @ok="handleOk(this.dataForm.id === undefined ? '/${moduleName}/${functionName}/save' : '/${moduleName}/${functionName}/update')"
   >
     <a-form
       ref="dataForm"
@@ -16,6 +16,7 @@
       :model="dataForm"
       :wrapper-col="this.wrapperCol"
     >
+
       <a-input v-model:value="dataForm.id" type="hidden" />
       <a-row>
         <a-col :md="12" :xs="24">
@@ -152,25 +153,39 @@
 
 <script>
   import { dataFormModalMixin } from '../../../mixins/common/data-form-mixin-modal.js';
-  import { inputSelectDicts, inputRadioDicts, inputCheckboxDicts } from './data';
+  <#if hasDictWidget>
+  import {
+    <#list columnPlans as columnPlan>
+      <#if columnPlan.dictField>
+    ${columnPlan.javaFieldName}Dicts,
+    ${columnPlan.javaFieldName}DictsMap,
+      </#if>
+    </#list>
+    } from './data.ts';
+  </#if>
+  <#if hasRichTextWidget>
   import { Tinymce } from '../../../components/Tinymce/index';
+  </#if>
+  <#if hasFileUploadWidget || hasImageUploadWidget>
   import SUploader from '../../../components/SUploader/index.vue';
+  </#if>
   import { defHttp } from '../../../utils/http/axios';
 
   export default {
     name: 'DataFormModal',
-    components: { Tinymce, SUploader },
+    components: { <#if hasRichTextWidget>Tinymce,</#if> <#if hasFileUploadWidget || hasImageUploadWidget>SUploader</#if> },
     mixins: [dataFormModalMixin],
     emits: ['refreshQuery'],
     setup() {
-      return { inputSelectDicts, inputRadioDicts, inputCheckboxDicts };
+      <#assign firstItem = true>
+      return {<#if hasDictWidget><#list columnPlans as columnPlan><#if columnPlan.dictField>${firstItem?string(""," ,")}${columnPlan.javaFieldName}Dicts, ${columnPlan.javaFieldName}DictsMap<#assign firstItem = false></#if></#list></#if>};
     },
     methods: {
       open(title, id) {
         this.visible = true;
         this.title = title;
         if (null != id) {
-          defHttp.get({ url: '/sys/demo/query/' + id }).then((data) => {
+          defHttp.get({ url: '/${moduleName}/${functionName}/query/' + id }).then((data) => {
             this.dataForm = data;
           });
         } else {
@@ -179,13 +194,13 @@
       },
       checkInputText(rule, value) {
         return this.uniqueFieldSimpleValidation(
-          '/sys/demo/check_input_text',
+          '/${moduleName}/${functionName}/check_input_text',
           value,
           {
             id: this.dataForm.id,
             inputText: value,
           },
-          `${value} 已存在`
+          `${"$"}{value} 已存在`
         );
       },
       // 保存后回调

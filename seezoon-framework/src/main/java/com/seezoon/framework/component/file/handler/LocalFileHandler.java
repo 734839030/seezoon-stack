@@ -73,6 +73,11 @@ public class LocalFileHandler implements FileHandler {
     }
 
     @Override
+    public String getUrlPrefix() {
+        return localProperties.getUrlPrefix();
+    }
+
+    @Override
     public void close() throws Exception {
 
     }

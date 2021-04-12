@@ -11,6 +11,11 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+<#if importDate>
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+</#if>
 import com.seezoon.dao.framework.entity.BaseEntity;
 
 import io.swagger.annotations.ApiModel;
@@ -42,6 +47,13 @@ public class ${className} extends BaseEntity<${pkPlan.dataType.javaType()}> {
     @NotNull
         </#if>
       </#if>
+        <#if columnPlan.inputType.name() == "DATE">
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+        <#elseif columnPlan.inputType.name() == "DATETIME">
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        </#if>
     private ${columnPlan.dataType.javaType()} ${columnPlan.javaFieldName};
 
    </#if>
