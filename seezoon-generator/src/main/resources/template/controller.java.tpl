@@ -1,7 +1,29 @@
 package com.seezoon.admin.modules.${moduleName}.controller;
+<#list columnPlans as columnPlan>
+  <#if columnPlan.uniqueFieldCheck>
 
+import java.util.Objects;
+    <#break>
+  </#if>
+</#list>
 import javax.validation.Valid;
+<#list columnPlans as columnPlan>
+  <#if columnPlan.uniqueFieldCheck && columnPlan.stringType>
+import javax.validation.constraints.NotBlank;
+    <#break>
+  </#if>
+</#list>
+<#list columnPlans as columnPlan>
+  <#if columnPlan.uniqueFieldCheck && !columnPlan.stringType>
+import javax.validation.constraints.NotNull;
+    <#break>
+  </#if>
+</#list>
 
+<#if hasRichTextWidget>
+import org.apache.commons.text.StringEscapeUtils;
+import org.springframework.util.Assert;
+</#if>
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +56,14 @@ public class ${className}Controller extends BaseController {
     @GetMapping("/query/{${pkPlan.javaFieldName}}")
     public Result<${className}> query(@PathVariable ${pkPlan.dataType.javaType()} ${pkPlan.javaFieldName}) {
         ${className} ${className?uncap_first} = ${className?uncap_first}Service.find(${pkPlan.javaFieldName});
+        <#if hasRichTextWidget>
+        Assert.notNull(${className?uncap_first}, ${pkPlan.javaFieldName} + " not exists");
+        </#if>
+        <#list columnPlans as columnPlan>
+          <#if columnPlan.inputType.name() == "RICH_TEXT">
+        ${className?uncap_first}.set${columnPlan.javaFieldName?cap_first}(StringEscapeUtils.unescapeHtml4(${className?uncap_first}.get${columnPlan.javaFieldName?cap_first}()));
+          </#if>
+        </#list>
         return Result.ok(${className?uncap_first});
     }
 
@@ -68,4 +98,18 @@ public class ${className}Controller extends BaseController {
         int count = ${className?uncap_first}Service.delete(${pkPlan.javaFieldName});
         return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.DELETE_ERROR, count);
     }
+
+    <#list columnPlans as columnPlan>
+      <#if columnPlan.uniqueFieldCheck>
+    @ApiOperation(value = "${columnPlan.javaFieldName}是否重复")
+    @PreAuthorize("hasAuthority('${moduleName}:${functionName}:query')")
+    @PostMapping(value = "/check_${columnPlan.underScoreFieldName}")
+    public Result<Boolean> check${columnPlan.javaFieldName?cap_first}(@RequestParam(required = false) ${pkPlan.dataType.javaType()} ${pkPlan.javaFieldName},
+        ${columnPlan.stringType?string("@NotBlank","@NotNull")} @RequestParam ${columnPlan.dataType.javaType()} ${columnPlan.javaFieldName}) {
+        ${className} ${className?uncap_first} = this.${className?uncap_first}Service.findBy${columnPlan.javaFieldName?cap_first}(${columnPlan.javaFieldName});
+                return Result.ok(null == ${className?uncap_first} || Objects.equals(${className?uncap_first}.get${pkPlan.javaFieldName?cap_first}(), id));
+    }
+
+      </#if>
+    </#list>
 }

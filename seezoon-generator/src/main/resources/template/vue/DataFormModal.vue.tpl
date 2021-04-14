@@ -8,7 +8,7 @@
     :title="title"
     :width="this.width"
     okText="保存"
-    @ok="handleOk(this.dataForm.id === undefined ? '/${moduleName}/${functionName}/save' : '/${moduleName}/${functionName}/update')"
+    @ok="handleOk(this.dataForm.${pkPlan.javaFieldName} === undefined ? '/${moduleName}/${functionName}/save' : '/${moduleName}/${functionName}/update')"
   >
     <a-form
       ref="dataForm"
@@ -16,136 +16,86 @@
       :model="dataForm"
       :wrapper-col="this.wrapperCol"
     >
+      <#list columnPlans as columnPlan>
+        <#if columnPlan.showDataForm>
+          <#if columnPlan.inputType.name() == "HIDDEN">
+      <a-input v-model:value="dataForm.${columnPlan.javaFieldName}" type="hidden" />
+          </#if>
+        </#if>
+      </#list>
 
-      <a-input v-model:value="dataForm.id" type="hidden" />
       <a-row>
-        <a-col :md="12" :xs="24">
-          <a-form-item
-            :rules="[
-              { required: true, message: '文本不能为空', whitespace: true },
-              { validator: checkInputText, trigger: 'blur' },
-            ]"
-            label="文本"
-            name="inputText"
-          >
-            <a-input v-model:value="dataForm.inputText" :maxlength="50" placeholder="文本" />
-          </a-form-item>
-        </a-col>
-        <a-col :md="12" :xs="24">
-          <a-form-item
-            :rules="[{ required: true, message: '下拉不能为空', whitespace: true }]"
-            label="下拉"
-            name="inputSelect"
-          >
+      <#assign itemCount = 0>
+      <#list columnPlans as columnPlan>
+        <#if columnPlan.showDataForm || columnPlan.inputType.name() != "HIDDEN">
+          <a-col :md="12" :xs="24">
+            <a-form-item
+              label="${columnPlan.fieldName}"
+              name="${columnPlan.javaFieldName}"
+              :rules="[
+             <#if !columnPlan.nullable>
+                { required: true,<#if columnPlan.inputType.name() == "INTEGRAL_NUMBER" || columnPlan.inputType.name() == "DECIMAL" || columnPlan.numberType> type: 'number',<#elseif columnPlan.inputType.name() == "CHECKBOX">type: 'array',</#if> message: '${columnPlan.fieldName}不能为空', whitespace: true },
+             </#if>
+             <#if columnPlan.uniqueFieldCheck>
+                { validator: check${columnPlan.javaFieldName?cap_first}, trigger: 'blur' },
+             </#if>
+                ]"
+                >
+             <#if columnPlan.inputType.name() == "TEXT">
+                <a-input v-model:value="dataForm.${columnPlan.javaFieldName}" <#if columnPlan.maxLength??>:maxlength="${columnPlan.maxLength}"</#if> placeholder="" />
+             <#elseif columnPlan.inputType.name() == "SELECT">
             <a-select
-              v-model:value="dataForm.inputSelect"
+              v-model:value="dataForm.${columnPlan.javaFieldName}"
               style="width: 120px"
               :allowClear="true"
-              :options="inputSelectDicts"
+              :options="${columnPlan.javaFieldName}Dicts"
               placeholder="请选择下拉数据"
             />
-          </a-form-item>
-        </a-col>
-      </a-row>
-      <a-row>
-        <a-col :md="12" :xs="24">
-          <a-form-item
-            :rules="[{ required: true, message: '单选不能为空', whitespace: true }]"
-            label="单选"
-            name="inputRadio"
-          >
-            <a-radio-group :options="inputRadioDicts" v-model:value="dataForm.inputRadio" />
-          </a-form-item>
-        </a-col>
-        <a-col :md="12" :xs="24">
-          <a-form-item
-            :rules="[{ required: true, type: 'array', message: '多选不能为空', whitespace: true }]"
-            label="多选"
-            name="inputCheckboxTODO"
-          >
-            <a-checkbox-group
-              v-model:value="dataForm.inputCheckboxTODO"
-              :options="inputCheckboxDicts"
+             <#elseif columnPlan.inputType.name() == "SELECT_MULTIPLE">
+            <a-select
+              v-model:value="searchForm.${columnPlan.javaFieldName}"
+              mode="tags"
+              :allowClear="true"
+              :options="${columnPlan.javaFieldName}Dicts"
+              placeholder="请选择"
+              style="width: 120px"
+              :token-separators="[',']"
             />
-          </a-form-item>
-        </a-col>
-      </a-row>
-      <a-row>
-        <a-col :md="12" :xs="24">
-          <a-form-item label="文本域" name="inputTextarea" :rules="[]">
+             <#elseif columnPlan.inputType.name() == "INTEGRAL_NUMBER">
+            <a-input-number v-model:value="dataForm.${columnPlan.javaFieldName}" :precision="0" />
+             <#elseif columnPlan.inputType.name() == "DECIMAL">
+            <a-input-number v-model:value="dataForm.${columnPlan.javaFieldName}" :precision="2" />
+             <#elseif columnPlan.inputType.name() == "CHECKBOX">
+            <a-checkbox-group v-model:value="dataForm.${columnPlan.javaFieldName}" :options="${columnPlan.javaFieldName}Dicts" />
+             <#elseif columnPlan.inputType.name() == "RADIO">
+            <a-radio-group :options="${columnPlan.javaFieldName}Dicts" v-model:value="dataForm.${columnPlan.javaFieldName}" />
+             <#elseif columnPlan.inputType.name() == "DATE">
+            <a-date-picker v-model:value="dataForm.${columnPlan.javaFieldName}" valueFormat="YYYY-MM-DD" />
+             <#elseif columnPlan.inputType.name() == "DATETIME">
+            <a-date-picker v-model:value="dataForm.${columnPlan.javaFieldName}" :showTime="true" valueFormat="YYYY-MM-DD HH:mm:ss" />
+             <#elseif columnPlan.inputType.name() == "TEXTAREA">
             <a-textarea
-              v-model:value="dataForm.inputTextarea"
-              :auto-size="{ minRows: 3, maxRows: 5 }"
-              :maxlength="255"
-              placeholder=""
+               v-model:value="dataForm.${columnPlan.javaFieldName}"
+               :auto-size="{ minRows: 3, maxRows: 5 }"
+               <#if columnPlan.maxLength??>:maxlength="${columnPlan.maxLength}"</#if>
+               placeholder=""
             />
-          </a-form-item>
-        </a-col>
-        <a-col :md="12" :xs="24">
-          <a-form-item
-            label="日期"
-            name="inputDate"
-            :rules="[{ required: true, message: '日期不能为空', whitespace: true }]"
-          >
-            <a-date-picker v-model:value="dataForm.inputDate" valueFormat="YYYY-MM-DD" />
-          </a-form-item>
-        </a-col>
-      </a-row>
-      <a-row>
-        <a-col :md="12" :xs="24">
-          <a-form-item
-            label="整数"
-            name="inputZhengshu"
-            :rules="[{ required: true, type: 'number', message: '整数不能为空', whitespace: true }]"
-          >
-            <a-input-number v-model:value="dataForm.inputZhengshu" :precision="0" />
-          </a-form-item>
-        </a-col>
-        <a-col :md="12" :xs="24">
-          <a-form-item
-            label="小数"
-            name="inputXiaoshu"
-            :rules="[
-              { required: true, type: 'number', message: '小数数不能为空', whitespace: true },
-            ]"
-          >
-            <a-input-number v-model:value="dataForm.inputXiaoshu" :precision="0" />
-          </a-form-item>
-        </a-col>
-      </a-row>
-      <a-row>
-        <a-col :md="12" :xs="24">
-          <a-form-item
-            label="富文本"
-            name="richText"
-            :rules="[{ required: true, message: '富文本不能为空', whitespace: true }]"
-          >
+             <#elseif columnPlan.inputType.name() == "RICH_TEXT">
             <tinymce v-model="dataForm.richText" width="100%" />
-          </a-form-item>
-        </a-col>
-        <a-col :md="12" :xs="24">
-          <a-form-item
-            label="图片"
-            name="image"
-            :autoLink="false"
-            :rules="[{ required: true, message: '图片不能为空', whitespace: true }]"
-          >
-            <s-uploader v-model:value="dataForm.image" accept="image/*" listType="picture-card" />
-          </a-form-item>
-        </a-col>
+             <#elseif columnPlan.inputType.name() == "IMAGE">
+             <s-uploader v-model:value="dataForm.${columnPlan.javaFieldName}" accept="image/*" listType="picture-card" />
+             <#elseif columnPlan.inputType.name() == "FILE">
+             <s-uploader v-model:value="dataForm.${columnPlan.javaFieldName}" listType="text" />
+             </#if>
+            </a-form-item>
+          </a-col>
+          <#assign itemCount = itemCount + 1>
+          <#if itemCount%2 == 0>
       </a-row>
       <a-row>
-        <a-col :md="12" :xs="24">
-          <a-form-item
-            label="文件"
-            name="file"
-            :autoLink="false"
-            :rules="[{ required: true, message: '文件不能为空', whitespace: true }]"
-          >
-            <s-uploader v-model:value="dataForm.file" listType="text" />
-          </a-form-item>
-        </a-col>
-        <a-col :md="12" :xs="24" />
+          </#if>
+        </#if>
+      </#list>
       </a-row>
     </a-form>
   </a-modal>
@@ -181,28 +131,32 @@
       return {<#if hasDictWidget><#list columnPlans as columnPlan><#if columnPlan.dictField>${firstItem?string(""," ,")}${columnPlan.javaFieldName}Dicts, ${columnPlan.javaFieldName}DictsMap<#assign firstItem = false></#if></#list></#if>};
     },
     methods: {
-      open(title, id) {
+      open(title, ${pkPlan.javaFieldName}) {
         this.visible = true;
         this.title = title;
-        if (null != id) {
-          defHttp.get({ url: '/${moduleName}/${functionName}/query/' + id }).then((data) => {
+        if (null != ${pkPlan.javaFieldName}) {
+          defHttp.get({ url: '/${moduleName}/${functionName}/query/' + ${pkPlan.javaFieldName} }).then((data) => {
             this.dataForm = data;
           });
         } else {
-          this.dataForm = { sort: 1000 };
+          this.dataForm = {};
         }
       },
-      checkInputText(rule, value) {
-        return this.uniqueFieldSimpleValidation(
-          '/${moduleName}/${functionName}/check_input_text',
+      <#list columnPlans as columnPlan>
+        <#if columnPlan.uniqueFieldCheck>
+      check${columnPlan.javaFieldName?cap_first}(rule, value) {
+          return this.uniqueFieldSimpleValidation(
+          '/${moduleName}/${functionName}/check_${columnPlan.underScoreFieldName}',
           value,
           {
-            id: this.dataForm.id,
-            inputText: value,
+            ${pkPlan.javaFieldName}: this.dataForm.${pkPlan.javaFieldName},
+            ${columnPlan.javaFieldName}: value,
           },
           `${"$"}{value} 已存在`
         );
       },
+        </#if>
+      </#list>
       // 保存后回调
       handleOkCb() {
         this.$emit('refreshQuery');

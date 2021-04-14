@@ -9,7 +9,7 @@
   >
     <a-descriptions bordered size="small">
       <#list columnPlans as columnPlan>
-        <#if showView>
+        <#if columnPlan.showView>
         <a-descriptions-item label="${columnPlan.fieldName}">
           <#if columnPlan.dictField>
            <#if columnPlan.inputType.name() == "SELECT_MULTIPLE">
@@ -24,11 +24,11 @@
            <#else>
           {{ ${columnPlan.javaFieldName}DictsMap.get(data.${columnPlan.javaFieldName}) }}
            </#if>
-          <#else if columnPlan.inputType.name() == "IMAGE">
+          <#elseif columnPlan.inputType.name() == "IMAGE">
           <s-uploader v-model:value="data.${columnPlan.javaFieldName}" :disabled="true" listType="picture-card" />
-          <#else if columnPlan.inputType.name() == "FILE">
+          <#elseif columnPlan.inputType.name() == "FILE">
           <s-uploader v-model:value="data.${columnPlan.javaFieldName}" :disabled="true" />
-          <#else if columnPlan.inputType.name() == "RICH_TEXT">
+          <#elseif columnPlan.inputType.name() == "RICH_TEXT">
           <p v-html="data.${columnPlan.javaFieldName}"></p>
           <#else>
           {{ data.${columnPlan.javaFieldName} }}
@@ -64,9 +64,9 @@
     setup() {
       const visible = ref(false);
       const data = ref({});
-      const open = function (id) {
+      const open = function (${pkPlan.javaFieldName}) {
         visible.value = true;
-        defHttp.get({ url: '/sys/demo/query/' + id }).then((_data) => {
+        defHttp.get({ url: '/sys/demo/query/' + ${pkPlan.javaFieldName} }).then((_data) => {
           data.value = _data;
         });
       };

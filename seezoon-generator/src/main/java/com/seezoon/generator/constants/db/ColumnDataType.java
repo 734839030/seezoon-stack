@@ -24,7 +24,7 @@ public enum ColumnDataType {
     TINYINT("tinyint", "TINYINT", Integer.class.getSimpleName()),
     INT("int", "INTEGER", Integer.class.getSimpleName()),
     INTEGER("integer", "INTEGER", Integer.class.getSimpleName()),
-    bigint("bigint", "BIGINT", Long.class.getSimpleName()),
+    BIGINT("bigint", "BIGINT", Long.class.getSimpleName()),
     DOUBLE("double", "DOUBLE", Double.class.getSimpleName()),
     FLOAT("float", "REAL", Float.class.getSimpleName()),
     // 导入时间

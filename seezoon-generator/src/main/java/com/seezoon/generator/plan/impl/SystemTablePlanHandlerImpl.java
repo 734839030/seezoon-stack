@@ -37,8 +37,6 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
      * DB 及表字段的分隔符
      */
     private static final String DB_DELIMITER = "_";
-    private static final String[] DEFAULT_COLUMNS =
-        {"id", "status", "create_by", "create_time", "update_by", "update_time", "remarks"};
 
     @Override
     public TablePlan generate(DbTable dbTable, List<DbTableColumn> dbTableColumns) {
@@ -79,12 +77,9 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
                     .inputType(InputType.NONE)
                     .build();
             // @formatter:on
-            // 是否String 类型
-            columnPlan.setStringType(columnPlan.getDataType().javaType().equals(String.class.getSimpleName()));
             columnPlan.setInsert(true);
             columnPlan.setUpdate(true);
             columnPlan.setList(true);
-            columnPlan.setDefaultField(ArrayUtils.contains(DEFAULT_COLUMNS, columnPlan.getDbColumnName()));
 
             // 针对默认字段的处理
             if (columnPlan.isDefaultField()) {
@@ -115,7 +110,7 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
                 }
             } else {
                 // 默认文本框
-                if (String.class.getSimpleName().equals(columnPlan.getDataType().javaType())) {
+                if (columnPlan.isStringType()) {
                     columnPlan.setInputType(InputType.TEXT);
                 }
                 // 时间框
@@ -129,11 +124,10 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
                 }
 
                 // jdbcType = LONGVARCHAR的为大文本
-                if (ColumnDataType.TEXT.jdbcType().equals(columnPlan.getDataType().jdbcType())) {
+                if (columnPlan.isBlobType()) {
                     columnPlan.setInputType(InputType.TEXTAREA);
                     // 列表默认也不展示
                     columnPlan.setList(false);
-                    columnPlan.setBlobType(true);
                     tablePlan.setHasBlob(true);
                 }
 

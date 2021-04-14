@@ -2,6 +2,7 @@ package com.seezoon.generator.plan;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import com.google.common.base.CaseFormat;
 import com.seezoon.generator.constants.InputType;
 import com.seezoon.generator.constants.QueryType;
 import com.seezoon.generator.constants.db.ColumnDataType;
@@ -23,6 +24,8 @@ import lombok.Setter;
 @Builder
 public class ColumnPlan implements Comparable<ColumnPlan> {
 
+    private static final String[] DEFAULT_COLUMNS =
+        {"id", "status", "create_by", "create_time", "update_by", "update_time", "remarks"};
     /**
      * DB 列名称
      */
@@ -59,19 +62,6 @@ public class ColumnPlan implements Comparable<ColumnPlan> {
      */
     private String javaFieldName;
 
-    /**
-     * 是否默认字段,会在能忽略的场景忽略，比如默认字段
-     */
-    private boolean defaultField;
-
-    /**
-     * 大量需要判断是否字符串的
-     */
-    private boolean stringType;
-    /**
-     * 是否大字段
-     */
-    private boolean blobType;
     /**
      * 是否可空
      */
@@ -123,8 +113,9 @@ public class ColumnPlan implements Comparable<ColumnPlan> {
     }
 
     public boolean isDictField() {
-        return ArrayUtils.contains(new String[] {InputType.SELECT.name(), InputType.SELECT_MULTIPLE.name(),
-            InputType.CHECKBOX.name(), InputType.RADIO.name()}, this.getInputType().name());
+        return ArrayUtils.contains(
+            new InputType[] {InputType.SELECT, InputType.SELECT_MULTIPLE, InputType.CHECKBOX, InputType.RADIO},
+            this.getInputType());
     }
 
     public boolean isShowDataForm() {
@@ -137,4 +128,43 @@ public class ColumnPlan implements Comparable<ColumnPlan> {
             new String[] {DefaultColumns.create_by.name(), DefaultColumns.id.name(), DefaultColumns.update_by.name()},
             this.getDbColumnName());
     }
+
+    public boolean isUniqueFieldCheck() {
+        return this.isShowDataForm() && !InputType.HIDDEN.equals(this.getInputType())
+            && ArrayUtils.contains(new ColumnKey[] {ColumnKey.PRI, ColumnKey.UNI}, this.getColumnKey());
+    }
+
+    /**
+     * 大量需要判断是否字符串的
+     */
+    public boolean isStringType() {
+        return this.getDataType().javaType().equals(String.class.getSimpleName());
+    }
+
+    public boolean isNumberType() {
+        return ArrayUtils.contains(
+            new String[] {ColumnDataType.TINYINT.javaType(), ColumnDataType.INT.javaType(),
+                ColumnDataType.INTEGER.javaType(), ColumnDataType.BIGINT.javaType(), ColumnDataType.DOUBLE.javaType(),
+                ColumnDataType.FLOAT.javaType(), ColumnDataType.DECIMAL.javaType(), ColumnDataType.NUMERIC.javaType(),},
+            this.getDataType().javaType());
+    }
+
+    /**
+     * 是否默认字段,会在能忽略的场景忽略，比如默认字段
+     */
+    public boolean isDefaultField() {
+        return ArrayUtils.contains(DEFAULT_COLUMNS, this.getDbColumnName());
+    }
+
+    /**
+     * 是否大字段
+     */
+    public boolean isBlobType() {
+        return ColumnDataType.TEXT.jdbcType().equals(this.getDataType().jdbcType());
+    }
+
+    public String getUnderScoreFieldName() {
+        return CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, this.getJavaFieldName());
+    }
+
 }

@@ -5,7 +5,9 @@ import java.util.Objects;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import com.github.pagehelper.PageSerializable;
@@ -36,6 +38,8 @@ public class SysParamController extends BaseController {
     @GetMapping("/query/{id}")
     public Result<SysParam> query(@PathVariable Integer id) {
         SysParam sysParam = sysParamService.find(id);
+        Assert.notNull(sysParam, id + " not exists");
+        sysParam.setParamValue(StringEscapeUtils.unescapeHtml4(sysParam.getParamValue()));
         return Result.ok(sysParam);
     }
 

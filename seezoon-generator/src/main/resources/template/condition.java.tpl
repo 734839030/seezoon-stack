@@ -51,7 +51,6 @@ public class ${className}Condition extends PageCondition {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
           </#if>
-
     private ${columnPlan.dataType.javaType()} ${columnPlan.javaFieldName};
         </#if>
     </#list>
