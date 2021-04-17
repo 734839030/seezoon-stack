@@ -148,7 +148,6 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
                     || ColumnKey.UNI.equals(columnPlan.getColumnKey()))) {
                     columnPlan.setSearch(true);
                     columnPlan.setSortable(true);
-                    columnPlan.setInputType(InputType.TEXT);
                     columnPlan.setQueryType(QueryType.EQUAL);
                     tablePlan.setHasSearch(true);
                 }

@@ -7,31 +7,38 @@ package com.seezoon.generator.constants;
  */
 public enum CodeTemplate {
 
-    MAPPER("mapper.xml.tpl", "mappings/${moduleName}", "${className}Mapper.xml"),
+    MAPPER("mapper.xml.tpl", "seezoon-dao/src/main/resources/mappings/${moduleName}", "${className}Mapper.xml"),
 
-    ENTITY("entity.java.tpl", "com/seezoon/dao/modules/${moduleName}/entity", "${className}.java"),
+    ENTITY("entity.java.tpl", "seezoon-dao/src/main/java/com/seezoon/dao/modules/${moduleName}/entity",
+        "${className}.java"),
 
-    CONDITION("condition.java.tpl", "com/seezoon/dao/modules/${moduleName}/entity", "${className}Condition.java"),
+    CONDITION("condition.java.tpl", "seezoon-dao/src/main/java/com/seezoon/dao/modules/${moduleName}/entity",
+        "${className}Condition.java"),
 
-    DAO("dao.java.tpl", "com/seezoon/dao/modules/${moduleName}", "${className}Dao.java"),
+    DAO("dao.java.tpl", "seezoon-dao/src/main/java/com/seezoon/dao/modules/${moduleName}", "${className}Dao.java"),
 
-    MENU("menu.sql.tpl", "", "sys_menu_for_${tableName}.sql"),
+    MENU("menu.sql.tpl", "", "db/sys_menu_for_${tableName}.sql"),
 
-    SERVICE("service.java.tpl", "com/seezoon/admin/modules/${moduleName}/service", "${className}Service.java"),
+    SERVICE("service.java.tpl", "seezoon-admin-server/src/main/java/com/seezoon/admin/modules/${moduleName}/service",
+        "${className}Service.java"),
 
-    CONTROLLER("controller.java.tpl", "com/seezoon/admin/modules/${moduleName}/controller",
+    CONTROLLER("controller.java.tpl",
+        "seezoon-admin-server/src/main/java/com/seezoon/admin/modules/${moduleName}/controller",
         "${className}Controller.java"),
 
     // 前端代码
-    VUE_INDEX("vue/index.vue.tpl", "views/${moduleName}/${functionName}", "index.vue"),
+    VUE_INDEX("vue/index.vue.tpl", "seezoon-admin-web/src/views/${moduleName}/${functionName}", "index.vue"),
     // 分页表格
-    VUE_MAIN_TABLE("vue/MainTable.vue.tpl", "views/${moduleName}/${functionName}", "MainTable.vue"),
+    VUE_MAIN_TABLE("vue/MainTable.vue.tpl", "seezoon-admin-web/src/views/${moduleName}/${functionName}",
+        "MainTable.vue"),
     // 添加与编辑模态窗口
-    VUE_DATA_FORM_MODAL("vue/DataFormModal.vue.tpl", "views/${moduleName}/${functionName}", "DataFormModal.vue"),
+    VUE_DATA_FORM_MODAL("vue/DataFormModal.vue.tpl", "seezoon-admin-web/src/views/${moduleName}/${functionName}",
+        "DataFormModal.vue"),
     // 查看
-    VUE_DATA_VIEW_MODAL("vue/DataViewModal.vue.tpl", "views/${moduleName}/${functionName}", "DataViewModal.vue"),
+    VUE_DATA_VIEW_MODAL("vue/DataViewModal.vue.tpl", "seezoon-admin-web/src/views/${moduleName}/${functionName}",
+        "DataViewModal.vue"),
     // 数据字典
-    VUE_DATA_DICT("vue/data.ts.tpl", "views/${moduleName}/${functionName}", "data.ts"),
+    VUE_DATA_DICT("vue/data.ts.tpl", "seezoon-admin-web/src/views/${moduleName}/${functionName}", "data.ts"),
 
     ;
 
