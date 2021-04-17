@@ -94,29 +94,7 @@ public class UserTablePlanHandlerImpl implements TablePlanHandler {
                     tablePlan.getPkPlan()
                         .setDefaultJavaPkName(columnPlan.getJavaFieldName().equals(DefaultColumns.id.name()));
                 }
-                if (!tablePlan.isSortable()) {
-                    tablePlan.setSortable(columnPlan.isSortable());
-                }
-                if (!tablePlan.isHasSearch()) {
-                    tablePlan.setHasSearch(columnPlan.isSearch());
-                }
-                if (!tablePlan.isHasDictWidget()) {
-                    tablePlan.setHasDictWidget(ArrayUtils.contains(new InputType[] {InputType.SELECT,
-                        InputType.SELECT_MULTIPLE, InputType.RADIO, InputType.CHECKBOX}, columnPlan.getInputType()));
-                }
-                if (!tablePlan.isHasRichTextWidget()) {
-                    tablePlan.setHasRichTextWidget(columnPlan.getInputType().equals(InputType.RICH_TEXT));
-                }
-                if (!tablePlan.isHasDateWidget()) {
-                    tablePlan.setHasDateWidget(columnPlan.getInputType().equals(InputType.DATE)
-                        || columnPlan.getInputType().equals(InputType.DATETIME));
-                }
-                if (!tablePlan.isHasFileUploadWidget()) {
-                    tablePlan.setHasFileUploadWidget(columnPlan.getInputType().equals(InputType.FILE));
-                }
-                if (!tablePlan.isHasImageUploadWidget()) {
-                    tablePlan.setHasImageUploadWidget(columnPlan.getInputType().equals(InputType.IMAGE));
-                }
+
             }
             tablePlan.getColumnPlans().sort(null);
         }

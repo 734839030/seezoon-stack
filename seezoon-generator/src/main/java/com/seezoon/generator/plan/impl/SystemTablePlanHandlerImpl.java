@@ -115,7 +115,6 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
                 }
                 // 时间框
                 if (Date.class.getSimpleName().equals(columnPlan.getDataType().javaType())) {
-                    tablePlan.setImportDate(true);
                     if (ColumnDataType.DATE.dbType().equals(columnPlan.getDataType().dbType())) {
                         columnPlan.setInputType(InputType.DATE);
                     } else {
@@ -128,7 +127,6 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
                     columnPlan.setInputType(InputType.TEXTAREA);
                     // 列表默认也不展示
                     columnPlan.setList(false);
-                    tablePlan.setHasBlob(true);
                 }
 
                 // 数值
@@ -140,7 +138,6 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
                     columnPlan.setInputType(InputType.DECIMAL);
                 } else if (BigDecimal.class.getSimpleName().equals(columnPlan.getDataType().javaType())) {
                     columnPlan.setInputType(InputType.DECIMAL);
-                    tablePlan.setImportBigDecimal(true);
                 }
 
                 // 有索引的
@@ -149,7 +146,6 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
                     columnPlan.setSearch(true);
                     columnPlan.setSortable(true);
                     columnPlan.setQueryType(QueryType.EQUAL);
-                    tablePlan.setHasSearch(true);
                 }
             }
 
@@ -172,7 +168,6 @@ public class SystemTablePlanHandlerImpl implements TablePlanHandler {
             }
             columnPlans.add(columnPlan);
         });
-        tablePlan.setSortable(columnPlans.stream().anyMatch(columnPlan -> columnPlan.isSortable()));
         // 一定要有主键
         if (null == tablePlan.getPkPlan()) {
             throw new IllegalArgumentException(

@@ -1,8 +1,14 @@
 package com.seezoon.generator.plan;
 
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+
+import com.seezoon.generator.constants.InputType;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -53,51 +59,7 @@ public class TablePlan {
     /**
      * 字段方案
      */
-    private List<ColumnPlan> columnPlans;
-
-    /**
-     * 是否引入Date DB类型决定
-     */
-    private boolean importDate;
-    /**
-     * 是否引入BigDecimal DB 类型决定
-     */
-    private boolean importBigDecimal;
-
-    /**
-     * 字段可排序查询
-     */
-    private boolean sortable;
-    /**
-     * 是否有大字段 DB 类型决定
-     */
-    private boolean hasBlob;
-    /**
-     * 是否有搜索
-     */
-    private boolean hasSearch;
-
-    /**
-     * 是否有字典组件(下拉，单选，多选)
-     */
-    private boolean hasDictWidget;
-
-    /**
-     * 是否富文本
-     */
-    private boolean hasRichTextWidget;
-    /**
-     * 日期控件
-     */
-    private boolean hasDateWidget;
-    /**
-     * 是否有文件上传
-     */
-    private boolean hasFileUploadWidget;
-    /**
-     * 图片上传
-     */
-    private boolean hasImageUploadWidget;
+    private List<ColumnPlan> columnPlans = Collections.emptyList();
 
     /**
      * 为了让freemark读取到{@code defaultTableAlias}
@@ -115,5 +77,57 @@ public class TablePlan {
      */
     public String getDefaultTableAliasPrefix() {
         return DEFAULT_TABLE_ALIAS_PREFIX;
+    }
+
+    public boolean isImportDate() {
+        return this.getColumnPlans().stream()
+            .anyMatch(columnPlan -> Date.class.getSimpleName().equals(columnPlan.getDataType().javaType()));
+    }
+
+    public boolean isImportBigDecimal() {
+        return this.getColumnPlans().stream()
+            .anyMatch(columnPlan -> BigDecimal.class.getSimpleName().equals(columnPlan.getDataType().javaType()));
+    }
+
+    public boolean isHasSearch() {
+        return this.getColumnPlans().stream().anyMatch(columnPlan -> columnPlan.isSearch());
+    }
+
+    /**
+     * 字段可排序查询
+     *
+     * @return
+     */
+    public boolean isSortable() {
+        return this.getColumnPlans().stream().anyMatch(columnPlan -> columnPlan.isSortable());
+    }
+
+    public boolean isHasDateWidget() {
+        return this.getColumnPlans().stream().anyMatch(columnPlan -> columnPlan.getInputType().equals(InputType.DATE)
+            || columnPlan.getInputType().equals(InputType.DATETIME));
+    }
+
+    public boolean isHasDictWidget() {
+        return this.getColumnPlans().stream()
+            .anyMatch(columnPlan -> ArrayUtils.contains(
+                new InputType[] {InputType.SELECT, InputType.SELECT_MULTIPLE, InputType.RADIO, InputType.CHECKBOX},
+                columnPlan.getInputType()));
+    }
+
+    public boolean isHasBlob() {
+        return this.getColumnPlans().stream().anyMatch(columnPlan -> columnPlan.isBlobType());
+    }
+
+    public boolean isHasRichTextWidget() {
+        return this.getColumnPlans().stream()
+            .anyMatch(columnPlan -> columnPlan.getInputType().equals(InputType.RICH_TEXT));
+    }
+
+    public boolean isHasFileUploadWidget() {
+        return this.getColumnPlans().stream().anyMatch(columnPlan -> columnPlan.getInputType().equals(InputType.FILE));
+    }
+
+    public boolean isHasImageUploadWidget() {
+        return this.getColumnPlans().stream().anyMatch(columnPlan -> columnPlan.getInputType().equals(InputType.IMAGE));
     }
 }
