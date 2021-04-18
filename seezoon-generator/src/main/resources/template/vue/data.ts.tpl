@@ -1,6 +1,6 @@
 <#if hasDictWidget>
 import { Dict } from '/@/api/sys/model/dictModel';
-import { dictArray2Map, getDict } from '/@/api/sys';
+import { dictArray2Map<#if hasDictType>, getDict</#if> } from '/@/api/sys';
 
 // 提示: 字典的value 类型需要和后台实际返回的数据类型一致，不然在数据回显的时候，无法自自动选中，校验也会不生效
 <#list columnPlans as columnPlan>

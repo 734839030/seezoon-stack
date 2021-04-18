@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.seezoon.dao.modules.sys.SysLoginLogDao">
+    <resultMap id="BaseResultMap" type="com.seezoon.dao.modules.sys.entity.SysLoginLog">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="result" jdbcType="TINYINT" property="result"/>
+        <result column="login_time" jdbcType="TIMESTAMP" property="loginTime"/>
+        <result column="ip" jdbcType="VARCHAR" property="ip"/>
+        <result column="area" jdbcType="VARCHAR" property="area"/>
+        <result column="user_agent" jdbcType="VARCHAR" property="userAgent"/>
+        <result column="device_name" jdbcType="VARCHAR" property="deviceName"/>
+        <result column="browser_name" jdbcType="VARCHAR" property="browserName"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    t.id,t.user_id,t.user_name,t.result,t.login_time,t.ip,t.area,t.user_agent,t.device_name,t.browser_name
+    </sql>
+
+    <sql id="Query_Table" >
+    sys_login_log t
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from <include refid="Query_Table" />
+        where t.id = #{id}
+    </select>
+
+    <select id="selectByCondition" parameterType="com.seezoon.dao.modules.sys.entity.SysLoginLogCondition" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from <include refid="Query_Table" />
+        <where>
+            <if test="userId != null">
+            and t.user_id = #{userId}
+            </if>
+            <if test="userName != null and userName != ''">
+            and t.user_name = #{userName}
+            </if>
+            <if test="result != null">
+            and t.result = #{result}
+            </if>
+            <if test="loginTime != null">
+            and t.login_time = #{loginTime}
+            </if>
+            <if test="ip != null and ip != ''">
+            and t.ip = #{ip}
+            </if>
+        </where>
+        <choose>
+            <when test="sortField != null and sortField != '' and sortOrder != null and sortOrder !=''">
+                order by ${sortField} ${sortOrder}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <delete id="deleteByPrimaryKey">
+        delete t from sys_login_log t
+        where t.id in
+        <foreach item="item" collection="array" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <insert id="insert" >
+        insert into sys_login_log (id,user_id,user_name,result,login_time,ip,area,user_agent,device_name,browser_name)
+        values
+        <foreach item="item" collection="array" separator=",">
+            (#{item.id},#{item.userId},#{item.userName},#{item.result},#{item.loginTime},#{item.ip},#{item.area},#{item.userAgent},#{item.deviceName},#{item.browserName})
+        </foreach>
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.seezoon.dao.modules.sys.entity.SysLoginLog">
+        update sys_login_log t
+        <set>
+            <if test="userId != null">
+                t.user_id = #{userId},
+            </if>
+            <if test="userName != null">
+                t.user_name = #{userName},
+            </if>
+            <if test="result != null">
+                t.result = #{result},
+            </if>
+            <if test="loginTime != null">
+                t.login_time = #{loginTime},
+            </if>
+            <if test="ip != null">
+                t.ip = #{ip},
+            </if>
+            <if test="area != null">
+                t.area = #{area},
+            </if>
+            <if test="userAgent != null">
+                t.user_agent = #{userAgent},
+            </if>
+            <if test="deviceName != null">
+                t.device_name = #{deviceName},
+            </if>
+            <if test="browserName != null">
+                t.browser_name = #{browserName}
+            </if>
+        </set>
+        where t.id = #{id}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.seezoon.dao.modules.sys.entity.SysLoginLog">
+        update sys_login_log t set
+        t.user_id = #{userId}
+        ,t.user_name = #{userName}
+        ,t.result = #{result}
+        ,t.login_time = #{loginTime}
+        ,t.ip = #{ip}
+        ,t.area = #{area}
+        ,t.user_agent = #{userAgent}
+        ,t.device_name = #{deviceName}
+        ,t.browser_name = #{browserName}
+        where t.id = #{id}
+    </update>
+</mapper>

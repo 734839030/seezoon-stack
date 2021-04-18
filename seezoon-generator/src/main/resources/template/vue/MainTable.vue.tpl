@@ -12,7 +12,7 @@
     <#if columnPlan.search>
     <a-form-item label="${columnPlan.fieldName!}" name="${columnPlan.javaFieldName}">
         <#if columnPlan.inputType.name() == "TEXT">
-      <a-input v-model:value="searchForm.${columnPlan.javaFieldName}" <#if columnPlan.stringType>:maxlength="${columnPlan.maxLength}"</#if> placeholder=""/>
+      <a-input v-model:value="searchForm.${columnPlan.javaFieldName}" <#if columnPlan.stringType>:maxlength="${columnPlan.maxLength?c}"</#if> placeholder=""/>
         </#if>
         <#if columnPlan.inputType.name() == "SELECT">
       <a-select
@@ -20,7 +20,7 @@
          :allowClear="true"
          :options="${columnPlan.javaFieldName}Dicts"
          placeholder="请选择"
-         style="width: 120px"
+         style="width: 140px"
       />
         </#if>
        <#if columnPlan.inputType.name() == "SELECT_MULTIPLE">
@@ -30,7 +30,7 @@
           :allowClear="true"
           :options="${columnPlan.javaFieldName}Dicts"
           placeholder="请选择"
-          style="width: 120px"
+          style="width: 140px"
           :token-separators="[',']"
       />
         </#if>
@@ -59,7 +59,7 @@
       <a-textarea
         v-model:value="dataForm.${columnPlan.javaFieldName}"
         <#if columnPlan.stringType>
-        :maxlength="${columnPlan.maxLength}"
+        :maxlength="${columnPlan.maxLength?c}"
         </#if>
         placeholder=""
       />
@@ -105,7 +105,7 @@
       <a v-auth="'${moduleName}:${functionName}:update'" @click="this.$refs.dataFormModal.open('编辑', record.id)"
       >编辑</a
       >
-      <a-divider type="vertical"/>
+      <a-divider type="vertical" v-auth="'${moduleName}:${functionName}:delete'" />
       <a-popconfirm
           placement="left"
           title="确定删除？"

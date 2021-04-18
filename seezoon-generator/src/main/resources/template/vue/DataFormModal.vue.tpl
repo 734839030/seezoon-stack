@@ -27,7 +27,7 @@
       <a-row>
       <#assign itemCount = 0>
       <#list columnPlans as columnPlan>
-        <#if columnPlan.showDataForm || columnPlan.inputType.name() != "HIDDEN">
+        <#if columnPlan.showDataForm && columnPlan.inputType.name() != "HIDDEN">
           <a-col :md="12" :xs="24">
             <a-form-item
               label="${columnPlan.fieldName}"
@@ -42,11 +42,11 @@
                 ]"
                 >
              <#if columnPlan.inputType.name() == "TEXT">
-                <a-input v-model:value="dataForm.${columnPlan.javaFieldName}" <#if columnPlan.maxLength??>:maxlength="${columnPlan.maxLength}"</#if> placeholder="" />
+                <a-input v-model:value="dataForm.${columnPlan.javaFieldName}" <#if columnPlan.maxLength??>:maxlength="${columnPlan.maxLength?c}"</#if> placeholder="" />
              <#elseif columnPlan.inputType.name() == "SELECT">
             <a-select
               v-model:value="dataForm.${columnPlan.javaFieldName}"
-              style="width: 120px"
+              style="width: 140px"
               :allowClear="true"
               :options="${columnPlan.javaFieldName}Dicts"
               placeholder="请选择下拉数据"
@@ -58,7 +58,7 @@
               :allowClear="true"
               :options="${columnPlan.javaFieldName}Dicts"
               placeholder="请选择"
-              style="width: 120px"
+              style="width: 140px"
               :token-separators="[',']"
             />
              <#elseif columnPlan.inputType.name() == "INTEGRAL_NUMBER">
@@ -77,7 +77,7 @@
             <a-textarea
                v-model:value="dataForm.${columnPlan.javaFieldName}"
                :auto-size="{ minRows: 3, maxRows: 5 }"
-               <#if columnPlan.maxLength??>:maxlength="${columnPlan.maxLength}"</#if>
+               <#if columnPlan.maxLength??>:maxlength="${columnPlan.maxLength?c}"</#if>
                placeholder=""
             />
              <#elseif columnPlan.inputType.name() == "RICH_TEXT">

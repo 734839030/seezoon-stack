@@ -17,7 +17,7 @@
              v-model:value="data.${columnPlan.javaFieldName}"
              mode="tags"
              :options="${columnPlan.javaFieldName}Dicts"
-             style="width: 120px"
+             style="width: 140px"
              :token-separators="[',']"
              :disabled="true"
            />

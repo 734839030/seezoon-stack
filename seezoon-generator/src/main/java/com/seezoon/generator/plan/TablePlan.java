@@ -130,4 +130,8 @@ public class TablePlan {
     public boolean isHasImageUploadWidget() {
         return this.getColumnPlans().stream().anyMatch(columnPlan -> columnPlan.getInputType().equals(InputType.IMAGE));
     }
+
+    public boolean isHasDictType() {
+        return this.getColumnPlans().stream().anyMatch(columnPlan -> StringUtils.isNotEmpty(columnPlan.getDictType()));
+    }
 }
