@@ -58,6 +58,7 @@
         <!-- aliyun-sdk-oss -->
         <aliyun-sdk-oss.version>3.11.2</aliyun-sdk-oss.version>
         <docker.repository>734839030</docker.repository>
+        <useragent.version>1.21</useragent.version>
 
     </properties>
     <dependencyManagement>

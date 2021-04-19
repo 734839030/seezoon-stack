@@ -2,7 +2,6 @@ package com.seezoon.framework.autoconfigure;
 
 import javax.servlet.ServletRequestListener;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cache.annotation.EnableCaching;
@@ -12,6 +11,7 @@ import com.seezoon.framework.properties.SeezoonProperties;
 import com.seezoon.framework.web.AutoWebMvcConfigurer;
 
 import io.swagger.annotations.Api;
+import lombok.RequiredArgsConstructor;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -42,10 +42,10 @@ import springfox.documentation.spring.web.plugins.Docket;
 @EnableOpenApi
 @Import({AutoWebMvcConfigurer.class, BeanValidatorPluginsConfiguration.class})
 @EnableCaching
+@RequiredArgsConstructor
 public class SeezoonFrameworkAutoConfiguration {
 
-    @Autowired
-    private SeezoonProperties seezoonProperties;
+    private final SeezoonProperties seezoonProperties;
 
     /**
      * doc 配置

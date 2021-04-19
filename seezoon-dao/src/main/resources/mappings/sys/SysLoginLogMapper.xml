@@ -15,39 +15,42 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-    t.id,t.user_id,t.user_name,t.result,t.login_time,t.ip,t.area,t.user_agent,t.device_name,t.browser_name
+        t.id,t.user_id,t.user_name,t.result,t.login_time,t.ip,t.area,t.user_agent,t.device_name,t.browser_name
     </sql>
 
-    <sql id="Query_Table" >
-    sys_login_log t
+    <sql id="Query_Table">
+        sys_login_log t
     </sql>
 
     <select id="selectByPrimaryKey" parameterType="Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from <include refid="Query_Table" />
+        from
+        <include refid="Query_Table"/>
         where t.id = #{id}
     </select>
 
-    <select id="selectByCondition" parameterType="com.seezoon.dao.modules.sys.entity.SysLoginLogCondition" resultMap="BaseResultMap">
+    <select id="selectByCondition" parameterType="com.seezoon.dao.modules.sys.entity.SysLoginLogCondition"
+            resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from <include refid="Query_Table" />
+        from
+        <include refid="Query_Table"/>
         <where>
             <if test="userId != null">
-            and t.user_id = #{userId}
+                and t.user_id = #{userId}
             </if>
             <if test="userName != null and userName != ''">
-            and t.user_name = #{userName}
+                and t.user_name = #{userName}
             </if>
             <if test="result != null">
-            and t.result = #{result}
+                and t.result = #{result}
             </if>
             <if test="loginTime != null">
-            and t.login_time = #{loginTime}
+                and t.login_time = #{loginTime}
             </if>
             <if test="ip != null and ip != ''">
-            and t.ip = #{ip}
+                and t.ip = #{ip}
             </if>
         </where>
         <choose>
@@ -67,11 +70,11 @@
         </foreach>
     </delete>
 
-    <insert id="insert" >
-        insert into sys_login_log (id,user_id,user_name,result,login_time,ip,area,user_agent,device_name,browser_name)
+    <insert id="insert">
+        insert into sys_login_log (user_id,user_name,result,login_time,ip,area,user_agent,device_name,browser_name)
         values
         <foreach item="item" collection="array" separator=",">
-            (#{item.id},#{item.userId},#{item.userName},#{item.result},#{item.loginTime},#{item.ip},#{item.area},#{item.userAgent},#{item.deviceName},#{item.browserName})
+            (#{item.userId},#{item.userName},#{item.result},#{item.loginTime},#{item.ip},#{item.area},#{item.userAgent},#{item.deviceName},#{item.browserName})
         </foreach>
     </insert>
 
