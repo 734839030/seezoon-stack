@@ -1,4 +1,6 @@
-module.exports = {
+// @ts-check
+const { defineConfig } = require('eslint-define-config');
+module.exports = defineConfig({
   root: true,
   env: {
     browser: true,
@@ -13,7 +15,6 @@ module.exports = {
     jsxPragma: 'React',
     ecmaFeatures: {
       jsx: true,
-      tsx: true,
     },
   },
   extends: [
@@ -58,7 +59,6 @@ module.exports = {
     'vue/multiline-html-element-content-newline': 'off',
     'vue/singleline-html-element-content-newline': 'off',
     'vue/attribute-hyphenation': 'off',
-    // 'vue/html-self-closing': 'off',
     'vue/require-default-prop': 'off',
     'vue/html-self-closing': [
       'error',
@@ -73,4 +73,4 @@ module.exports = {
       },
     ],
   },
-};
+});

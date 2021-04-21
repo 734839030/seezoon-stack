@@ -12,6 +12,9 @@
         </template>
       </DrawerHeader>
     </template>
+    <template v-else #title>
+      <slot name="title"></slot>
+    </template>
 
     <ScrollContainer
       :style="getScrollContentStyle"
@@ -218,7 +221,7 @@
     .ant-drawer-body {
       height: calc(100% - @header-height);
       padding: 0;
-      background-color: #fff;
+      background-color: @component-background;
 
       .scrollbar__wrap {
         padding: 16px !important;

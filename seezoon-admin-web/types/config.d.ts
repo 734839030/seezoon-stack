@@ -8,7 +8,6 @@ import {
 } from '/@/enums/appEnum';
 
 import { CacheTypeEnum } from '/@/enums/cacheEnum';
-import { ThemeMode } from '../build/config/themeConfig';
 
 export type LocaleType = 'zh_CN' | 'en' | 'ru' | 'ja' | 'ko';
 
@@ -34,6 +33,7 @@ export interface MenuSetting {
 }
 
 export interface MultiTabsSetting {
+  cache: boolean;
   show: boolean;
   showQuick: boolean;
   canDrag: boolean;
@@ -83,6 +83,8 @@ export interface ProjectConfig {
   permissionCacheType: CacheTypeEnum;
   // Whether to show the configuration button
   showSettingButton: boolean;
+  // Whether to show the theme switch button
+  showDarkModeToggle: boolean;
   // Configure where the button is displayed
   settingButtonPosition: SettingButtonPositionEnum;
   // Permission mode
@@ -94,7 +96,6 @@ export interface ProjectConfig {
   // Theme color
   themeColor: string;
 
-  themeMode: ThemeMode;
   // The main interface is displayed in full screen, the menu is not displayed, and the top
   fullContent: boolean;
   // content width

@@ -37,7 +37,10 @@
       <a-space>
         <a-button v-auth="'sys:role:query'" type="primary" @click="handleQuery()">查询</a-button>
         <a-button type="default" @click="this.$refs.searchForm.resetFields()">重置</a-button>
-        <a-button v-auth="'sys:role:save'" type="default" @click="handleDataForm('添加')"
+        <a-button
+          v-auth="'sys:role:save'"
+          type="default"
+          @click="this.$refs.dataFormModal.open('添加')"
           >添加
         </a-button>
       </a-space>
@@ -60,11 +63,13 @@
       </a-tag>
     </template>
     <template #action="{ record }">
-      <a v-auth="'sys:role:assign'" @click="this.$refs.roleAssignModal.show(record.id, record.name)"
+      <a v-auth="'sys:role:assign'" @click="this.$refs.roleAssignModal.open(record.id, record.name)"
         >分配</a
       >
       <a-divider type="vertical" />
-      <a v-auth="'sys:role:update'" @click="handleDataForm('编辑', record.id)">编辑</a>
+      <a v-auth="'sys:role:update'" @click="this.$refs.dataFormModal.open('编辑', record.id)"
+        >编辑</a
+      >
       <a-divider type="vertical" />
       <a-popconfirm
         placement="left"
@@ -75,17 +80,11 @@
       </a-popconfirm>
     </template>
   </a-table>
-  <data-form-modal
-    ref="dataFormModal"
-    :data-form="dataFormModal.dataForm"
-    :title="dataFormModal.title"
-    @refreshQuery="handleQuery"
-  />
+  <data-form-modal ref="dataFormModal" @refreshQuery="handleQuery" />
   <role-assign-modal ref="roleAssignModal" />
 </template>
 <script>
   import DataFormModal from './DataFormModal.vue';
-  import { defHttp } from '../../../utils/http/axios';
   import { queryTableMixin } from '../../../mixins/common/query-table-mixin';
   import RoleAssignModal from './RoleAssignModal.vue';
   import { dataScopeArray, dataScopeMap } from './data';
@@ -134,25 +133,11 @@
             slots: { customRender: 'action' },
           },
         ],
-        dataFormModal: {},
         dataScopeArray,
       };
     },
     mounted() {
       this.handleQuery();
-    },
-    methods: {
-      handleDataForm(title, id) {
-        if (id) {
-          defHttp.get({ url: '/sys/role/query/' + id }).then((data) => {
-            this.$refs.dataFormModal.show();
-            this.dataFormModal = { title: title, dataForm: data };
-          });
-        } else {
-          this.$refs.dataFormModal.show();
-          this.dataFormModal = { title: title, dataForm: { status: 1 } };
-        }
-      },
     },
   };
 </script>

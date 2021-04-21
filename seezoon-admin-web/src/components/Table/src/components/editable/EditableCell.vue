@@ -60,14 +60,14 @@
       },
       column: {
         type: Object as PropType<BasicColumn>,
-        default: {},
+        default: () => {},
       },
       index: propTypes.number,
     },
     setup(props) {
       const table = useTableContext();
       const isEdit = ref(false);
-      const elRef = ref<any>(null);
+      const elRef = ref();
       const ruleVisible = ref(false);
       const ruleMessage = ref('');
       const optionsRef = ref<LabelValueOptions>([]);

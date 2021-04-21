@@ -17,7 +17,10 @@
       <a-space>
         <a-button v-auth="'sys:param:query'" type="primary" @click="handleQuery()">查询</a-button>
         <a-button type="default" @click="this.$refs.searchForm.resetFields()">重置</a-button>
-        <a-button v-auth="'sys:param:save'" type="default" @click="handleDataForm('添加')"
+        <a-button
+          v-auth="'sys:param:save'"
+          type="default"
+          @click="this.$refs.dataFormModal.open('添加')"
           >添加
         </a-button>
       </a-space>
@@ -40,7 +43,9 @@
       </a-tag>
     </template>
     <template #action="{ record }">
-      <a v-auth="'sys:param:update'" @click="handleDataForm('编辑', record.id)">编辑</a>
+      <a v-auth="'sys:param:update'" @click="this.$refs.dataFormModal.open('编辑', record.id)"
+        >编辑</a
+      >
       <a-divider type="vertical" />
       <a-popconfirm
         placement="left"
@@ -51,16 +56,10 @@
       </a-popconfirm>
     </template>
   </a-table>
-  <data-form-modal
-    ref="dataFormModal"
-    :data-form="dataFormModal.dataForm"
-    :title="dataFormModal.title"
-    @refreshQuery="handleQuery"
-  />
+  <data-form-modal ref="dataFormModal" @refreshQuery="handleQuery" />
 </template>
 <script>
   import DataFormModal from './DataFormModal.vue';
-  import { defHttp } from '../../../utils/http/axios';
   import { queryTableMixin } from '../../../mixins/common/query-table-mixin.js';
 
   export default {
@@ -104,24 +103,10 @@
             slots: { customRender: 'action' },
           },
         ],
-        dataFormModal: {},
       };
     },
     mounted() {
       this.handleQuery();
-    },
-    methods: {
-      handleDataForm(title, id) {
-        if (id) {
-          defHttp.get({ url: '/sys/param/query/' + id }).then((data) => {
-            this.$refs.dataFormModal.show();
-            this.dataFormModal = { title: title, dataForm: data };
-          });
-        } else {
-          this.$refs.dataFormModal.show();
-          this.dataFormModal = { title: title, dataForm: { status: 1 } };
-        }
-      },
     },
   };
 </script>

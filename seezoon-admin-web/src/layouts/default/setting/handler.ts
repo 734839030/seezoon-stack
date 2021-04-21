@@ -3,18 +3,26 @@ import { updateHeaderBgColor, updateSidebarBgColor } from '/@/logics/theme/updat
 import { updateColorWeak } from '/@/logics/theme/updateColorWeak';
 import { updateGrayMode } from '/@/logics/theme/updateGrayMode';
 
-import { appStore } from '/@/store/modules/app';
+import { useAppStore } from '/@/store/modules/app';
 import { ProjectConfig } from '/#/config';
 import { changeTheme } from '/@/logics/theme';
+import { updateDarkTheme } from '/@/logics/theme/dark';
 import { useRootSetting } from '/@/hooks/setting/useRootSetting';
 
 export function baseHandler(event: HandlerEnum, value: any) {
+  const appStore = useAppStore();
   const config = handler(event, value);
-  appStore.commitProjectConfigState(config);
+  appStore.setProjectConfig(config);
+  if (event === HandlerEnum.CHANGE_THEME) {
+    updateHeaderBgColor();
+    updateSidebarBgColor();
+  }
 }
 
 export function handler(event: HandlerEnum, value: any): DeepPartial<ProjectConfig> {
-  const { getThemeColor } = useRootSetting();
+  const appStore = useAppStore();
+
+  const { getThemeColor, getDarkMode } = useRootSetting();
   switch (event) {
     case HandlerEnum.CHANGE_LAYOUT:
       const { mode, type, split } = value;
@@ -36,7 +44,16 @@ export function handler(event: HandlerEnum, value: any): DeepPartial<ProjectConf
         return {};
       }
       changeTheme(value);
+
       return { themeColor: value };
+
+    case HandlerEnum.CHANGE_THEME:
+      if (getDarkMode.value === value) {
+        return {};
+      }
+      updateDarkTheme(value);
+
+      return {};
 
     case HandlerEnum.MENU_HAS_DRAG:
       return { menuSetting: { canDrag: value } };
@@ -83,7 +100,7 @@ export function handler(event: HandlerEnum, value: any): DeepPartial<ProjectConf
 
     // ============transition==================
     case HandlerEnum.OPEN_PAGE_LOADING:
-      appStore.commitPageLoadingState(false);
+      appStore.setPageLoading(false);
       return { transitionSetting: { openPageLoading: value } };
 
     case HandlerEnum.ROUTER_TRANSITION:

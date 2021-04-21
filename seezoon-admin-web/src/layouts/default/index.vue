@@ -42,13 +42,9 @@
     },
     setup() {
       const { prefixCls } = useDesign('default-layout');
-
       const { getIsMobile } = useAppInject();
-
       const { getShowFullHeaderRef } = useHeaderSetting();
-
       const { getShowSidebar, getIsMixSidebar } = useMenuSetting();
-
       const layoutClass = computed(() => ({ 'ant-layout-has-sider': unref(getIsMixSidebar) }));
 
       return {
@@ -69,7 +65,7 @@
     display: flex;
     width: 100%;
     min-height: 100%;
-    background: @content-bg;
+    background-color: @content-bg;
     flex-direction: column;
 
     > .ant-layout {

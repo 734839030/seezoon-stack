@@ -3,7 +3,10 @@
     <a-form-item>
       <a-space>
         <a-button v-auth="'sys:menu:query'" type="primary" @click="handleQuery()"> 查询</a-button>
-        <a-button v-auth="'sys:menu:save'" type="default" @click="handleDataForm('添加')"
+        <a-button
+          v-auth="'sys:menu:save'"
+          type="default"
+          @click="this.$refs.dataFormModal.open('添加')"
           >添加
         </a-button>
       </a-space>
@@ -35,7 +38,9 @@
       </a-tag>
     </template>
     <template #action="{ record }">
-      <a v-auth="'sys:menu:update'" @click="handleDataForm('编辑', record.id)">编辑</a>
+      <a v-auth="'sys:menu:update'" @click="this.$refs.dataFormModal.open('编辑', record.id)"
+        >编辑</a
+      >
       <a-divider type="vertical" />
       <a-popconfirm
         :title="record.children ? '子节点将一起删除，确定删除?' : '确定删除?'"
@@ -46,17 +51,11 @@
       </a-popconfirm>
     </template>
   </a-table>
-  <data-form-modal
-    ref="dataFormModal"
-    :data-form="dataFormModal.dataForm"
-    :title="dataFormModal.title"
-    @refreshQuery="handleQuery"
-  />
+  <data-form-modal ref="dataFormModal" @refreshQuery="handleQuery" />
 </template>
 <script>
   import DataFormModal from './DataFormModal.vue';
   import { queryTableMixin } from '../../../mixins/common/query-table-mixin';
-  import { defHttp } from '../../../utils/http/axios';
   import { Icon } from '../../../components/Icon';
 
   export default {
@@ -123,31 +122,10 @@
             slots: { customRender: 'action' },
           },
         ],
-        dataFormModal: {},
       };
     },
     mounted() {
       this.handleQuery();
-    },
-    methods: {
-      handleDataForm(title, id) {
-        this.$refs.dataFormModal.loadMenuData();
-        if (id) {
-          defHttp.get({ url: '/sys/menu/query/' + id }).then((data) => {
-            this.$refs.dataFormModal.show();
-            if (data.parentId === 0) {
-              data.parentId = undefined;
-            }
-            this.dataFormModal = { title: title, dataForm: data };
-          });
-        } else {
-          this.$refs.dataFormModal.show();
-          this.dataFormModal = {
-            title: title,
-            dataForm: { status: 1, type: 1, sort: 1000, target: 'main' },
-          };
-        }
-      },
     },
   };
 </script>

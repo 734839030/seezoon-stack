@@ -8,7 +8,7 @@ interface Params {
 const DEFAULT_EXCLUDE_KEYS = ['class', 'style'];
 const LISTENER_PREFIX = /^on[A-Z]/;
 
-export function entries<T>(obj: Hash<T>): [string, T][] {
+export function entries<T>(obj: Recordable<T>): [string, T][] {
   return Object.keys(obj).map((key: string) => [key, obj[key]]);
 }
 
@@ -30,7 +30,7 @@ export function useAttrs(params: Params = {}): Ref<Recordable> | {} {
       }
 
       return acm;
-    }, {} as Hash<any>);
+    }, {} as Recordable);
 
     attrs.value = res;
   });

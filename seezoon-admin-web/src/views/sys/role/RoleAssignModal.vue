@@ -116,7 +116,7 @@
       },
     },
     methods: {
-      show(roleId, roleName) {
+      open(roleId, roleName) {
         this.visible = true;
         this.roleId = roleId;
         this.roleName = roleName;

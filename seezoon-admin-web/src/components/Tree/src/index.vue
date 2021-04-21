@@ -39,7 +39,7 @@
     name: 'BasicTree',
     inheritAttrs: false,
     props: basicProps,
-    emits: ['update:expandedKeys', 'update:selectedKeys', 'update:value', 'change'],
+    emits: ['update:expandedKeys', 'update:selectedKeys', 'update:value', 'change', 'check'],
     setup(props, { attrs, slots, emit }) {
       const state = reactive<State>({
         checkStrictly: props.checkStrictly,
@@ -92,6 +92,7 @@
             state.checkedKeys = v;
             const rawVal = toRaw(v);
             emit('change', rawVal);
+            emit('check', rawVal);
             emit('update:value', rawVal);
           },
           onRightClick: handleRightClick,
@@ -320,10 +321,10 @@
       }
       return () => {
         const { title, helpMessage, toolbar, search, checkable } = props;
-        const showTitle = title || toolbar || search;
+        const showTitle = title || toolbar || search || slots.headerTitle;
         const scrollStyle: CSSProperties = { height: 'calc(100% - 38px)' };
         return (
-          <div class={[prefixCls, 'h-full bg-white', attrs.class]}>
+          <div class={[prefixCls, 'h-full', attrs.class]}>
             {showTitle && (
               <TreeHeader
                 checkable={checkable}
@@ -335,7 +336,9 @@
                 helpMessage={helpMessage}
                 onStrictlyChange={onStrictlyChange}
                 onSearch={handleSearch}
-              />
+              >
+                {extendSlots(slots)}
+              </TreeHeader>
             )}
             <ScrollContainer style={scrollStyle} v-show={!unref(getNotFound)}>
               <Tree {...unref(getBindValues)} showIcon={false}>
@@ -358,6 +361,8 @@
   @prefix-cls: ~'@{namespace}-basic-tree';
 
   .@{prefix-cls} {
+    background-color: @component-background;
+
     .ant-tree-node-content-wrapper {
       position: relative;
 

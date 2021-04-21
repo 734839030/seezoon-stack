@@ -7,6 +7,8 @@ export interface RequestOptions {
   formatDate?: boolean;
   //  Whether to process the request result
   isTransformRequestResult?: boolean;
+  // false返回整个response
+  isTransformResponse?: boolean;
   // Whether to join url
   joinPrefix?: boolean;
   // Interface address, use the default apiUrl if you leave it blank
@@ -28,7 +30,7 @@ export interface Result<T = any> {
 // multipart/form-data: upload file
 export interface UploadFileParams {
   // Other parameters
-  data?: Indexable;
+  data?: Recordable;
   // File parameter interface field name
   name?: string;
   // file name

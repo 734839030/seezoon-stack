@@ -101,7 +101,7 @@
 
   import clickOutside from '/@/directives/clickOutside';
   import { getShallowMenus, getChildrenMenus, getCurrentParentPath } from '/@/router/menus';
-  import { listenerLastChangeTab } from '/@/logics/mitt/tabChange';
+  import { listenerRouteChange } from '/@/logics/mitt/routeChange';
   import { SimpleMenu } from '/@/components/SimpleMenu';
 
   export default defineComponent({
@@ -202,7 +202,7 @@
         menuModules.value = await getShallowMenus();
       });
 
-      listenerLastChangeTab((route) => {
+      listenerRouteChange((route) => {
         currentRoute.value = route;
         setActive(true);
         if (unref(getCloseMixSidebarOnChange)) {
@@ -344,7 +344,7 @@
     z-index: @layout-mix-sider-fixed-z-index;
     height: 100%;
     overflow: hidden;
-    background: @sider-dark-bg-color;
+    background-color: @sider-dark-bg-color;
     transition: all 0.2s ease 0s;
 
     &-dom {
@@ -383,7 +383,7 @@
 
           &--active {
             color: @primary-color;
-            background: unset;
+            background-color: unset;
           }
         }
       }
@@ -403,7 +403,7 @@
         }
       }
     }
-    @border-color: @sider-dark-lighten-1-bg-color;
+    @border-color: @sider-dark-lighten-bg-color;
 
     &.dark {
       &.open {
@@ -416,7 +416,7 @@
         }
       }
       .@{prefix-cls}-menu-list {
-        background: @sider-dark-bg-color;
+        background-color: @sider-dark-bg-color;
 
         &__title {
           color: @white;
@@ -459,7 +459,7 @@
         &--active {
           font-weight: 700;
           color: @white;
-          background: @sider-dark-darken-bg-color;
+          background-color: @sider-dark-darken-bg-color;
 
           &::before {
             position: absolute;
@@ -467,7 +467,7 @@
             left: 0;
             width: 3px;
             height: 100%;
-            background: @primary-color;
+            background-color: @primary-color;
             content: '';
           }
         }
@@ -496,12 +496,12 @@
       font-size: 18px;
       color: rgba(255, 255, 255, 0.65);
       cursor: pointer;
-      background: @sider-dark-bg-color;
+      background-color: @sider-dark-bg-color;
     }
 
     &.light &-trigger {
       color: rgba(0, 0, 0, 0.65);
-      background: #fff;
+      background-color: #fff;
     }
 
     &-menu-list {
@@ -510,7 +510,7 @@
       width: 0;
       width: 200px;
       height: calc(100%);
-      background: #fff;
+      background-color: #fff;
       transition: all 0.2s;
 
       &__title {
@@ -573,7 +573,7 @@
       width: 1px;
       height: calc(100% - 50px);
       cursor: ew-resize;
-      background: #f8f8f9;
+      background-color: #f8f8f9;
       border-top: none;
       border-bottom: none;
       box-shadow: 0 0 4px 0 rgba(28, 36, 56, 0.15);

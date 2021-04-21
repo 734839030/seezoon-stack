@@ -2,7 +2,7 @@
   <div :class="[prefixCls, `${prefixCls}--${theme}`]">
     <a-breadcrumb :routes="routes">
       <template #itemRender="{ route, routes, paths }">
-        <Icon :icon="route.meta.icon" v-if="getShowBreadCrumbIcon && route.meta.icon" />
+        <Icon :icon="getIcon(route)" v-if="getShowBreadCrumbIcon && getIcon(route)" />
         <span v-if="!hasRedirect(routes, route)">
           {{ t(route.name || route.meta.title) }}
         </span>
@@ -21,8 +21,6 @@
 
   import { Breadcrumb } from 'ant-design-vue';
   import Icon from '/@/components/Icon';
-
-  import { PageEnum } from '/@/enums/pageEnum';
 
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useRootSetting } from '/@/hooks/setting/useRootSetting';
@@ -49,6 +47,7 @@
       const { currentRoute } = useRouter();
       const { prefixCls } = useDesign('layout-breadcrumb');
       const { getShowBreadCrumbIcon } = useRootSetting();
+      const go = useGo();
 
       const { t } = useI18n();
       watchEffect(async () => {
@@ -124,7 +123,6 @@
           return;
         }
 
-        const go = useGo();
         if (redirect && isString(redirect)) {
           go(redirect);
         } else {
@@ -148,7 +146,11 @@
         return true;
       }
 
-      return { routes, t, prefixCls, getShowBreadCrumbIcon, handleClick, hasRedirect };
+      function getIcon(route) {
+        return route.icon || route.meta?.icon;
+      }
+
+      return { routes, t, prefixCls, getIcon, getShowBreadCrumbIcon, handleClick, hasRedirect };
     },
   });
 </script>

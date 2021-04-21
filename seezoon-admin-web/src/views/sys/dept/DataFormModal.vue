@@ -90,6 +90,7 @@
 <script>
   import { dataFormModalMixin } from '../../../mixins/common/data-form-mixin-modal.js';
   import { deptTreeSelectMixin } from '../../../mixins/sys/dept-tree-select-mixin.js';
+  import { defHttp } from '../../../utils/http/axios';
 
   export default {
     name: 'DataFormModal',
@@ -107,6 +108,21 @@
           },
           `该层级部门 ${value} 已存在`
         );
+      },
+      open(title, id) {
+        this.loadDeptData();
+        this.visible = true;
+        this.title = title;
+        if (null != id) {
+          defHttp.get({ url: '/sys/dept/query/' + id }).then((data) => {
+            if (data.parentId === 0) {
+              data.parentId = undefined;
+            }
+            this.dataForm = data;
+          });
+        } else {
+          this.dataForm = { sort: 1000 };
+        }
       },
       // 保存后回调
       handleOkCb() {

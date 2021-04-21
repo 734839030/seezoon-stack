@@ -11,20 +11,18 @@
   import { ConfigProvider } from 'ant-design-vue';
   import { AppProvider } from '/@/components/Application';
 
-  import { initAppConfigStore } from '/@/logics/initAppConfig';
-
   import { useLockPage } from '/@/hooks/web/useLockPage';
+  import { useTitle } from '/@/hooks/web/useTitle';
   import { useLocale } from '/@/locales/useLocale';
 
   export default defineComponent({
     name: 'App',
     components: { ConfigProvider, AppProvider },
     setup() {
+      useTitle();
+
       // support Multi-language
       const { getAntdLocale } = useLocale();
-
-      // Initialize vuex internal system configuration
-      initAppConfigStore();
 
       // Create a lock screen monitor
       const lockEvent = useLockPage();

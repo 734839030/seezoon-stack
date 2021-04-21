@@ -7,7 +7,7 @@ const charts: AppRouteModule = {
   path: '/charts',
   name: 'Charts',
   component: LAYOUT,
-  redirect: '/charts/apexChart',
+  redirect: '/charts/echarts/map',
   meta: {
     icon: 'ion:bar-chart-outline',
     title: t('routes.demo.charts.charts'),
@@ -38,14 +38,6 @@ const charts: AppRouteModule = {
       component: () => import('/@/views/demo/charts/map/Google.vue'),
     },
 
-    {
-      path: 'apexChart',
-      name: 'ApexChart',
-      meta: {
-        title: t('routes.demo.charts.apexChart'),
-      },
-      component: () => import('/@/views/demo/charts/apex/index.vue'),
-    },
     {
       path: 'echarts',
       name: 'Echarts',

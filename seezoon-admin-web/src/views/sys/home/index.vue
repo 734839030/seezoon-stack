@@ -1,23 +1,39 @@
 <template>
-  <div class="welcome">
-    <demo-home />
+  <div class="p-4">
+    <GrowCard :loading="loading" class="enter-y" />
+    <SiteAnalysis class="!my-4 enter-y" :loading="loading" />
+
+    <div class="md:flex enter-y">
+      <VisitRadar class="md:w-1/3 w-full" :loading="loading" />
+
+      <VisitSource class="md:w-1/3 !md:mx-4 !md:my-0 !my-4 w-full" :loading="loading" />
+      <SalesProductPie class="md:w-1/3 w-full" :loading="loading" />
+    </div>
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
-  import DemoHome from '../../demo/dashboard/analysis/index.vue';
+  import { defineComponent, ref } from 'vue';
+  import GrowCard from './components/GrowCard.vue';
+  import SiteAnalysis from './components/SiteAnalysis.vue';
+  import VisitSource from './components/VisitSource.vue';
+  import VisitRadar from './components/VisitRadar.vue';
+  import SalesProductPie from './components/SalesProductPie.vue';
 
   export default defineComponent({
-    name: 'Welcome',
-    components: { DemoHome },
+    components: {
+      GrowCard,
+      SiteAnalysis,
+      VisitRadar,
+      VisitSource,
+      SalesProductPie,
+    },
+    setup() {
+      const loading = ref(true);
+
+      setTimeout(() => {
+        loading.value = false;
+      }, 1500);
+      return { loading };
+    },
   });
 </script>
-<style lang="less" scoped>
-  .welcome {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-  }
-</style>

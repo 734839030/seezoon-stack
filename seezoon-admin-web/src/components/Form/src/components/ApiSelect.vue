@@ -1,5 +1,10 @@
 <template>
-  <Select v-bind="attrs" :options="getOptions" v-model:value="state">
+  <Select
+    @dropdownVisibleChange="handleFetch"
+    v-bind="attrs"
+    :options="getOptions"
+    v-model:value="state"
+  >
     <template #[item]="data" v-for="item in Object.keys($slots)">
       <slot :name="item" v-bind="data"></slot>
     </template>
@@ -36,7 +41,12 @@
     },
     inheritAttrs: false,
     props: {
-      value: propTypes.string,
+      value: propTypes.oneOfType([
+        propTypes.object,
+        propTypes.number,
+        propTypes.string,
+        propTypes.array,
+      ]),
       numberToString: propTypes.bool,
       api: {
         type: Function as PropType<(arg?: Recordable) => Promise<OptionsItem[]>>,
@@ -51,11 +61,13 @@
       resultField: propTypes.string.def(''),
       labelField: propTypes.string.def('label'),
       valueField: propTypes.string.def('value'),
+      immediate: propTypes.bool.def(true),
     },
     emits: ['options-change', 'change'],
     setup(props, { emit }) {
       const options = ref<OptionsItem[]>([]);
       const loading = ref(false);
+      const isFirstLoad = ref(true);
       const attrs = useAttrs();
       const { t } = useI18n();
 
@@ -78,7 +90,7 @@
       });
 
       watchEffect(() => {
-        fetch();
+        props.immediate && fetch();
       });
 
       async function fetch() {
@@ -90,20 +102,32 @@
           const res = await api(props.params);
           if (Array.isArray(res)) {
             options.value = res;
-            emit('options-change', unref(options));
+            emitChange();
             return;
           }
           if (props.resultField) {
             options.value = get(res, props.resultField) || [];
           }
-          emit('options-change', unref(options));
+          emitChange();
         } catch (error) {
           console.warn(error);
         } finally {
           loading.value = false;
         }
       }
-      return { state, attrs, getOptions, loading, t };
+
+      async function handleFetch() {
+        if (!props.immediate && unref(isFirstLoad)) {
+          await fetch();
+          isFirstLoad.value = false;
+        }
+      }
+
+      function emitChange() {
+        emit('options-change', unref(options));
+      }
+
+      return { state, attrs, getOptions, loading, t, handleFetch };
     },
   });
 </script>

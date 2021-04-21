@@ -4,7 +4,7 @@
       <div :class="getClass" @click.stop v-if="visible">
         <div :class="`${prefixCls}-content`" v-click-outside="handleClose">
           <div :class="`${prefixCls}-input__wrapper`">
-            <a-input
+            <Input
               :class="`${prefixCls}-input`"
               :placeholder="t('common.searchText')"
               allow-clear
@@ -14,7 +14,7 @@
                 <!-- <Icon icon="ion:search"/> -->
                 <SearchOutlined />
               </template>
-            </a-input>
+            </Input>
             <span :class="`${prefixCls}-cancel`" @click="handleClose">
               {{ t('common.cancelText') }}
             </span>
@@ -76,7 +76,7 @@
 
   export default defineComponent({
     name: 'AppSearchModal',
-    components: { Icon, SearchOutlined, AppSearchFooter, [Input.name]: Input },
+    components: { Icon, SearchOutlined, AppSearchFooter, Input },
     directives: {
       clickOutside,
     },
@@ -147,7 +147,7 @@
     width: 100%;
     height: 100%;
     padding-top: 50px;
-    background: rgba(0, 0, 0, 0.25);
+    background-color: rgba(0, 0, 0, 0.25);
     justify-content: center;
 
     &--mobile {
@@ -190,12 +190,10 @@
     &-content {
       position: relative;
       width: 632px;
-      // padding: 14px;
       margin: 0 auto auto auto;
-      background: #f5f6f7;
+      background-color: @component-background;
       border-radius: 16px;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-      // box-shadow: inset 1px 1px 0 0 hsla(0, 0%, 100%, 0.5), 0 3px 8px 0 #555a64;
       flex-direction: column;
     }
 
@@ -253,8 +251,7 @@
         font-size: 14px;
         color: @text-color-base;
         cursor: pointer;
-        // background: @primary-color;
-        background: #fff;
+        background-color: @component-background;
         border-radius: 4px;
         box-shadow: 0 1px 3px 0 #d4d9e1;
         align-items: center;
@@ -267,7 +264,7 @@
 
         &--active {
           color: #fff;
-          background: @primary-color;
+          background-color: @primary-color;
 
           .@{prefix-cls}-list__item-enter {
             opacity: 1;

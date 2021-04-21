@@ -6,7 +6,7 @@
           <a-col :span="8">
             <div :class="`${prefixCls}-top__avatar`">
               <img width="70" :src="headerImg" />
-              <span>Serati Ma</span>
+              <span>Vben</span>
               <div>海纳百川，有容乃大</div>
             </div>
           </a-col>
@@ -102,7 +102,7 @@
     &-top {
       padding: 10px;
       margin: 16px 16px 12px 16px;
-      background: #fff;
+      background-color: @component-background;
       border-radius: 3px;
 
       &__avatar {
@@ -144,7 +144,7 @@
     &-bottom {
       padding: 10px;
       margin: 0 16px 16px 16px;
-      background: #fff;
+      background-color: @component-background;
       border-radius: 3px;
     }
   }

@@ -1,11 +1,11 @@
 <template>
   <Menu
     v-bind="getBindValues"
-    @select="handleSelect"
     :activeName="activeName"
     :openNames="getOpenKeys"
     :class="prefixCls"
     :activeSubMenuNames="activeSubMenuNames"
+    @select="handleSelect"
   >
     <template v-for="item in items" :key="item.path">
       <SimpleSubMenu
@@ -18,7 +18,6 @@
   </Menu>
 </template>
 <script lang="ts">
-  import type { PropType } from 'vue';
   import type { MenuState } from './types';
   import type { Menu as MenuType } from '/@/router/types';
 
@@ -27,7 +26,7 @@
 
   import Menu from './components/Menu.vue';
   import SimpleSubMenu from './SimpleSubMenu.vue';
-  import { listenerLastChangeTab } from '/@/logics/mitt/tabChange';
+  import { listenerRouteChange } from '/@/logics/mitt/routeChange';
   import { propTypes } from '/@/utils/propTypes';
   import { REDIRECT_NAME } from '/@/router/constant';
   import { RouteLocationNormalizedLoaded, useRouter } from 'vue-router';
@@ -54,6 +53,7 @@
       beforeClickFn: {
         type: Function as PropType<(key: string) => Promise<boolean>>,
       },
+      isSplitMenu: propTypes.bool,
     },
     emits: ['menuClick'],
     setup(props, { attrs, emit }) {
@@ -69,6 +69,7 @@
       const { currentRoute } = useRouter();
       const { prefixCls } = useDesign('simple-menu');
       const { items, accordion, mixSider, collapse } = toRefs(props);
+
       const { setOpenKeys, getOpenKeys } = useOpenKeys(
         menuState,
         items,
@@ -91,7 +92,18 @@
         { immediate: true }
       );
 
-      listenerLastChangeTab((route) => {
+      watch(
+        () => props.items,
+        () => {
+          if (!props.isSplitMenu) {
+            return;
+          }
+          setOpenKeys(currentRoute.value.path);
+        },
+        { flush: 'post' }
+      );
+
+      listenerRouteChange((route) => {
         if (route.name === REDIRECT_NAME) return;
 
         currentActiveMenu.value = route.meta?.currentActiveMenu as string;
@@ -112,7 +124,6 @@
         menuState.activeName = path;
 
         setOpenKeys(path);
-        // if (unref(currentActiveMenu)) return;
       }
 
       async function handleSelect(key: string) {

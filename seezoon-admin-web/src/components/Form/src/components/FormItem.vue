@@ -28,15 +28,15 @@
       },
       formProps: {
         type: Object as PropType<FormProps>,
-        default: {},
+        default: () => {},
       },
       allDefaultValues: {
         type: Object as PropType<Recordable>,
-        default: {},
+        default: () => {},
       },
       formModel: {
         type: Object as PropType<Recordable>,
-        default: {},
+        default: () => {},
       },
       setFormModel: {
         type: Function as PropType<(key: string, value: any) => void>,
@@ -156,9 +156,9 @@
           if (!isShow) {
             rule.required = false;
           }
-          if (rule.required && component) {
+          if (component) {
             if (!Reflect.has(rule, 'type')) {
-              rule.type = 'string';
+              rule.type = component === 'InputNumber' ? 'number' : 'string';
             }
             const joinLabel = Reflect.has(props.schema, 'rulesMessageJoinLabel')
               ? rulesMessageJoinLabel
@@ -210,7 +210,7 @@
             props.setFormModel(field, value);
           },
         };
-        const Comp = componentMap.get(component) as typeof defineComponent;
+        const Comp = componentMap.get(component) as ReturnType<typeof defineComponent>;
 
         const { autoSetPlaceHolder, size } = props.formProps;
         const propsData: Recordable = {
@@ -258,7 +258,7 @@
         const { label, helpMessage, helpComponentProps, subLabel } = props.schema;
         const renderLabel = subLabel ? (
           <span>
-            {label} <span style="color:#00000073">{subLabel}</span>
+            {label} <span class="text-secondary">{subLabel}</span>
           </span>
         ) : (
           label

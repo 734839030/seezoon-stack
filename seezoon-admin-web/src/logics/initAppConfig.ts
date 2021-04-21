@@ -9,40 +9,56 @@ import projectSetting from '/@/settings/projectSetting';
 import { updateHeaderBgColor, updateSidebarBgColor } from '/@/logics/theme/updateBackground';
 import { updateColorWeak } from '/@/logics/theme/updateColorWeak';
 import { updateGrayMode } from '/@/logics/theme/updateGrayMode';
+import { updateDarkTheme } from '/@/logics/theme/dark';
 import { changeTheme } from '/@/logics/theme';
 
-import { appStore } from '/@/store/modules/app';
-import { localeStore } from '/@/store/modules/locale';
+import { useAppStore } from '/@/store/modules/app';
+import { useLocaleStore } from '/@/store/modules/locale';
 
 import { getCommonStoragePrefix, getStorageShortName } from '/@/utils/env';
 
 import { primaryColor } from '../../build/config/themeConfig';
 import { Persistent } from '/@/utils/cache/persistent';
 import { deepMerge } from '/@/utils';
+import { ThemeEnum } from '/@/enums/appEnum';
 
 // Initial project configuration
 export function initAppConfigStore() {
+  const localeStore = useLocaleStore();
+  const appStore = useAppStore();
   let projCfg: ProjectConfig = Persistent.getLocal(PROJ_CFG_KEY) as ProjectConfig;
   projCfg = deepMerge(projectSetting, projCfg || {});
+  const darkMode = appStore.getDarkMode;
+  const {
+    colorWeak,
+    grayMode,
+    themeColor,
+
+    headerSetting: { bgColor: headerBgColor } = {},
+    menuSetting: { bgColor } = {},
+  } = projCfg;
   try {
-    const {
-      colorWeak,
-      grayMode,
-      themeColor,
-      headerSetting: { bgColor: headerBgColor } = {},
-      menuSetting: { bgColor } = {},
-    } = projCfg;
     if (themeColor && themeColor !== primaryColor) {
       changeTheme(themeColor);
     }
-    headerBgColor && updateHeaderBgColor(headerBgColor);
-    bgColor && updateSidebarBgColor(bgColor);
+
     grayMode && updateGrayMode(grayMode);
     colorWeak && updateColorWeak(colorWeak);
   } catch (error) {
     console.log(error);
   }
-  appStore.commitProjectConfigState(projCfg);
+  appStore.setProjectConfig(projCfg);
+
+  // init dark mode
+  updateDarkTheme(darkMode);
+  if (darkMode === ThemeEnum.DARK) {
+    updateHeaderBgColor();
+    updateSidebarBgColor();
+  } else {
+    headerBgColor && updateHeaderBgColor(headerBgColor);
+    bgColor && updateSidebarBgColor(bgColor);
+  }
+  // init store
   localeStore.initLocale();
 
   setTimeout(() => {

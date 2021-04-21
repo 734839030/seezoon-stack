@@ -9,11 +9,11 @@
           :class="`${prefixCls}-submenu-title-icon`"
         />
       </div>
-      <MenuCollapseTransition>
+      <CollapseTransition>
         <ul :class="prefixCls" v-show="opened">
           <slot></slot>
         </ul>
-      </MenuCollapseTransition>
+      </CollapseTransition>
     </template>
 
     <Popover
@@ -43,6 +43,7 @@
           :class="`${prefixCls}-submenu-title-icon`"
         />
       </div>
+      <!-- eslint-disable-next-line -->
       <template #content v-show="opened">
         <div v-bind="getEvents(true)">
           <ul :class="[prefixCls, `${prefixCls}-${getTheme}`, `${prefixCls}-popup`]">
@@ -72,7 +73,7 @@
   import { propTypes } from '/@/utils/propTypes';
   import { useMenuItem } from './useMenu';
   import { useSimpleRootMenuContext } from './useSimpleMenuContext';
-  import MenuCollapseTransition from './MenuCollapseTransition.vue';
+  import { CollapseTransition } from '/@/components/Transition';
   import Icon from '/@/components/Icon';
   import { Popover } from 'ant-design-vue';
   import { isBoolean, isObject } from '/@/utils/is';
@@ -83,7 +84,7 @@
     name: 'SubMenu',
     components: {
       Icon,
-      MenuCollapseTransition,
+      CollapseTransition,
       Popover,
     },
     props: {
@@ -189,12 +190,18 @@
         const { disabled } = props;
         if (disabled || unref(getCollapse)) return;
         const opened = state.opened;
+
         if (unref(getAccordion)) {
           const { uidList } = getParentList();
           rootMenuEmitter.emit('on-update-opened', {
             opend: false,
             parent: instance?.parent,
             uidList: uidList,
+          });
+        } else {
+          rootMenuEmitter.emit('open-name-change', {
+            name: props.name,
+            opened: !opened,
           });
         }
         state.opened = !opened;

@@ -6,6 +6,7 @@
       class="absolute top-4 right-4 enter-x text-white xl:text-gray-600"
       :showText="false"
     />
+    <AppDarkModeToggle class="absolute top-3 right-7 enter-x" />
 
     <span class="-enter-x xl:hidden">
       <AppLogo :alwaysShowTitle="true" />
@@ -31,7 +32,8 @@
         </div>
         <div class="h-full xl:h-auto flex py-5 xl:py-0 xl:my-0 w-full xl:w-6/12">
           <div
-            class="my-auto mx-auto xl:ml-20 bg-white xl:bg-transparent px-5 py-8 sm:px-8 xl:p-0 rounded-md shadow-md xl:shadow-none w-full sm:w-3/4 lg:w-2/4 xl:w-auto enter-x relative"
+            :class="`${prefixCls}-form`"
+            class="my-auto mx-auto xl:ml-20 xl:bg-transparent px-5 py-8 sm:px-8 xl:p-4 rounded-md shadow-md xl:shadow-none w-full sm:w-3/4 lg:w-2/4 xl:w-auto enter-x relative"
           >
             <LoginForm />
             <ForgetPasswordForm />
@@ -48,7 +50,7 @@
   import { defineComponent, computed } from 'vue';
 
   import { AppLogo } from '/@/components/Application';
-  import { AppLocalePicker } from '/@/components/Application';
+  import { AppLocalePicker, AppDarkModeToggle } from '/@/components/Application';
   import LoginForm from './LoginForm.vue';
   import ForgetPasswordForm from './ForgetPasswordForm.vue';
   import RegisterForm from './RegisterForm.vue';
@@ -58,7 +60,7 @@
   import { useGlobSetting } from '/@/hooks/setting';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useDesign } from '/@/hooks/web/useDesign';
-  import { localeStore } from '/@/store/modules/locale';
+  import { useLocaleStore } from '/@/store/modules/locale';
 
   export default defineComponent({
     name: 'Login',
@@ -70,11 +72,13 @@
       MobileForm,
       QrCodeForm,
       AppLocalePicker,
+      AppDarkModeToggle,
     },
     setup() {
       const globSetting = useGlobSetting();
       const { prefixCls } = useDesign('login');
       const { t } = useI18n();
+      const localeStore = useLocaleStore();
 
       return {
         t,
@@ -89,10 +93,43 @@
   @prefix-cls: ~'@{namespace}-login';
   @logo-prefix-cls: ~'@{namespace}-app-logo';
   @countdown-prefix-cls: ~'@{namespace}-countdown-input';
+  @dark-bg: #293146;
+
+  html[data-theme='dark'] {
+    .@{prefix-cls} {
+      background-color: @dark-bg;
+
+      &::before {
+        background-image: url(/@/assets/svg/login-bg-dark.svg);
+      }
+
+      .ant-input,
+      .ant-input-password {
+        background-color: #232a3b;
+      }
+
+      .ant-btn:not(.ant-btn-link):not(.ant-btn-primary) {
+        border: 1px solid #4a5569;
+      }
+
+      &-form {
+        background: transparent !important;
+      }
+
+      .app-iconify {
+        color: #fff;
+      }
+    }
+  }
 
   .@{prefix-cls} {
+    overflow: hidden;
     @media (max-width: @screen-xl) {
-      background: linear-gradient(180deg, #1c3faa, #1c3faa);
+      background-color: #293146;
+
+      .@{prefix-cls}-form {
+        background-color: #fff;
+      }
     }
 
     &::before {
@@ -159,18 +196,23 @@
     input:not([type='checkbox']) {
       min-width: 360px;
 
+      @media (max-width: @screen-xl) {
+        min-width: 320px;
+      }
+
       @media (max-width: @screen-lg) {
-        min-width: 300px;
+        min-width: 260px;
       }
 
       @media (max-width: @screen-md) {
-        min-width: 280px;
+        min-width: 240px;
       }
 
       @media (max-width: @screen-sm) {
-        min-width: 180px;
+        min-width: 160px;
       }
     }
+    
     .@{countdown-prefix-cls} input {
       min-width: unset;
     }

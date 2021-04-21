@@ -35,7 +35,7 @@
 <script lang="ts">
   import type { BasicTableProps, TableActionType, SizeType } from './types/table';
 
-  import { defineComponent, ref, computed, unref } from 'vue';
+  import { defineComponent, ref, computed, unref, toRaw } from 'vue';
   import { Table } from 'ant-design-vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import expandIcon from './components/ExpandIcon';
@@ -185,8 +185,10 @@
       } = useTableForm(getProps, slots, fetch);
 
       const getBindValues = computed(() => {
+        const dataSource = unref(getDataSourceRef);
         let propsData: Recordable = {
           size: 'middle',
+          // ...(dataSource.length === 0 ? { getPopupContainer: () => document.body } : {}),
           ...attrs,
           customRow,
           expandIcon: expandIcon(),
@@ -197,9 +199,9 @@
           tableLayout: 'fixed',
           rowSelection: unref(getRowSelectionRef),
           rowKey: unref(getRowKey),
-          columns: unref(getViewColumns),
-          pagination: unref(getPaginationInfo),
-          dataSource: unref(getDataSourceRef),
+          columns: toRaw(unref(getViewColumns)),
+          pagination: toRaw(unref(getPaginationInfo)),
+          dataSource,
           footer: unref(getFooterProps),
           ...unref(getExpandOption),
         };
@@ -208,7 +210,6 @@
         }
 
         propsData = omit(propsData, 'class');
-
         return propsData;
       });
 
@@ -298,20 +299,20 @@
   @prefix-cls: ~'@{namespace}-basic-table';
 
   .@{prefix-cls} {
+    &-row__striped {
+      td {
+        background-color: content-background;
+      }
+    }
+
     &-form-container {
       padding: 16px;
 
       .ant-form {
         padding: 12px 10px 6px 10px;
         margin-bottom: 16px;
-        background: #fff;
+        background-color: @component-background;
         border-radius: 4px;
-      }
-    }
-
-    &-row__striped {
-      td {
-        background: #fafafa;
       }
     }
 
@@ -327,7 +328,7 @@
 
     .ant-table-wrapper {
       padding: 6px;
-      background: #fff;
+      background-color: @component-background;
       border-radius: 2px;
 
       .ant-table-title {
@@ -339,7 +340,6 @@
       }
     }
 
-    //
     .ant-table {
       width: 100%;
       overflow-x: hidden;
@@ -353,7 +353,7 @@
       }
 
       .ant-table-tbody > tr.ant-table-row-selected td {
-        background: fade(@primary-color, 8%) !important;
+        background-color: fade(@primary-color, 8%) !important;
       }
     }
 

@@ -12,8 +12,15 @@ export const ROLES_KEY = 'ROLES__KEY__';
 // project config key
 export const PROJ_CFG_KEY = 'PROJ__CFG__KEY__';
 
+// 字段缓存
+export const DICT_KEY = 'DICT__KEY__';
+
 // lock info
 export const LOCK_INFO_KEY = 'LOCK__INFO__KEY__';
+
+export const MULTIPLE_TABS_KEY = 'MULTIPLE_TABS__KEY__';
+
+export const APP_DARK_MODE_KEY_ = '__APP__DARK__MODE__';
 
 // base global local key
 export const APP_LOCAL_CACHE_KEY = 'COMMON__LOCAL__KEY__';

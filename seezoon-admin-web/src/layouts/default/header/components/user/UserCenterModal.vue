@@ -133,7 +133,7 @@
   import { reactive, ref } from 'vue';
   import { getUserInfo } from '../../../../../api/sys/user';
   import { defHttp } from '../../../../../utils/http/axios';
-  import { userStore } from '../../../../../store/modules/user';
+  import { useUserStore } from '../../../../../store/modules/user';
   import SUploader from '../../../../../components/SUploader/index.vue';
   import { Icon } from '../../../../../components/Icon';
 
@@ -143,6 +143,7 @@
     props: { title: String },
     setup() {
       const activeKey = ref('');
+
       const visible = ref(false);
       const userInfoForm = reactive({});
       const userPasswordForm = ref({});
@@ -163,12 +164,14 @@
         visible.value = true;
         init();
       };
+      const userStore = useUserStore();
       return {
         userPasswordForm,
         visible,
         show,
         activeKey,
         userInfoForm,
+        userStore,
       };
     },
     computed: {
@@ -186,7 +189,7 @@
           defHttp.postForm('/sys/user/update_password', this.userPasswordForm).then(() => {
             this.$refs.userPasswordFormRef.resetFields();
             this.$message.success('修改成功,请重新登录');
-            userStore.logout(true);
+            this.userStore.logout(true);
           });
         });
       },
@@ -221,7 +224,7 @@
               })
               .then(() => {
                 getUserInfo().then((userInfo) => {
-                  userStore.commitUserInfoState(userInfo);
+                  this.userStore.setUserInfo(userInfo);
                 });
                 this.$message.success('保存成功');
               });

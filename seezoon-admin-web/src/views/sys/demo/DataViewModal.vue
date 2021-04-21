@@ -44,7 +44,7 @@
     setup() {
       const visible = ref(false);
       const data = ref({});
-      const show = function (id) {
+      const open = function (id) {
         visible.value = true;
         defHttp.get({ url: '/sys/demo/query/' + id }).then((_data) => {
           data.value = _data;
@@ -52,7 +52,7 @@
       };
       return {
         visible,
-        show,
+        open,
         data,
         inputSelectDictsMap,
         inputRadioDictsMap,

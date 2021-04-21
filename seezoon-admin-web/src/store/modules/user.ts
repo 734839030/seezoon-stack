@@ -1,143 +1,128 @@
-import type { GetUserInfoModel, LoginParams } from '/@/api/sys/model/userModel';
+import type { UserInfo } from '/#/store';
+import type { ErrorMessageMode } from '/@/utils/http/axios/types';
 
-import store from '/@/store/index';
-import { Action, getModule, Module, Mutation, VuexModule } from 'vuex-module-decorators';
-import { hotModuleUnregisterModule } from '/@/utils/helper/vuexHelper';
+import { defineStore } from 'pinia';
+import { store } from '/@/store';
 
-import { PageEnum } from '/@/enums/pageEnum';
 import { RoleEnum } from '/@/enums/roleEnum';
+import { PageEnum } from '/@/enums/pageEnum';
 import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum';
 
-import { useMessage } from '/@/hooks/web/useMessage';
-
-import router from '/@/router';
+import { getAuthCache, setAuthCache } from '/@/utils/auth';
+import { GetUserInfoModel, LoginParams } from '/@/api/sys/model/userModel';
 
 import { getUserInfo, loginApi, logout } from '/@/api/sys/user';
 
 import { useI18n } from '/@/hooks/web/useI18n';
-import { ErrorMessageMode } from '/@/utils/http/axios/types';
-import { getAuthCache, setAuthCache } from '/@/utils/auth/index';
+import { useMessage } from '/@/hooks/web/useMessage';
+import router from '/@/router';
 
-//import { LoginResultModel } from '/@/api/sys/model/userModel';
-
-export type UserInfo = Omit<GetUserInfoModel, 'roles'>;
-
-const NAME = 'app-user';
-hotModuleUnregisterModule(NAME);
-
-@Module({ namespaced: true, name: NAME, dynamic: true, store })
-class User extends VuexModule {
-  // user info
-  private userInfoState: UserInfo | null = null;
-
-  // token
-  private tokenState = '';
-
-  // roleList
-  private roleListState: RoleEnum[] = [];
-
-  get getUserInfoState(): UserInfo {
-    return this.userInfoState || getAuthCache<UserInfo>(USER_INFO_KEY) || {};
-  }
-
-  get getTokenState(): string {
-    return this.tokenState || getAuthCache<string>(TOKEN_KEY);
-  }
-
-  get getRoleListState(): RoleEnum[] {
-    return this.roleListState.length > 0 ? this.roleListState : getAuthCache<RoleEnum[]>(ROLES_KEY);
-  }
-
-  @Mutation
-  commitResetState(): void {
-    this.userInfoState = null;
-    this.tokenState = '';
-    this.roleListState = [];
-  }
-
-  @Mutation
-  commitUserInfoState(info: UserInfo): void {
-    this.userInfoState = info;
-    setAuthCache(USER_INFO_KEY, info);
-  }
-
-  @Mutation
-  commitRoleListState(roleList: RoleEnum[]): void {
-    this.roleListState = roleList;
-    setAuthCache(ROLES_KEY, roleList);
-  }
-
-  @Mutation
-  commitTokenState(info: string): void {
-    this.tokenState = info;
-    setAuthCache(TOKEN_KEY, info);
-  }
-
-  /**
-   * @description: login
-   */
-  @Action
-  async login(
-    params: LoginParams & {
-      goHome?: boolean;
-      mode?: ErrorMessageMode;
-    }
-  ): Promise<GetUserInfoModel | null> {
-    try {
-      const { goHome = true, ...loginParams } = params;
-      // 同步登陆
-      await loginApi(loginParams);
-      //const data = await loginApi(loginParams);
-      //const { token, userId } = data;
-      // save token
-      this.commitTokenState(new Date().getTime() + '');
-
-      // get user info
-      // const userInfo = await this.getUserInfoAction({ userId });
-      await this.getUserInfoAction();
-      goHome && (await router.replace(PageEnum.BASE_HOME));
-      return null;
-    } catch (error) {
-      return null;
-    }
-  }
-
-  @Action
-  async getUserInfoAction() {
-    // 获取菜单
-    const userInfo = await getUserInfo();
-    //const { roles } = userInfo;
-    //const roleList = roles as RoleEnum[];
-    this.commitUserInfoState(userInfo);
-    //  this.commitRoleListState(roleList);
-    return userInfo;
-  }
-
-  /**
-   * @description: logout
-   */
-  @Action
-  async logout(goLogin = false) {
-    await logout();
-    goLogin && router.push(PageEnum.BASE_LOGIN);
-  }
-
-  /**
-   * @description: Confirm before logging out
-   */
-  @Action
-  async confirmLoginOut() {
-    const { createConfirm } = useMessage();
-    const { t } = useI18n();
-    createConfirm({
-      iconType: 'warning',
-      title: t('sys.app.logoutTip'),
-      content: t('sys.app.logoutMessage'),
-      onOk: async () => {
-        await this.logout(true);
-      },
-    });
-  }
+interface UserState {
+  userInfo: Nullable<UserInfo>;
+  token?: string;
+  roleList: RoleEnum[];
 }
 
-export const userStore = getModule<User>(User);
+export const useUserStore = defineStore({
+  id: 'app-user',
+  state: (): UserState => ({
+    // user info
+    userInfo: null,
+    // token
+    token: undefined,
+    // roleList
+    roleList: [],
+  }),
+  getters: {
+    getUserInfo(): UserInfo {
+      return this.userInfo || getAuthCache<UserInfo>(USER_INFO_KEY) || {};
+    },
+    getToken(): string {
+      return this.token || getAuthCache<string>(TOKEN_KEY);
+    },
+    getRoleList(): RoleEnum[] {
+      return this.roleList.length > 0 ? this.roleList : getAuthCache<RoleEnum[]>(ROLES_KEY);
+    },
+  },
+  actions: {
+    setToken(info: string) {
+      this.token = info;
+      setAuthCache(TOKEN_KEY, info);
+    },
+    setRoleList(roleList: RoleEnum[]) {
+      this.roleList = roleList;
+      setAuthCache(ROLES_KEY, roleList);
+    },
+    setUserInfo(info: UserInfo) {
+      this.userInfo = info;
+      setAuthCache(USER_INFO_KEY, info);
+    },
+    resetState() {
+      this.userInfo = null;
+      this.token = '';
+      this.roleList = [];
+    },
+    /**
+     * @description: login
+     */
+    async login(
+      params: LoginParams & {
+        goHome?: boolean;
+        mode?: ErrorMessageMode;
+      }
+    ): Promise<GetUserInfoModel | null> {
+      try {
+        const { goHome = true, ...loginParams } = params;
+        // 同步登陆
+        await loginApi(loginParams);
+        //const data = await loginApi(loginParams);
+        //const { token, userId } = data;
+        // save token
+        this.setToken(new Date().getTime() + '');
+
+        const userInfo = await this.getUserInfoAction();
+        goHome && (await router.replace(PageEnum.BASE_HOME));
+        return userInfo;
+      } catch (error) {
+        return null;
+      }
+    },
+    async getUserInfoAction() {
+      // 获取菜单
+      const userInfo = await getUserInfo();
+      //const { roles } = userInfo;
+      //const roleList = roles as RoleEnum[];
+      this.setUserInfo(userInfo);
+      //  this.commitRoleListState(roleList);
+      return userInfo;
+    },
+    /**
+     * @description: logout
+     */
+    async logout(goLogin = false) {
+      await logout();
+      goLogin && router.push(PageEnum.BASE_LOGIN);
+    },
+
+    /**
+     * @description: Confirm before logging out
+     */
+    confirmLoginOut() {
+      const { createConfirm } = useMessage();
+      const { t } = useI18n();
+      createConfirm({
+        iconType: 'warning',
+        title: t('sys.app.logoutTip'),
+        content: t('sys.app.logoutMessage'),
+        onOk: async () => {
+          await this.logout(true);
+        },
+      });
+    },
+  },
+});
+
+// Need to be used outside the setup
+export function useUserStoreWidthOut() {
+  return useUserStore(store);
+}

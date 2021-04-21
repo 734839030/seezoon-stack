@@ -1,24 +1,24 @@
 <template>
   <a-input
-    v-model:value="currentSelect"
-    :class="prefixCls"
-    :maxlength="50"
-    :placeholder="t('component.icon.placeholder')"
+    :disabled="false"
     :style="{ width }"
+    :placeholder="t('component.icon.placeholder')"
+    :class="prefixCls"
+    v-model:value="currentSelect"
   >
     <template #addonAfter>
       <Popover
-        v-model="visible"
-        :overlayClassName="`${prefixCls}-popover`"
         placement="bottomLeft"
         trigger="click"
+        v-model="visible"
+        :overlayClassName="`${prefixCls}-popover`"
       >
         <template #title>
           <div class="flex justify-between">
             <a-input
               :placeholder="t('component.icon.search')"
-              allowClear
               @change="handleSearchChange"
+              allowClear
             />
           </div>
         </template>
@@ -33,6 +33,7 @@
                   :class="currentSelect === icon ? 'border border-primary' : ''"
                   class="p-2 w-1/8 cursor-pointer mr-1 mt-1 flex justify-center items-center border border-solid hover:border-primary"
                   @click="handleClick(icon)"
+                  :title="icon"
                 >
                   <!-- <Icon :icon="icon" :prefix="prefix" /> -->
                   <SvgIcon v-if="isSvgMode" :name="icon" />
@@ -42,18 +43,16 @@
             </ScrollContainer>
             <div class="flex py-2 items-center justify-center" v-if="getTotal >= pageSize">
               <Pagination
-                :pageSize="pageSize"
-                :total="getTotal"
                 showLessItems
                 size="small"
+                :pageSize="pageSize"
+                :total="getTotal"
                 @change="handlePageChange"
               />
             </div>
           </div>
-          <template v-else>
-            <div class="p-5">
-              <Empty />
-            </div>
+          <template v-else
+            ><div class="p-5"> <Empty /></div>
           </template>
         </template>
 
@@ -66,25 +65,20 @@
   </a-input>
 </template>
 <script lang="ts">
-  import { defineComponent, ref, unref, watch, watchEffect } from 'vue';
-
+  import { defineComponent, ref, watchEffect, watch, unref } from 'vue';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { ScrollContainer } from '/@/components/Container';
-
-  import { Empty, Input, Pagination, Popover } from 'ant-design-vue';
+  import { Input, Popover, Pagination, Empty } from 'ant-design-vue';
   import Icon from './index.vue';
   import SvgIcon from './SvgIcon.vue';
-
   import iconsData from '../data/icons.data';
   import { propTypes } from '/@/utils/propTypes';
   import { usePagination } from '/@/hooks/web/usePagination';
-  import { useDebounce } from '/@/hooks/core/useDebounce';
+  import { useDebounceFn } from '@vueuse/core';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useCopyToClipboard } from '/@/hooks/web/useCopyToClipboard';
   import { useMessage } from '/@/hooks/web/useMessage';
-
-  // import '@iconify/iconify';
-  import svgIcons from 'vite-plugin-svg-icons/client';
+  import svgIcons from 'virtual:svg-icons-names';
 
   function getIcons() {
     const data = iconsData as any;
@@ -97,11 +91,9 @@
     }
     return result;
   }
-
   function getSvgIcons() {
     return svgIcons.map((icon) => icon.replace('icon-', ''));
   }
-
   export default defineComponent({
     name: 'IconPicker',
     components: { [Input.name]: Input, Icon, Popover, ScrollContainer, Pagination, Empty, SvgIcon },
@@ -119,38 +111,29 @@
     setup(props, { emit }) {
       const isSvgMode = props.mode === 'svg';
       const icons = isSvgMode ? getSvgIcons() : getIcons();
-
       const currentSelect = ref('');
       const visible = ref(false);
       const currentList = ref(icons);
-
       const { t } = useI18n();
       const { prefixCls } = useDesign('icon-picker');
-
-      const [debounceHandleSearchChange] = useDebounce(handleSearchChange, 100);
-      // const { clipboardRef, isSuccessRef } = useCopyToClipboard(props.value);
+      const debounceHandleSearchChange = useDebounceFn(handleSearchChange, 100);
+      const { clipboardRef, isSuccessRef } = useCopyToClipboard(props.value);
       const { createMessage } = useMessage();
-
       const { getPaginationList, getTotal, setCurrentPage } = usePagination(
         currentList,
         props.pageSize
       );
-
       watchEffect(() => {
         currentSelect.value = props.value;
       });
-
       watch(
         () => currentSelect.value,
         (v) => emit('change', v)
       );
-
       function handlePageChange(page: number) {
         setCurrentPage(page);
       }
-
       function handleClick(icon: string) {
-        const { clipboardRef, isSuccessRef } = useCopyToClipboard(props.value);
         currentSelect.value = icon;
         if (props.copy) {
           clipboardRef.value = icon;
@@ -159,7 +142,6 @@
           }
         }
       }
-
       function handleSearchChange(e: ChangeEvent) {
         const value = e.target.value;
         if (!value) {
@@ -169,7 +151,6 @@
         }
         currentList.value = icons.filter((item) => item.includes(value));
       }
-
       return {
         t,
         prefixCls,
@@ -187,19 +168,15 @@
 </script>
 <style lang="less">
   @prefix-cls: ~'@{namespace}-icon-picker';
-
   .@{prefix-cls} {
     .ant-input-group-addon {
       padding: 0;
     }
-
     &-popover {
       width: 300px;
-
       .ant-popover-inner-content {
         padding: 0;
       }
-
       .scrollbar {
         height: 220px;
       }

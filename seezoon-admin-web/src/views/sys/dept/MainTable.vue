@@ -14,7 +14,10 @@
       <a-space>
         <a-button v-auth="'sys:dept:query'" type="primary" @click="handleQuery()">查询</a-button>
         <a-button type="default" @click="this.$refs.searchForm.resetFields()">重置</a-button>
-        <a-button v-auth="'sys:dept:save'" type="default" @click="handleDataForm('添加')"
+        <a-button
+          v-auth="'sys:dept:save'"
+          type="default"
+          @click="this.$refs.dataFormModal.open('添加')"
           >添加
         </a-button>
       </a-space>
@@ -38,7 +41,9 @@
         @change="handleTableChange"
       >
         <template #action="{ record }">
-          <a v-auth="'sys:dept:update'" @click="handleDataForm('编辑', record.id)">编辑</a>
+          <a v-auth="'sys:dept:update'" @click="this.$refs.dataFormModal.open('编辑', record.id)"
+            >编辑</a
+          >
           <a-divider type="vertical" />
           <a-popconfirm
             placement="left"
@@ -53,8 +58,6 @@
   </a-row>
   <data-form-modal
     ref="dataFormModal"
-    :data-form="dataFormModal.dataForm"
-    :title="dataFormModal.title"
     @refreshDeptTree="this.loadDeptData"
     @refreshQuery="handleQuery"
   />
@@ -63,7 +66,6 @@
   import DataFormModal from './DataFormModal.vue';
   import { queryTableMixin } from '../../../mixins/common/query-table-mixin';
   import { deptTree } from '../../../api/sys';
-  import { defHttp } from '../../../utils/http/axios';
 
   export default {
     name: 'MainTable',
@@ -116,7 +118,6 @@
             slots: { customRender: 'action' },
           },
         ],
-        dataFormModal: {},
         // 部门树
         deptTreeData: [],
       };
@@ -127,21 +128,6 @@
       this.loadDeptData();
     },
     methods: {
-      handleDataForm(title, id) {
-        this.$refs.dataFormModal.loadDeptData();
-        if (id) {
-          defHttp.get({ url: '/sys/dept/query/' + id }).then((data) => {
-            this.$refs.dataFormModal.show();
-            if (data.parentId === 0) {
-              data.parentId = undefined;
-            }
-            this.dataFormModal = { title: title, dataForm: data };
-          });
-        } else {
-          this.$refs.dataFormModal.show();
-          this.dataFormModal = { title: title, dataForm: { sort: 1000 } };
-        }
-      },
       handleDeleteCb(id) {
         this.searchForm.parentId =
           id === this.searchForm.parentId ? null : this.searchForm.parentId;

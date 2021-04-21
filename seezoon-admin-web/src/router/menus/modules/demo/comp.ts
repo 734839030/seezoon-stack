@@ -47,6 +47,10 @@ const menu: MenuModule = {
             path: 'customerForm',
             name: t('routes.demo.form.customerForm'),
           },
+          {
+            path: 'appendForm',
+            name: t('routes.demo.form.appendForm'),
+          },
         ],
       },
       {
@@ -117,15 +121,16 @@ const menu: MenuModule = {
         ],
       },
       {
+        path: 'cropper',
+        name: t('routes.demo.comp.cropperImage'),
+      },
+      {
         path: 'countTo',
         name: t('routes.demo.comp.countTo'),
       },
       {
         path: 'timestamp',
         name: t('routes.demo.comp.time'),
-        tag: {
-          content: 'new',
-        },
       },
       {
         path: 'transition',
@@ -163,10 +168,7 @@ const menu: MenuModule = {
       {
         path: 'tree',
         name: t('routes.demo.comp.tree'),
-        tag: {
-          dot: true,
-          type: 'warn',
-        },
+
         children: [
           {
             path: 'basic',
@@ -175,10 +177,6 @@ const menu: MenuModule = {
           {
             path: 'editTree',
             name: t('routes.demo.comp.editTree'),
-            tag: {
-              dot: true,
-              type: 'warn',
-            },
           },
           {
             path: 'actionTree',
@@ -189,7 +187,17 @@ const menu: MenuModule = {
       {
         name: t('routes.demo.editor.editor'),
         path: 'editor',
+        tag: {
+          dot: true,
+        },
         children: [
+          {
+            path: 'json',
+            name: t('routes.demo.editor.jsonEditor'),
+            tag: {
+              content: 'new',
+            },
+          },
           {
             path: 'markdown',
             name: t('routes.demo.editor.markdown'),

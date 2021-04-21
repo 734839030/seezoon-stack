@@ -1,10 +1,12 @@
 /**
  * @description: Login interface parameters
  */
+import { UserInfo } from '/#/store';
+
 export interface LoginParams {
   username: string;
   password: string;
-  rememberMe: boolean;
+  rememberMe?: boolean;
 }
 
 /**
@@ -31,19 +33,4 @@ export interface LoginResultModel {
 /**
  * @description: Get user information return value
  */
-export interface GetUserInfoModel {
-  permissions?: string[];
-
-  roles?: string[];
-  // 用户id
-  userId: string | number;
-  // 用户名
-  username: string;
-  deptName?: string;
-  // 真实名字
-  name: string;
-  photo?: string;
-  photoUrl?: string;
-  // 介绍
-  desc?: string;
-}
+export type GetUserInfoModel = UserInfo;

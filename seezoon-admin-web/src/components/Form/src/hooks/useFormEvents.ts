@@ -88,7 +88,9 @@ export function useFormEvents({
    */
   async function removeSchemaByFiled(fields: string | string[]): Promise<void> {
     const schemaList: FormSchema[] = cloneDeep(unref(getSchema));
-    if (!fields) return;
+    if (!fields) {
+      return;
+    }
 
     let fieldList: string[] = isString(fields) ? [fields] : fields;
     if (isString(fields)) {
@@ -107,6 +109,7 @@ export function useFormEvents({
     if (isString(field)) {
       const index = schemaList.findIndex((schema) => schema.field === field);
       if (index !== -1) {
+        delete formModel[field];
         schemaList.splice(index, 1);
       }
     }
@@ -212,7 +215,9 @@ export function useFormEvents({
       const values = await validate();
       const res = handleFormValues(values);
       emit('submit', res);
-    } catch (error) {}
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   return {

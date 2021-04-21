@@ -168,6 +168,7 @@
   import { dataFormModalMixin } from '../../../mixins/common/data-form-mixin-modal';
   import { menuTreeMixin } from '../../../mixins/sys/menu-tree-mixin';
   import { IconPicker } from '../../../components/Icon';
+  import { defHttp } from '../../../utils/http/axios';
 
   export default {
     name: 'DataFormModal',
@@ -184,6 +185,21 @@
       };
     },
     methods: {
+      open(title, id) {
+        this.visible = true;
+        this.title = title;
+        this.loadMenuData();
+        if (null != id) {
+          defHttp.get({ url: '/sys/menu/query/' + id }).then((data) => {
+            if (data.parentId === 0) {
+              data.parentId = undefined;
+            }
+            this.dataForm = data;
+          });
+        } else {
+          this.dataForm = { status: 1, type: 1, sort: 1000, target: 'main' };
+        }
+      },
       // 保存后回调
       handleOkCb() {
         this.$emit('refreshQuery');

@@ -141,6 +141,17 @@
             });
         });
       },
+      open(title, id) {
+        this.visible = true;
+        this.title = title;
+        if (null != id) {
+          defHttp.get({ url: '/sys/dict/query/' + id }).then((data) => {
+            this.dataForm = data;
+          });
+        } else {
+          this.dataForm = { status: 1, sort: 1000 };
+        }
+      },
       // 保存后回调
       handleOkCb() {
         this.$emit('refreshQuery');

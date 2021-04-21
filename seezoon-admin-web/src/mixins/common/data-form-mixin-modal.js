@@ -1,10 +1,6 @@
 import { defHttp } from '/@/utils/http/axios';
 // 用于子组件的时候,prop 是只读的，modal 自带的关闭方法无法扩展调用$emit('update:visible',false);
 export const dataFormModalMixin = {
-  props: {
-    title: String,
-    dataForm: Object,
-  },
   data() {
     return {
       width: 750,
@@ -13,12 +9,11 @@ export const dataFormModalMixin = {
       wrapperCol: { span: 18 },
       visible: false,
       confirmLoading: false,
+      title: '',
+      dataForm: {},
     };
   },
   methods: {
-    show() {
-      this.visible = true;
-    },
     handleOkCb() {
       // 需要覆写
     },

@@ -1,12 +1,8 @@
 import { Dict } from '/@/api/sys/model/dictModel';
-import { dictArray2Map } from '/@/api/sys';
+import { dictArray2Map, getDict } from '/@/api/sys';
 
 // value和后台类型要对应
-export const inputSelectDicts: Dict[] = [
-  { value: '1', label: '下拉1' },
-  { value: '2', label: '下拉2' },
-];
-
+export const inputSelectDicts: Dict[] = getDict('select');
 export const inputSelectDictsMap = dictArray2Map(inputSelectDicts);
 
 export const inputRadioDicts: Dict[] = [
@@ -22,3 +18,7 @@ export const inputCheckboxDicts: Dict[] = [
 ];
 
 export const inputCheckboxDictsMap = dictArray2Map(inputCheckboxDicts);
+
+export const statusDicts: Dict[] = getDict('status', true);
+
+export const statusDictsMap = dictArray2Map(statusDicts);

@@ -8,9 +8,9 @@
   >
     <div :class="`${prefixCls}__entry`">
       <div :class="`${prefixCls}__header`">
-        <img :src="headerImg" :class="`${prefixCls}__header-img`" />
+        <img :src="userInfo.photoUrl || headerImg" :class="`${prefixCls}__header-img`" />
         <p :class="`${prefixCls}__header-name`">
-          {{ getRealName }}
+          {{ userInfo.name }}
         </p>
       </div>
 
@@ -31,8 +31,8 @@
   import { BasicModal, useModalInner } from '/@/components/Modal/index';
   import { BasicForm, useForm } from '/@/components/Form/index';
 
-  import { userStore } from '/@/store/modules/user';
-  import { lockStore } from '/@/store/modules/lock';
+  import { useUserStore } from '/@/store/modules/user';
+  import { useLockStore } from '/@/store/modules/lock';
   import headerImg from '/@/assets/images/header.jpg';
   export default defineComponent({
     name: 'LockModal',
@@ -41,10 +41,14 @@
     setup() {
       const { t } = useI18n();
       const { prefixCls } = useDesign('header-lock-modal');
+      const userStore = useUserStore();
+      const lockStore = useLockStore();
 
-      const getRealName = computed(() => {
-        return userStore.getUserInfoState?.realName;
+      const userInfo = computed(() => {
+        const { name = '', desc, photoUrl } = userStore.getUserInfo || {};
+        return { name, desc, photoUrl };
       });
+
       const [register, { closeModal }] = useModalInner();
 
       const [registerForm, { validateFields, resetFields }] = useForm({
@@ -64,7 +68,7 @@
         const password: string | undefined = values.password;
         closeModal();
 
-        lockStore.commitLockInfoState({
+        lockStore.setLockInfo({
           isLock: true,
           pwd: password,
         });
@@ -74,7 +78,7 @@
       return {
         t,
         prefixCls,
-        getRealName,
+        userInfo,
         register,
         registerForm,
         handleLock,
@@ -91,7 +95,7 @@
       position: relative;
       height: 240px;
       padding: 130px 30px 60px 30px;
-      background: #fff;
+      margin-top: 25px;
       border-radius: 10px;
     }
 

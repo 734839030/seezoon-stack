@@ -1,6 +1,6 @@
-import type { LockInfo, UserInfo } from '/@/store/types';
-
-import { ProjectConfig } from '/#/config';
+import type { LockInfo, UserInfo } from '/#/store';
+import type { ProjectConfig } from '/#/config';
+import type { RouteLocationNormalized } from 'vue-router';
 
 import { createLocalStorage, createSessionStorage } from '/@/utils/cache';
 import { Memory } from './memory';
@@ -12,9 +12,12 @@ import {
   PROJ_CFG_KEY,
   APP_LOCAL_CACHE_KEY,
   APP_SESSION_CACHE_KEY,
+  MULTIPLE_TABS_KEY,
+  DICT_KEY,
 } from '/@/enums/cacheEnum';
 import { DEFAULT_CACHE_TIME } from '/@/settings/encryptionSetting';
 import { toRaw } from 'vue';
+import { Dict } from '/@/api/sys/model/dictModel';
 
 interface BasicStore {
   [TOKEN_KEY]: string | number | null | undefined;
@@ -22,6 +25,8 @@ interface BasicStore {
   [ROLES_KEY]: string[];
   [LOCK_INFO_KEY]: LockInfo;
   [PROJ_CFG_KEY]: ProjectConfig;
+  [DICT_KEY]: Dict[];
+  [MULTIPLE_TABS_KEY]: RouteLocationNormalized[];
 }
 
 type LocalStore = BasicStore;
@@ -69,7 +74,7 @@ export class Persistent {
 
   static setSession(key: SessionKeys, value: SessionStore[SessionKeys], immediate = false): void {
     sessionMemory.set(key, toRaw(value));
-    immediate && ss.set(APP_SESSION_CACHE_KEY, sessionMemory);
+    immediate && ss.set(APP_SESSION_CACHE_KEY, sessionMemory.getCache);
   }
 
   static removeSession(key: SessionKeys): void {

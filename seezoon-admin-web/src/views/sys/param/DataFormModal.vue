@@ -104,6 +104,7 @@
 
 <script>
   import { dataFormModalMixin } from '../../../mixins/common/data-form-mixin-modal.js';
+  import { defHttp } from '../../../utils/http/axios';
 
   export default {
     name: 'DataFormModal',
@@ -120,6 +121,17 @@
           },
           `唯一键 ${value} 已存在`
         );
+      },
+      open(title, id) {
+        this.visible = true;
+        this.title = title;
+        if (null != id) {
+          defHttp.get({ url: '/sys/param/query/' + id }).then((data) => {
+            this.dataForm = data;
+          });
+        } else {
+          this.dataForm = { status: 1 };
+        }
       },
       // 保存后回调
       handleOkCb() {

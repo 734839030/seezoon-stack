@@ -58,13 +58,13 @@ export const queryTableMixin = {
         ...filters,
       });
     },
-    // 选择性覆写
-    handleDeleteCb() {},
+    // 选择性覆写_u 可以lint 不告警
+    handleDeleteCb(_u) {},
     handleDelete(url, id) {
       defHttp.postForm(url, { id: id }).then(() => {
         this.$message.success('删除成功');
         this.handleQuery();
-        this.handleDeleteCb();
+        this.handleDeleteCb(id);
       });
     },
   },
