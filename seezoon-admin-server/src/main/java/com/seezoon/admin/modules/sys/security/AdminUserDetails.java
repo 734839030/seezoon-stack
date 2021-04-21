@@ -16,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AdminUserDetails implements UserDetails {
 
+    private static final long serialVersionUID = -1;
+
     private final UserInfo userInfo;
     private final String username;
     private final String passowrd;
