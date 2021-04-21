@@ -24,6 +24,10 @@ public class LoginSecurityProperties {
      */
     private boolean maxSessionsPreventsLogin = false;
 
-    private Duration rememberTime = Duration.ofDays(7);;
+    private Duration rememberTime = Duration.ofDays(7);
+    /**
+     * 可以定期更换
+     */
+    private String rememberKey = "C02tlRRi8JNsT6Bsp2liSE1paa5naDNY";
 
 }

@@ -54,12 +54,11 @@ import lombok.RequiredArgsConstructor;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String[] STATIC_RESOURCES =
         {"/**/*.html", "/**/*.js", "/**/*.css", "/**/*.ico", "/**/*.png", "/**/*.jpg"};
-    public static final String[] DOC_API = {"/swagger-resources/**", "/**/api-docs"};
+    // public static final String[] DOC_API = {"/swagger-resources/**", "/**/api-docs"};
     private static final String DEFAULT_REMEMBER_ME_NAME = "rememberMe";
     private static final String PUBLIC_ANT_PATH = "/public/**";
     private static final String LOGIN_URL = "/login";
     private static final String LOGIN_OUT_URL = "/logout";
-    private static final String REMEMBER_KEY = "C02tlRRi8JNsT6Bsp2liSE1paa5naDNY";
 
     private final LoginSecurityProperties loginSecurityProperties;
 
@@ -83,8 +82,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // remember 采用默认解密前端remember-cookie
         http.sessionManagement().maximumSessions(1)
             .maxSessionsPreventsLogin(loginSecurityProperties.isMaxSessionsPreventsLogin());
-        http.rememberMe().rememberMeParameter(DEFAULT_REMEMBER_ME_NAME).key(REMEMBER_KEY).useSecureCookie(true)
-            .tokenValiditySeconds((int)loginSecurityProperties.getRememberTime().toSeconds())
+        http.rememberMe().rememberMeParameter(DEFAULT_REMEMBER_ME_NAME).key(loginSecurityProperties.getRememberKey())
+            .useSecureCookie(true).tokenValiditySeconds((int)loginSecurityProperties.getRememberTime().toSeconds())
             .userDetailsService(adminUserDetailsService());
         // 需要添加不然spring boot 的跨域配置无效
         http.cors();
@@ -114,7 +113,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         // 按需忽略
-        web.ignoring().antMatchers(STATIC_RESOURCES).antMatchers(DOC_API);
+        web.ignoring().antMatchers(STATIC_RESOURCES);// .antMatchers(DOC_API);
     }
 
     /**
