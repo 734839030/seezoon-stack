@@ -1,12 +1,17 @@
-package com.seezoon.admin.modules.sys.security.handler.listener;
+package com.seezoon.admin.modules.sys.security.listener;
 
 import java.util.Date;
+import java.util.Objects;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
 import com.google.common.eventbus.Subscribe;
 import com.seezoon.admin.modules.sys.eventbus.AdminEventBus;
+import com.seezoon.admin.modules.sys.security.LoginSecurityProperties;
+import com.seezoon.admin.modules.sys.security.LoginSecurityService;
+import com.seezoon.admin.modules.sys.security.SecurityUtils;
+import com.seezoon.admin.modules.sys.security.constant.LoginResult;
 import com.seezoon.admin.modules.sys.service.SysLoginLogService;
 import com.seezoon.dao.modules.sys.entity.SysLoginLog;
 
@@ -28,6 +33,9 @@ public class LoginEventListener implements InitializingBean {
 
     private final SysLoginLogService sysLoginLogService;
 
+    private final LoginSecurityService loginSecurityService;
+    private final LoginSecurityProperties loginSecurityProperties;
+
     @Subscribe
     public void listen(LoginResultMsg msg) {
         SysLoginLog sysLoginLog = new SysLoginLog();
@@ -48,7 +56,19 @@ public class LoginEventListener implements InitializingBean {
         } catch (Exception e) {
             log.error("parse userAgent error", e);
         }
-        sysLoginLogService.save(sysLoginLog);
+        if (LoginResult.SUCCESS == msg.getResult()) {
+            loginSecurityService.clear(msg.getUserName(), msg.getIp());
+        } else if (LoginResult.PASSWD_ERROR == msg.getResult()) {
+            loginSecurityService.getIpLockStrategy().increment(msg.getIp());
+            if (!Objects.equals(msg.getUserId(), SecurityUtils.SUPER_ADMIN_USER_ID)) {
+                loginSecurityService.getUsernameLockStrategy().increment(msg.getUserName());
+            }
+        } else if (LoginResult.USERNAME_NOT_FOUND == msg.getResult()) {
+            loginSecurityService.getIpLockStrategy().increment(msg.getIp());
+        }
+        if (loginSecurityProperties.isRecordLog()) {
+            sysLoginLogService.save(sysLoginLog);
+        }
     }
 
     @Override

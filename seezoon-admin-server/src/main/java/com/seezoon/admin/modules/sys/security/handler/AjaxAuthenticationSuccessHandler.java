@@ -11,8 +11,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 
 import com.seezoon.admin.modules.sys.eventbus.AdminEventBus;
 import com.seezoon.admin.modules.sys.security.SecurityUtils;
-import com.seezoon.admin.modules.sys.security.handler.listener.LoginEventListener;
-import com.seezoon.dao.modules.sys.entity.SysLoginLog;
+import com.seezoon.admin.modules.sys.security.constant.LoginResult;
+import com.seezoon.admin.modules.sys.security.listener.LoginEventListener;
 import com.seezoon.framework.api.Result;
 import com.seezoon.framework.utils.IpUtil;
 import com.seezoon.framework.web.respone.AbstractJsonResponeHandler;
@@ -31,7 +31,7 @@ public class AjaxAuthenticationSuccessHandler extends AbstractJsonResponeHandler
         String username = authentication.getName();
         LoginEventListener.LoginResultMsg loginResultMsg = new LoginEventListener.LoginResultMsg(username, new Date(),
             IpUtil.getRemoteIp(request), request.getHeader("User-Agent"));
-        loginResultMsg.setResult(SysLoginLog.SUCCESS);
+        loginResultMsg.setResult(LoginResult.SUCCESS);
         loginResultMsg.setUserId(SecurityUtils.getUserId());
         AdminEventBus.publish(loginResultMsg);
         super.sendRespone(response, Result.SUCCESS);

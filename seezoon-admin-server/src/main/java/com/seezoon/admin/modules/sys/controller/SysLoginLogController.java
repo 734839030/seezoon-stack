@@ -54,5 +54,4 @@ public class SysLoginLogController extends BaseController {
         int count = sysLoginLogService.delete(id);
         return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.DELETE_ERROR, count);
     }
-
 }

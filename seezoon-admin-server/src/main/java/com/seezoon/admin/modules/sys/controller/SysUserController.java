@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import com.github.pagehelper.PageSerializable;
 import com.seezoon.admin.framework.file.FileService;
 import com.seezoon.admin.modules.sys.security.AdminPasswordEncoder;
+import com.seezoon.admin.modules.sys.security.LoginSecurityService;
 import com.seezoon.admin.modules.sys.security.SecurityUtils;
+import com.seezoon.admin.modules.sys.security.constant.LockType;
 import com.seezoon.admin.modules.sys.service.SysUserService;
 import com.seezoon.dao.modules.sys.entity.SysUser;
 import com.seezoon.dao.modules.sys.entity.SysUserCondition;
@@ -21,6 +24,7 @@ import com.seezoon.framework.web.BaseController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -36,6 +40,7 @@ public class SysUserController extends BaseController {
 
     private final SysUserService sysUserService;
     private final FileService fileService;
+    private final LoginSecurityService loginSecurityService;
 
     @ApiOperation(value = "主键查询")
     @PreAuthorize("hasAuthority('sys:user:query')")
@@ -106,5 +111,18 @@ public class SysUserController extends BaseController {
         @NotBlank @RequestParam String mobile) {
         SysUser sysUser = this.sysUserService.findByMobile(mobile);
         return Result.ok(null == sysUser || Objects.equals(sysUser.getId(), id));
+    }
+
+    @ApiOperation(value = "解锁")
+    @PreAuthorize("hasAuthority('sys:user:unlock')")
+    @PostMapping(value = "/unlock")
+    public Result unlock(@ApiParam("0:ip,1:用户名") @RequestParam @NotNull Integer type,
+        @NotBlank @RequestParam String lockKey) {
+        if (Objects.equals(type, LockType.IP.ordinal())) {
+            loginSecurityService.clear(null, lockKey);
+        } else if (Objects.equals(type, LockType.USERNAME.ordinal())) {
+            loginSecurityService.clear(lockKey, null);
+        }
+        return Result.ok();
     }
 }

@@ -39,6 +39,10 @@ public class Result<T> {
         this(codeMsg.code(), codeMsg.msg(), args);
     }
 
+    public static <T> Result<T> ok() {
+        return ok(null);
+    }
+
     public static <T> Result<T> ok(T data) {
         Result<T> result = new Result(DefaultCodeMsgBundle.SUCCESS);
         result.setData(data);

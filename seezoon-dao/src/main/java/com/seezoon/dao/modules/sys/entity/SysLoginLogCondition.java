@@ -1,10 +1,8 @@
 package com.seezoon.dao.modules.sys.entity;
 
-import java.util.Date;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.seezoon.dao.framework.entity.PageCondition;
 import com.seezoon.dao.framework.sort.annotation.SortField;
 
@@ -40,16 +38,14 @@ public class SysLoginLogCondition extends PageCondition {
     @ApiModelProperty(value = "登录结果")
     private Integer result;
     /**
-     * 登录时间
-     */
-    @ApiModelProperty(value = "登录时间")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date loginTime;
-    /**
      * IP地址
      */
     @ApiModelProperty(value = "IP地址")
     private String ip;
+
+    @NotEmpty
+    @Size(min = 2, max = 2)
+    @ApiModelProperty(value = "登录日期")
+    private String[] loginDateRange;
 
 }

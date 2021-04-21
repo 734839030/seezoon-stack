@@ -19,7 +19,7 @@ public class AdminUserDetails implements UserDetails {
     private final UserInfo userInfo;
     private final String username;
     private final String passowrd;
-    private final boolean locked;
+    private boolean locked;
 
     private List<GrantedAuthority> authorities;
 

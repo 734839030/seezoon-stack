@@ -46,8 +46,10 @@
             <if test="result != null">
                 and t.result = #{result}
             </if>
-            <if test="loginTime != null">
-                and t.login_time = #{loginTime}
+            <if test="loginDateRange != null and loginDateRange.length == 2">
+                <![CDATA[
+                and (t.login_time > #{loginDateRange[0],javaType=String} and t.login_time < date_add(#{loginDateRange[1],javaType=String}, interval 1 day))
+			    ]]>
             </if>
             <if test="ip != null and ip != ''">
                 and t.ip = #{ip}
@@ -58,6 +60,7 @@
                 order by ${sortField} ${sortOrder}
             </when>
             <otherwise>
+                order by t.login_time desc
             </otherwise>
         </choose>
     </select>

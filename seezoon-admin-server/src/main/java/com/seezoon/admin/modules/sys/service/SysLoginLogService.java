@@ -1,6 +1,7 @@
 package com.seezoon.admin.modules.sys.service;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,7 @@ import com.seezoon.dao.modules.sys.entity.SysLoginLog;
 public class SysLoginLogService extends AbstractCrudService<SysLoginLogDao, SysLoginLog, Integer> {
 
     @Async
-    @Override
-    public int save(@NotEmpty SysLoginLog... records) {
-        return super.save(records);
+    public void save(@Valid @NotNull SysLoginLog record) {
+        super.save(record);
     }
 }

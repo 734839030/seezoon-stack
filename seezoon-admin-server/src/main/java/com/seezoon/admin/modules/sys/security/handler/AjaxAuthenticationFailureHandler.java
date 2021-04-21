@@ -15,8 +15,9 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 
 import com.seezoon.admin.framework.error.AdminCodeMsgBundle;
 import com.seezoon.admin.modules.sys.eventbus.AdminEventBus;
-import com.seezoon.admin.modules.sys.security.handler.listener.LoginEventListener;
-import com.seezoon.dao.modules.sys.entity.SysLoginLog;
+import com.seezoon.admin.modules.sys.security.constant.LockType;
+import com.seezoon.admin.modules.sys.security.constant.LoginResult;
+import com.seezoon.admin.modules.sys.security.listener.LoginEventListener;
 import com.seezoon.framework.api.Result;
 import com.seezoon.framework.utils.IpUtil;
 import com.seezoon.framework.web.respone.AbstractJsonResponeHandler;
@@ -39,21 +40,26 @@ public class AjaxAuthenticationFailureHandler extends AbstractJsonResponeHandler
 
         if (cause instanceof UsernameNotFoundException) {
             result = Result.error(AdminCodeMsgBundle.USERNAME_NOT_FOUND);
-            loginResultMsg.setResult(SysLoginLog.USERNAME_NOT_FOUND);
+            loginResultMsg.setResult(LoginResult.USERNAME_NOT_FOUND);
         } else if (cause instanceof BadCredentialsException) {
             result = Result.error(AdminCodeMsgBundle.BAD_CREDENTIALS);
-            loginResultMsg.setResult(SysLoginLog.PASSWD_ERROR);
+            loginResultMsg.setResult(LoginResult.PASSWD_ERROR);
         } else if (cause instanceof LockedException) {
-            result = Result.error(AdminCodeMsgBundle.LOCKED);
-            loginResultMsg.setResult(SysLoginLog.LOCK24H);
+            if (cause.getMessage().equals(LockType.USERNAME.name())) {
+                result = Result.error(AdminCodeMsgBundle.USERNAME_LOCKED);
+                loginResultMsg.setResult(LoginResult.USERNAME_LOCKED);
+            } else {
+                result = Result.error(AdminCodeMsgBundle.IP_LOCKED);
+                loginResultMsg.setResult(LoginResult.IP_LOCKED);
+            }
         } else if (cause instanceof DisabledException) {
             result = Result.error(AdminCodeMsgBundle.DISABLED);
-            loginResultMsg.setResult(SysLoginLog.DISABLED);
+            loginResultMsg.setResult(LoginResult.DISABLED);
         } else {
             result = Result.error(AdminCodeMsgBundle.UNKOWN_LOGIN, exception.getMessage());
-            loginResultMsg.setResult(SysLoginLog.UNKOWN);
+            loginResultMsg.setResult(LoginResult.UNKOWN);
         }
-        loginResultMsg.setUserId(SysLoginLog.DEFAULT_USER_ID);
+        loginResultMsg.setUserId(LoginResult.DEFAULT_USER_ID);
         AdminEventBus.publish(loginResultMsg);
         super.sendRespone(response, result);
     }

@@ -3,6 +3,7 @@ package com.seezoon.admin.modules.sys.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,6 +19,8 @@ import com.seezoon.admin.modules.sys.security.handler.AdminAccessDeniedHandler;
 import com.seezoon.admin.modules.sys.security.handler.AjaxAuthenticationFailureHandler;
 import com.seezoon.admin.modules.sys.security.handler.AjaxAuthenticationSuccessHandler;
 import com.seezoon.admin.modules.sys.security.handler.AjaxLogoutSuccessHandler;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * <code>
@@ -47,6 +50,7 @@ import com.seezoon.admin.modules.sys.security.handler.AjaxLogoutSuccessHandler;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 @ControllerAdvice
+@RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String[] STATIC_RESOURCES =
         {"/**/*.html", "/**/*.js", "/**/*.css", "/**/*.ico", "/**/*.png", "/**/*.jpg"};
@@ -56,6 +60,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String LOGIN_URL = "/login";
     private static final String LOGIN_OUT_URL = "/logout";
     private static final String REMEMBER_KEY = "C02tlRRi8JNsT6Bsp2liSE1paa5naDNY";
+
+    private final LoginSecurityProperties loginSecurityProperties;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -73,12 +79,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.exceptionHandling().accessDeniedHandler(new AdminAccessDeniedHandler())
             // 到认证环节的入口逻辑,默认是跳页
             .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
-
         // seesion 管理 一个账号登录一次，后面的挤掉前面的(spring security 默认的,true 则已登录的优先)
         // remember 采用默认解密前端remember-cookie
-        http.sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(false);
+        http.sessionManagement().maximumSessions(1)
+            .maxSessionsPreventsLogin(loginSecurityProperties.isMaxSessionsPreventsLogin());
         http.rememberMe().rememberMeParameter(DEFAULT_REMEMBER_ME_NAME).key(REMEMBER_KEY).useSecureCookie(true)
-            .tokenValiditySeconds(7 * 24 * 60 * 60).userDetailsService(adminUserDetailsService());
+            .tokenValiditySeconds((int)loginSecurityProperties.getRememberTime().toSeconds())
+            .userDetailsService(adminUserDetailsService());
         // 需要添加不然spring boot 的跨域配置无效
         http.cors();
         // 安全头设置
@@ -122,8 +129,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
+
         // 默认 DaoAuthenticationProvider的userDetailsService，自定义其他登录方式还得在provider中设置
-        auth.userDetailsService(adminUserDetailsService()).passwordEncoder(AdminPasswordEncoder.getEncoder());
+        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setPasswordEncoder(AdminPasswordEncoder.getEncoder());
+        daoAuthenticationProvider.setUserDetailsService(adminUserDetailsService());
+        daoAuthenticationProvider.setHideUserNotFoundExceptions(false);
+        auth.authenticationProvider(daoAuthenticationProvider);
+
+        // 只因为下面的没有暴露setHideUserNotFoundExceptions 方法，导致UsernameNotFoundException 被内部转换成BadCredentialsException
+        // auth.userDetailsService(adminUserDetailsService()).passwordEncoder(AdminPasswordEncoder.getEncoder());
     }
 
     @Bean
