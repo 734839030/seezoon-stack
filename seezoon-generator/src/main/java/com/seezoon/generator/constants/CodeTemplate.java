@@ -17,7 +17,7 @@ public enum CodeTemplate {
 
     DAO("dao.java.tpl", "seezoon-dao/src/main/java/com/seezoon/dao/modules/${moduleName}", "${className}Dao.java"),
 
-    MENU("menu.sql.tpl", "", "db/sys_menu_for_${tableName}.sql"),
+    MENU("menu.sql.tpl", "db", "sys_menu_for_${tableName}.sql"),
 
     SERVICE("service.java.tpl", "seezoon-admin-server/src/main/java/com/seezoon/admin/modules/${moduleName}/service",
         "${className}Service.java"),
