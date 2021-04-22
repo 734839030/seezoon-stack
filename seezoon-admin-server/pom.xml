@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.seezoon</groupId>
         <artifactId>seezoon-stack</artifactId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.0-beta</version>
     </parent>
     <name>Seezoon Admin Server</name>
     <artifactId>seezoon-admin-server</artifactId>
