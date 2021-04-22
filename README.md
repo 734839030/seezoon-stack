@@ -174,12 +174,20 @@
   cd seezoon-stack/seezoon-admin-web
   yarn install
   yarn serve 
-  ```
-
-- 访问地址
-
-  ```
+  
+  # 访问地址
   http://localhost:3100/
+  ```
+
+- 本地测试文件服务器(可选)
+
+  ```
+  cd seezoon-admin-web/test/server/upload
+  yarn install
+  yarn start
+  
+  # 管理端上传文件后，可以直接访问地址static目录静态文件
+  http://localhost:3001/static/xxxx
   ```
 
 ### 功能介绍
