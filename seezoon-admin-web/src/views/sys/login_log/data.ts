@@ -7,7 +7,7 @@ export const resultDicts: Dict[] = [
   { value: 0, label: '成功' },
   { value: 10, label: '账号不存在' },
   { value: 20, label: '密码错误' },
-  { value: 30, label: '禁用' },
+  { value: 30, label: '已禁用' },
   { value: 40, label: '账户已锁定' },
   { value: 45, label: 'IP已锁定' },
   { value: 50, label: '未知失败' },

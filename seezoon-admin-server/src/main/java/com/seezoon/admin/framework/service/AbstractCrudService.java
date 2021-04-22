@@ -1,5 +1,6 @@
 package com.seezoon.admin.framework.service;
 
+import com.seezoon.admin.framework.context.UserContext;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -115,6 +116,8 @@ public abstract class AbstractCrudService<D extends CrudDao<T, PK>, T extends Ba
             if (null == t.getId() && t.getId() instanceof String) {
                 t.setId((PK)IdGen.uuid());
             }
+            t.setCreateBy(UserContext.getUserId());
+            t.setUpdateBy(UserContext.getUserId());
             t.setCreateTime(new Date());
             t.setUpdateTime(t.getCreateTime());
         });
@@ -129,6 +132,7 @@ public abstract class AbstractCrudService<D extends CrudDao<T, PK>, T extends Ba
      */
     public int updateSelective(@NotNull T record) {
         record.setUpdateTime(new Date());
+        record.setUpdateBy(UserContext.getUserId());
         return this.d.updateByPrimaryKeySelective(record);
     }
 
@@ -144,6 +148,7 @@ public abstract class AbstractCrudService<D extends CrudDao<T, PK>, T extends Ba
      */
     public int update(@NotNull T record) {
         record.setUpdateTime(new Date());
+        record.setUpdateBy(UserContext.getUserId());
         return this.d.updateByPrimaryKey(record);
     }
 

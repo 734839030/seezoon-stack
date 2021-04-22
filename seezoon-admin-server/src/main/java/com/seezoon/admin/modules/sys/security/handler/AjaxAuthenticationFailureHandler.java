@@ -1,5 +1,6 @@
 package com.seezoon.admin.modules.sys.security.handler;
 
+import com.seezoon.admin.modules.sys.security.SecurityUtils;
 import java.io.IOException;
 import java.util.Date;
 
@@ -59,7 +60,7 @@ public class AjaxAuthenticationFailureHandler extends AbstractJsonResponeHandler
             result = Result.error(AdminCodeMsgBundle.UNKOWN_LOGIN, exception.getMessage());
             loginResultMsg.setResult(LoginResult.UNKOWN);
         }
-        loginResultMsg.setUserId(LoginResult.DEFAULT_USER_ID);
+        loginResultMsg.setUserId(SecurityUtils.ANONYMOUS_USER_ID);
         AdminEventBus.publish(loginResultMsg);
         super.sendRespone(response, result);
     }

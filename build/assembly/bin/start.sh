@@ -49,7 +49,7 @@ fi
 
 echo "SERVER_OTPS=${SERVER_OTPS}"
 
-if [ "${daemon}" = false ]; then
+if [ "${IN_CONTAINER}" = true ]; then
     $RUN_JAVA -jar ${JAVA_OPTS} ${ROOT}/bin/${APP_NAME}*.jar ${SERVER_OTPS} >logs/catalina.out 2>&1
 else
     nohup $RUN_JAVA -jar ${JAVA_OPTS} ${ROOT}/bin/${APP_NAME}*.jar ${SERVER_OTPS} >logs/catalina.out 2>&1 &

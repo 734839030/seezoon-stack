@@ -6,13 +6,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.seezoon.admin.modules.sys.dto.UserInfo;
+import org.springframework.util.Assert;
 
 public class SecurityUtils {
 
     public static final Integer SUPER_ADMIN_USER_ID = 1;
+    public static final Integer ANONYMOUS_USER_ID = - 1;
 
     public static Integer getUserId() {
-        return getUser().getUserId();
+        UserInfo user = getUser();
+        Assert.notNull(user,"thread context don't contain any user");
+        return user.getUserId();
     }
 
     public static UserInfo getUser() {

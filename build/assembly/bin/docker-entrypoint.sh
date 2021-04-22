@@ -6,7 +6,7 @@ ROOT=$(
   pwd
 )
 cd ${ROOT}
-daemon=false
+IN_CONTAINER=true
 case $1 in
 "start")
   source start.sh
