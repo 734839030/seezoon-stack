@@ -10,4 +10,5 @@ fi
 JAVA_OPTS="${JVM_MEM} -XX:+UseG1GC -verbose:gc -Xlog:gc*,safepoint:./logs/gc.log:time,uptime:filecount=1,filesize=10M -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./logs/dump"
 # for 1.7 < jdk version < 11
 #JAVA_OPTS="-Xmx512m -Xms128m -XX:+UseG1GC -verbose:gc -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintHeapAtGC -XX:+PrintGCDateStamps -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=10M  -Xloggc:./logs/gc.log -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=./logs/dump"
+# 如果是多环境配置文件内置，则添加 -- spring.profiles.active=${env}
 SERVER_OTPS="--server.port=8080 --server.tomcat.basedir=. --server.tomcat.connection-timeout=5s --server.tomcat.max-connections=2000 --server.tomcat.accept-count=200 --server.tomcat.threads.min-spare=10 --server.tomcat.threads.max=500 --server.shutdown=graceful --spring.lifecycle.timeout-per-shutdown-phase=10s"

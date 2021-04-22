@@ -39,6 +39,11 @@
             <artifactId>UserAgentUtils</artifactId>
             <version>${useragent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba.boot</groupId>
+            <artifactId>nacos-config-spring-boot-starter</artifactId>
+            <version>${nacos.starter}</version>
+        </dependency>
     </dependencies>
     <build>
         <!--

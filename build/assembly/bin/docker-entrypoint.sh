@@ -6,7 +6,6 @@ ROOT=$(
   pwd
 )
 cd ${ROOT}
-IN_CONTAINER=true
 case $1 in
 "start")
   source start.sh
