@@ -8,9 +8,9 @@
 
 **Seezoon Stack** 以**快速开发**为目的，在开发速度和代码结构上做出一定取啥，无论如何，你将看到**最地道**的 Java 常用开发框架使用。该项目采用主流开发框架，无论打包、编译、部署都按着大公司的标准完成并不断逐步完善。
 
-### 在线演示
+### 💻 在线演示
 
-[http://stack.seezoon.com/](http://stack.seezoon.com/)
+[https://stack.seezoon.com/](https://stack.seezoon.com/)
 
 账号：admin
 
@@ -47,9 +47,10 @@
 - Spring Boot 异步线程配置
 - 跨域配置
 - 基于openAPI 3.0 规范的自动生成文档
-- 前后端代码生成
+- 前后端一体化代码生成
 - 登录及权限控制
 - 文件处理，支持磁盘文件和阿里云OSS
+- 国际化
 
 优先级较低的功能(TODO)：
 
@@ -105,25 +106,25 @@
 
 
 
-【可选】**EsLint **(IDEA 内置)前端格式化，配置如下图
+【可选】**EsLint** (IDEA 内置)前端格式化，配置如下图
 
 <img src="doc/pictures/image-20210422201755954.png" alt="image-20210422201755954" style="zoom:50%;" />
 
 
 
-### 快速开始
+### 🚀 快速开始
 
-- 代码下载
+**代码下载**
 
-  可以通过 IDEA `File->New->Project From Version Control `导入，也可以通过命令下载后导入。
+可以通过 IDEA `File->New->Project From Version Control `导入，也可以通过命令下载后导入。
 
-  >  建议fork 后到自己仓库后再导入，方便后续同步更新。
+>  建议fork 后到自己仓库后再导入，方便后续同步更新。
 
-  ```
-  git clone https://github.com/734839030/seezoon-stack.git
-  ```
+```
+git clone https://github.com/734839030/seezoon-stack.git
+```
 
-- 工程结构
+**工程结构**
 
 ```
 ​```
@@ -152,23 +153,25 @@
 
 #### 后台
 
-- 初始化DB脚本
+- **初始化DB脚本**
 
   脚本见`db/seezoon-stack.sql`
 
-- 配置seezoon-admin-server
+- **配置seezoon-admin-server**
 
   在如下配置文件配置**DB**和**Redis**账号密码
 
   `seezoon-admin-server/src/main/resources/application-local.properties`
 
-​       启动后台，执行如下类中Main方法(如果报依赖错误，可以执行parent 工程mvn package)
+-  **IDEA中启动后台**
+
+  >  执行如下类中Main方法(如果报依赖错误，可以执行parent 工程mvn package)
 
 ​	  `seezoon-admin-server/src/main/java/com/seezoon/admin/AdminMain.java`
 
 #### 前台
 
-- 安装依赖并启动
+- **安装依赖并启动**
 
   ```
   cd seezoon-stack/seezoon-admin-web
@@ -179,7 +182,7 @@
   http://localhost:3100/
   ```
 
-- 本地测试文件服务器(可选)
+- **本地测试文件服务器(可选)**
 
   ```
   cd seezoon-admin-web/test/server/upload
@@ -189,6 +192,188 @@
   # 管理端上传文件后，可以直接访问地址static目录静态文件
   http://localhost:3001/static/xxxx
   ```
+
+### 生产环境部署
+
+线上目录结构，
+
+```
+/data/
+│── cert
+├── seezoon-admin-server  # 后台产出物
+│   ├── bin
+│   ├── conf
+│   ├── logs
+│   └── work
+├── seezoon-admin-web    # 前端产出物
+│   ├── assets
+│   └── resource
+└── upload-server  文件上传目录，默认使用磁盘文件，使用OSS则不需要.
+```
+
+
+
+#### 😇 手工部署-后台
+
+> 线上环境安装Java 1.8 + ，推荐11。
+
+采用[maven-assembly-plugin](http://maven.apache.org/plugins/maven-assembly-plugin/)生成构建物，可以直接生成生产部署的目录结构，方便DevOps 集成.
+
+```
+cd seezoon-admin-server
+mvn clean package
+```
+
+**产出物目录**
+
+`seezoon-admin-server/target/seezoon-admin-server`
+
+**只需要维护产出物`conf `目录的`application.properties `即可**，然后就可以发布了。
+
+>  配置文件与环境分离，产出物jar会排出resources目录如下文件
+
+```
+application-local.properties
+logback-spring.xml
+```
+
+
+
+<img src="doc/pictures/image-20210423121842460.png" alt="image-20210423121842460" />
+
+#### 😇 手工部署-前台
+
+```
+cd seezoon-admin-web
+yarn build
+```
+
+**产出物**
+
+`seezoon-admin-web/dist` 中文件发布到线上nginx 目录即可，该工程nginx 配置如下，仅供参考。
+
+```
+upstream seezoon-admin-server {
+    server 127.0.0.1:8080 max_fails=3 fail_timeout=10s;
+}
+
+server {
+    listen       80;
+    server_name  stack.seezoon.com;
+    rewrite ^(.*)$  https://$host$1 permanent;
+}
+
+server {
+    listen       443;
+    server_name  stack.seezoon.com;
+    ssl on;
+    ssl_certificate   /data/cert/stack.seezoon.com.pem; 
+    ssl_certificate_key  /data/cert/stack.seezoon.com.key;
+    ssl_session_timeout 5m;
+    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_prefer_server_ciphers on;
+
+    # api
+    location ^~ /api/ {
+        proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Real-PORT $remote_port;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://seezoon-admin-server/;
+    }
+    # 文件服务
+    location ^~ /file/ {
+        access_log off;
+        alias /data/upload-server/;
+    }
+
+    # 静态资源
+    location / {
+        access_log off;
+        root /data/seezoon-admin-web/;
+        index index.html index.htm;
+    }
+
+}
+```
+
+> 可选静态资源压缩配置，放在`nginx.conf http` 节点下。
+
+```
+# 打开gzip 效果更佳
+gzip on;
+gzip_min_length 1k;
+gzip_buffers 4 16k;
+gzip_http_version 1.0;
+gzip_comp_level 6;
+gzip_types text/plain application/javascript application/x-javascript text/css application/xml text/javascript application/x-httpd-php image/jpeg image/gif image/png;
+gzip_vary off;
+gzip_disable "MSIE [1-6]\.";
+```
+
+#### 🏄🏾‍♂️ （推荐）[云效2020](https://www.aliyun.com/product/yunxiao/public) 部署
+
+> 不是给阿里打广告，是真的好用，个人使用基本免费，可以使用完整DevOps功能，需求看板，测试计划、灰度发布，回退等。
+
+后台最短路径**流水线 **配置，添加源代码->构建->主机部署(不要求是阿里主机).
+
+<img src="doc/pictures/image-20210423130133351.png" alt="image-20210423130133351" style="zoom:50%;" />
+
+
+
+主机部署，部署脚本见`build/yunxiao/java-deploy.sh`，主机如果conf目录存在了，则不会覆盖，后面会讲用配置中心的方式(小项目依赖多了划不来，可以当学习使用)。
+
+![image-20210423130548116](doc/pictures/image-20210423130548116.png)
+
+前台最短路径
+
+![image-20210423144532907](doc/pictures/image-20210423144532907.png)
+
+部署脚本见`build/yunxiao/page-deploy.sh`
+
+![image-20210423144643042](doc/pictures/image-20210423144643042.png)
+
+
+
+#### 🤴🏽 阿里云[ACM](https://www.aliyun.com/product/acm) 应用配置管理
+
+> 没错你猜对了，这个是也是**免费**的，没有任何附加条件，也是流行Nacos 实现，可以配置比对，版本管理，灰度推送，推送轨迹等便捷功能。
+
+上面的后台部署需要手工处理配置文件比较麻烦，这个章节看项目需要，可以彻底剥离配置文件，大项目一般是有配置中心的，可以自己搭建Nacos，这里有免费的当然优先选择现有的，何况代码中没有直接依赖。
+
+![image-20210423150358035](doc/pictures/image-20210423150358035.png)
+
+
+
+该项目已经集成`nacos-config-spring-boot-starter`。静默开启和关闭，加上Nacos 配置则远程优先本地，不加则还是传统方式。
+
+这里为了**降低依赖**没有使用Nacos的注解，所以不具备自动刷新能力，发完配置需要重启生效。
+
+```
+# 在这个文件中补全Nacos 的配置
+build/assembly/conf/application.properties
+
+# 免费阿里云配置中心nacos https://acmnext.console.aliyun.com/
+# 只需添加了下列配置，就可以读取配置中心变量，默认spring自带注解不刷新，发布后应用需要重启，如需自动刷新，请用Nacos自带注解
+# 容器中使用把可变参数值做成环境变量即可
+nacos.config.bootstrap.enable=true
+nacos.config.remote-first=true
+nacos.config.bootstrap.log-enable=true
+nacos.config.auto-refresh=true
+nacos.config.type=properties
+nacos.config.data-id=com.seezoon
+nacos.config.group=seezoon-admin-server
+nacos.config.endpoint=acm.aliyun.com
+# 很奇葩是这uuid ，不想写名字
+nacos.config.namespace=555dabb9-1d2a-4ecd-9069-c377f7823236
+# 推荐使用 RAM 用户的 accessKey 和 secretKey
+nacos.config.access-key=xxx
+nacos.config.secret-key=xxx
+```
+
+
 
 ### 功能介绍
 
