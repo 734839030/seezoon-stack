@@ -50,8 +50,8 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "更新密码")
     @PostMapping("/update_password")
-    public Result updatePassword(@NotEmpty @Size(min = 6, max = 50) String oldPassword,
-        @NotEmpty @Size(min = 6, max = 50) String newPassword) {
+    public Result updatePassword(@RequestParam @NotEmpty @Size(min = 6, max = 50) String oldPassword,
+            @RequestParam @NotEmpty @Size(min = 6, max = 50) String newPassword) {
         boolean result = userService.updatePassword(SecurityUtils.getUserId(), oldPassword, newPassword);
         if (!result) {
             return Result.error("原密码错误");
