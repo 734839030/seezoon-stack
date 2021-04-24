@@ -19,6 +19,7 @@ import com.seezoon.dao.modules.sys.SysMenuDao;
 import com.seezoon.dao.modules.sys.SysRoleMenuDao;
 import com.seezoon.dao.modules.sys.entity.SysMenu;
 import com.seezoon.dao.modules.sys.entity.SysMenuCondition;
+import com.seezoon.framework.exception.BusinessException;
 import com.seezoon.framework.utils.TreeHelper;
 
 import lombok.RequiredArgsConstructor;
@@ -135,15 +136,21 @@ public class SysMenuService extends AbstractCrudService<SysMenuDao, SysMenu, Int
 
     @Override
     public int updateSelective(@NotNull SysMenu record) {
-        // 检查是否修改过父部门
         SysMenu current = this.find(record.getId());
+
+        List<SysMenu> allChildren = this.findAllChildren(record.getId());
+        if (Objects.equals(SysMenu.MENU_TYPE_DIRECTORY, current.getType())
+            && Objects.equals(SysMenu.MENU_TYPE_BUTTON, record.getType())
+            && allChildren.stream().anyMatch(v -> Objects.equals(SysMenu.MENU_TYPE_MENU, v.getType()))) {
+            throw new BusinessException("当前目录下有菜单，不允许修改为按钮类型");
+        }
+
         if (Objects.equals(current.getParentId(), record.getParentId())) {
             return super.updateSelective(record);
         } else {
             String oldParentIds = current.getParentIds();
             this.resolveParentIds(record);
-
-            this.findAllChildren(record.getId()).forEach((child) -> {
+            allChildren.forEach((child) -> {
                 child.setParentIds(child.getParentIds().replace(oldParentIds, oldParentIds));
                 super.updateSelective(child);
             });
