@@ -155,11 +155,12 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- 代码覆盖率报告
+            <!-- 代码覆盖率报告,通常会有DevOps 流程中的代码质量来完成，所以这里默认注释
              see example https://www.jacoco.org/jacoco/trunk/doc/maven.html
              mvn clean test && mvn jacoco:report
              the report in target/site/jacoco
              -->
+            <!--
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -200,6 +201,7 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
         </plugins>
     </build>
 

@@ -230,14 +230,14 @@ mvn clean package
 
 **只需要维护产出物`conf `目录的`application.properties `即可**，然后就可以发布了。
 
->  配置文件与环境分离，产出物jar会排出resources目录如下文件
+>  配置文件与环境分离，`maven-jar-plugin` 打包产出物`jar`会排出`resources`目录如下文件：
 
 ```
 application-local.properties
 logback-spring.xml
 ```
 
-
+>  如果不介意各个环境配置都在工程中那就很方便，使用spring boot 提供的`--spring.profiles.active`，在启动命令中选择配置文件。
 
 <img src="doc/pictures/image-20210423121842460.png" alt="image-20210423121842460" />
 
