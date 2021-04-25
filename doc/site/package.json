@@ -1,0 +1,15 @@
+{
+  "name": "seezoon-stack-doc",
+  "version": "1.0.0",
+  "description": "doc site for project",
+  "main": "index.js",
+  "author": "734839030@qq.com",
+  "license": "MIT",
+  "devDependencies": {
+    "vuepress": "^1.8.2"
+  },
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
+  }
+}
