@@ -12,6 +12,7 @@ module.exports = {
         nav: [
             {text: '功能介绍', link: '/'},
             {text: '开发指南', link: '/guide/'},
+            {text: '预览', link: 'https://stack.seezoon.com'},
             {text: 'GitHub', link: 'https://github.com/734839030/seezoon-stack'},
         ]
     }
