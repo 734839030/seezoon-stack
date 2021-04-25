@@ -34,8 +34,9 @@ logs/
 .env.*.local
 
 node_modules
-/dist
+dist
 upload/static
+
 # Log files
 npm-debug.log*
 yarn-debug.log*
