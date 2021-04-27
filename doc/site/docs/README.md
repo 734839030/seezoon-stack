@@ -17,6 +17,6 @@ features:
 - title: 标准化
   details: 项目定位快速开发，但也架构标准，无论是代码还是部署，都按着正规大项目标准实现。
 - title: Spring Boot
-  details: 采用Spring boot及相关starter开发，后端代码简单，通用性强，基于没有学习成本。
+  details: 采用Spring boot及相关Starter开发，后端代码简单，通用性强，几乎没有学习成本。
 footer: MIT Licensed | Copyright © 2020-present Seezoon Stack
 ---
