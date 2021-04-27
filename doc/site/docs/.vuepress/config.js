@@ -22,6 +22,13 @@ module.exports = {
                     collapsable: false,
                     children: ['/guide/', '/guide/quick-start'],
                 },
+            ],
+            '/manual/': [
+                {
+                    title: '开发手册(建设中...)',
+                    collapsable: false,
+                    children: ['/manual/'],
+                },
             ]
         }
     }
