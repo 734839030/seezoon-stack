@@ -22,7 +22,7 @@ module.exports = {
                     title: '基础(更新中...)',
                     collapsable: false,
                     sidebarDepth: 2,    // 可选的, 默认值是 1
-                    children: ['/guide/', '/guide/quick-start'],
+                    children: ['/guide/', '/guide/quick-start', '/guide/production'],
                 },
             ],
             '/manual/': [
