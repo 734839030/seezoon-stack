@@ -1,5 +1,5 @@
 module.exports = {
-    //  斜杠结尾markdown 中图片，需要这样$withBase('/foo.png')，config 中的路径会自动加base
+    //  斜杠结尾,markdown 中图片，需要这样$withBase('/foo.png')，config 中的路径会自动加base
     // 自定义子域名则要base=/ ,利用github pages的网址 需要写base=/seezoon-stack/
     base: '/',
     head: [
@@ -7,6 +7,7 @@ module.exports = {
     ],
     title: 'Seezoon Stack',
     description: '一款基于当前最前沿的前端（Vue3 + Vite + Antdv）和后台（Spring boot）实现的低代码开发平台。',
+    plugins: ['@vuepress/back-to-top'],
     themeConfig: {
         logo: '/images/logo.png',
         nav: [
@@ -20,6 +21,7 @@ module.exports = {
                 {
                     title: '基础(更新中...)',
                     collapsable: false,
+                    sidebarDepth: 2,    // 可选的, 默认值是 1
                     children: ['/guide/', '/guide/quick-start'],
                 },
             ],
@@ -30,6 +32,28 @@ module.exports = {
                     children: ['/manual/'],
                 },
             ]
-        }
+        },
+        smoothScroll: true,
+        lastUpdated: '上次更新', // string | boolean
+
+        // 假定是 GitHub. 同时也可以是一个完整的 GitLab URL
+        //repo: '734839030/seezoon-stack',
+        // 自定义仓库链接文字。默认从 `themeConfig.repo` 中自动推断为
+        // "GitHub"/"GitLab"/"Bitbucket" 其中之一，或是 "Source"。
+        //  repoLabel: '查看源码',
+
+        // 以下为可选的编辑链接选项
+
+        // 假如你的文档仓库和项目本身不在一个仓库：
+        docsRepo: '734839030/seezoon-stack',
+        // 假如文档不是放在仓库的根目录下：
+        docsDir: 'doc/site/docs',
+        // 假如文档放在一个特定的分支下：
+        docsBranch: 'master',
+        // 默认是 false, 设置为 true 来启用
+        editLinks: true,
+        // 默认为 "Edit this page"
+        editLinkText: '帮助我们改善此页面！'
+
     }
 }

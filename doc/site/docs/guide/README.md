@@ -2,6 +2,8 @@
 
 [Seezoon-Stack](https://github.com/734839030/seezoon-stack)以**快速开发**为目的，在开发速度和代码结果上做出一定取啥，无论如何，你将看到**非常地道**的 Java 常用开发框架使用，`Seezoon-Statck`采用主流开发框架，无论打包、编译、部署都按着大公司的标准完成并不断逐步完善。
 
+[[toc]]
+
 ## 初衷
 
 作为一个IT程序员，日常难免会帮朋友、亲戚做一些小项目，或者基于一个持续学习的目的，所以一个稳定，高效的开发平台很有必要，目前开源社区也有很多类似优秀的全家桶框架，大多太庞大，功能太繁多，学习成本巨高，比如一些基于`dubbo`、`spring-cloud`等搭建的，可能并不太适合快速开发及日常项目使用，在早期创业公司也收益颇多，所以决定再次手写一款使用最新技术的快速开发框架，以便日常所需，并长期升级。
@@ -26,18 +28,6 @@
 - 云原生架构相关知识，如`k8s + service mesh`上部署，容灾，服务治理，灰度发布等。
 
 
-
-## 环境准备
-
-本地开发环境需要安装：
-
-- [IDEA](https://www.jetbrains.com/idea/)（😎宇宙第一无敌IDE）
-- [JDK](http://jdk.java.net/archive/) (要求1.8 +，推荐11)
-- [Node](https://nodejs.org/zh-cn/download/)
-- [Yarn](https://yarnpkg.com/getting-started/install)
-- [Git](https://git-scm.com/downloads)
-- [Mysql](https://dev.mysql.com/downloads/mysql/)
-- [Redis](https://redis.io/download)
 
 ## 技术选型
 
