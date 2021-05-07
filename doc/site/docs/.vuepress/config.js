@@ -18,6 +18,7 @@ module.exports = {
     plugins: ['@vuepress/back-to-top'],
     themeConfig: {
         logo: '/images/logo.png',
+        // displayAllHeaders: true ,
         nav: [
             {text: '指南', link: '/guide/'},
             {text: '开发手册', link: '/manual/'},
@@ -27,10 +28,22 @@ module.exports = {
         sidebar: {
             '/guide/': [
                 {
-                    title: '基础(更新中...)',
+                    title: '基础',
                     collapsable: false,
                     sidebarDepth: 2,    // 可选的, 默认值是 1
-                    children: ['/guide/', '/guide/quick-start', '/guide/production'],
+                    children: ['/guide/', '/guide/quick-start', '/guide/code-specs', '/guide/production'],
+                },
+                {
+                    title: '功能',
+                    collapsable: false,
+                    sidebarDepth: 2,    // 可选的, 默认值是 1
+                    children: ['/guide/feature'],
+                },
+                {
+                    title: '进阶',
+                    collapsable: false,
+                    sidebarDepth: 2,    // 可选的, 默认值是 1
+                    children: ['/guide/production'],
                 },
             ],
             '/manual/': [

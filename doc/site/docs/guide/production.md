@@ -16,7 +16,7 @@
 └── upload-server  文件上传目录，默认使用磁盘文件，使用OSS则不需要.
 ```
 
-## 😇 手动部署
+## 手动部署
 
 ### 后台
 
@@ -116,7 +116,7 @@ gzip_vary off;
 gzip_disable "MSIE [1-6]\.";
 ```
 
-## 🏄🏾‍♂️ （推荐）[云效2020](https://www.aliyun.com/product/yunxiao/public) 部署
+## [云效2020](https://www.aliyun.com/product/yunxiao/public) 部署
 
 > 不是给阿里打广告，是真的好用，个人使用基本免费，可以使用完整DevOps功能，需求看板，测试计划、灰度发布，回退等。
 
@@ -144,7 +144,9 @@ gzip_disable "MSIE [1-6]\.";
 
 <img :src="$withBase('/images/image-20210423174851689.png')" />
 
-## 🤴🏽 阿里云[ACM](https://www.aliyun.com/product/acm) 应用配置管理
+##  Nacos 配置中心
+
+这里使用阿里云[ACM](https://www.aliyun.com/product/acm) 应用配置管理。
 
 > 没错你猜对了，这个是也是**免费**的，没有任何附加条件，也是流行Nacos 实现，可以配置比对，版本管理，灰度推送，推送轨迹等便捷功能。
 
@@ -171,7 +173,7 @@ nacos.config.type=properties
 nacos.config.data-id=com.seezoon
 nacos.config.group=seezoon-admin-server
 nacos.config.endpoint=acm.aliyun.com
-# 很奇葩是这uuid ，不想写名字
+# 很奇葩是这uuid ，不能写名字
 nacos.config.namespace=555dabb9-1d2a-4ecd-9069-c377f7823236
 # 推荐使用 RAM 用户的 accessKey 和 secretKey
 nacos.config.access-key=xxx

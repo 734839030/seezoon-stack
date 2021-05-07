@@ -1,12 +1,13 @@
 ![seezoon](doc/pictures/logo.png)
 
 **Seezoon Stack**
- [![GitHub stars](https://img.shields.io/github/stars/734839030/seezoon-stack.svg?style=social&label=Star&)](https://github.com/734839030/seezoon-stack/stargazers)
- [![GitHub forks](https://img.shields.io/github/forks/734839030/seezoon-stack.svg?style=social&label=Fork&)](https://github.com/734839030/seezoon-stack/fork)
+[![GitHub stars](https://img.shields.io/github/stars/734839030/seezoon-stack.svg?style=social&label=Star&)](https://github.com/734839030/seezoon-stack/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/734839030/seezoon-stack.svg?style=social&label=Fork&)](https://github.com/734839030/seezoon-stack/fork)
 
-##  简介
+## 简介
 
-**Seezoon Stack** 以**快速开发**为目的，在开发速度和代码结构上做出一定取啥，无论如何，你将看到**非常地道**的 Java 常用开发框架使用。该项目采用主流开发框架，无论打包、编译、部署都按着大公司的标准完成并不断逐步完善。
+**Seezoon Stack** 以**快速开发**为目的，在开发速度和代码结构上做出一定取啥，无论如何，你将看到**非常地道**的 Java
+常用开发框架使用。该项目采用主流开发框架，无论打包、编译、部署都按着大公司的标准完成并不断逐步完善。
 
 ## 💻 在线演示
 
@@ -77,42 +78,14 @@
 
 前端主要采用Ant Design Vue 2 作为主要组件库，降低学习成本，主体框架均为TypeScript，业务功能采用JavaScript编写，针对快速开发JavaScript 代码量较为简洁，速度较快。
 
-
-
 ## 环境准备
 
 - JDK 1.8 + （建议11）
-- Maven 3 + 
+- Maven 3 +
 - Node 12 +
 - Yarn（安装完node，可用`npm install -g yarn`）
-- Redis 
+- Redis
 - Mysql 5.7 + (建议8)
-
-## IDEA 配置
-
-**建议都配置**，可以实现Java 和前端代码自动格式化，统一编码标准。
-
-在IDEA 中分别安装插件
-
-【**必须**】**Lombok** 简化代码神器，安装即可 
-
-【可选】**Save Actions** 保存代码自动格式化，配置如下图
-
-<img src="doc/pictures/image-20210422201011887.png" alt="image-20210422201011887" style="zoom:40%;" />
-
-
-
-【可选】**Eclipse Code Formatter** 使用阿里[P3C](https://github.com/alibaba/p3c) 格式化规范，已放置在`build/eclipse-codestyle.xml`，配置如下图
-
-<img src="doc/pictures/image-20210422201421446.png" alt="image-20210422201421446" style="zoom:50%;" />
-
-
-
-【可选】**EsLint** (IDEA 内置)前端格式化，配置如下图
-
-<img src="doc/pictures/image-20210422201755954.png" alt="image-20210422201755954" style="zoom:50%;" />
-
-
 
 ## 🚀 快速开始
 
@@ -120,7 +93,7 @@
 
 可以通过 IDEA `File->New->Project From Version Control `导入，也可以通过命令下载后导入。
 
->  建议fork 后到自己仓库后再导入，方便后续同步更新。
+> 建议fork 后到自己仓库后再导入，方便后续同步更新。
 
 ```
 git clone https://github.com/734839030/seezoon-stack.git
@@ -165,11 +138,11 @@ git clone https://github.com/734839030/seezoon-stack.git
 
   `seezoon-admin-server/src/main/resources/application-local.properties`
 
--  **IDEA中启动后台**
+- **IDEA中启动后台**
 
-  >  执行如下类中Main方法(如果报依赖错误，可以执行parent 工程mvn package)
+> 执行如下类中Main方法(如果报依赖错误，可以执行parent 工程mvn package)
 
-​	  `seezoon-admin-server/src/main/java/com/seezoon/admin/AdminMain.java`
+​      `seezoon-admin-server/src/main/java/com/seezoon/admin/AdminMain.java`
 
 ### 前台
 
@@ -213,8 +186,6 @@ git clone https://github.com/734839030/seezoon-stack.git
 └── upload-server  文件上传目录，默认使用磁盘文件，使用OSS则不需要.
 ```
 
-
-
 ### 😇 手工部署-后台
 
 > 线上环境安装Java 1.8 + ，推荐11。
@@ -232,14 +203,14 @@ mvn clean package
 
 **只需要维护产出物`conf `目录的`application.properties `即可**，然后就可以发布了。
 
->  配置文件与环境分离，`maven-jar-plugin` 打包产出物`jar`会排出`resources`目录如下文件：
+> 配置文件与环境分离，`maven-jar-plugin` 打包产出物`jar`会排出`resources`目录如下文件：
 
 ```
 application-local.properties
 logback-spring.xml
 ```
 
->  如果不介意各个环境配置都在工程中那就很方便，使用spring boot 提供的`--spring.profiles.active`，在启动命令中选择配置文件。
+> 如果不介意各个环境配置都在工程中那就很方便，使用spring boot 提供的`--spring.profiles.active`，在启动命令中选择配置文件。
 
 <img src="doc/pictures/image-20210423121842460.png" alt="image-20210423121842460" />
 
@@ -341,10 +312,6 @@ gzip_disable "MSIE [1-6]\.";
 
 ![image-20210423174851689](doc/pictures/image-20210423174851689.png)
 
-
-
-
-
 ### 🤴🏽 阿里云[ACM](https://www.aliyun.com/product/acm) 应用配置管理
 
 > 没错你猜对了，这个是也是**免费**的，没有任何附加条件，也是流行Nacos 实现，可以配置比对，版本管理，灰度推送，推送轨迹等便捷功能。
@@ -352,8 +319,6 @@ gzip_disable "MSIE [1-6]\.";
 上面的后台部署需要手工处理配置文件比较麻烦，这个章节看项目需要，可以彻底剥离配置文件，大项目一般是有配置中心的，可以自己搭建Nacos，这里有免费的当然优先选择现有的，何况代码中没有直接依赖。
 
 ![image-20210423150358035](doc/pictures/image-20210423150358035.png)
-
-
 
 该项目已经集成`nacos-config-spring-boot-starter`。静默开启和关闭，加上Nacos 配置则远程优先本地，不加则还是传统方式。
 
@@ -381,7 +346,6 @@ nacos.config.access-key=xxx
 nacos.config.secret-key=xxx
 ```
 
-
 ## 如何贡献
 
 非常欢迎你的加入！[提一个 Issue](https://github.com/734839030/seezoon-stack/issues/new) 或者提交一个 Pull Request。
@@ -396,7 +360,8 @@ nacos.config.secret-key=xxx
 
 ## Git 贡献提交规范
 
-- 参考规范 ([Angular](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular))
+-
+参考规范 ([Angular](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular))
 
     - `feat` 增加新功能
     - `fix` 修复问题/BUG

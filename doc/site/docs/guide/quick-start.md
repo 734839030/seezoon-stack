@@ -59,11 +59,13 @@ git clone https://github.com/734839030/seezoon-stack.git
 
 ### 数据库初始化
 
+脚本见`db/seezoon-stack.sql`，已包含建库语句。
+
+::: warning
+
 默认提供的是`Mysql 8`的建库建表语句，默认字符集`utf8mb4`，`collation：utf8mb4_0900_ai_ci`。`Mysql 8` 以下，不支持`utf8mb4_0900_ai_ci`，请全局替换为`utf8mb4_general_ci`，否则执行会出现错误`Unknown collation: 'utf8mb4_0900_ai_ci`，强烈推荐使用`Mysql 8`。
 
-
-
-脚本见`db/seezoon-stack.sql`，已包含建库语句。
+:::
 
 ### 配置Mysql
 
