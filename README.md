@@ -4,17 +4,19 @@
  [![GitHub stars](https://img.shields.io/github/stars/734839030/seezoon-stack.svg?style=social&label=Star&)](https://github.com/734839030/seezoon-stack/stargazers)
  [![GitHub forks](https://img.shields.io/github/forks/734839030/seezoon-stack.svg?style=social&label=Fork&)](https://github.com/734839030/seezoon-stack/fork)
 
-###  简介
+##  简介
 
 **Seezoon Stack** 以**快速开发**为目的，在开发速度和代码结构上做出一定取啥，无论如何，你将看到**非常地道**的 Java 常用开发框架使用。该项目采用主流开发框架，无论打包、编译、部署都按着大公司的标准完成并不断逐步完善。
 
-### 💻 在线演示
+## 💻 在线演示
 
-[https://stack.seezoon.com/](https://stack.seezoon.com/)
+**演示地址：**[https://stack.seezoon.com/](https://stack.seezoon.com/)
 
 账号：admin
 
 密码：123456
+
+**文档地址：**  [https://doc.stack.seezoon.com](https://doc.stack.seezoon.com)
 
 部分效果图：
 
@@ -24,7 +26,7 @@
 
 <img src="doc/pictures/image-20210422205738456.png" alt="image-20210422205738456" style="zoom:50%;" />
 
-### 技术选型
+## 技术选型
 
 **Seezoon Stack** 采用当下最前沿前后端的技术栈完成。
 
@@ -38,7 +40,7 @@
 | Mybatis                   | https://mybatis.org/mybatis-3/zh/index.html          | 持久层         |
 | Springfox                 | https://github.com/springfox/springfox               | openAPI 3 文档 |
 
-#### 特性
+## 特性
 
 - JSR303 验证、标准API模型，错误码、异常处理封装
 - 请求埋点，返回头添加`X-Trace-Id`，通过`MDC`在日志中埋入线程ID;
@@ -77,7 +79,7 @@
 
 
 
-### 环境准备
+## 环境准备
 
 - JDK 1.8 + （建议11）
 - Maven 3 + 
@@ -86,7 +88,7 @@
 - Redis 
 - Mysql 5.7 + (建议8)
 
-### IDEA 配置
+## IDEA 配置
 
 **建议都配置**，可以实现Java 和前端代码自动格式化，统一编码标准。
 
@@ -112,7 +114,7 @@
 
 
 
-### 🚀 快速开始
+## 🚀 快速开始
 
 **代码下载**
 
@@ -151,7 +153,7 @@ git clone https://github.com/734839030/seezoon-stack.git
 ​```
 ```
 
-#### 后台
+### 后台
 
 - **初始化DB脚本**
 
@@ -169,7 +171,7 @@ git clone https://github.com/734839030/seezoon-stack.git
 
 ​	  `seezoon-admin-server/src/main/java/com/seezoon/admin/AdminMain.java`
 
-#### 前台
+### 前台
 
 - **安装依赖并启动**
 
@@ -193,7 +195,7 @@ git clone https://github.com/734839030/seezoon-stack.git
   http://localhost:3001/static/xxxx
   ```
 
-### 生产环境部署
+## 生产环境部署
 
 线上目录结构，
 
@@ -213,7 +215,7 @@ git clone https://github.com/734839030/seezoon-stack.git
 
 
 
-#### 😇 手工部署-后台
+### 😇 手工部署-后台
 
 > 线上环境安装Java 1.8 + ，推荐11。
 
@@ -241,7 +243,7 @@ logback-spring.xml
 
 <img src="doc/pictures/image-20210423121842460.png" alt="image-20210423121842460" />
 
-#### 😇 手工部署-前台
+### 😇 手工部署-前台
 
 ```
 cd seezoon-admin-web
@@ -313,7 +315,7 @@ gzip_vary off;
 gzip_disable "MSIE [1-6]\.";
 ```
 
-#### 🏄🏾‍♂️ （推荐）[云效2020](https://www.aliyun.com/product/yunxiao/public) 部署
+### 🏄🏾‍♂️ （推荐）[云效2020](https://www.aliyun.com/product/yunxiao/public) 部署
 
 > 不是给阿里打广告，是真的好用，个人使用基本免费，可以使用完整DevOps功能，需求看板，测试计划、灰度发布，回退等。
 
@@ -343,7 +345,7 @@ gzip_disable "MSIE [1-6]\.";
 
 
 
-#### 🤴🏽 阿里云[ACM](https://www.aliyun.com/product/acm) 应用配置管理
+### 🤴🏽 阿里云[ACM](https://www.aliyun.com/product/acm) 应用配置管理
 
 > 没错你猜对了，这个是也是**免费**的，没有任何附加条件，也是流行Nacos 实现，可以配置比对，版本管理，灰度推送，推送轨迹等便捷功能。
 
@@ -380,18 +382,34 @@ nacos.config.secret-key=xxx
 ```
 
 
+## 如何贡献
 
-### 功能介绍
+非常欢迎你的加入！[提一个 Issue](https://github.com/734839030/seezoon-stack/issues/new) 或者提交一个 Pull Request。
 
-持续完善中......
+**Pull Request:**
 
-### 常用开发指南
+1. Fork 代码!
+2. 创建自己的分支: `git checkout -b feat/xxxx`
+3. 提交你的修改: `git commit -m 'feat(function): add xxxxx'`
+4. 推送您的分支: `git push origin feat/xxxx`
+5. 提交`pull request`
 
-持续完善中......
+## Git 贡献提交规范
 
+- 参考规范 ([Angular](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular))
 
-
-
-
+    - `feat` 增加新功能
+    - `fix` 修复问题/BUG
+    - `style` 代码风格相关无影响运行结果的
+    - `perf` 优化/性能提升
+    - `refactor` 重构
+    - `revert` 撤销修改
+    - `test` 测试相关
+    - `docs` 文档/注释
+    - `chore` 依赖更新/脚手架配置修改等
+    - `workflow` 工作流改进
+    - `ci` 持续集成
+    - `types` 类型定义文件更改
+    - `wip` 开发中
 
 

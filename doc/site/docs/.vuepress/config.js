@@ -3,7 +3,15 @@ module.exports = {
     // 自定义子域名则要base=/ ,利用github pages的网址 需要写base=/seezoon-stack/
     base: '/',
     head: [
-        ['link', {rel: 'icon', href: '/images/favicon.ico'}]
+        ['link', {rel: 'icon', href: '/images/favicon.ico'}],
+        [
+            "script",
+            {
+                "data-ad-client": "ca-pub-5032572591927756",
+                async: true,
+                src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+            }
+        ]
     ],
     title: 'Seezoon Stack',
     description: '一款基于当前最前沿的前端（Vue3 + Vite + Antdv）和后台（Spring boot）实现的低代码开发平台。',
