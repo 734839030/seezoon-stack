@@ -1,6 +1,9 @@
 # 异常处理
 
-框架使用Spring ControllerAdvice来统一处理异常，异常会有异常码和异常原因，需要更细分可以自行扩展。
+异常会有异常码和异常原因，需要更细分可以自行扩展。
+
+## ExceptionAdvice
+框架使用Spring ControllerAdvice来统一处理异常，
 
 ```java
 package com.seezoon.framework.web.advice;
