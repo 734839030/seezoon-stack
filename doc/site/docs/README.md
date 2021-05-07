@@ -4,7 +4,7 @@ heroImage: /images/logo.png
 heroText: Seezoon Stack低代码开发平台
 tagline: 基于 Vue3 + Vite + Antdv + Spring Boot 实现。
 actionText: 快速上手 →
-actionLink: /guide/quick-start.html
+actionLink: /guide/base/quick-start.html
 features:
 - title: 简洁至上
   details: 采用最简单的前后端技术封装实现，最简化的配置，一分钟可以上手。
