@@ -1,8 +1,6 @@
 package com.seezoon.framework.component;
 
-import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -36,11 +34,8 @@ public class ScheduledCustomConfiguration implements SchedulingConfigurer {
             new ScheduledThreadPoolExecutor(scheduled.getCorePoolSize());
         scheduledThreadPoolExecutor.setMaximumPoolSize(scheduled.getMaxPoolSize());
         scheduledThreadPoolExecutor.setKeepAliveTime(scheduled.getKeepAliveTime(), TimeUnit.SECONDS);
-        scheduledThreadPoolExecutor.setRejectedExecutionHandler(new RejectedExecutionHandler() {
-            @Override
-            public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
-                logger.error("Scheduled exception:scheduled rejected");
-            }
+        scheduledThreadPoolExecutor.setRejectedExecutionHandler((r, executor) -> {
+            logger.error("Scheduled exception:scheduled rejected");
         });
         taskRegistrar.setScheduler(scheduledThreadPoolExecutor);
     }

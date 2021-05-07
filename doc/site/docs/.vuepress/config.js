@@ -31,13 +31,14 @@ module.exports = {
                     title: '基础',
                     collapsable: false,
                     sidebarDepth: 2,    // 可选的, 默认值是 1
-                    children: ['/guide/', '/guide/quick-start', '/guide/code-specs', '/guide/production'],
+                    children: ['/guide/', '/guide/base/quick-start', '/guide/base/code-specs'],
                 },
                 {
                     title: '功能',
                     collapsable: false,
                     sidebarDepth: 2,    // 可选的, 默认值是 1
-                    children: ['/guide/feature'],
+                    children: ['/guide/feature/lombok', '/guide/feature/jsr-303', '/guide/feature/response',
+                        '/guide/feature/error-code', '/guide/feature/exception', '/guide/feature/api-doc'],
                 },
                 {
                     title: '进阶',
