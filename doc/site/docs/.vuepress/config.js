@@ -45,7 +45,7 @@ module.exports = {
                     title: '进阶',
                     collapsable: false,
                     sidebarDepth: 2,    // 可选的, 默认值是 1
-                    children: ['/guide/advance/deploy', '/guide/advance/nacos'],
+                    children: ['/guide/advance/cors', '/guide/advance/deploy', '/guide/advance/nacos'],
                 },
             ],
             '/manual/': [
