@@ -34,12 +34,12 @@ public class FileHandlerConfiguration {
     @Bean
     @ConditionalOnProperty(name = "seezoon.file.store-type", havingValue = "local")
     public FileHandler localFileHandler() {
-        return new LocalFileHandler(seezoonProperties.getFile().getLocal());
+        return new LocalFileHandler(seezoonProperties.getFile());
     }
 
     @Bean
     @ConditionalOnProperty(name = "seezoon.file.store-type", havingValue = "aliyun_oss")
     public FileHandler aliyunOssFileHandler() {
-        return new AliyunOssHandler(seezoonProperties.getFile().getAliyun());
+        return new AliyunOssHandler(seezoonProperties.getFile());
     }
 }

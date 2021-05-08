@@ -20,12 +20,13 @@ import com.seezoon.framework.properties.SeezoonProperties;
  */
 public class LocalFileHandler implements FileHandler {
 
-    private SeezoonProperties.FileProperties.LocalProperties localProperties;
+    private SeezoonProperties.FileProperties fileProperties;
 
-    public LocalFileHandler(SeezoonProperties.FileProperties.LocalProperties localProperties) {
-        Assert.hasText(localProperties.getDirectory(), "FileProperties.LocalProperties directory must not be empty");
-        Assert.hasText(localProperties.getUrlPrefix(), "FileProperties.LocalProperties urlPrefix must not be empty");
-        this.localProperties = localProperties;
+    public LocalFileHandler(SeezoonProperties.FileProperties fileProperties) {
+        Assert.hasText(fileProperties.getLocal().getDirectory(),
+            "FileProperties.LocalProperties directory must not be empty");
+        Assert.hasText(fileProperties.getUrlPrefix(), "FileProperties urlPrefix must not be empty");
+        this.fileProperties = fileProperties;
     }
 
     /**
@@ -42,14 +43,14 @@ public class LocalFileHandler implements FileHandler {
     public void upload(String relativePath, InputStream in) throws IOException {
         Assert.hasLength(relativePath, "relativePath must not be empty");
         Assert.notNull(in, "inputStream must not be null");
-        Path storePath = Path.of(localProperties.getDirectory(), relativePath);
+        Path storePath = Path.of(fileProperties.getLocal().getDirectory(), relativePath);
         FileUtils.copyInputStreamToFile(in, storePath.toFile());
     }
 
     @Override
     public InputStream download(String relativePath) throws IOException {
         Assert.hasLength(relativePath, "relativePath must not be empty");
-        Path storePath = Path.of(localProperties.getDirectory(), relativePath);
+        Path storePath = Path.of(fileProperties.getLocal().getDirectory(), relativePath);
         if (!Files.exists(storePath)) {
             throw new BusinessException("file is not exists");
         }
@@ -59,7 +60,7 @@ public class LocalFileHandler implements FileHandler {
     @Override
     public void delete(String relativePath) throws IOException {
         Assert.hasLength(relativePath, "relativePath must not be empty");
-        Path storePath = Path.of(localProperties.getDirectory(), relativePath);
+        Path storePath = Path.of(fileProperties.getLocal().getDirectory(), relativePath);
         // 文件不存在返回 false
         if (Files.isDirectory(storePath)) {
             throw new RuntimeException(storePath + " is directory,can not delete ");
@@ -69,12 +70,12 @@ public class LocalFileHandler implements FileHandler {
 
     @Override
     public String getUrl(String relativePath) {
-        return StringUtils.isNotBlank(relativePath) ? localProperties.getUrlPrefix() + relativePath : null;
+        return StringUtils.isNotBlank(relativePath) ? fileProperties.getUrlPrefix() + relativePath : null;
     }
 
     @Override
     public String getUrlPrefix() {
-        return localProperties.getUrlPrefix();
+        return fileProperties.getUrlPrefix();
     }
 
     @Override

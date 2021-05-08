@@ -360,7 +360,6 @@ nacos.config.secret-key=xxx
 
 ## Git 贡献提交规范
 
--
 参考规范 ([Angular](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular))
 
     - `feat` 增加新功能

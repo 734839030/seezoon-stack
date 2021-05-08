@@ -122,16 +122,16 @@ public class SeezoonProperties {
     @Setter
     public static class FileProperties {
         private StoreType storeType = StoreType.NONE;
+        /**
+         * 可访问的网址前缀，如https://xxx.com
+         */
+        private String urlPrefix;
         private LocalProperties local = new LocalProperties();
         private AliyunOssProperties aliyun = new AliyunOssProperties();
 
         @Getter
         @Setter
         public static class LocalProperties {
-            /**
-             * 可访问的网址前缀，如https://xxx.com
-             */
-            private String urlPrefix;
             /**
              * 存储目录，一般为可以处理静态容器的路径，如nginx,tomcat 下可以通过url访问的目录,如果/data/files
              *
@@ -143,10 +143,6 @@ public class SeezoonProperties {
         @Getter
         @Setter
         public static class AliyunOssProperties {
-            /**
-             * 可访问的网址前缀，如https://xxx.com
-             */
-            private String urlPrefix;
             /**
              * 阿里云oss 存储空间
              * <a>https://help.aliyun.com/document_detail/177682.html?spm=a2c4g.11186623.6.634.4a102c4cZPZ0M5</a>

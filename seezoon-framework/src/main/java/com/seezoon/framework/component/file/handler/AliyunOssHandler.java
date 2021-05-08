@@ -16,18 +16,18 @@ import com.seezoon.framework.properties.SeezoonProperties;
  */
 public class AliyunOssHandler implements FileHandler {
 
-    private SeezoonProperties.FileProperties.AliyunOssProperties aliyunOssProperties;
+    private SeezoonProperties.FileProperties fileProperties;
     private OSS ossClient;
 
-    public AliyunOssHandler(SeezoonProperties.FileProperties.AliyunOssProperties aliyunOssProperties) {
-        this.aliyunOssProperties = aliyunOssProperties;
-        ossClient = new OSSClientBuilder().build(aliyunOssProperties.getEndpoint(),
-            aliyunOssProperties.getAccessKeyId(), aliyunOssProperties.getAccessKeySecret());
+    public AliyunOssHandler(SeezoonProperties.FileProperties fileProperties) {
+        this.fileProperties = fileProperties;
+        ossClient = new OSSClientBuilder().build(fileProperties.getAliyun().getEndpoint(),
+            fileProperties.getAliyun().getAccessKeyId(), fileProperties.getAliyun().getAccessKeySecret());
     }
 
     @Override
     public void upload(String relativePath, InputStream in) throws IOException {
-        ossClient.putObject(aliyunOssProperties.getBucketName(), handleRelativePath(relativePath), in);
+        ossClient.putObject(fileProperties.getAliyun().getBucketName(), handleRelativePath(relativePath), in);
         if (null != in) {
             in.close();
         }
@@ -36,18 +36,18 @@ public class AliyunOssHandler implements FileHandler {
     @Override
     public InputStream download(String relativePath) throws IOException {
         OSSObject object =
-            ossClient.getObject(aliyunOssProperties.getBucketName(), this.handleRelativePath(relativePath));
+            ossClient.getObject(fileProperties.getAliyun().getBucketName(), this.handleRelativePath(relativePath));
         return object.getObjectContent();
     }
 
     @Override
     public void delete(String relativePath) throws IOException {
-        ossClient.deleteObject(aliyunOssProperties.getBucketName(), this.handleRelativePath(relativePath));
+        ossClient.deleteObject(fileProperties.getAliyun().getBucketName(), this.handleRelativePath(relativePath));
     }
 
     @Override
     public String getUrl(String relativePath) {
-        return StringUtils.isNotBlank(relativePath) ? aliyunOssProperties.getUrlPrefix() + relativePath : null;
+        return StringUtils.isNotBlank(relativePath) ? fileProperties.getUrlPrefix() + relativePath : null;
     }
 
     @Override
@@ -73,6 +73,6 @@ public class AliyunOssHandler implements FileHandler {
 
     @Override
     public String getUrlPrefix() {
-        return aliyunOssProperties.getUrlPrefix();
+        return fileProperties.getUrlPrefix();
     }
 }
