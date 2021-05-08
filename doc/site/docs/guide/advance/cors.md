@@ -18,7 +18,7 @@
 
 > 使用Spring Security 需要在其配置中加上跨域代码`http.cors()`才可以。
 
-### Cookie SameSite 
+## Cookie SameSite 
 
 跨域目前收这个影响，Cookie 的`SameSite`属性用来限制第三方 Cookie，从而减少安全风险。它可以设置三个值：
 
