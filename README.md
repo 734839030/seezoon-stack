@@ -17,7 +17,7 @@
 
 密码：123456
 
-**文档地址：**  [https://doc.stack.seezoon.com](https://doc.stack.seezoon.com)
+**详细文档地址：**  [https://doc.stack.seezoon.com](https://doc.stack.seezoon.com)
 
 部分效果图：
 
@@ -286,71 +286,13 @@ gzip_vary off;
 gzip_disable "MSIE [1-6]\.";
 ```
 
-### 🏄🏾‍♂️ （推荐）[云效2020](https://www.aliyun.com/product/yunxiao/public) 部署
 
-> 不是给阿里打广告，是真的好用，个人使用基本免费，可以使用完整DevOps功能，需求看板，测试计划、灰度发布，回退等。
-
-后台最短路径**流水线 **配置，添加源代码->构建->主机部署(不要求是阿里主机).
-
-<img src="doc/pictures/image-20210423130133351.png" alt="image-20210423130133351" style="zoom:50%;" />
-
-
-
-主机部署，部署脚本见`build/yunxiao/java-deploy.sh`，主机如果conf目录存在了，则不会覆盖，后面会讲用配置中心的方式(小项目依赖多了划不来，可以当学习使用)。
-
-![image-20210423130548116](doc/pictures/image-20210423130548116.png)
-
-前台最短路径
-
-![image-20210423144532907](doc/pictures/image-20210423144532907.png)
-
-部署脚本见`build/yunxiao/page-deploy.sh`
-
-![image-20210423144643042](doc/pictures/image-20210423144643042.png)
-
-最终的效果就是动动小手👌就部署了，也可以使用git hooks，基于代码和分支变动自动触发，非常酸爽。
-
-![image-20210423174851689](doc/pictures/image-20210423174851689.png)
-
-### 🤴🏽 阿里云[ACM](https://www.aliyun.com/product/acm) 应用配置管理
-
-> 没错你猜对了，这个是也是**免费**的，没有任何附加条件，也是流行Nacos 实现，可以配置比对，版本管理，灰度推送，推送轨迹等便捷功能。
-
-上面的后台部署需要手工处理配置文件比较麻烦，这个章节看项目需要，可以彻底剥离配置文件，大项目一般是有配置中心的，可以自己搭建Nacos，这里有免费的当然优先选择现有的，何况代码中没有直接依赖。
-
-![image-20210423150358035](doc/pictures/image-20210423150358035.png)
-
-该项目已经集成`nacos-config-spring-boot-starter`。静默开启和关闭，加上Nacos 配置则远程优先本地，不加则还是传统方式。
-
-这里为了**降低依赖**没有使用Nacos的注解，所以不具备自动刷新能力，发完配置需要重启生效。
-
-```
-# 在这个文件中补全Nacos 的配置
-build/assembly/conf/application.properties
-
-# 免费阿里云配置中心nacos https://acmnext.console.aliyun.com/
-# 只需添加了下列配置，就可以读取配置中心变量，默认spring自带注解不刷新，发布后应用需要重启，如需自动刷新，请用Nacos自带注解
-# 容器中使用把可变参数值做成环境变量即可
-nacos.config.bootstrap.enable=true
-nacos.config.remote-first=true
-nacos.config.bootstrap.log-enable=true
-nacos.config.auto-refresh=true
-nacos.config.type=properties
-nacos.config.data-id=com.seezoon
-nacos.config.group=seezoon-admin-server
-nacos.config.endpoint=acm.aliyun.com
-# 很奇葩是这uuid ，不想写名字
-nacos.config.namespace=555dabb9-1d2a-4ecd-9069-c377f7823236
-# 推荐使用 RAM 用户的 accessKey 和 secretKey
-nacos.config.access-key=xxx
-nacos.config.secret-key=xxx
-```
 
 ## 如何贡献
 
 非常欢迎你的加入！[提一个 Issue](https://github.com/734839030/seezoon-stack/issues/new) 或者提交一个 Pull Request。
 
-**Pull Request:**
+**Pull Request：**
 
 1. Fork 代码!
 2. 创建自己的分支: `git checkout -b feat/xxxx`

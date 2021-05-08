@@ -10,7 +10,7 @@ import org.springframework.util.Assert;
  *
  * <code>
  *     基于注解的权限控制，里面如果传入的是角色，需要加前缀ROLE_
- *     &#64;Secured({"ROLE_ADMIN"}) 非常不建议使用，不是很灵活
+ *     &#64;Secured({"ROLE_admin"}) 非常不建议使用，不是很灵活
  *      &#64;PreAuthorize("hasAuthority('ROLE_admin')")
  *      &#64;PreAuthorize("hasRole('admin')")
  * </code>

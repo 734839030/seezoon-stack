@@ -15,9 +15,10 @@ import com.seezoon.framework.properties.SeezoonProperties.ScheduledProperties;
 import lombok.RequiredArgsConstructor;
 
 /**
- * 定时配置
- *
- * 如需要使用异步，springboot 要求显示的用{@code @EnableScheduling}
+ * 定时配置可选
+ * 
+ * @see <a>https://docs.spring.io/spring-boot/docs/2.4.5/reference/htmlsingle/#boot-features-task-execution-sch</a>
+ *      如需要使用异步，springboot 要求显示的用{@code @EnableScheduling}
  */
 @Configuration
 @RequiredArgsConstructor

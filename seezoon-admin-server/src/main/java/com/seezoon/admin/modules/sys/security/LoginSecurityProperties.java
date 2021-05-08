@@ -20,6 +20,10 @@ public class LoginSecurityProperties {
     private Duration lockTime = Duration.ofDays(1);
     private boolean recordLog = true;
     /**
+     * Controls the maximum number of sessions for a user when {@code maxSessionsPreventsLogin = true}
+     */
+    private int maximumSessions = 1;
+    /**
      * 是否可以同时登录{@code true} 同个不可以同时登录
      */
     private boolean maxSessionsPreventsLogin = false;

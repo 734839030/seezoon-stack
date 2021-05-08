@@ -1,3 +1,14 @@
+# 登录与授权
+
+基于 [Spring Security ](https://spring.io/projects/spring-security)实现登录安全及细粒度的授权访问控制，Spring Security模型比较固定，建议通读其文档便于理解，关键控制参数已经抽取到：
+
+```java
+com.seezoon.admin.modules.sys.security.LoginSecurityProperties
+```
+
+具体实现参考：
+
+```java
 package com.seezoon.admin.modules.sys.security;
 
 import org.springframework.context.annotation.Bean;
@@ -160,3 +171,161 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new AdminUserDetailsServiceImpl();
     }
 }
+
+```
+
+## 登录
+
+目前实现一种登录方式即账号密码登录，扩展其他登录方式也比较简单，按文档实现一个Filter。
+
+> 后续考虑实现微信扫码登录，作为例子。
+
+### 单账号登录限制
+
+可以配置一个账号是否可以多人登录，具体设置：
+
+```java
+http.sessionManagement().maximumSessions(loginSecurityProperties.getMaximumSessions())
+            .maxSessionsPreventsLogin(loginSecurityProperties.isMaxSessionsPreventsLogin());
+```
+
+> 当maxSessionsPreventsLogin=true 时候maximumSessions有效，后面会踢掉前面的。
+
+### RememberMe
+
+记住我实现，可以控制记住时长，以及安全控制盐值，可以定期更换。
+
+```java
+http.rememberMe().rememberMeParameter(DEFAULT_REMEMBER_ME_NAME).key(loginSecurityProperties.getRememberKey())
+         .useSecureCookie(true).tokenValiditySeconds((int)loginSecurityProperties.getRememberTime().toSeconds())
+```
+
+> 修改密码后，RememberMe会自动失效。
+
+### 登录安全
+
+账号错误到一定次数会锁定，IP错误一定次数会锁定IP，见LoginSecurityProperties中配置。
+
+## 授权
+
+采用RBAC（Role-based access control）的授权访问控制，即基于角色的访问控制。登录时候会放入相关授权信息，主要包括可访问菜单、按钮。
+
+```java
+package com.seezoon.admin.modules.sys.security;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import com.seezoon.admin.framework.file.FileService;
+import com.seezoon.admin.modules.sys.dto.UserInfo;
+import com.seezoon.admin.modules.sys.security.constant.LockType;
+import com.seezoon.admin.modules.sys.service.SysUserService;
+import com.seezoon.dao.framework.constants.EntityStatus;
+import com.seezoon.dao.modules.sys.entity.SysMenu;
+import com.seezoon.dao.modules.sys.entity.SysRole;
+import com.seezoon.dao.modules.sys.entity.SysUser;
+import com.seezoon.framework.utils.IpUtil;
+
+/**
+ * 用户加载逻辑
+ *
+ * @author hdf
+ */
+public class AdminUserDetailsServiceImpl implements UserDetailsService {
+
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private SysUserService sysUserService;
+    @Autowired
+    private FileService fileService;
+    @Autowired
+    private LoginSecurityService loginSecurityService;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        HttpServletRequest request =
+            ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+        String remoteIp = IpUtil.getRemoteIp(request);
+        boolean ipLocked = loginSecurityService.getIpLockStrategy().isLocked(remoteIp);
+        if (ipLocked) {
+            throw new LockedException(LockType.IP.name());
+        }
+
+        if (StringUtils.isBlank(username)) {
+            throw new UsernameNotFoundException("username is empty");
+        }
+
+        boolean locked = loginSecurityService.getUsernameLockStrategy().isLocked(username);
+        if (locked) {
+            throw new LockedException(LockType.USERNAME.name());
+        }
+        SysUser user = sysUserService.findByUsername(username);
+        if (null == user) {
+            throw new UsernameNotFoundException(username + "  not found");
+        }
+
+        if (EntityStatus.INVALID.status() == user.getStatus()) {
+            throw new DisabledException(username + " disabled");
+        }
+
+        UserInfo userInfo = new UserInfo(user.getId(), user.getDeptId(), user.getUsername(), user.getName());
+        userInfo.setDeptName(user.getDeptName());
+        userInfo.setPhoto(fileService.getUrl(user.getPhoto()));
+        // 角色及权限信息登录成功后放入
+        AdminUserDetails adminUserDetails = new AdminUserDetails(userInfo, username, user.getPassword());
+        adminUserDetails.setAuthorities(getAuthorities(user.getId()));
+        return adminUserDetails;
+    }
+
+    /**
+     *
+     * @return
+     */
+    private List<GrantedAuthority> getAuthorities(Integer userId) {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        // 角色处理
+        List<SysRole> userRoles = userService.findRolesByUserId(userId);
+        userRoles.stream().filter(v -> StringUtils.isNotBlank(v.getCode())).forEach(v -> {
+            authorities.add(new UserGrantedAuthority(v.getCode(), true));
+        });
+        List<SysMenu> userMenus = userService.findMenusByUserId(userId);
+        userMenus.stream().filter(v -> StringUtils.isNotBlank(v.getPermission())).forEach(v -> {
+            authorities.add(new UserGrantedAuthority(v.getPermission()));
+        });
+        return authorities;
+    }
+}
+
+```
+
+### 细粒度控制
+
+Spring Security 提供了多种方式，[Authorization Architecture](https://docs.spring.io/spring-security/site/docs/5.4.6/reference/html5/#servlet-authorization)。
+
+这里列举常用的使用方式基本够用，更多表达式语法[Expression-Based Access Control](https://docs.spring.io/spring-security/site/docs/5.4.6/reference/html5/#el-access)。
+
+```java
+// 只看UserDetails中Authorities是否包含即可
+@PreAuthorize("hasAuthority('ROLE_admin')")
+// 判断有ROLE_ 前缀的Authority
+@PreAuthorize("hasRole('admin')") 
+// 不建议使用, 上面的够用了
+@Secured({"ROLE_admin"}) 
+```
+
+> 如果是角色判断需要GrantedAuthority放入时候需要加上ROLE_前缀，该框架已处理。
+
