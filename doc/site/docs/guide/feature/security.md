@@ -174,6 +174,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 ```
 
+## CSRF & XSS
+
+设置代码，框架多特殊字符会自动转义避免XSS 攻击，针对CSRF 登录成功后获取Respone Cookie中 name=XSRF-TOKEN，在请求时候可以统一携带param _csrf=xxx 或者Header：X-CSRF-TOKEN=xxx。
+
+> CSRF 默认不拦截get 请求。
+
+```java
+   http.headers().defaultsDisabled()// 关闭默认
+            // 浏览器根据respone content type 格式解析资源
+            .contentTypeOptions()
+            // xss 攻击，限制有限，还是需要通过过滤请求参数，该框架已做
+            .and().xssProtection()
+            // 同域名可以通过frame
+            .and().frameOptions().sameOrigin()
+            // CSRF 攻击 
+            // respone cookie name XSRF-TOKEN
+            // requst param _csrf or below;
+            // request head HEADER_NAME = "X-CSRF-TOKEN";
+            // CsrfFilter 默认实现类是这个，不拦截get请求
+            .and().csrf().ignoringAntMatchers(PUBLIC_ANT_PATH, LOGIN_URL)
+            .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+```
+
 ## 登录
 
 目前实现一种登录方式即账号密码登录，扩展其他登录方式也比较简单，按文档实现一个Filter。
