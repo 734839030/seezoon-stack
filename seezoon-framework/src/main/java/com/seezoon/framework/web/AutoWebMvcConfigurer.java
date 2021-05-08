@@ -4,6 +4,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.session.web.http.DefaultCookieSerializer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -30,7 +31,7 @@ public class AutoWebMvcConfigurer implements WebMvcConfigurer {
         registry.addResourceHandler("/swagger-ui/**")
             .addResourceLocations("classpath:/META-INF/resources/webjars/springfox-swagger-ui/");
     }
-
+    
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/swagger-ui/").setViewName("forward:" + "/swagger-ui/index.html");
@@ -61,5 +62,17 @@ public class AutoWebMvcConfigurer implements WebMvcConfigurer {
         registry.addMapping(cors.getMapping()).allowedOrigins(cors.getAllowedOrigins())
             .allowedHeaders(cors.getAllowedHeaders()).allowedMethods(cors.getAllowedMethods())
             .allowCredentials(cors.isAllowCredentials()).maxAge(cors.getMaxAge());
+    }
+
+    /**
+     * 默认Spring session SameSite 默认为Lax ,无法跨域使用
+     * 
+     * @return
+     */
+    @Bean
+    public DefaultCookieSerializer defaultCookieSerializer() {
+        DefaultCookieSerializer defaultCookieSerializer = new DefaultCookieSerializer();
+        defaultCookieSerializer.setSameSite(null);
+        return defaultCookieSerializer;
     }
 }
