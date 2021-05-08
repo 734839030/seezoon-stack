@@ -416,5 +416,52 @@ public class ScheduledCustomConfiguration implements SchedulingConfigurer {
 }
 ```
 
+##  [Caching](https://docs.spring.io/spring-boot/docs/2.4.5/reference/htmlsingle/#boot-features-caching)(caffeine)
 
+简易内存缓存，适合对分布式场景不一致不敏感的场景，如字典，非关键参数。
 
+该框架默认配置了。
+
+```properties
+spring.cache.type=caffeine
+spring.cache.caffeine.spec=maximumSize=1000,expireAfterAccess=300s
+```
+
+缓存用法，具体请参考参考文档。
+
+```java
+@Cacheable(cacheNames = "SysParam", key = "#paramKey")
+```
+
+## 文件存储
+
+提供通过配置实现文件存储类型更换，使用其他存储可以自行扩展。
+
+```
+com.seezoon.framework.component.file.handler.FileHandler
+com.seezoon.framework.component.file.FileHandlerConfiguration
+```
+
+- 本地文件(多实例可以使用NFS)
+
+  ```properties
+  seezoon.file.store-type=local
+  seezoon.file.url-prefix=http://127.0.0.1:3001/static
+  # 本地适用，其他部署环境写真实目录
+  seezoon.file.local.directory=@local.upload.directory@
+  ```
+
+- 阿里云OSS
+
+  ```properties
+  seezoon.file.store-type=aliyun_oss
+  seezoon.file.url-prefix=https://seezoon-file.oss-cn-hangzhou.aliyuncs.com
+  seezoon.file.aliyun.bucket-name=seezoon-file
+  seezoon.file.aliyun.endpoint=oss-cn-hangzhou.aliyuncs.com
+  seezoon.file.aliyun.access-key-id=xxxx
+  seezoon.file.aliyun.access-key-secret=xxx
+  ```
+
+  
+
+  
