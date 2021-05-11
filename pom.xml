@@ -37,7 +37,8 @@
         <skipTests>true</skipTests>
         <!-- DB-->
         <mybatis-spring-boot-starter.version>2.1.3</mybatis-spring-boot-starter.version>
-        <pagehelper-spring-boot-starter.version>1.3.0</pagehelper-spring-boot-starter.version>
+        <!--        <pagehelper-spring-boot-starter.version>1.3.0</pagehelper-spring-boot-starter.version>-->
+        <pagehelper.version>5.2.0</pagehelper.version>
         <!--  tools-->
         <spring-retry.version>1.3.0</spring-retry.version>
         <guava.version>30.0-jre</guava.version>

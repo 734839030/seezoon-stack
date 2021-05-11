@@ -14,45 +14,51 @@
         <result column="remarks" jdbcType="VARCHAR" property="remarks"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, name, param_key, param_value, status, create_by, create_time, update_by, update_time,
-        remarks
+        t.id, t.name, t.param_key, t.param_value, t.status, t.create_by, t.create_time, t.update_by, t.update_time,
+        t.remarks
+    </sql>
+    <sql id="Query_Table">
+        sys_param t
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from sys_param
-        where id = #{id,jdbcType=INTEGER}
+        from
+        <include refid="Query_Table"/>
+        where t.id = #{id,jdbcType=INTEGER} ${dsf}
     </select>
 
     <select id="selectByCondition" parameterType="com.seezoon.dao.framework.entity.AbstractQueryCondition"
             resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from sys_param
+        from
+        <include refid="Query_Table"/>
         <where>
             <if test="paramKey != null and paramKey != ''">
-                param_key = #{paramKey}
+                t.param_key = #{paramKey}
             </if>
             <if test="name != null and name != ''">
-                and name like concat('%',#{name},'%')
+                and t.name like concat('%',#{name},'%')
             </if>
             <if test="status != null">
-                and status = #{status}
+                and t.status = #{status}
             </if>
+            ${dsf}
         </where>
         <choose>
             <when test="sortField != null and sortField != '' and sortOrder != null and sortOrder !=''">
                 order by ${sortField} ${sortOrder}
             </when>
             <otherwise>
-                order by create_time desc
+                order by t.create_time desc
             </otherwise>
         </choose>
     </select>
 
     <delete id="deleteByPrimaryKey">
-        delete from sys_param
-        where id in
+        delete t from sys_param t
+        where t.id in
         <foreach item="item" collection="array" separator="," open="(" close=")">
             #{item}
         </foreach>
@@ -72,49 +78,49 @@
         </foreach>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.seezoon.dao.modules.sys.entity.SysParam">
-        update sys_param
+        update sys_param t
         <set>
             <if test="name != null">
-                name = #{name,jdbcType=VARCHAR},
+                t.name = #{name,jdbcType=VARCHAR},
             </if>
             <if test="paramKey != null">
-                param_key = #{paramKey,jdbcType=VARCHAR},
+                t.param_key = #{paramKey,jdbcType=VARCHAR},
             </if>
             <if test="paramValue != null">
-                param_value = #{paramValue,jdbcType=VARCHAR},
+                t.param_value = #{paramValue,jdbcType=VARCHAR},
             </if>
             <if test="status != null">
-                status = #{status,jdbcType=TINYINT},
+                t.status = #{status,jdbcType=TINYINT},
             </if>
             <if test="createBy != null">
-                create_by = #{createBy,jdbcType=INTEGER},
+                t.create_by = #{createBy,jdbcType=INTEGER},
             </if>
             <if test="createTime != null">
-                create_time = #{createTime,jdbcType=TIMESTAMP},
+                t.create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="updateBy != null">
-                update_by = #{updateBy,jdbcType=INTEGER},
+                t.update_by = #{updateBy,jdbcType=INTEGER},
             </if>
             <if test="updateTime != null">
-                update_time = #{updateTime,jdbcType=TIMESTAMP},
+                t.update_time = #{updateTime,jdbcType=TIMESTAMP},
             </if>
             <if test="remarks != null">
-                remarks = #{remarks,jdbcType=VARCHAR},
+                t.remarks = #{remarks,jdbcType=VARCHAR},
             </if>
         </set>
-        where id = #{id,jdbcType=INTEGER}
+        where t.id = #{id,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.seezoon.dao.modules.sys.entity.SysParam">
-        update sys_param
-        set name = #{name,jdbcType=VARCHAR},
-        param_key = #{paramKey,jdbcType=VARCHAR},
-        param_value = #{paramValue,jdbcType=VARCHAR},
-        status = #{status,jdbcType=TINYINT},
-        create_by = #{createBy,jdbcType=INTEGER},
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-        update_by = #{updateBy,jdbcType=INTEGER},
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-        remarks = #{remarks,jdbcType=VARCHAR}
-        where id = #{id,jdbcType=INTEGER}
+        update sys_param t
+        t.set name = #{name,jdbcType=VARCHAR},
+        t.param_key = #{paramKey,jdbcType=VARCHAR},
+        t.param_value = #{paramValue,jdbcType=VARCHAR},
+        t.status = #{status,jdbcType=TINYINT},
+        t.create_by = #{createBy,jdbcType=INTEGER},
+        t.create_time = #{createTime,jdbcType=TIMESTAMP},
+        t.update_by = #{updateBy,jdbcType=INTEGER},
+        t.update_time = #{updateTime,jdbcType=TIMESTAMP},
+        t.remarks = #{remarks,jdbcType=VARCHAR}
+        where t.id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

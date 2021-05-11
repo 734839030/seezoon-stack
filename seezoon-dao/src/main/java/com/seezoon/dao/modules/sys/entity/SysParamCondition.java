@@ -14,7 +14,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@SortField({"updateTime:update_time"})
+@SortField({"updateTime:t.update_time"})
 public class SysParamCondition extends PageCondition {
 
     /**
