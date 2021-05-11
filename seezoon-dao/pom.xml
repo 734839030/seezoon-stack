@@ -30,6 +30,7 @@
             <artifactId>pagehelper-spring-boot-starter</artifactId>
             <version>${pagehelper-spring-boot-starter.version}</version>
         </dependency>-->
+        <!-- 涉及拦截器顺序，所以不用自动装配-->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper</artifactId>
