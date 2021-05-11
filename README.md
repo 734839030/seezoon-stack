@@ -1,9 +1,5 @@
 ![seezoon](doc/pictures/logo.png)
 
-**Seezoon Stack**
-[![GitHub stars](https://img.shields.io/github/stars/734839030/seezoon-stack.svg?style=social&label=Star&)](https://github.com/734839030/seezoon-stack/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/734839030/seezoon-stack.svg?style=social&label=Fork&)](https://github.com/734839030/seezoon-stack/fork)
-
 ## 简介
 
 **Seezoon Stack** 以**快速开发**为目的，在开发速度和代码结构上做出一定取啥，无论如何，你将看到**非常地道**的 Java
