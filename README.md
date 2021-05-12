@@ -15,7 +15,7 @@
 
 **详细文档地址：**  [https://doc.stack.seezoon.com](https://doc.stack.seezoon.com)
 
-**官方QQ群：** 514685454、574933593
+**交流QQ群：** 514685454、574933593
 
 
 部分效果图：
