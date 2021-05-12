@@ -15,6 +15,9 @@
 
 **详细文档地址：**  [https://doc.stack.seezoon.com](https://doc.stack.seezoon.com)
 
+**官方QQ群：** 514685454、574933593
+
+
 部分效果图：
 
 <img src="doc/pictures/image-20210422205522263.png" alt="image-20210422205522263" style="zoom:50%;" />
