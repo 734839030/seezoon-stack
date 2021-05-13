@@ -1,6 +1,7 @@
 package com.seezoon.dao.framework.authority;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,6 +19,8 @@ import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.type.SimpleTypeRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author hdf
@@ -31,9 +34,16 @@ import org.apache.ibatis.type.SimpleTypeRegistry;
     @Signature(type = Executor.class, method = "update", args = {MappedStatement.class, Object.class})})
 public class DataAuthorityInterceptor implements Interceptor {
 
+    protected final Logger logger = LoggerFactory.getLogger(DataAuthorityInterceptor.class);
+
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
-        String dsf = "";
+        DataAuthority dataScopeFilterSql = DataAuthorityLoader.getInstance();
+        if (Objects.isNull(dataScopeFilterSql)) {
+            logger.info("Data Scope Filter Spi not found, disable data authority");
+            return invocation.proceed();
+        }
+        String dsf = dataScopeFilterSql.get();
         if (StringUtils.isEmpty(dsf)) {
             return invocation.proceed();
         }

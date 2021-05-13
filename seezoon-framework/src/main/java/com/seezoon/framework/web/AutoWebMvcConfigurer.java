@@ -59,9 +59,11 @@ public class AutoWebMvcConfigurer implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         SeezoonProperties.CorsProperties cors = seezoonProperties.getCors();
-        registry.addMapping(cors.getMapping()).allowedOrigins(cors.getAllowedOrigins())
-            .allowedHeaders(cors.getAllowedHeaders()).allowedMethods(cors.getAllowedMethods())
-            .allowCredentials(cors.isAllowCredentials()).maxAge(cors.getMaxAge());
+        if (cors.isEnable()) {
+            registry.addMapping(cors.getMapping()).allowedOrigins(cors.getAllowedOrigins())
+                .allowedHeaders(cors.getAllowedHeaders()).allowedMethods(cors.getAllowedMethods())
+                .allowCredentials(cors.isAllowCredentials()).maxAge(cors.getMaxAge());
+        }
     }
 
     /**

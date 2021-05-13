@@ -92,6 +92,8 @@ public class SeezoonProperties {
     @Getter
     @Setter
     public static class CorsProperties {
+
+        private boolean enable = false;
         /**
          * 路径{@link org.springframework.util.AntPathMatcher}
          */

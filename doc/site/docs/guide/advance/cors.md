@@ -7,20 +7,22 @@
 已经实现配置化，具体参考配置SeezoonProperties中cors即可，开启跨域后建议详细配置允许跨域的域名allowedOrigins，保障安全。
 
 ```java
-    @Override
+     @Override
     public void addCorsMappings(CorsRegistry registry) {
         SeezoonProperties.CorsProperties cors = seezoonProperties.getCors();
-        registry.addMapping(cors.getMapping()).allowedOrigins(cors.getAllowedOrigins())
-            .allowedHeaders(cors.getAllowedHeaders()).allowedMethods(cors.getAllowedMethods())
-            .allowCredentials(cors.isAllowCredentials()).maxAge(cors.getMaxAge());
+        if (cors.isEnable()) {
+            registry.addMapping(cors.getMapping()).allowedOrigins(cors.getAllowedOrigins())
+                .allowedHeaders(cors.getAllowedHeaders()).allowedMethods(cors.getAllowedMethods())
+                .allowCredentials(cors.isAllowCredentials()).maxAge(cors.getMaxAge());
+        }
     }
 ```
 
-> 使用Spring Security 需要在其配置中加上跨域代码`http.cors()`才可以。
+> 使用Spring Security 需要在其配置中加上跨域代码`http.cors()`才可以，框架已处理。
 
 ## Cookie SameSite 
 
-跨域目前收这个影响，Cookie 的`SameSite`属性用来限制第三方 Cookie，从而减少安全风险。它可以设置三个值：
+跨域目前受这个影响，Cookie 的`SameSite`属性用来限制第三方 Cookie，从而减少安全风险。它可以设置三个值：
 
 - Strict
 

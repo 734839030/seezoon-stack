@@ -22,7 +22,7 @@ public class AdminAccessDeniedHandler extends AccessDeniedHandlerImpl {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response,
         AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        log.error("AccessDenied:{}", accessDeniedException.getMessage());
+        log.error("User Access Denied:{}", accessDeniedException.getMessage());
         super.handle(request, response, accessDeniedException);
     }
 }

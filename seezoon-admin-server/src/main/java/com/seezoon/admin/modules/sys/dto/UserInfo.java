@@ -2,6 +2,8 @@ package com.seezoon.admin.modules.sys.dto;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -35,5 +37,6 @@ public class UserInfo implements Serializable {
     private String mobile;
     @ApiModelProperty(value = "邮箱")
     private String email;
-
+    @JsonIgnore
+    private String dsf;
 }

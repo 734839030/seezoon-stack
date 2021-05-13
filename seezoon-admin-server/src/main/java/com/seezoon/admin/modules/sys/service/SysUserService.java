@@ -57,15 +57,20 @@ public class SysUserService extends AbstractCrudService<SysUserDao, SysUser, Int
     @Override
     public int updateSelective(@NotNull SysUser record) {
         int cnt = super.updateSelective(record);
-        sysUserRoleDao.deleteByUser(record.getId());
-        this.saveUserRoles(record.getRoleIds(), record.getId());
+        if (cnt != 0) {
+            sysUserRoleDao.deleteByUser(record.getId());
+            this.saveUserRoles(record.getRoleIds(), record.getId());
+        }
         return cnt;
     }
 
     @Override
     public int delete(@NotEmpty Integer... userIds) {
-        sysUserRoleDao.deleteByUser(userIds);
-        return super.delete(userIds);
+        int cnt = super.delete(userIds);
+        if (cnt != 0) {
+            sysUserRoleDao.deleteByUser(userIds);
+        }
+        return cnt;
     }
 
     public int save(@NotNull SysUser record) {

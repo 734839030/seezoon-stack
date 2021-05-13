@@ -69,12 +69,16 @@ public class AdminUserDetailsServiceImpl implements UserDetailsService {
             throw new DisabledException(username + " disabled");
         }
 
+        // 角色
+        List<SysRole> userRoles = userService.findRolesByUserId(user.getId());
+
         UserInfo userInfo = new UserInfo(user.getId(), user.getDeptId(), user.getUsername(), user.getName());
         userInfo.setDeptName(user.getDeptName());
         userInfo.setPhoto(fileService.getUrl(user.getPhoto()));
+        userInfo.setDsf("test dsf");
         // 角色及权限信息登录成功后放入
         AdminUserDetails adminUserDetails = new AdminUserDetails(userInfo, username, user.getPassword());
-        adminUserDetails.setAuthorities(getAuthorities(user.getId()));
+        adminUserDetails.setAuthorities(getAuthorities(userRoles, user.getId()));
         return adminUserDetails;
     }
 
@@ -82,10 +86,9 @@ public class AdminUserDetailsServiceImpl implements UserDetailsService {
      *
      * @return
      */
-    private List<GrantedAuthority> getAuthorities(Integer userId) {
+    private List<GrantedAuthority> getAuthorities(List<SysRole> userRoles, Integer userId) {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        // 角色处理
-        List<SysRole> userRoles = userService.findRolesByUserId(userId);
+
         userRoles.stream().filter(v -> StringUtils.isNotBlank(v.getCode())).forEach(v -> {
             authorities.add(new UserGrantedAuthority(v.getCode(), true));
         });
@@ -94,5 +97,9 @@ public class AdminUserDetailsServiceImpl implements UserDetailsService {
             authorities.add(new UserGrantedAuthority(v.getPermission()));
         });
         return authorities;
+    }
+
+    private String getDsf(List<SysRole> userRoles) {
+        return null;
     }
 }

@@ -29,7 +29,7 @@
         ,<include refid="Blob_Column_List"/>
         </#if>
         from <include refid="Query_Table" />
-        where ${defaultTableAliasPrefix}${pkPlan.dbColumnName} = ${"#"}{${pkPlan.javaFieldName}}
+        where ${defaultTableAliasPrefix}${pkPlan.dbColumnName} = ${"#"}{${pkPlan.javaFieldName}} ${"$"}{dsf}
     </select>
 
     <select id="selectByCondition" parameterType="com.seezoon.dao.modules.${moduleName}.entity.${className}Condition" resultMap="BaseResultMap">
@@ -63,6 +63,7 @@
             </if>
             </#if>
         </#list>
+        ${"$"}{dsf}
         </where>
         </#if>
         <choose>
@@ -86,6 +87,7 @@
         <foreach item="item" collection="array" separator="," open="(" close=")">
             ${"#"}{item}
         </foreach>
+        ${"$"}{dsf}
     </delete>
 
     <insert id="insert" <#if pkPlan.autoIncrement>keyColumn="${pkPlan.dbColumnName}" keyProperty="${pkPlan.javaFieldName}" useGeneratedKeys="true"</#if>>
@@ -109,7 +111,7 @@
             </#if>
         </#list>
         </set>
-        where ${defaultTableAliasPrefix}${pkPlan.dbColumnName} = ${"#"}{${pkPlan.javaFieldName}}
+        where ${defaultTableAliasPrefix}${pkPlan.dbColumnName} = ${"#"}{${pkPlan.javaFieldName}} ${"$"}{dsf}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.seezoon.dao.modules.${moduleName}.entity.${className}">
         update ${tableName} ${defaultTableAlias} set
@@ -120,6 +122,6 @@
             <#assign firstItem = false>
             </#if>
         </#list>
-        where ${defaultTableAliasPrefix}${pkPlan.dbColumnName} = ${"#"}{${pkPlan.javaFieldName}}
+        where ${defaultTableAliasPrefix}${pkPlan.dbColumnName} = ${"#"}{${pkPlan.javaFieldName}} ${"$"}{dsf}
     </update>
 </mapper>
