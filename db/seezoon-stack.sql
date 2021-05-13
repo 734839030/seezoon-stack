@@ -331,24 +331,6 @@ BEGIN;
 COMMIT;
 
 -- ----------------------------
--- Table structure for sys_role_dept
--- ----------------------------
-DROP TABLE IF EXISTS `sys_role_dept`;
-CREATE TABLE `sys_role_dept` (
-  `role_id` varchar(32) NOT NULL COMMENT '角色id',
-  `dept_id` varchar(32) NOT NULL COMMENT '部门id',
-  PRIMARY KEY (`role_id`,`dept_id`),
-  KEY `role_id` (`role_id`),
-  KEY `dept_id` (`dept_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='角色部门';
-
--- ----------------------------
--- Records of sys_role_dept
--- ----------------------------
-BEGIN;
-COMMIT;
-
--- ----------------------------
 -- Table structure for sys_role_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_role_menu`;

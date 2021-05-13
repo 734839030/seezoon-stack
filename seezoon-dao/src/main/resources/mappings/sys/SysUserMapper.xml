@@ -93,12 +93,12 @@
         </foreach>
     </delete>
 
-    <insert id="insert">
+    <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
         insert into sys_user
-        (id,dept_id,username,password,name,mobile,photo,email,status,create_by,create_time,update_by,update_time,remarks)
+        (dept_id,username,password,name,mobile,photo,email,status,create_by,create_time,update_by,update_time,remarks)
         values
         <foreach item="item" collection="array" separator=",">
-            (#{item.id},#{item.deptId},#{item.username},#{item.password},#{item.name},#{item.mobile},#{item.photo},#{item.email},#{item.status},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remarks})
+            (#{item.deptId},#{item.username},#{item.password},#{item.name},#{item.mobile},#{item.photo},#{item.email},#{item.status},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remarks})
         </foreach>
     </insert>
 

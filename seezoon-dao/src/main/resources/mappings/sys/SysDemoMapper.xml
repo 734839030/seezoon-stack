@@ -22,32 +22,37 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-    t.id,t.input_text,t.input_select,t.input_radio,t.input_checkbox,t.input_date,t.input_zhengshu,t.input_xiaoshu,t.image,t.file,t.create_by,t.create_time,t.update_by,t.update_time,t.remarks
+        t.id,t.input_text,t.input_select,t.input_radio,t.input_checkbox,t.input_date,t.input_zhengshu,t.input_xiaoshu,t.image,t.file,t.create_by,t.create_time,t.update_by,t.update_time,t.remarks
     </sql>
 
-    <sql id="Blob_Column_List" >
-    t.input_textarea,t.rich_text
+    <sql id="Blob_Column_List">
+        t.input_textarea,t.rich_text
     </sql>
-    <sql id="Query_Table" >
-    sys_demo t
+    <sql id="Query_Table">
+        sys_demo t
     </sql>
 
     <select id="selectByPrimaryKey" parameterType="Integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        ,<include refid="Blob_Column_List"/>
-        from <include refid="Query_Table" />
-        where t.id = #{id}
+        ,
+        <include refid="Blob_Column_List"/>
+        from
+        <include refid="Query_Table"/>
+        where t.id = #{id} ${dsf}
     </select>
 
-    <select id="selectByCondition" parameterType="com.seezoon.dao.modules.sys.entity.SysDemoCondition" resultMap="BaseResultMap">
+    <select id="selectByCondition" parameterType="com.seezoon.dao.modules.sys.entity.SysDemoCondition"
+            resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
-        from <include refid="Query_Table" />
+        from
+        <include refid="Query_Table"/>
         <where>
             <if test="inputText != null and inputText != ''">
-            and t.input_text = #{inputText}
+                and t.input_text = #{inputText}
             </if>
+            ${dsf}
         </where>
         <choose>
             <when test="sortField != null and sortField != '' and sortOrder != null and sortOrder !=''">
@@ -65,10 +70,12 @@
         <foreach item="item" collection="array" separator="," open="(" close=")">
             #{item}
         </foreach>
+        ${dsf}
     </delete>
 
     <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
-        insert into sys_demo (input_text,input_select,input_radio,input_checkbox,input_textarea,input_date,input_zhengshu,input_xiaoshu,rich_text,image,file,create_by,create_time,update_by,update_time,remarks)
+        insert into sys_demo
+        (input_text,input_select,input_radio,input_checkbox,input_textarea,input_date,input_zhengshu,input_xiaoshu,rich_text,image,file,create_by,create_time,update_by,update_time,remarks)
         values
         <foreach item="item" collection="array" separator=",">
             (#{item.inputText},#{item.inputSelect},#{item.inputRadio},#{item.inputCheckbox},#{item.inputTextarea},#{item.inputDate},#{item.inputZhengshu},#{item.inputXiaoshu},#{item.richText},#{item.image},#{item.file},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remarks})
@@ -121,7 +128,7 @@
                 t.remarks = #{remarks}
             </if>
         </set>
-        where t.id = #{id}
+        where t.id = #{id} ${dsf}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.seezoon.dao.modules.sys.entity.SysDemo">
         update sys_demo t set
@@ -139,6 +146,6 @@
         ,t.update_by = #{updateBy}
         ,t.update_time = #{updateTime}
         ,t.remarks = #{remarks}
-        where t.id = #{id}
+        where t.id = #{id} ${dsf}
     </update>
 </mapper>

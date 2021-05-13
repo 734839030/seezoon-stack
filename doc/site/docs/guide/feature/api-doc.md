@@ -1,8 +1,18 @@
 # API 文档
 
 通常我们会采用SpringFox + Swagger 来自动生成文档，但是Swagger 页面不是太友好，所以这里采用[SpringFox](http://springfox.github.io/springfox/) + [Knife4j](https://gitee.com/xiaoym/knife4j)。
-
 > 通常SpringFox 只提供符合[OpenAPI3.0](https://swagger.io/specification/)的接口，Swagger和Knife4j 都是用来展示的。
+
+## 文档开关
+
+本地开发启动较慢，所以文档默认关，测试环境或者线上想开可以开。
+
+```
+springfox.documentation.enabled=true
+springfox.documentation.auto-startup=true
+```
+
+> 文档接口和页面都是用后端停服务，所以正常访问是通过nginx转发的。
 
 ## SpringFox 配置
 
@@ -109,11 +119,3 @@ Spring 接收参数，@RequestParam可以缺省，但是SpringFox，需要读取
 ## 文档安全
 
 需要登录才可以访问，生产环境也可以通过配置关闭文档。
-
-```
-# 文档默认开,线上请关闭
-springfox.documentation.enabled=false
-springfox.documentation.auto-startup=false
-```
-
-> 文档接口和页面都是用后端停服务，所以正常访问是通过nginx转发的。

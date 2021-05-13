@@ -8,6 +8,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.CaseUtils;
 import org.springframework.web.bind.annotation.*;
 
 import com.seezoon.admin.modules.sys.dto.UserAo;
@@ -51,7 +52,7 @@ public class UserController extends BaseController {
     @ApiOperation(value = "更新密码")
     @PostMapping("/update_password")
     public Result updatePassword(@RequestParam @NotEmpty @Size(min = 6, max = 50) String oldPassword,
-            @RequestParam @NotEmpty @Size(min = 6, max = 50) String newPassword) {
+        @RequestParam @NotEmpty @Size(min = 6, max = 50) String newPassword) {
         boolean result = userService.updatePassword(SecurityUtils.getUserId(), oldPassword, newPassword);
         if (!result) {
             return Result.error("原密码错误");
@@ -110,7 +111,17 @@ public class UserController extends BaseController {
                     }
                 }
             }
-
+            // 名字和组件名字对应才可以keepAlive
+            if (StringUtils.isNotEmpty(menu.getUrl())) {
+                String[] menuSplit = StringUtils.split(menu.getUrl(), "/");
+                if (menuSplit.length > 0) {
+                    String name = "";
+                    for (String s : menuSplit) {
+                        name += CaseUtils.toCamelCase(s, true, '_', '-');
+                    }
+                    route.setName(name);
+                }
+            }
             // 处理子路由
             List<SysMenu> children = parentIdGroup.get(menu.getId());
             if (null != children && !children.isEmpty()) {

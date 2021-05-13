@@ -25,7 +25,7 @@
         <include refid="Base_Column_List"/>
         from
         <include refid="Query_Table"/>
-        where t.id = #{id,jdbcType=INTEGER} ${dsf}
+        where t.id = #{id,jdbcType=INTEGER}
     </select>
 
     <select id="selectByCondition" parameterType="com.seezoon.dao.framework.entity.AbstractQueryCondition"
@@ -44,7 +44,6 @@
             <if test="status != null">
                 and t.status = #{status}
             </if>
-            ${dsf}
         </where>
         <choose>
             <when test="sortField != null and sortField != '' and sortOrder != null and sortOrder !=''">

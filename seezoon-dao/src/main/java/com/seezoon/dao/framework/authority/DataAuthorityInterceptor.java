@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.Properties;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -38,14 +37,12 @@ public class DataAuthorityInterceptor implements Interceptor {
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
-        DataAuthority dataScopeFilterSql = DataAuthorityLoader.getInstance();
-        if (Objects.isNull(dataScopeFilterSql)) {
-            logger.info("Data Scope Filter Spi not found, disable data authority");
-            return invocation.proceed();
-        }
-        String dsf = dataScopeFilterSql.get();
-        if (StringUtils.isEmpty(dsf)) {
-            return invocation.proceed();
+        DataAuthority dataAuthority = DataAuthorityLoader.getInstance();
+        String dsf = null;
+        if (Objects.isNull(dataAuthority)) {
+            logger.info("DataAuthority Spi not found, disable data authority");
+        } else {
+            dsf = dataAuthority.getDsf();
         }
         Object[] args = invocation.getArgs();
         MappedStatement ms = (MappedStatement)args[0];
@@ -55,7 +52,8 @@ public class DataAuthorityInterceptor implements Interceptor {
             return invocation.proceed();
         }
         Object parameter = (Object)args[1];
-        WrapContextMap wrapContextMap = new WrapContextMap(parameter, dsf);
+        WrapContextMap wrapContextMap = new WrapContextMap(parameter);
+        wrapContextMap.put("dsf", dsf);
         args[1] = wrapContextMap;
         return invocation.proceed();
     }
@@ -76,15 +74,13 @@ public class DataAuthorityInterceptor implements Interceptor {
         private final Object parameter;
         private final MetaObject metaObject;
 
-        public WrapContextMap(Object parameter, String dsf) {
+        public WrapContextMap(Object parameter) {
             this.parameter = parameter;
             if (null != parameter) {
                 this.metaObject = SystemMetaObject.forObject(parameter);
             } else {
                 this.metaObject = null;
             }
-            // 加入数据权限
-            super.put("dsf", dsf);
         }
 
         @Override
