@@ -2,6 +2,7 @@ package com.seezoon.dao.framework.entity;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.seezoon.dao.framework.sort.SortDirectionMapping;
 import com.seezoon.dao.framework.sort.SortFieldMapping;
 
@@ -31,6 +32,14 @@ public class PageCondition extends AbstractQueryCondition {
 
     @ApiModelProperty(value = "排序顺序")
     private String sortOrder;
+
+    /**
+     * 分页场景下的数据权限，添加该字段mybatis拦截器成本最低
+     * 
+     * @see com.seezoon.dao.framework.authority.DataAuthorityInterceptor
+     */
+    @JsonIgnore
+    private String dsf;
 
     public PageCondition() {
         SortFieldMapping.regiest(this.getClass());
@@ -72,5 +81,13 @@ public class PageCondition extends AbstractQueryCondition {
 
     public void setSortOrder(String sortOrder) {
         this.sortOrder = sortOrder;
+    }
+
+    public String getDsf() {
+        return dsf;
+    }
+
+    public void setDsf(String dsf) {
+        this.dsf = dsf;
     }
 }

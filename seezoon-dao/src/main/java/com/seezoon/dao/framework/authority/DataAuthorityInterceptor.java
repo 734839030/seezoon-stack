@@ -21,6 +21,9 @@ import org.apache.ibatis.type.SimpleTypeRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.pagehelper.PageHelper;
+import com.seezoon.dao.framework.entity.PageCondition;
+
 /**
  * @author hdf
  */
@@ -47,12 +50,21 @@ public class DataAuthorityInterceptor implements Interceptor {
         Object[] args = invocation.getArgs();
         MappedStatement ms = (MappedStatement)args[0];
         SqlCommandType sqlCommandType = ms.getSqlCommandType();
-        // 跳过insert
+        // skip insert
         if (sqlCommandType.equals(SqlCommandType.INSERT)) {
             return invocation.proceed();
         }
         Object parameter = (Object)args[1];
+
+        // 成本最低的方式 这里主要是和PageHelper 拦截器针对参数处理不一样，PageHelper 对map类型（WrapContextMap） 直接用了putAll，
+        // 如果要兼容需要把parameter 都放到map中，对简单类型字段
+        if (sqlCommandType.equals(SqlCommandType.SELECT) && null != PageHelper.getLocalPage() && null != parameter
+            && parameter instanceof PageCondition) {
+            ((PageCondition)parameter).setDsf(dsf);
+        }
+
         WrapContextMap wrapContextMap = new WrapContextMap(parameter);
+        // 自定义附件参数，多租户也可以自定义参数
         wrapContextMap.put("dsf", dsf);
         args[1] = wrapContextMap;
         return invocation.proceed();
