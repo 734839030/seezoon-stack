@@ -39,7 +39,7 @@ module.exports = {
                     sidebarDepth: 2,    // 可选的, 默认值是 1
                     children: ['/guide/feature/lombok', '/guide/feature/jsr-303', '/guide/feature/response',
                         '/guide/feature/error-code', '/guide/feature/exception', '/guide/feature/api-doc',
-                        '/guide/feature/security', '/guide/feature/components', '/guide/feature/code-gen'],
+                        '/guide/feature/security', '/guide/feature/components', '/guide/feature/code-gen', '/guide/feature/data-scope'],
                 },
                 {
                     title: '进阶',
