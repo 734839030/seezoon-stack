@@ -8,6 +8,7 @@
   import { PageWrapper } from '../../../components/Page';
 
   export default {
+    name: 'SysDept',
     components: { MainTable, PageWrapper },
   };
 </script>

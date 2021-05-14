@@ -6,7 +6,7 @@ Simple file upload service for testing file upload components.
 
 ```js
 
-cd ./test/upload
+cd ./test/upload-server
 
 yarn install
 

@@ -8,6 +8,7 @@
   import { PageWrapper } from '../../../components/Page';
 
   export default {
+    name: 'SysMenu',
     components: { MainTable, PageWrapper },
   };
 </script>

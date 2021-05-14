@@ -1,24 +1,24 @@
 <template>
   <a-input
-    v-model:value="currentSelect"
-    :class="prefixCls"
     :disabled="false"
-    :placeholder="t('component.icon.placeholder')"
     :style="{ width }"
+    :placeholder="t('component.icon.placeholder')"
+    :class="prefixCls"
+    v-model:value="currentSelect"
   >
     <template #addonAfter>
       <Popover
-        v-model="visible"
-        :overlayClassName="`${prefixCls}-popover`"
         placement="bottomLeft"
         trigger="click"
+        v-model="visible"
+        :overlayClassName="`${prefixCls}-popover`"
       >
         <template #title>
           <div class="flex justify-between">
             <a-input
               :placeholder="t('component.icon.search')"
-              allowClear
               @change="handleSearchChange"
+              allowClear
             />
           </div>
         </template>
@@ -31,46 +31,44 @@
                   v-for="icon in getPaginationList"
                   :key="icon"
                   :class="currentSelect === icon ? 'border border-primary' : ''"
-                  :title="icon"
                   class="p-2 w-1/8 cursor-pointer mr-1 mt-1 flex justify-center items-center border border-solid hover:border-primary"
                   @click="handleClick(icon)"
+                  :title="icon"
                 >
                   <!-- <Icon :icon="icon" :prefix="prefix" /> -->
                   <SvgIcon v-if="isSvgMode" :name="icon" />
-                  <Icon v-else :icon="icon" />
+                  <Icon :icon="icon" v-else />
                 </li>
               </ul>
             </ScrollContainer>
-            <div v-if="getTotal >= pageSize" class="flex py-2 items-center justify-center">
+            <div class="flex py-2 items-center justify-center" v-if="getTotal >= pageSize">
               <Pagination
-                :pageSize="pageSize"
-                :total="getTotal"
                 showLessItems
                 size="small"
+                :pageSize="pageSize"
+                :total="getTotal"
                 @change="handlePageChange"
               />
             </div>
           </div>
-          <template v-else>
-            <div class="p-5">
-              <Empty />
-            </div>
+          <template v-else
+            ><div class="p-5"> <Empty /></div>
           </template>
         </template>
 
-        <span v-if="isSvgMode && currentSelect" class="cursor-pointer px-2 py-1 flex items-center">
+        <span class="cursor-pointer px-2 py-1 flex items-center" v-if="isSvgMode && currentSelect">
           <SvgIcon :name="currentSelect" />
         </span>
-        <Icon v-else :icon="currentSelect || 'ion:apps-outline'" class="cursor-pointer px-2 py-1" />
+        <Icon :icon="currentSelect || 'ion:apps-outline'" class="cursor-pointer px-2 py-1" v-else />
       </Popover>
     </template>
   </a-input>
 </template>
 <script lang="ts">
-  import { defineComponent, ref, unref, watch, watchEffect } from 'vue';
+  import { defineComponent, ref, watchEffect, watch, unref } from 'vue';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { ScrollContainer } from '/@/components/Container';
-  import { Empty, Input, Pagination, Popover } from 'ant-design-vue';
+  import { Input, Popover, Pagination, Empty } from 'ant-design-vue';
   import Icon from './index.vue';
   import SvgIcon from './SvgIcon.vue';
   import iconsData from '../data/icons.data';
@@ -93,11 +91,9 @@
     }
     return result;
   }
-
   function getSvgIcons() {
     return svgIcons.map((icon) => icon.replace('icon-', ''));
   }
-
   export default defineComponent({
     name: 'IconPicker',
     components: { [Input.name]: Input, Icon, Popover, ScrollContainer, Pagination, Empty, SvgIcon },
@@ -121,6 +117,7 @@
       const { t } = useI18n();
       const { prefixCls } = useDesign('icon-picker');
       const debounceHandleSearchChange = useDebounceFn(handleSearchChange, 100);
+
       const { createMessage } = useMessage();
       const { getPaginationList, getTotal, setCurrentPage } = usePagination(
         currentList,
@@ -133,11 +130,9 @@
         () => currentSelect.value,
         (v) => emit('change', v)
       );
-
       function handlePageChange(page: number) {
         setCurrentPage(page);
       }
-
       function handleClick(icon: string) {
         currentSelect.value = icon;
         if (props.copy) {
@@ -148,7 +143,6 @@
           }
         }
       }
-
       function handleSearchChange(e: ChangeEvent) {
         const value = e.target.value;
         if (!value) {
@@ -158,7 +152,6 @@
         }
         currentList.value = icons.filter((item) => item.includes(value));
       }
-
       return {
         t,
         prefixCls,
@@ -180,14 +173,11 @@
     .ant-input-group-addon {
       padding: 0;
     }
-
     &-popover {
       width: 300px;
-
       .ant-popover-inner-content {
         padding: 0;
       }
-
       .scrollbar {
         height: 220px;
       }

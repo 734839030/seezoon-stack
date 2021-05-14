@@ -88,7 +88,7 @@ export const useUserStore = defineStore({
       }
     },
     async getUserInfoAction() {
-      // 获取菜单
+      // 获取用户信息
       const userInfo = await getUserInfo();
       //const { roles } = userInfo;
       //const roleList = roles as RoleEnum[];

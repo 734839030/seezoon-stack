@@ -185,9 +185,13 @@
         searchState.startSearch = true;
         const { title: titleField } = unref(getReplaceFields);
 
-        searchState.searchData = filter(unref(treeDataRef), (node) => {
-          return node[titleField]?.includes(searchValue) ?? false;
-        });
+        searchState.searchData = filter(
+          unref(treeDataRef),
+          (node) => {
+            return node[titleField]?.includes(searchValue) ?? false;
+          },
+          unref(getReplaceFields)
+        );
       }
 
       function handleClickNode(key: string, children: TreeItem[]) {
@@ -305,7 +309,11 @@
                     ) : (
                       <>
                         {icon && <TreeIcon icon={icon} />}
-                        <span class={`${prefixCls}__content`}>{get(item, titleField)}</span>
+                        <span
+                          class={unref(getBindValues)?.blockNode ? `${prefixCls}__content` : ''}
+                        >
+                          {get(item, titleField)}
+                        </span>
                         <span class={`${prefixCls}__actions`}>
                           {renderAction({ ...item, level })}
                         </span>
