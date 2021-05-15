@@ -6,6 +6,10 @@
 com.seezoon.admin.modules.sys.security.LoginSecurityProperties
 ```
 
+目前实现一种登录方式即账号密码登录，扩展其他登录方式也比较简单，按文档实现一个Filter。
+
+> 后续考虑实现微信扫码登录，作为例子。
+
 具体实现参考：
 
 ```java
@@ -197,13 +201,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 ```
 
-## 登录
-
-目前实现一种登录方式即账号密码登录，扩展其他登录方式也比较简单，按文档实现一个Filter。
-
-> 后续考虑实现微信扫码登录，作为例子。
-
-### 单账号登录限制
+## 单账号登录限制
 
 可以配置一个账号是否可以多人登录，具体设置：
 
@@ -214,7 +212,7 @@ http.sessionManagement().maximumSessions(loginSecurityProperties.getMaximumSessi
 
 > 当maxSessionsPreventsLogin=true 时候maximumSessions有效，后面会踢掉前面的。
 
-### RememberMe
+## RememberMe
 
 记住我实现，可以控制记住时长，以及安全控制盐值，可以定期更换。
 
@@ -225,7 +223,7 @@ http.rememberMe().rememberMeParameter(DEFAULT_REMEMBER_ME_NAME).key(loginSecurit
 
 > 修改密码后，RememberMe会自动失效。
 
-### 登录安全
+## 登录安全
 
 账号错误到一定次数会锁定，IP错误一定次数会锁定IP，见LoginSecurityProperties中配置。
 
@@ -335,7 +333,7 @@ public class AdminUserDetailsServiceImpl implements UserDetailsService {
 
 ```
 
-### 细粒度控制
+## 细粒度控制
 
 Spring Security 提供了多种方式，[Authorization Architecture](https://docs.spring.io/spring-security/site/docs/5.4.6/reference/html5/#servlet-authorization)。
 
@@ -352,3 +350,6 @@ Spring Security 提供了多种方式，[Authorization Architecture](https://doc
 
 > 如果是角色判断需要GrantedAuthority放入时候需要加上ROLE_前缀，该框架已处理。
 
+## 动态菜单&按钮
+
+根据用户的角色，获取用户菜单和按钮权限。
