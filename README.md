@@ -7,13 +7,11 @@
 
 ## 💻 在线演示
 
-**演示地址：**[https://stack.seezoon.com/](https://stack.seezoon.com/)
+**详细文档及演示地址：**  [https://doc.stack.seezoon.com](https://doc.stack.seezoon.com)
 
 账号：admin
 
 密码：123456
-
-**详细文档地址：**  [https://doc.stack.seezoon.com](https://doc.stack.seezoon.com)
 
 **交流QQ群：** 514685454、574933593
 
@@ -316,5 +314,4 @@ gzip_disable "MSIE [1-6]\.";
     - `ci` 持续集成
     - `types` 类型定义文件更改
     - `wip` 开发中
-
 

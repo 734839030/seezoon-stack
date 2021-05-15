@@ -7,7 +7,7 @@
 - 本部门及以下
 - 本人
 
-> 需要其他类型可以自行扩展，只需要维护框架暴露的权限sql即可。
+> 需要其他类型可以自行扩展，只需要维护框架暴露的权限sql即可，系统模块不在控制范围内。
 
 ## 实现原理
 
@@ -22,7 +22,7 @@
 
 
 
-本框架采用了第二种哈，由于使用的PageHelper 的插件，PageHelper 对Map参数的处理采用putAll的方式，无法把我们做的WrapContextMap中的数据完全读出，所以针对有分页上下文的，采用手动放入的方式。
+本框架采用了**第二种**，由于使用的PageHelper 的插件，PageHelper 对Map参数的处理采用putAll的方式，无法把我们做的WrapContextMap中的数据完全读出，所以针对有分页上下文的，采用手动放入的方式。
 
 ```java
 package com.seezoon.dao.framework.authority;
