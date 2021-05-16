@@ -292,7 +292,7 @@ gzip_disable "MSIE [1-6]\.";
 
 **Pull Request：**
 
-1. Fork 代码!
+1. Fork 代码! (同步上游：git pull https://github.com/734839030/seezoon-stack.git master)
 2. 创建自己的分支: `git checkout -b feat/xxxx`
 3. 提交你的修改: `git commit -m 'feat(function): add xxxxx'`
 4. 推送您的分支: `git push origin feat/xxxx`
