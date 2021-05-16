@@ -21,8 +21,8 @@ public class FileService extends AbstractBaseService {
 
     private final FileHandler fileHandler;
 
-    public void upload(String relativePath, InputStream in) throws IOException {
-        this.fileHandler.upload(relativePath, in);
+    public void upload(String relativePath, String contentType, InputStream in) throws IOException {
+        this.fileHandler.upload(relativePath, contentType, in);
     }
 
     public InputStream download(String relativePath) throws IOException {

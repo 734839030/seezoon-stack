@@ -11,7 +11,7 @@ import java.io.InputStream;
 public class NoneFileHandler implements FileHandler {
 
     @Override
-    public void upload(String relativePath, InputStream in) throws IOException {
+    public void upload(String relativePath, String contentType, InputStream in) throws IOException {
         throw new RuntimeException("pls config FileHandler properties");
     }
 

@@ -118,6 +118,11 @@
             <version>2.3.3</version>
         </dependency>
         <!-- oss end-->
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>0.4.14</version>
+        </dependency>
     </dependencies>
     <build>
         <resources>

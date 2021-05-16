@@ -86,6 +86,8 @@ public class SysFileController extends BaseController {
     @PreAuthorize("hasAuthority('sys:file:upload')")
     @PostMapping(value = "/upload")
     public Result<FileInfo> upload(@NotNull @RequestParam MultipartFile file) throws IOException {
+        // 开启图片压缩
+
         FileInfo fileInfo = sysFileService.upload(file.getOriginalFilename(), file.getContentType(), file.getSize(),
             file.getInputStream());
         return Result.ok(fileInfo);

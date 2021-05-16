@@ -128,6 +128,13 @@ public class SeezoonProperties {
          * 可访问的网址前缀，如https://xxx.com
          */
         private String urlPrefix;
+        // 图片压缩开关
+        private boolean enableImageCompress = false;
+        // 图片输出质量 1 百分百输出 < 1
+        private float imageQuality = 1;
+        // 缩放1 为不缩放 < 1
+        private double iamgeScale = 1;
+
         private LocalProperties local = new LocalProperties();
         private AliyunOssProperties aliyun = new AliyunOssProperties();
 

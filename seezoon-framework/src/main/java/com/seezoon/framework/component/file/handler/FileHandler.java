@@ -1,9 +1,13 @@
 package com.seezoon.framework.component.file.handler;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import org.apache.commons.lang3.StringUtils;
+
+import net.coobird.thumbnailator.Thumbnails;
 
 /**
  * @author hdf
@@ -14,10 +18,11 @@ public interface FileHandler extends AutoCloseable {
      * 文件上传
      *
      * @param relativePath
+     * @param contentType
      * @param in
      * @throws IOException
      */
-    void upload(String relativePath, InputStream in) throws IOException;
+    void upload(String relativePath, String contentType, InputStream in) throws IOException;
 
     /**
      * 文件下载
@@ -59,5 +64,31 @@ public interface FileHandler extends AutoCloseable {
             throw new IllegalArgumentException("相对路径错误");
         }
         return relativePath.substring(start + 1, end);
+    }
+
+    default boolean isImage(String contentType) {
+        if (StringUtils.isBlank(contentType)) {
+            return false;
+        }
+        return contentType.startsWith("image/");
+    }
+
+    /**
+     * 图片压缩
+     *
+     * @param source
+     *            will be auto close
+     * @param imageQuality
+     *            输出质量
+     * @param scale
+     *            缩放
+     * @return
+     */
+    default InputStream imageCompress(InputStream source, float imageQuality, double scale) throws IOException {
+        try (InputStream in = source; ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+            Thumbnails.of(in).outputQuality(imageQuality).scale(scale).toOutputStream(bos);
+            ByteArrayInputStream compressedInputStream = new ByteArrayInputStream(bos.toByteArray());
+            return compressedInputStream;
+        }
     }
 }

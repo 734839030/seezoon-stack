@@ -50,7 +50,7 @@ public class SysFileService extends AbstractCrudService<SysFileDao, SysFile, Str
         String fileId = createFileId();
         String newName = rename(fileId, originalFilename);
         String relativePath = createRelativeDirectory() + newName;
-        fileService.upload(relativePath, in);
+        fileService.upload(relativePath, contentType, in);
         // 入库
         SysFile sysFile = new SysFile();
         sysFile.setId(fileId);
@@ -90,7 +90,7 @@ public class SysFileService extends AbstractCrudService<SysFileDao, SysFile, Str
             for (String relativePath : relativePathArray) {
                 SysFile sysFile = relativePathMapFile.get(relativePath);
                 if (null == sysFile) {
-                    logger.error("file not exists relativePath=[{}]",relativePath);
+                    logger.error("file not exists relativePath=[{}]", relativePath);
                     continue;
                 }
                 fileInfos.add(new FileInfo(fileService.getUrl(sysFile.getRelativePath()), sysFile.getRelativePath(),

@@ -26,8 +26,15 @@ public class AliyunOssHandler implements FileHandler {
     }
 
     @Override
-    public void upload(String relativePath, InputStream in) throws IOException {
-        ossClient.putObject(fileProperties.getAliyun().getBucketName(), handleRelativePath(relativePath), in);
+    public void upload(String relativePath, String contentType, InputStream in) throws IOException {
+        if (isImage(contentType) && fileProperties.isEnableImageCompress()) {
+            InputStream compressedInputStream =
+                imageCompress(in, fileProperties.getImageQuality(), fileProperties.getIamgeScale());
+            ossClient.putObject(fileProperties.getAliyun().getBucketName(), handleRelativePath(relativePath),
+                compressedInputStream);
+        } else {
+            ossClient.putObject(fileProperties.getAliyun().getBucketName(), handleRelativePath(relativePath), in);
+        }
         if (null != in) {
             in.close();
         }
