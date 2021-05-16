@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.scheduling.annotation.EnableAsync;
 
-import com.seezoon.admin.modules.sys.security.LoginSecurityProperties;
+import com.seezoon.admin.framework.properties.SeezoonAdminProperties;
 
 /**
  * 程序入口
@@ -13,7 +13,7 @@ import com.seezoon.admin.modules.sys.security.LoginSecurityProperties;
  * @author hdf
  */
 @SpringBootApplication
-@EnableConfigurationProperties({LoginSecurityProperties.class})
+@EnableConfigurationProperties({SeezoonAdminProperties.class})
 @EnableAsync
 public class AdminMain {
 

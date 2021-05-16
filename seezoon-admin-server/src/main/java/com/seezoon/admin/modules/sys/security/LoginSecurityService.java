@@ -7,6 +7,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
+import com.seezoon.admin.framework.properties.SeezoonAdminProperties;
 import com.seezoon.admin.framework.service.AbstractBaseService;
 import com.seezoon.admin.modules.sys.security.lock.IpLockStrategy;
 import com.seezoon.admin.modules.sys.security.lock.LockStrategy;
@@ -22,7 +23,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LoginSecurityService extends AbstractBaseService implements InitializingBean {
 
-    private final LoginSecurityProperties loginSecurityProperties;
+    private final SeezoonAdminProperties seezoonAdminProperties;
+    private SeezoonAdminProperties.LoginProperties loginProperties;
     @Resource(name = "redisTemplate")
     private ValueOperations<String, Integer> valueOperations;
     private LockStrategy usernameLockStrategy;
@@ -30,10 +32,11 @@ public class LoginSecurityService extends AbstractBaseService implements Initial
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        usernameLockStrategy = new UsernameLockStrategy(loginSecurityProperties.getLockTime(),
-            loginSecurityProperties.getLockPasswdFailTimes(), valueOperations);
-        ipLockStrategy = new IpLockStrategy(loginSecurityProperties.getLockTime(),
-            loginSecurityProperties.getLockIpFailTimes(), valueOperations);
+        loginProperties = seezoonAdminProperties.getLogin();
+        usernameLockStrategy = new UsernameLockStrategy(loginProperties.getLockTime(),
+            loginProperties.getLockPasswdFailTimes(), valueOperations);
+        ipLockStrategy =
+            new IpLockStrategy(loginProperties.getLockTime(), loginProperties.getLockIpFailTimes(), valueOperations);
     }
 
     public void clear(String username, String ip) {

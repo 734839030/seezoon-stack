@@ -15,6 +15,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.seezoon.admin.framework.properties.SeezoonAdminProperties;
 import com.seezoon.admin.modules.sys.security.handler.AdminAccessDeniedHandler;
 import com.seezoon.admin.modules.sys.security.handler.AjaxAuthenticationFailureHandler;
 import com.seezoon.admin.modules.sys.security.handler.AjaxAuthenticationSuccessHandler;
@@ -60,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String LOGIN_URL = "/login";
     private static final String LOGIN_OUT_URL = "/logout";
 
-    private final LoginSecurityProperties loginSecurityProperties;
+    private final SeezoonAdminProperties seezoonAdminProperties;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -80,11 +81,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
         // seesion 管理 一个账号登录一次，后面的挤掉前面的(spring security 默认的,true 则已登录的优先)
         // remember 采用默认解密前端remember-cookie
-        http.sessionManagement().maximumSessions(loginSecurityProperties.getMaximumSessions())
-            .maxSessionsPreventsLogin(loginSecurityProperties.isMaxSessionsPreventsLogin());
-        http.rememberMe().rememberMeParameter(DEFAULT_REMEMBER_ME_NAME).key(loginSecurityProperties.getRememberKey())
-            .useSecureCookie(true).tokenValiditySeconds((int)loginSecurityProperties.getRememberTime().toSeconds())
+        http.sessionManagement().maximumSessions(seezoonAdminProperties.getLogin().getMaximumSessions())
+            .maxSessionsPreventsLogin(seezoonAdminProperties.getLogin().isMaxSessionsPreventsLogin());
+        http.rememberMe().rememberMeParameter(DEFAULT_REMEMBER_ME_NAME)
+            .key(seezoonAdminProperties.getLogin().getRememberKey()).useSecureCookie(true)
+            .tokenValiditySeconds((int)seezoonAdminProperties.getLogin().getRememberTime().toSeconds())
             .userDetailsService(adminUserDetailsService());
+
         // 需要添加不然spring boot 的跨域配置无效
         http.cors();
         // 安全头设置

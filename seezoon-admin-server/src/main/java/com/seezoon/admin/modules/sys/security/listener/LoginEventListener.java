@@ -7,8 +7,8 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
 import com.google.common.eventbus.Subscribe;
+import com.seezoon.admin.framework.properties.SeezoonAdminProperties;
 import com.seezoon.admin.modules.sys.eventbus.AdminEventBus;
-import com.seezoon.admin.modules.sys.security.LoginSecurityProperties;
 import com.seezoon.admin.modules.sys.security.LoginSecurityService;
 import com.seezoon.admin.modules.sys.security.SecurityUtils;
 import com.seezoon.admin.modules.sys.security.constant.LoginResult;
@@ -34,7 +34,7 @@ public class LoginEventListener implements InitializingBean {
     private final SysLoginLogService sysLoginLogService;
 
     private final LoginSecurityService loginSecurityService;
-    private final LoginSecurityProperties loginSecurityProperties;
+    private final SeezoonAdminProperties seezoonAdminProperties;
 
     @Subscribe
     public void listen(LoginResultMsg msg) {
@@ -66,7 +66,7 @@ public class LoginEventListener implements InitializingBean {
         } else if (LoginResult.USERNAME_NOT_FOUND == msg.getResult()) {
             loginSecurityService.getIpLockStrategy().increment(msg.getIp());
         }
-        if (loginSecurityProperties.isRecordLog()) {
+        if (seezoonAdminProperties.getLogin().isRecordLog()) {
             sysLoginLogService.save(sysLoginLog);
         }
     }
