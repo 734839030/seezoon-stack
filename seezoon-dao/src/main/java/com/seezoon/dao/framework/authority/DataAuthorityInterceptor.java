@@ -61,12 +61,13 @@ public class DataAuthorityInterceptor implements Interceptor {
         if (sqlCommandType.equals(SqlCommandType.SELECT) && null != PageHelper.getLocalPage() && null != parameter
             && parameter instanceof PageCondition) {
             ((PageCondition)parameter).setDsf(dsf);
+        } else {
+            WrapContextMap wrapContextMap = new WrapContextMap(parameter);
+            // 自定义附件参数，多租户也可以自定义参数
+            wrapContextMap.put("dsf", dsf);
+            args[1] = wrapContextMap;
         }
 
-        WrapContextMap wrapContextMap = new WrapContextMap(parameter);
-        // 自定义附件参数，多租户也可以自定义参数
-        wrapContextMap.put("dsf", dsf);
-        args[1] = wrapContextMap;
         return invocation.proceed();
     }
 
