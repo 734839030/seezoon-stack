@@ -19,7 +19,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 
 # if utf8mb4_0900_ai_ci  not support (less than 8),pls replace utf8mb4_0900_ai_ci to utf8mb4_general_ci;
 CREATE DATABASE IF NOT EXISTS `seezoon-stack` DEFAULT CHARSET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
-
+use `seezoon-stack`;
 -- ----------------------------
 -- Table structure for sys_demo
 -- ----------------------------
