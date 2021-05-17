@@ -66,7 +66,7 @@
       const data = ref({});
       const open = function (${pkPlan.javaFieldName}) {
         visible.value = true;
-        defHttp.get({ url: '/sys/demo/query/' + ${pkPlan.javaFieldName} }).then((_data) => {
+        defHttp.get({ url: '/${moduleName}/${functionName}/query/' + ${pkPlan.javaFieldName} }).then((_data) => {
           data.value = _data;
         });
       };
