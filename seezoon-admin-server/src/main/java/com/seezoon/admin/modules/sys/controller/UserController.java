@@ -95,6 +95,8 @@ public class UserController extends BaseController {
             VueRouteMenu route = new VueRouteMenu();
             route.setMeta(new RouteMeta(menu.getName(), menu.getIcon()));
             if (menu.getType() == SysMenu.MENU_TYPE_DIRECTORY) {
+                // 如果不设置点击时候目录path相同的会一起展开,child 使用的绝对路径不受影响
+                route.setPath("/" + menu.getName());
                 route.setComponent(VueRouteMenu.COMPONENT_LAYOUT);
             } else if (menu.getType() == SysMenu.MENU_TYPE_MENU) {
                 if (null != menu.getUrl() && !menu.getUrl().startsWith("https://")
