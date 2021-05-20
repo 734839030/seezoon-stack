@@ -25,12 +25,17 @@ public class SeezoonAdminProperties {
         private Integer lockIpFailTimes = 10;
         private Duration lockTime = Duration.ofDays(1);
         private boolean recordLog = true;
+
         /**
-         * Controls the maximum number of sessions for a user when {@code maxSessionsPreventsLogin = true}
+         * 开启session 并发控制，true 下面才maximumSessions & maxSessionsPreventsLogin才生效
+         */
+        private boolean concurrentSessionControlEnabled = true;
+        /**
+         * Controls the maximum number of sessions for a user where sessionConcurrency =true
          */
         private int maximumSessions = 1;
         /**
-         * 是否可以同时登录{@code true} 同个不可以同时登录
+         * 后面一个登陆{@code true} 登陆报错，false 后面踢前面,when sessionConcurrency=true
          */
         private boolean maxSessionsPreventsLogin = false;
 

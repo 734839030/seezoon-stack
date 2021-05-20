@@ -1,8 +1,8 @@
 package com.seezoon.admin.modules.sys.security;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -15,6 +15,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.session.FindByIndexNameSessionRepository;
+import org.springframework.session.security.SpringSessionBackedSessionRegistry;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -64,6 +66,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String LOGIN_OUT_URL = "/logout";
 
     private final SeezoonAdminProperties seezoonAdminProperties;
+    private final FindByIndexNameSessionRepository sessionRepository;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -81,10 +84,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.exceptionHandling().accessDeniedHandler(new AdminAccessDeniedHandler())
             // 到认证环节的入口逻辑,默认是跳页
             .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
-        // seesion 管理 一个账号登录一次，后面的挤掉前面的(spring security 默认的,true 则已登录的优先)
+        if (seezoonAdminProperties.getLogin().isConcurrentSessionControlEnabled()) {
+            // seesion 管理 一个账号登录一次，maxSessionsPreventsLogin=false后面的挤掉前面的,true直接报错,需要添加下方httpSessionEventPublisher
+            http.sessionManagement().maximumSessions(seezoonAdminProperties.getLogin().getMaximumSessions())
+                .maxSessionsPreventsLogin(seezoonAdminProperties.getLogin().isMaxSessionsPreventsLogin())
+                // 不使用spring session 不需要指定，默认是内存逻辑
+                .sessionRegistry(new SpringSessionBackedSessionRegistry<>(sessionRepository));
+        }
+
         // remember 采用默认解密前端remember-cookie
-        http.sessionManagement().maximumSessions(seezoonAdminProperties.getLogin().getMaximumSessions())
-            .maxSessionsPreventsLogin(seezoonAdminProperties.getLogin().isMaxSessionsPreventsLogin());
         http.rememberMe().rememberMeParameter(DEFAULT_REMEMBER_ME_NAME)
             .key(seezoonAdminProperties.getLogin().getRememberKey()).useSecureCookie(true)
             .tokenValiditySeconds((int)seezoonAdminProperties.getLogin().getRememberTime().toSeconds())
@@ -113,13 +121,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * 当开启session 并发控制时候需要
      *
      * @return
-     * @see org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer.ConcurrencyControlConfigurer#maxSessionsPreventsLogin(boolean)
+     * @see HttpSecurity#sessionManagement()
      */
     @Bean
-    @Primary
-    @ConditionalOnProperty(name = "seezoon.admin.login.max-sessions-prevents-login", havingValue = "true")
-    public HttpSessionEventPublisher httpSessionEventPublisher() {
-        return new HttpSessionEventPublisher();
+    @ConditionalOnProperty(name = "seezoon.admin.login.concurrent-session-control-enabled", havingValue = "true")
+    public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
+        return new ServletListenerRegistrationBean(new HttpSessionEventPublisher());
     }
 
     /**
