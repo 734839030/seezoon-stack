@@ -210,7 +210,7 @@ http.sessionManagement().maximumSessions(loginSecurityProperties.getMaximumSessi
             .maxSessionsPreventsLogin(loginSecurityProperties.isMaxSessionsPreventsLogin());
 ```
 
-> 当maxSessionsPreventsLogin=true 时候maximumSessions有效，后面会踢掉前面的。
+> 需要设定HttpSessionEventPublisher，Spring session 还需指定SessionRegistry。
 
 ## RememberMe
 
