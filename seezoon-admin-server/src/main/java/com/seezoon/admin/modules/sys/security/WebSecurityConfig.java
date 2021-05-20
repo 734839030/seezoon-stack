@@ -1,6 +1,8 @@
 package com.seezoon.admin.modules.sys.security;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -12,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -25,28 +28,27 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * <code>
- *     账号密码登录
- *     url:/login
- *     method:POST
- *     param:
- *          username
- *          password
- *          rememberMe
- *
- *     退出登录
- *     url:/logout
- *     method:POST
+ * 账号密码登录
+ * url:/login
+ * method:POST
+ * param:
+ * username
+ * password
+ * rememberMe
+ * <p>
+ * 退出登录
+ * url:/logout
+ * method:POST
  *
  * </code>
- *
- *
+ * <p>
+ * <p>
  * 安全配置
  *
- * @see <a>https://docs.spring.io/spring-security/site/docs/5.4.1/reference/html5</a>
- *
- *      默认的安全设置参考{@link WebSecurityConfigurerAdapter#getHttp}
- *
  * @author hdf
+ * @see <a>https://docs.spring.io/spring-security/site/docs/5.4.1/reference/html5</a>
+ *      <p>
+ *      默认的安全设置参考{@link WebSecurityConfigurerAdapter#getHttp}
  */
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
@@ -105,6 +107,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             // CsrfFilter 默认实现类是这个，不拦截get请求
             .and().csrf().ignoringAntMatchers(PUBLIC_ANT_PATH, LOGIN_URL)
             .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());// .disable();
+    }
+
+    /**
+     * 当开启session 并发控制时候需要
+     *
+     * @return
+     * @see org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer.ConcurrencyControlConfigurer#maxSessionsPreventsLogin(boolean)
+     */
+    @Bean
+    @Primary
+    @ConditionalOnProperty(name = "seezoon.admin.login.max-sessions-prevents-login", havingValue = "true")
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
     }
 
     /**
