@@ -22,10 +22,14 @@ public class SecurityUtils {
 
     public static UserInfo getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (null != authentication) {
+        // 匿名也是Authenticated = true
+        if (null != authentication && authentication.isAuthenticated()) {
+            // 如果是匿名，返回的是个字符串
             Object principal = authentication.getPrincipal();
-            AdminUserDetails adminUserDetails = (AdminUserDetails)principal;
-            return adminUserDetails.getUserInfo();
+            if (principal instanceof AdminUserDetails) {
+                AdminUserDetails adminUserDetails = (AdminUserDetails)principal;
+                return adminUserDetails.getUserInfo();
+            }
         }
         return null;
     }
@@ -40,7 +44,7 @@ public class SecurityUtils {
 
     /**
      * 数据权限sql
-     * 
+     *
      * @return
      */
     public static String getDsf() {
