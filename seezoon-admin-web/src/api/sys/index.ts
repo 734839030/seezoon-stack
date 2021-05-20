@@ -47,7 +47,7 @@ export function getDictRomote(type: string) {
   return dicts;
 }
 
-const dicts = <Map<string, Dict[]>>getDictAll();
+let globalDicts;
 
 /**
  * 在表单回显的时候会区分类型
@@ -55,7 +55,7 @@ const dicts = <Map<string, Dict[]>>getDictAll();
  * @param number 是否数值
  */
 export function getDict(type: string, number = false): Dict[] {
-  const dictArray = dicts.get(type) || [];
+  const dictArray = globalDicts.get(type) || [];
   // 转数值类字段
   if (number) {
     dictArray.forEach((dict) => {
@@ -97,6 +97,7 @@ export async function initAllDict() {
       });
     }
     Persistent.setSession(DICT_KEY, dicts, true);
+    globalDicts = <Map<string, Dict[]>>getDictAll();
   } catch (e) {
     message.error('字典加载失败请刷新网页:' + e);
   }
