@@ -52,7 +52,7 @@ module.exports = {
                 {
                     title: '开发手册(建设中...)',
                     collapsable: false,
-                    children: ['/manual/'],
+                    children: ['/manual/page', "/manual/server"],
                 },
             ]
         },
