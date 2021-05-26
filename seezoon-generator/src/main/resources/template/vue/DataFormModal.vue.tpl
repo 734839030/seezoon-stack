@@ -53,7 +53,7 @@
             />
              <#elseif columnPlan.inputType.name() == "SELECT_MULTIPLE">
             <a-select
-              v-model:value="searchForm.${columnPlan.javaFieldName}"
+              v-model:value="dataForm.${columnPlan.javaFieldName}"
               mode="tags"
               :allowClear="true"
               :options="${columnPlan.javaFieldName}Dicts"
