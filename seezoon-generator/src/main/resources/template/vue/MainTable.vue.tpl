@@ -25,13 +25,12 @@
         </#if>
        <#if columnPlan.inputType.name() == "SELECT_MULTIPLE">
       <a-select
-          v-model:value="searchForm.${columnPlan.javaFieldName}"
-          mode="tags"
+          v-model:value="searchForm.${columnPlan.javaFieldName}Array"
+          mode="multiple"
           :allowClear="true"
           :options="${columnPlan.javaFieldName}Dicts"
           placeholder="请选择"
           style="width: 140px"
-          :token-separators="[',']"
       />
         </#if>
         <#if columnPlan.inputType.name() == "INTEGRAL_NUMBER">
@@ -42,7 +41,7 @@
         </#if>
         <#if columnPlan.inputType.name() == "CHECKBOX">
       <a-checkbox-group
-          v-model:value="searchForm.${columnPlan.javaFieldName}"
+          v-model:value="searchForm.${columnPlan.javaFieldName}Array"
           :options="${columnPlan.javaFieldName}Dicts"
       />
         </#if>
@@ -147,7 +146,7 @@ export default {
       columns: [
       <#assign firstItem = true>
       <#list columnPlans as columnPlan>
-        <#if columnPlan.list>
+        <#if columnPlan.list && !columnPlan.multiple>
         {
           title: '${columnPlan.fieldName}',
           dataIndex: '${columnPlan.javaFieldName}',

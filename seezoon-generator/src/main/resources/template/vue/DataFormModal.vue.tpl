@@ -34,7 +34,7 @@
               name="${columnPlan.javaFieldName}"
               :rules="[
              <#if !columnPlan.nullable>
-                { required: true,<#if columnPlan.inputType.name() == "INTEGRAL_NUMBER" || columnPlan.inputType.name() == "DECIMAL" || columnPlan.numberType> type: 'number',<#elseif columnPlan.inputType.name() == "CHECKBOX">type: 'array',</#if> message: '${columnPlan.fieldName}不能为空', whitespace: true },
+                { required: true,<#if columnPlan.inputType.name() == "INTEGRAL_NUMBER" || columnPlan.inputType.name() == "DECIMAL" || columnPlan.numberType> type: 'number',<#elseif columnPlan.multiple>type: 'array',</#if> message: '${columnPlan.fieldName}不能为空', whitespace: true },
              </#if>
              <#if columnPlan.uniqueFieldCheck>
                 { validator: check${columnPlan.javaFieldName?cap_first}, trigger: 'blur' },
@@ -53,20 +53,19 @@
             />
              <#elseif columnPlan.inputType.name() == "SELECT_MULTIPLE">
             <a-select
-              v-model:value="dataForm.${columnPlan.javaFieldName}"
-              mode="tags"
+              v-model:value="dataForm.${columnPlan.javaFieldName}Array"
+              mode="multiple"
               :allowClear="true"
               :options="${columnPlan.javaFieldName}Dicts"
               placeholder="请选择"
               style="width: 140px"
-              :token-separators="[',']"
             />
              <#elseif columnPlan.inputType.name() == "INTEGRAL_NUMBER">
             <a-input-number v-model:value="dataForm.${columnPlan.javaFieldName}" :precision="0" />
              <#elseif columnPlan.inputType.name() == "DECIMAL">
             <a-input-number v-model:value="dataForm.${columnPlan.javaFieldName}" :precision="2" />
              <#elseif columnPlan.inputType.name() == "CHECKBOX">
-            <a-checkbox-group v-model:value="dataForm.${columnPlan.javaFieldName}" :options="${columnPlan.javaFieldName}Dicts" />
+            <a-checkbox-group v-model:value="dataForm.${columnPlan.javaFieldName}Array" :options="${columnPlan.javaFieldName}Dicts" />
              <#elseif columnPlan.inputType.name() == "RADIO">
             <a-radio-group :options="${columnPlan.javaFieldName}Dicts" v-model:value="dataForm.${columnPlan.javaFieldName}" />
              <#elseif columnPlan.inputType.name() == "DATE">

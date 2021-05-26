@@ -14,13 +14,18 @@
           <#if columnPlan.dictField>
            <#if columnPlan.inputType.name() == "SELECT_MULTIPLE">
            <a-select
-             v-model:value="data.${columnPlan.javaFieldName}"
-             mode="tags"
+             v-model:value="data.${columnPlan.javaFieldName}Array"
+             mode="multiple"
              :options="${columnPlan.javaFieldName}Dicts"
              style="width: 140px"
-             :token-separators="[',']"
              :disabled="true"
            />
+           <#elseif>
+           <#if columnPlan.inputType.name() == "CHECKBOX">
+           <a-checkbox-group
+             v-model:value="data.${columnPlan.javaFieldName}Array"
+             :options="${columnPlan.javaFieldName}Dicts"
+            />
            <#else>
           {{ ${columnPlan.javaFieldName}DictsMap.get(data.${columnPlan.javaFieldName}) }}
            </#if>

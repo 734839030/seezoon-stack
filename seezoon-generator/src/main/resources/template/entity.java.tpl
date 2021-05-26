@@ -7,6 +7,16 @@ import java.math.BigDecimal;
 import java.util.Date;
 </#if>
 
+<#list columnPlans as columnPlan>
+   <#if columnPlan.multiple>
+import java.util.Arrays;
+import com.seezoon.dao.framework.constants.Constants;
+import org.apache.commons.lang3.StringUtils;
+import javax.validation.constraints.NotEmpty;
+       <#break>
+   </#if>
+</#list>
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -37,8 +47,8 @@ public class ${className} extends BaseEntity<${pkPlan.dataType.javaType()}> {
 
 <#list columnPlans as columnPlan>
    <#if !columnPlan.defaultField>
-    @ApiModelProperty(value = "${columnPlan.fieldName!}"<#if !columnPlan.nullable>, required = true</#if>)
-      <#if !columnPlan.nullable>
+    @ApiModelProperty(value = "${columnPlan.fieldName!}"<#if !columnPlan.nullable && !columnPlan.multiple>, required = true</#if>)
+      <#if !columnPlan.nullable && !columnPlan.multiple>
         <#if columnPlan.stringType>
     @NotBlank
     @Size(max = ${columnPlan.maxLength?c})
@@ -57,6 +67,32 @@ public class ${className} extends BaseEntity<${pkPlan.dataType.javaType()}> {
 
    </#if>
 </#list>
+<#list columnPlans as columnPlan>
+    <#if columnPlan.multiple>
+    // 辅助接收多选
+    @ApiModelProperty(value = "${columnPlan.fieldName!}"<#if !columnPlan.nullable>, required = true</#if>)
+    <#if !columnPlan.nullable>
+    @NotEmpty
+    </#if>
+    private Object[] {columnPlan.javaFieldName}Array;
+
+    private ${columnPlan.dataType.javaType()} get${columnPlan.javaFieldName?cap_first} {
+        if (null != {columnPlan.javaFieldName}Array) {
+            return StringUtils.join({columnPlan.javaFieldName}Array, Constants.COMMA);
+        }
+        return ${columnPlan.javaFieldName};
+    }
+
+    public Object[] get{columnPlan.javaFieldName?cap_first}Array() {
+        if (StringUtils.isNotEmpty(${columnPlan.javaFieldName})) {
+            return Arrays.stream(StringUtils.split(${columnPlan.javaFieldName}, Constants.COMMA)).map(v -> ${columnPlan.dataType.javaType()}.valueOf(v))
+                .toArray();
+        }
+        return ${columnPlan.javaFieldName}Array;
+    }
+    </#if>
+</#list>
+
 
 <#if !pkPlan.defaultJavaPkName>
     @Override

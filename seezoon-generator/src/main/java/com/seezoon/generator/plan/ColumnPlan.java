@@ -167,4 +167,14 @@ public class ColumnPlan implements Comparable<ColumnPlan> {
         return CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, this.getJavaFieldName());
     }
 
+    /**
+     * 是否多选
+     *
+     * @return
+     */
+    public boolean isMultiple() {
+        return ArrayUtils.contains(new InputType[] {InputType.SELECT_MULTIPLE, InputType.CHECKBOX},
+            this.getInputType());
+    }
+
 }
