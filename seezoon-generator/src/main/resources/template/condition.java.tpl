@@ -52,6 +52,11 @@ public class ${className}Condition extends PageCondition {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
           </#if>
     private ${columnPlan.dataType.javaType()} ${columnPlan.javaFieldName};
+        <#if columnPlan.multiple>
+        // 辅助接收多选
+    @ApiModelProperty(value = "${columnPlan.fieldName!}")
+    private ${columnPlan.dataType.javaType()}[] ${columnPlan.javaFieldName}Array;
+        </#if>
         </#if>
     </#list>
 

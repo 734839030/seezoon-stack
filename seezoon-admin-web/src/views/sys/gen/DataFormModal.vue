@@ -93,8 +93,8 @@
       <a-alert closable type="info">
         <template #message>
           当表单类型选择
-          <a-typography-text type="danger">复选框</a-typography-text>
-          时，生成后的代码需要手动梳理该字段从前端->后台->DB逻辑，因为前端是个数组，后端是一个字段，无法生成预期增删改查代码。
+          <a-typography-text type="danger">多选</a-typography-text>
+          时，查询不会生效，默认按逗号分隔保存，后台需要是字符串。特殊业务生成后梳理后按需需改。
         </template>
       </a-alert>
       <a-table
@@ -341,6 +341,7 @@
         this.title = title;
         defHttp.get({ url: '/sys/gen/query/' + id }).then((data) => {
           this.dataForm = data;
+          this.dataForm.id = id;
           this.tableDataSource = data.columnPlans;
         });
       },

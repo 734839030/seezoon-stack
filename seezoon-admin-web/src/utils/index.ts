@@ -51,9 +51,9 @@ export function openWindow(
 
   window.open(url, target, feature.join(','));
 }
+
 // ajax 下载
 export function blobDown(blob: Blob, fileName: string) {
-  debugger;
   // 下载流错误时候 服务端统一返回的json错误信息
   if (blob.type == 'application/json') {
     const reader = new FileReader();
@@ -73,6 +73,7 @@ export function blobDown(blob: Blob, fileName: string) {
   document.body.removeChild(downloadElement); //下载完成移除元素
   window.URL.revokeObjectURL(href); //释放掉blob对象
 }
+
 // dynamic use hook props
 export function getDynamicProps<T, U>(props: T): Partial<U> {
   const ret: Recordable = {};

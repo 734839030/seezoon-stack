@@ -74,16 +74,16 @@ public class ${className} extends BaseEntity<${pkPlan.dataType.javaType()}> {
     <#if !columnPlan.nullable>
     @NotEmpty
     </#if>
-    private Object[] {columnPlan.javaFieldName}Array;
+    private Object[] ${columnPlan.javaFieldName}Array;
 
-    private ${columnPlan.dataType.javaType()} get${columnPlan.javaFieldName?cap_first} {
-        if (null != {columnPlan.javaFieldName}Array) {
-            return StringUtils.join({columnPlan.javaFieldName}Array, Constants.COMMA);
+    private ${columnPlan.dataType.javaType()} get${columnPlan.javaFieldName?cap_first}() {
+        if (null != ${columnPlan.javaFieldName}Array) {
+            return StringUtils.join(${columnPlan.javaFieldName}Array, Constants.COMMA);
         }
         return ${columnPlan.javaFieldName};
     }
 
-    public Object[] get{columnPlan.javaFieldName?cap_first}Array() {
+    public Object[] get${columnPlan.javaFieldName?cap_first}Array() {
         if (StringUtils.isNotEmpty(${columnPlan.javaFieldName})) {
             return Arrays.stream(StringUtils.split(${columnPlan.javaFieldName}, Constants.COMMA)).map(v -> ${columnPlan.dataType.javaType()}.valueOf(v))
                 .toArray();

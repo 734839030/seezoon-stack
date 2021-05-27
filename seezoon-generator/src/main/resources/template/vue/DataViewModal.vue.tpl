@@ -20,8 +20,7 @@
              style="width: 140px"
              :disabled="true"
            />
-           <#elseif>
-           <#if columnPlan.inputType.name() == "CHECKBOX">
+           <#elseif columnPlan.inputType.name() == "CHECKBOX">
            <a-checkbox-group
              v-model:value="data.${columnPlan.javaFieldName}Array"
              :options="${columnPlan.javaFieldName}Dicts"

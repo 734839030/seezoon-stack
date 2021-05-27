@@ -1,14 +1,14 @@
 <template>
   <BasicModal
-    :footer="null"
-    :title="t('layout.header.lockScreen')"
     v-bind="$attrs"
     :class="prefixCls"
+    :footer="null"
+    :title="t('layout.header.lockScreen')"
     @register="register"
   >
     <div :class="`${prefixCls}__entry`">
       <div :class="`${prefixCls}__header`">
-        <img :src="userInfo.photoUrl || headerImg" :class="`${prefixCls}__header-img`" />
+        <img :class="`${prefixCls}__header-img`" :src="userInfo.photoUrl || headerImg" />
         <p :class="`${prefixCls}__header-name`">
           {{ userInfo.name }}
         </p>
@@ -17,7 +17,7 @@
       <BasicForm @register="registerForm" />
 
       <div :class="`${prefixCls}__footer`">
-        <a-button type="primary" block class="mt-2" @click="handleLock">
+        <a-button block class="mt-2" type="primary" @click="handleLock">
           {{ t('layout.header.lockScreenBtn') }}
         </a-button>
       </div>
@@ -25,7 +25,7 @@
   </BasicModal>
 </template>
 <script lang="ts">
-  import { defineComponent, computed } from 'vue';
+  import { computed, defineComponent } from 'vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { BasicModal, useModalInner } from '/@/components/Modal/index';
@@ -34,6 +34,7 @@
   import { useUserStore } from '/@/store/modules/user';
   import { useLockStore } from '/@/store/modules/lock';
   import headerImg from '/@/assets/images/header.jpg';
+
   export default defineComponent({
     name: 'LockModal',
     components: { BasicModal, BasicForm },
@@ -64,6 +65,7 @@
       });
 
       async function handleLock() {
+        debugger;
         const values = (await validateFields()) as any;
         const password: string | undefined = values.password;
         closeModal();

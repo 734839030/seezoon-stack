@@ -3,8 +3,8 @@
     <!--   暂时不需要-->
     <AppLocalePicker
       v-if="showLocale"
-      class="absolute top-4 right-4 enter-x text-white xl:text-gray-600"
       :showText="false"
+      class="absolute top-4 right-4 enter-x text-white xl:text-gray-600"
     />
     <AppDarkModeToggle class="absolute top-3 right-7 enter-x" />
 
@@ -19,8 +19,8 @@
           <div class="my-auto">
             <img
               :alt="title"
-              src="../../../assets/svg/login-box-bg.svg"
               class="w-1/2 -mt-16 -enter-x"
+              src="../../../assets/svg/login-box-bg.svg"
             />
             <div class="mt-10 font-medium text-white -enter-x">
               <span class="mt-4 text-3xl inline-block"> {{ t('sys.login.signInTitle') }}</span>
@@ -33,7 +33,25 @@
         <div class="h-full xl:h-auto flex py-5 xl:py-0 xl:my-0 w-full xl:w-6/12">
           <div
             :class="`${prefixCls}-form`"
-            class="my-auto mx-auto xl:ml-20 xl:bg-transparent px-5 py-8 sm:px-8 xl:p-4 rounded-md shadow-md xl:shadow-none w-full sm:w-3/4 lg:w-2/4 xl:w-auto enter-x relative"
+            class="
+              my-auto
+              mx-auto
+              xl:ml-20
+              xl:bg-transparent
+              px-5
+              py-8
+              sm:px-8
+              xl:p-4
+              rounded-md
+              shadow-md
+              xl:shadow-none
+              w-full
+              sm:w-3/4
+              lg:w-2/4
+              xl:w-auto
+              enter-x
+              relative
+            "
           >
             <LoginForm />
             <ForgetPasswordForm />
@@ -47,10 +65,9 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, computed } from 'vue';
+  import { computed, defineComponent } from 'vue';
 
-  import { AppLogo } from '/@/components/Application';
-  import { AppLocalePicker, AppDarkModeToggle } from '/@/components/Application';
+  import { AppDarkModeToggle, AppLocalePicker, AppLogo } from '/@/components/Application';
   import LoginForm from './LoginForm.vue';
   import ForgetPasswordForm from './ForgetPasswordForm.vue';
   import RegisterForm from './RegisterForm.vue';
