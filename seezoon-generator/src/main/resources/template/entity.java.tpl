@@ -51,10 +51,12 @@ public class ${className} extends BaseEntity<${pkPlan.dataType.javaType()}> {
       <#if !columnPlan.nullable && !columnPlan.multiple>
         <#if columnPlan.stringType>
     @NotBlank
-    @Size(max = ${columnPlan.maxLength?c})
         <#else>
     @NotNull
         </#if>
+      </#if>
+      <#if columnPlan.stringType>
+    @Size(max = ${columnPlan.maxLength?c})
       </#if>
         <#if columnPlan.inputType.name() == "DATE">
     @JsonFormat(pattern = "yyyy-MM-dd")
