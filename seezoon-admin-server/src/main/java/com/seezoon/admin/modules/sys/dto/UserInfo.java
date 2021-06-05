@@ -19,7 +19,7 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class UserInfo implements Serializable {
 
-    private static final long serialVersionUID = -1l;
+    private static final long serialVersionUID = -1L;
 
     @ApiModelProperty(value = "用户ID")
     private final Integer userId;
