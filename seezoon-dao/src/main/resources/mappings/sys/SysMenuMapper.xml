@@ -52,6 +52,9 @@
             <if test="status != null">
                 and t.status = #{status}
             </if>
+            <if test="url != null and url !=''">
+                and t.url = #{url}
+            </if>
             <if test="name != null and name != ''">
                 and t.name = #{name}
             </if>

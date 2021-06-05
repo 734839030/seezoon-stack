@@ -51,7 +51,18 @@ public class UserService extends AbstractTransactionService {
             sysMenuCondition.setStatus(EntityStatus.NORMAL.status());
             return sysMenuService.find(sysMenuCondition);
         }
-        return sysMenuService.findByUserId(userId);
+
+        List<SysMenu> sysMenus = sysMenuService.findByUserId(userId);
+        boolean match = sysMenus.stream().anyMatch(menu -> SysMenu.DEFAULT_HOME.equals(menu.getUrl()));
+        if (!match) {
+            SysMenuCondition sysMenuCondition = new SysMenuCondition();
+            sysMenuCondition.setUrl(SysMenu.DEFAULT_HOME);
+            SysMenu home = sysMenuService.findOne(sysMenuCondition);
+            Assert.notNull(home, "系统菜单配置不正确，缺少" + SysMenu.DEFAULT_HOME + "，请联系管理员");
+            sysMenus.add(home);
+        }
+
+        return sysMenus;
     }
 
     @Transactional(readOnly = true)

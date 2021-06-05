@@ -36,4 +36,7 @@ public class SysMenuCondition extends PageCondition {
     @ApiModelProperty(value = "状态1启用，0停用")
     private Integer status;
 
+    @ApiModelProperty(value = "地址查询")
+    private String url;
+
 }

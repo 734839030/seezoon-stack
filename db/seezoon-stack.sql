@@ -230,7 +230,7 @@ CREATE TABLE `sys_menu` (
 BEGIN;
 INSERT INTO `sys_menu` VALUES (6, 0, '/0/', '系统管理', 10, NULL, NULL, 1, 'ion:settings-outline', 1, NULL, 1, '2021-03-03 23:49:58', 1, '2021-04-16 23:59:01', '');
 INSERT INTO `sys_menu` VALUES (7, 6, '/0/6/', '部门管理', 10, '/sys/dept', 'main', 2, 'clarity:organization-line', 1, 'sys:dept:query', 1, '2021-03-04 00:55:33', 1, '2021-03-06 00:35:13', NULL);
-INSERT INTO `sys_menu` VALUES (8, 0, '/0/', '首页', 9, '/sys/home', 'main', 2, 'bx:bx-home', 1, NULL, 1, '2021-03-04 01:08:27', 1, '2021-03-04 01:08:27', NULL);
+INSERT INTO `sys_menu` VALUES (8, 0, '/0/', '首页', 9, '/sys/home', 'main', 2, 'bx:bx-home', 1, NULL, 1, '2021-03-04 01:08:27', 1, '2021-03-04 01:08:27', '必须存在');
 INSERT INTO `sys_menu` VALUES (9, 6, '/0/6/', '用户管理', 1000, '/sys/user', 'main', 2, 'ant-design:user-switch-outlined', 1, 'sys:user:query', 1, '2021-03-04 22:25:41', 1, '2021-03-06 00:34:49', NULL);
 INSERT INTO `sys_menu` VALUES (10, 6, '/0/6/', '角色管理', 1010, '/sys/role', 'main', 2, 'carbon:user-role', 1, 'sys:role:query', 1, '2021-03-04 22:26:30', 1, '2021-03-06 00:52:45', NULL);
 INSERT INTO `sys_menu` VALUES (11, 6, '/0/6/', '菜单管理', 1019, '/sys/menu', 'main', 2, 'ic:sharp-menu-book', 1, 'sys:menu:query', 1, '2021-03-04 22:27:15', 1, '2021-03-06 00:52:54', NULL);
