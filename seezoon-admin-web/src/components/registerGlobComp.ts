@@ -1,4 +1,4 @@
-import Icon from './Icon/index';
+import {Icon} from './Icon';
 
 import { App } from 'vue';
 import Antd from 'ant-design-vue';

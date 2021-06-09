@@ -1,4 +1,6 @@
 import type { RouteLocationNormalized, RouteRecordNormalized } from 'vue-router';
+import type { App, Plugin } from 'vue';
+
 import { unref } from 'vue';
 import { isObject } from '/@/utils/is';
 import { message } from 'ant-design-vue';
@@ -51,7 +53,6 @@ export function openWindow(
 
   window.open(url, target, feature.join(','));
 }
-
 // ajax 下载
 export function blobDown(blob: Blob, fileName: string) {
   // 下载流错误时候 服务端统一返回的json错误信息
@@ -73,7 +74,6 @@ export function blobDown(blob: Blob, fileName: string) {
   document.body.removeChild(downloadElement); //下载完成移除元素
   window.URL.revokeObjectURL(href); //释放掉blob对象
 }
-
 // dynamic use hook props
 export function getDynamicProps<T, U>(props: T): Partial<U> {
   const ret: Recordable = {};
@@ -99,3 +99,14 @@ export function getRawRoute(route: RouteLocationNormalized): RouteLocationNormal
       : undefined) as RouteRecordNormalized[],
   };
 }
+
+export const withInstall = <T>(component: T, alias?: string) => {
+  const comp = component as any;
+  comp.install = (app: App) => {
+    app.component(comp.name || comp.displayName, component);
+    if (alias) {
+      app.config.globalProperties[alias] = component;
+    }
+  };
+  return component as T & Plugin;
+};

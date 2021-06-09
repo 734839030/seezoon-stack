@@ -3,6 +3,7 @@
     v-bind="$attrs"
     :class="prefixCls"
     :footer="null"
+    :canFullscreen="false"
     :title="t('layout.header.lockScreen')"
     @register="register"
   >
@@ -95,15 +96,14 @@
   .@{prefix-cls} {
     &__entry {
       position: relative;
-      height: 240px;
-      padding: 130px 30px 60px 30px;
-      margin-top: 25px;
+      height: 260px;
+      padding: 100px 30px 0px 30px;
       border-radius: 10px;
     }
 
     &__header {
       position: absolute;
-      top: 0;
+      top: 10px;
       left: calc(50% - 45px);
       width: auto;
       text-align: center;

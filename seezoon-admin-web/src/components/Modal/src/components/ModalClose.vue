@@ -61,7 +61,7 @@
     align-items: center;
 
     > span {
-      margin-left: 48px;
+      //margin-left: 48px;
       font-size: 16px;
     }
 

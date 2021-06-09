@@ -15,12 +15,11 @@ import { RequestEnum, ResultEnum } from '/@/enums/httpEnum';
 
 import { isString } from '/@/utils/is';
 import { getToken } from '/@/utils/auth';
-import { setObjToUrlParams, deepMerge } from '/@/utils';
+import { deepMerge, setObjToUrlParams } from '/@/utils';
 import { useErrorLogStoreWithOut } from '/@/store/modules/errorLog';
 
-import { errorResult } from './const';
 import { useI18n } from '/@/hooks/web/useI18n';
-import { createNow, formatRequestDate } from './helper';
+import { formatRequestDate, joinTimestamp } from './helper';
 
 const globSetting = useGlobSetting();
 const prefix = globSetting.urlPrefix;
@@ -49,7 +48,7 @@ const transform: AxiosTransform = {
 
     if (!res.data) {
       // return '[HTTP] Request has no return value';
-      return errorResult;
+      throw new Error(t('sys.api.apiRequestFailed'));
     }
     //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
     const { code, msg } = res.data;
@@ -67,7 +66,7 @@ const transform: AxiosTransform = {
         }
       }
       // Promise.reject(new Error(msg));
-      return errorResult;
+      throw new Error(msg || t('sys.api.apiRequestFailed'));
     }
 
     // 接口请求成功，直接返回结果
@@ -91,10 +90,10 @@ const transform: AxiosTransform = {
     if (config.method?.toUpperCase() === RequestEnum.GET) {
       if (!isString(params)) {
         // 给 get 请求加上时间戳参数，避免从缓存中拿数据。
-        config.params = Object.assign(params || {}, createNow(joinTime, false));
+        config.params = Object.assign(params || {}, joinTimestamp(joinTime, false));
       } else {
         // 兼容restful风格
-        config.url = config.url + params + `${createNow(joinTime, true)}`;
+        config.url = config.url + params + `${joinTimestamp(joinTime, true)}`;
         config.params = undefined;
       }
     } else {
@@ -167,7 +166,7 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
         // 基础接口地址
         // baseURL: globSetting.apiUrl,
         // 接口可能会有通用的地址部分，可以统一抽取出来
-        prefixUrl: prefix,
+        urlPrefix: prefix,
         withCredentials: true,
         xsrfCookieName: 'XSRF-TOKEN',
         xsrfHeaderName: 'X-XSRF-TOKEN',
