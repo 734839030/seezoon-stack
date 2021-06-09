@@ -52,8 +52,8 @@ module.exports = {
                 {
                     title: '开发手册(建设中...)',
                     collapsable: false,
-                    sidebarDepth: 4,    // 可选的, 默认值是 1
-                    children: ['/manual/page', "/manual/server"],
+                    sidebarDepth: 1,    // 可选的, 默认值是 1
+                    children: ['/manual/', "/manual/server"],
                 },
             ]
         },
