@@ -28,6 +28,7 @@
         <module>seezoon-framework</module>
         <module>seezoon-generator</module>
         <module>seezoon-admin-server</module>
+        <module>seezoon-user-server</module>
     </modules>
 
 
@@ -60,6 +61,7 @@
         <useragent.version>1.21</useragent.version>
         <!-- 使用阿里云免费配置中心(可选使用) -->
         <nacos.starter>0.2.7</nacos.starter>
+        <easy.excel.version>2.2.10</easy.excel.version>
     </properties>
     <dependencyManagement>
         <dependencies>
