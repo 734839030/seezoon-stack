@@ -186,7 +186,7 @@ public class SysMenuService extends AbstractCrudService<SysMenuDao, SysMenu, Int
     public List<SysMenu> findByUserId(@NotNull Integer userId) {
         List<SysMenu> sysMenus = this.d.selectByUserId(userId);
         if (sysMenus.isEmpty()) {
-            return new ArrayList<>();
+            return sysMenus;
         }
         Set<Integer> menuIds = new HashSet<>();
         // 前端勾选限制，如果子节点没有勾选全，则不包含父节点，需要根据子节点自动加上父节点权限
