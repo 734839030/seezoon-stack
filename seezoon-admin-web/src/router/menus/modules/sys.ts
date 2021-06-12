@@ -4,44 +4,44 @@ import type { MenuModule } from '/@/router/types';
 const menu: MenuModule = {
   orderNo: 9,
   menu: {
-    path: '/',
+    path: '/sys',
     name: '系统管理',
     icon: 'ion:settings-outline',
     children: [
       {
-        path: '/sys/dept',
+        path: 'dept',
         name: '部门管理',
       },
       {
-        path: '/sys/user',
+        path: 'user',
         name: '用户管理',
       },
       {
-        path: '/sys/role',
+        path: 'role',
         name: '角色管理',
       },
       {
-        path: '/sys/menu',
+        path: 'menu',
         name: '菜单管理',
       },
       {
-        path: '/sys/param',
+        path: 'param',
         name: '系统参数',
       },
       {
-        path: '/sys/dict',
+        path: 'dict',
         name: '系统字典',
       },
       {
-        path: '/sys/file',
+        path: 'file',
         name: '文件管理',
       },
       {
-        path: '/doc',
+        path: 'doc',
         name: '内部',
       },
       {
-        path: 'https://vvbin.cn/docs/',
+        path: 'https://doc.stack.seezoon.com',
         name: '外部',
       },
     ],

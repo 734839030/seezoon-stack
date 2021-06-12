@@ -3,7 +3,7 @@ import type { AppRouteModule } from '/@/router/types';
 import { LAYOUT } from '/@/router/constant';
 
 const sys: AppRouteModule = {
-  path: '/',
+  path: '/sys',
   name: 'sys',
   component: LAYOUT,
   meta: {
@@ -12,17 +12,8 @@ const sys: AppRouteModule = {
   },
   children: [
     {
-      path: '/sys/home',
-      name: '/sys/home',
-      component: () => import('/@/views/sys/home/index.vue'),
-      meta: {
-        title: '首页',
-        icon: 'bx:bx-home',
-      },
-    },
-    {
-      path: '/sys/dept',
-      name: '/sys/dept',
+      path: 'dept',
+      name: 'SysDept',
       component: () => import('/@/views/sys/dept/index.vue'),
       meta: {
         icon: 'clarity:organization-line',
@@ -30,8 +21,8 @@ const sys: AppRouteModule = {
       },
     },
     {
-      path: '/sys/user',
-      name: '/sys/user',
+      path: 'user',
+      name: 'SysUser',
       component: () => import('/@/views/sys/user/index.vue'),
       meta: {
         icon: 'ant-design:user-switch-outlined',
@@ -39,8 +30,8 @@ const sys: AppRouteModule = {
       },
     },
     {
-      path: '/sys/role',
-      name: '/sys/role',
+      path: 'role',
+      name: 'SysRole',
       component: () => import('/@/views/sys/role/index.vue'),
       meta: {
         icon: 'carbon:user-role',
@@ -48,8 +39,8 @@ const sys: AppRouteModule = {
       },
     },
     {
-      path: '/sys/menu',
-      name: '/sys/menu',
+      path: 'menu',
+      name: 'SysMenu',
       component: () => import('/@/views/sys/menu/index.vue'),
       meta: {
         icon: 'ic:sharp-menu-book',
@@ -57,8 +48,8 @@ const sys: AppRouteModule = {
       },
     },
     {
-      path: '/sys/param',
-      name: '/sys/param',
+      path: 'param',
+      name: 'SysParam',
       component: () => import('/@/views/sys/param/index.vue'),
       meta: {
         icon: 'zmdi:code-setting',
@@ -66,8 +57,8 @@ const sys: AppRouteModule = {
       },
     },
     {
-      path: '/sys/dict',
-      name: '/sys/dict',
+      path: 'dict',
+      name: 'SysDict',
       component: () => import('/@/views/sys/dict/index.vue'),
       meta: {
         icon: 'raphael:books',
@@ -75,8 +66,8 @@ const sys: AppRouteModule = {
       },
     },
     {
-      path: '/sys/file',
-      name: '/sys/file',
+      path: 'file',
+      name: 'SysFile',
       component: () => import('/@/views/sys/file/index.vue'),
       meta: {
         icon: 'akar-icons:file',
@@ -84,17 +75,17 @@ const sys: AppRouteModule = {
       },
     },
     {
-      path: '/doc',
+      path: 'doc',
       name: 'doc',
       component: () => import('/@/views/sys/iframe/FrameBlank.vue'),
       meta: {
-        frameSrc: 'https://vvbin.cn/docs/',
+        frameSrc: 'https://doc.stack.seezoon.com',
         icon: 'akar-icons:file',
         title: '内部',
       },
     },
     {
-      path: 'https://vvbin.cn/docs/',
+      path: 'https://doc.stack.seezoon.com',
       name: 'docex',
       component: () => import('/@/views/sys/iframe/FrameBlank.vue'),
       meta: {

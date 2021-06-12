@@ -22,6 +22,7 @@ import { getUserResources } from '/@/api/sys/user';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { initAllDict } from '/@/api/sys';
 import { RoleEnum } from '/@/enums/roleEnum';
+import { toRaw } from 'vue';
 
 interface PermissionState {
   // Permission code list
@@ -83,26 +84,20 @@ export const usePermissionStore = defineStore({
     async buildRoutesAction(id?: number | string): Promise<AppRouteRecordRaw[]> {
       const { t } = useI18n();
       let routes: AppRouteRecordRaw[] = [];
-      let userResources;
       try {
-        userResources = await getUserResources();
         await initAllDict();
       } catch (e) {
         console.error(e);
         return routes;
       }
-      const { roles, permissions, routes: backRoutes } = userResources;
 
       const userStore = useUserStore();
       const appStore = useAppStoreWidthOut();
 
-      const roleList = roles as RoleEnum[];
-      userStore.setRoleList(roleList);
-      this.setPermCodeList(permissions);
-
       const { permissionMode = projectSetting.permissionMode } = appStore.getProjectConfig;
       // role permissions
       if (permissionMode === PermissionModeEnum.ROLE) {
+        const roleList = toRaw(userStore.getRoleList) || [];
         const routeFilter = (route: AppRouteRecordRaw) => {
           const { meta } = route;
           const { roles } = meta || {};
@@ -115,6 +110,19 @@ export const usePermissionStore = defineStore({
         routes = flatMultiLevelRoutes(routes);
         //  If you are sure that you do not need to do background dynamic permissions, please comment the entire judgment below
       } else if (permissionMode === PermissionModeEnum.BACK) {
+        let userResources;
+        try {
+          userResources = await getUserResources();
+        } catch (e) {
+          console.error(e);
+          return routes;
+        }
+
+        const { roles, permissions, routes: backRoutes } = userResources;
+        const roleList = roles as RoleEnum[];
+        userStore.setRoleList(roleList);
+        this.setPermCodeList(permissions);
+
         const { createMessage } = useMessage();
 
         createMessage.loading({
