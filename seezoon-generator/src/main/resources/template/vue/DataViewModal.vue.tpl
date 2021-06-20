@@ -7,7 +7,7 @@
     :width="750"
     :footer="null"
   >
-    <a-descriptions bordered size="small">
+    <a-descriptions :column="2" bordered size="small">
       <#list columnPlans as columnPlan>
         <#if columnPlan.showView>
         <a-descriptions-item label="${columnPlan.fieldName}">

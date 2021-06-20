@@ -151,6 +151,9 @@ export default {
           title: '${columnPlan.fieldName}',
           dataIndex: '${columnPlan.javaFieldName}',
           ellipsis: true,
+          <#if columnPlan.sortable>
+          sorter: true,
+          </#if>
           <#if columnPlan.dictField>
           customRender: function ({text}) {
             return ${columnPlan.javaFieldName}DictsMap.get(text);

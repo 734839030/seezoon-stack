@@ -24,10 +24,12 @@
         </#if>
       </#list>
 
-      <a-row>
       <#assign itemCount = 0>
       <#list columnPlans as columnPlan>
         <#if columnPlan.showDataForm && columnPlan.inputType.name() != "HIDDEN">
+          <#if itemCount%2 == 0>
+           <a-row>
+          </#if>
           <a-col :md="12" :xs="24">
             <a-form-item
               label="${columnPlan.fieldName}"
@@ -69,9 +71,9 @@
              <#elseif columnPlan.inputType.name() == "RADIO">
             <a-radio-group :options="${columnPlan.javaFieldName}Dicts" v-model:value="dataForm.${columnPlan.javaFieldName}" />
              <#elseif columnPlan.inputType.name() == "DATE">
-            <a-date-picker v-model:value="dataForm.${columnPlan.javaFieldName}" valueFormat="YYYY-MM-DD" />
+            <a-date-picker v-model:value="dataForm.${columnPlan.javaFieldName}" valueFormat="YYYY-MM-DD" format="YYYY-MM-DD" />
              <#elseif columnPlan.inputType.name() == "DATETIME">
-            <a-date-picker v-model:value="dataForm.${columnPlan.javaFieldName}" :showTime="true" valueFormat="YYYY-MM-DD HH:mm:ss" />
+            <a-date-picker v-model:value="dataForm.${columnPlan.javaFieldName}" :showTime="true" format="YYYY-MM-DD HH:mm:ss" valueFormat="YYYY-MM-DD HH:mm:ss" />
              <#elseif columnPlan.inputType.name() == "TEXTAREA">
             <a-textarea
                v-model:value="dataForm.${columnPlan.javaFieldName}"
@@ -90,12 +92,13 @@
           </a-col>
           <#assign itemCount = itemCount + 1>
           <#if itemCount%2 == 0>
-      </a-row>
-      <a-row>
+        </a-row>
           </#if>
         </#if>
       </#list>
-      </a-row>
+      <#if itemCount%2 != 0>
+        </a-row>
+       </#if>
     </a-form>
   </a-modal>
 </template>
