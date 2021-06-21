@@ -10,6 +10,8 @@ import javax.validation.constraints.Size;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.CaseUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.seezoon.admin.modules.sys.dto.UserAo;
 import com.seezoon.admin.modules.sys.dto.UserInfo;
@@ -92,6 +94,13 @@ public class UserController extends BaseController {
     private List<VueRouteMenu> genRoutes(List<SysMenu> sysMenus, Map<Integer, List<SysMenu>> parentIdGroup) {
         List<VueRouteMenu> vueRouteMenus = new ArrayList<>();
         sysMenus.forEach(menu -> {
+            String uriPath = menu.getUrl();
+            // 标准化下后面使用，menu.getUrl() 可能会携带参数
+            if (StringUtils.isNotEmpty(uriPath)) {
+                UriComponents uriComponents = UriComponentsBuilder.fromUriString(menu.getUrl()).build();
+                uriPath = uriComponents.getPath();
+            }
+
             VueRouteMenu route = new VueRouteMenu();
             route.setMeta(new RouteMeta(menu.getName(), menu.getIcon()));
             if (menu.getType() == SysMenu.MENU_TYPE_DIRECTORY) {
@@ -101,12 +110,12 @@ public class UserController extends BaseController {
             } else if (menu.getType() == SysMenu.MENU_TYPE_MENU) {
                 if (null != menu.getUrl() && !menu.getUrl().startsWith("https://")
                     && !menu.getUrl().startsWith("http://")) {
-                    route.setComponent(menu.getUrl() + "/index");
+                    route.setComponent(uriPath + "/index");
                     route.setPath(menu.getUrl());
                 } else { // 外部链接
                     route.setComponent(VueRouteMenu.COMPONENT_IFRAME);
                     if (SysMenu.TARGET_MAIN.equals(menu.getTarget())) {// 内部特殊结构,外部前端自动处理
-                        route.setPath("/" + menu.getId());
+                        route.setPath(StringUtils.isNotEmpty(uriPath) ? uriPath : "/" + menu.getId());
                         route.getMeta().setFrameSrc(menu.getUrl());
                     } else {
                         route.setPath(menu.getUrl());
@@ -115,7 +124,7 @@ public class UserController extends BaseController {
             }
             // 名字和组件名字对应才可以keepAlive
             if (StringUtils.isNotEmpty(menu.getUrl())) {
-                String[] menuSplit = StringUtils.split(menu.getUrl(), "/");
+                String[] menuSplit = StringUtils.split(uriPath, "/");
                 if (menuSplit.length > 0) {
                     String name = "";
                     for (String s : menuSplit) {

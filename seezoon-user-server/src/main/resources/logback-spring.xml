@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 打包后会排除 -->
+<configuration>
+    <!-- 开发环境使用spring boot 自带即可-->
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <!--
+     自带的未设置编码
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+    -->
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <!--
+    支持spring.profiles.active 参数切换，实际开发中用处不大
+    see https://docs.spring.io/spring-boot/docs/2.3.4.RELEASE/reference/htmlsingle/#profile-specific-configuration
+     -->
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="io.lettuce.core" level="ERROR"/>
+    <logger name="org.apache" level="ERROR"/>
+    <logger name="com.zaxxer.hikari.HikariConfig" level="DEBUG"/>
+    <!-- 日志输出级别 -->
+    <root level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>
