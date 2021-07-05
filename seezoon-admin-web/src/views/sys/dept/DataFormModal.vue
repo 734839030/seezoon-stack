@@ -121,7 +121,11 @@
             this.dataForm = data;
           });
         } else {
-          this.dataForm = { sort: 1000 };
+          let data = { sort: 1000 };
+          if(undefined !== this.dataForm.parentId) {
+            data.parentId = this.dataForm.parentId;
+          }
+          this.dataForm = data;
         }
       },
       // 保存后回调
