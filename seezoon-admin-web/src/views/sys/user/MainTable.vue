@@ -165,6 +165,7 @@
     methods: {
       onDeptTreeSelect(selectedKeys, { node }) {
         this.searchForm.deptId = node.selected ? undefined : node.dataRef.value;
+        this.$refs.dataFormModal.dataForm.deptId = node.selected ? undefined : node.dataRef.value;
         this.handleQuery();
       },
     },
