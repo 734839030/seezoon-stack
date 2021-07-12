@@ -145,7 +145,7 @@
         defHttp
           .post(
             { url: '/sys/gen/generate', params: ids, responseType: 'blob' },
-            { isTransformResponse: false }
+            { isReturnNativeResponse: true }
           )
           .then((res) => {
             //var blob = new Blob([res.data], { type: res.headers['content-type'] });

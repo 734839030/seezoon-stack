@@ -4,7 +4,8 @@ import { defineStore } from 'pinia';
 import { store } from '/@/store';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useUserStore } from './user';
-import { useAppStoreWidthOut } from './app';
+import { useAppStoreWithOut } from './app';
+
 import { transformObjToRoute, flatMultiLevelRoutes } from '/@/router/helper/routeHelper';
 import { transformRouteToMenu } from '/@/router/helper/menuHelper';
 
@@ -46,16 +47,16 @@ export const usePermissionStore = defineStore({
     backMenuList: [],
   }),
   getters: {
-    getPermCodeList() {
+    getPermCodeList(): string[] | number[] {
       return this.permCodeList;
     },
-    getBackMenuList() {
+    getBackMenuList(): Menu[] {
       return this.backMenuList;
     },
-    getLastBuildMenuTime() {
+    getLastBuildMenuTime(): number {
       return this.lastBuildMenuTime;
     },
-    getIsDynamicAddedRoute() {
+    getIsDynamicAddedRoute(): boolean {
       return this.isDynamicAddedRoute;
     },
   },
@@ -94,7 +95,7 @@ export const usePermissionStore = defineStore({
       }
 
       const userStore = useUserStore();
-      const appStore = useAppStoreWidthOut();
+      const appStore = useAppStoreWithOut();
 
       const { permissionMode = projectSetting.permissionMode } = appStore.getProjectConfig;
       // role permissions
@@ -154,6 +155,6 @@ export const usePermissionStore = defineStore({
 });
 
 // Need to be used outside the setup
-export function usePermissionStoreWidthOut() {
+export function usePermissionStoreWithOut() {
   return usePermissionStore(store);
 }

@@ -1,5 +1,5 @@
 <script lang="tsx">
-  import type { ReplaceFields, Keys, CheckKeys, TreeActionType, TreeItem } from './types';
+  import type { ReplaceFields, Keys, CheckKeys, TreeActionType, TreeItem } from './typing';
 
   import {
     defineComponent,
@@ -25,13 +25,12 @@
 
   import { useTree } from './useTree';
   import { useContextMenu } from '/@/hooks/web/useContextMenu';
-  import { useExpose } from '/@/hooks/core/useExpose';
   import { useDesign } from '/@/hooks/web/useDesign';
 
   import { basicProps } from './props';
   import { CreateContextOptions } from '/@/components/ContextMenu';
 
-  import { CheckEvent } from './types';
+  import { CheckEvent } from './typing';
 
   interface State {
     expandedKeys: Keys;
@@ -44,7 +43,7 @@
     inheritAttrs: false,
     props: basicProps,
     emits: ['update:expandedKeys', 'update:selectedKeys', 'update:value', 'change', 'check'],
-    setup(props, { attrs, slots, emit }) {
+    setup(props, { attrs, slots, emit, expose }) {
       const state = reactive<State>({
         checkStrictly: props.checkStrictly,
         expandedKeys: props.expandedKeys || [],
@@ -98,8 +97,7 @@
           },
           onRightClick: handleRightClick,
         };
-        propsData = omit(propsData, 'treeData', 'class');
-        return propsData;
+        return omit(propsData, 'treeData', 'class');
       });
 
       const getTreeData = computed((): TreeItem[] =>
@@ -107,11 +105,17 @@
       );
 
       const getNotFound = computed((): boolean => {
-        return searchState.startSearch && searchState.searchData?.length === 0;
+        return !getTreeData.value || getTreeData.value.length === 0;
       });
 
-      const { deleteNodeByKey, insertNodeByKey, filterByLevel, updateNodeByKey, getAllKeys } =
-        useTree(treeDataRef, getReplaceFields);
+      const {
+        deleteNodeByKey,
+        insertNodeByKey,
+        insertNodesByKey,
+        filterByLevel,
+        updateNodeByKey,
+        getAllKeys,
+      } = useTree(treeDataRef, getReplaceFields);
 
       function getIcon(params: Recordable, icon?: string) {
         if (!icon) {
@@ -268,6 +272,7 @@
         setCheckedKeys,
         getCheckedKeys,
         insertNodeByKey,
+        insertNodesByKey,
         deleteNodeByKey,
         updateNodeByKey,
         checkAll,
@@ -277,7 +282,7 @@
         },
       };
 
-      useExpose<TreeActionType>(instance);
+      expose(instance);
 
       function renderAction(node: TreeItem) {
         const { actionList } = props;
@@ -376,7 +381,7 @@
               </Tree>
             </ScrollContainer>
 
-            <Empty v-show={unref(getNotFound)} class="!mt-4" />
+            <Empty v-show={unref(getNotFound)} image={Empty.PRESENTED_IMAGE_SIMPLE} class="!mt-4" />
           </div>
         );
       };

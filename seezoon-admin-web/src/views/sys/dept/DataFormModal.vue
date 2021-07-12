@@ -3,19 +3,14 @@
     v-model:visible="visible"
     :confirm-loading="confirmLoading"
     :destroyOnClose="true"
-    :height="this.height"
+    :height="height"
     :maskClosable="false"
     :title="title"
-    :width="this.width"
+    :width="width"
     okText="保存"
-    @ok="handleOk(this.dataForm.id === undefined ? '/sys/dept/save' : '/sys/dept/update')"
+    @ok="handleOk(dataForm.id === undefined ? '/sys/dept/save' : '/sys/dept/update')"
   >
-    <a-form
-      ref="dataForm"
-      :label-col="this.labelCol"
-      :model="dataForm"
-      :wrapper-col="this.wrapperCol"
-    >
+    <a-form ref="dataForm" :label-col="labelCol" :model="dataForm" :wrapper-col="wrapperCol">
       <a-input v-model:value="dataForm.id" type="hidden" />
       <a-row>
         <a-col :md="12" :xs="24">
@@ -122,7 +117,7 @@
           });
         } else {
           let data = { sort: 1000 };
-          if(undefined !== this.dataForm.parentId) {
+          if (undefined !== this.dataForm.parentId) {
             data.parentId = this.dataForm.parentId;
           }
           this.dataForm = data;

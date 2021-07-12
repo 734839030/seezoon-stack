@@ -34,14 +34,14 @@ const transform: AxiosTransform = {
    */
   transformRequestHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
     const { t } = useI18n();
-    const { isTransformRequestResult, isTransformResponse } = options;
-    if (!isTransformResponse) {
+    const { isReturnNativeResponse, isTransformResponse } = options;
+    if (isReturnNativeResponse) {
       // 不进行任何处理，直接返回
       return res;
     }
 
     // 用于页面代码可能需要直接获取code，data，message这些信息时开启
-    if (!isTransformRequestResult) {
+    if (!isTransformResponse) {
       return res.data;
     }
     // 错误的时候返回
@@ -183,9 +183,9 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
           // 默认将prefix 添加到url
           joinPrefix: true,
           // 需要对返回数据进行处理 处理后返回{code,msg,data} 中的data,false 全返回
-          isTransformRequestResult: true,
-          // 返回所有响应包含响应头等字段 优先于上面的字段
           isTransformResponse: true,
+          // 是否返回原生响应头 比如：需要获取响应头时使用该属性
+          isReturnNativeResponse: false,
           // post请求的时候添加参数到url
           joinParamsToUrl: false,
           // 格式化提交参数时间

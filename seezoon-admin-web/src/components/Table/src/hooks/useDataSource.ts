@@ -1,6 +1,5 @@
 import type { BasicTableProps, FetchParams, SorterResult } from '../types/table';
 import type { PaginationProps } from '../types/pagination';
-
 import {
   ref,
   unref,
@@ -12,13 +11,10 @@ import {
   Ref,
   watchEffect,
 } from 'vue';
-
 import { useTimeoutFn } from '/@/hooks/core/useTimeout';
-
 import { buildUUID } from '/@/utils/uuid';
 import { isFunction, isBoolean } from '/@/utils/is';
 import { get, cloneDeep } from 'lodash-es';
-
 import { FETCH_SETTING, ROW_KEY, PAGE_SIZE } from '../const';
 
 interface ActionType {
@@ -117,7 +113,7 @@ export function useDataSource(
   const getDataSourceRef = computed(() => {
     const dataSource = unref(dataSourceRef);
     if (!dataSource || dataSource.length === 0) {
-      return [];
+      return unref(dataSourceRef);
     }
     if (unref(getAutoCreateKey)) {
       const firstItem = dataSource[0];
@@ -179,7 +175,11 @@ export function useDataSource(
     if (!api || !isFunction(api)) return;
     try {
       setLoading(true);
-      const { pageField, sizeField, listField, totalField } = fetchSetting || FETCH_SETTING;
+      const { pageField, sizeField, listField, totalField } = Object.assign(
+        {},
+        FETCH_SETTING,
+        fetchSetting
+      );
       let pageParams: Recordable = {};
 
       const { current = 1, pageSize = PAGE_SIZE } = unref(getPaginationInfo) as PaginationProps;
@@ -204,7 +204,7 @@ export function useDataSource(
         ...(opt?.filterInfo ?? {}),
       };
       if (beforeFetch && isFunction(beforeFetch)) {
-        params = beforeFetch(params) || params;
+        params = (await beforeFetch(params)) || params;
       }
 
       const res = await api(params);
@@ -226,7 +226,7 @@ export function useDataSource(
       }
 
       if (afterFetch && isFunction(afterFetch)) {
-        resultItems = afterFetch(resultItems) || resultItems;
+        resultItems = (await afterFetch(resultItems)) || resultItems;
       }
       dataSourceRef.value = resultItems;
       setPagination({

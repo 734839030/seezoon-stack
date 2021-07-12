@@ -2,6 +2,7 @@
   <Select
     @dropdownVisibleChange="handleFetch"
     v-bind="attrs"
+    @change="handleChange"
     :options="getOptions"
     v-model:value="state"
   >
@@ -26,7 +27,6 @@
   import { useRuleFormItem } from '/@/hooks/component/useFormItem';
   import { useAttrs } from '/@/hooks/core/useAttrs';
   import { get, omit } from 'lodash-es';
-
   import { LoadingOutlined } from '@ant-design/icons-vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { propTypes } from '/@/utils/propTypes';
@@ -68,11 +68,12 @@
       const options = ref<OptionsItem[]>([]);
       const loading = ref(false);
       const isFirstLoad = ref(true);
+      const emitData = ref<any[]>([]);
       const attrs = useAttrs();
       const { t } = useI18n();
 
       // Embedded in the form, just use the hook binding to perform form verification
-      const [state] = useRuleFormItem(props);
+      const [state] = useRuleFormItem(props, 'value', 'change', emitData);
 
       const getOptions = computed(() => {
         const { labelField, valueField, numberToString } = props;
@@ -105,7 +106,7 @@
       async function fetch() {
         const api = props.api;
         if (!api || !isFunction(api)) return;
-
+        options.value = [];
         try {
           loading.value = true;
           const res = await api(props.params);
@@ -136,7 +137,11 @@
         emit('options-change', unref(options));
       }
 
-      return { state, attrs, getOptions, loading, t, handleFetch };
+      function handleChange(_, ...args) {
+        emitData.value = args;
+      }
+
+      return { state, attrs, getOptions, loading, t, handleFetch, handleChange };
     },
   });
 </script>

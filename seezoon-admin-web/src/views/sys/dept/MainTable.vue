@@ -2,9 +2,9 @@
   <!-- 查询表单 -->
   <a-form
     ref="searchForm"
-    :labelCol="this.labelCol"
+    :labelCol="labelCol"
     :model="searchForm"
-    :wrapperCol="this.wrapperCol"
+    :wrapperCol="wrapperCol"
     layout="inline"
   >
     <a-form-item label="名称" name="name">
@@ -13,11 +13,8 @@
     <a-form-item>
       <a-space>
         <a-button v-auth="'sys:dept:query'" type="primary" @click="handleQuery()">查询</a-button>
-        <a-button type="default" @click="this.$refs.searchForm.resetFields()">重置</a-button>
-        <a-button
-          v-auth="'sys:dept:save'"
-          type="default"
-          @click="this.$refs.dataFormModal.open('添加')"
+        <a-button type="default" @click="$refs.searchForm.resetFields()">重置</a-button>
+        <a-button v-auth="'sys:dept:save'" type="default" @click="$refs.dataFormModal.open('添加')"
           >添加
         </a-button>
       </a-space>
@@ -41,7 +38,7 @@
         @change="handleTableChange"
       >
         <template #action="{ record }">
-          <a v-auth="'sys:dept:update'" @click="this.$refs.dataFormModal.open('编辑', record.id)"
+          <a v-auth="'sys:dept:update'" @click="$refs.dataFormModal.open('编辑', record.id)"
             >编辑</a
           >
           <a-divider type="vertical" />
@@ -58,7 +55,7 @@
   </a-row>
   <data-form-modal
     ref="dataFormModal"
-    @refreshDeptTree="this.loadDeptData"
+    @refreshDeptTree="loadDeptData"
     @refreshQuery="handleQuery"
   />
 </template>

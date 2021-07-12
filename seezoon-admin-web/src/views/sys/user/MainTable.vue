@@ -2,11 +2,11 @@
   <!-- 查询表单 -->
   <a-form
     ref="searchForm"
-    :labelCol="this.labelCol"
+    :labelCol="labelCol"
     :model="searchForm"
-    :wrapperCol="this.wrapperCol"
-    layout="inline"
+    :wrapperCol="wrapperCol"
     labelAlign="left"
+    layout="inline"
   >
     <a-form-item label="登录名" name="username">
       <a-input v-model:value="searchForm.username" :maxlength="50" placeholder="请输入登录名" />
@@ -14,15 +14,15 @@
     <a-form-item label="姓名" name="name">
       <a-input v-model:value="searchForm.name" :maxlength="50" placeholder="请输入姓名" />
     </a-form-item>
-    <a-form-item label="手机号" name="mobile">
+    <a-form-item label="手机" name="mobile">
       <a-input v-model:value="searchForm.mobile" :maxlength="20" placeholder="请输入手机号" />
     </a-form-item>
     <a-form-item label="状态" name="status">
       <a-select
         v-model:value="searchForm.status"
         :allowClear="true"
-        placeholder="请选择状态"
-        style="width: 120px"
+        placeholder="请选择"
+        style="width: 90px"
       >
         <a-select-option :value="1">正常</a-select-option>
         <a-select-option :value="0">禁用</a-select-option>
@@ -31,16 +31,13 @@
     <a-form-item>
       <a-space>
         <a-button v-auth="'sys:user:query'" type="primary" @click="handleQuery()">查询</a-button>
-        <a-button type="default" @click="this.$refs.searchForm.resetFields()">重置</a-button>
-        <a-button
-          v-auth="'sys:user:save'"
-          type="default"
-          @click="this.$refs.dataFormModal.open('添加')"
+        <a-button type="default" @click="$refs.searchForm.resetFields()">重置</a-button>
+        <a-button v-auth="'sys:user:save'" type="default" @click="$refs.dataFormModal.open('添加')"
           >添加
         </a-button>
-        <a-button v-auth="'sys:user:unlock'" type="primary" @click="this.$refs.unlockModal.open()"
-          >解锁</a-button
-        >
+        <a-button v-auth="'sys:user:unlock'" type="primary" @click="$refs.unlockModal.open()"
+          >解锁
+        </a-button>
       </a-space>
     </a-form-item>
   </a-form>
@@ -71,7 +68,7 @@
           </a-tag>
         </template>
         <template #action="{ record }">
-          <a v-auth="'sys:user:update'" @click="this.$refs.dataFormModal.open('编辑', record.id)"
+          <a v-auth="'sys:user:update'" @click="$refs.dataFormModal.open('编辑', record.id)"
             >编辑</a
           >
           <a-divider type="vertical" />

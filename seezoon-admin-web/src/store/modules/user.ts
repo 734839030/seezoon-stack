@@ -1,5 +1,5 @@
 import type { UserInfo } from '/#/store';
-import type { ErrorMessageMode } from '/@/utils/http/axios/types';
+import type { ErrorMessageMode } from '/#/axios';
 
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
@@ -133,6 +133,6 @@ export const useUserStore = defineStore({
 });
 
 // Need to be used outside the setup
-export function useUserStoreWidthOut() {
+export function useUserStoreWithOut() {
   return useUserStore(store);
 }
