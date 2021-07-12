@@ -251,7 +251,11 @@
             this.dataForm = data;
           });
         } else {
-          this.dataForm = { status: 1 };
+          let data = { status: 1 };
+          if(undefined !== this.dataForm.deptId) {
+            data.deptId = this.dataForm.deptId;
+          }
+          this.dataForm = data;
         }
       },
       // 保存后回调

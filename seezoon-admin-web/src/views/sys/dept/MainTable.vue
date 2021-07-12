@@ -135,6 +135,7 @@
       },
       onDeptTreeSelect(selectedKeys, { node }) {
         this.searchForm.parentId = node.selected ? undefined : node.dataRef.value;
+        this.$refs.dataFormModal.dataForm.parentId = node.selected ? undefined : node.dataRef.value;
         this.handleQuery();
       },
       //加载部门树
