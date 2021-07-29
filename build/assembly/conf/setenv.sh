@@ -1,7 +1,7 @@
 # 如果不设置，默认使用系统环境变量中的java命令
 #JAVA_HOME="/usr/local/jdk"
-# 远程调试功能for > jdk1.5
-# -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005
+# 远程调试功能for > jdk1.8, 1.5-1.8 address=5005
+# -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
 # for jdk version >= 11
 JVM_MEM="-Xmx512m -Xms128m"
 if [ "${IN_CONTAINER}" = true ]; then
