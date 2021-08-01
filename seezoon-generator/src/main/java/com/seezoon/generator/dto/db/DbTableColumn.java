@@ -36,7 +36,7 @@ public class DbTableColumn {
     /**
      * 字符长度
      */
-    private Integer maxlength;
+    private Long maxlength;
     /**
      * 列类型 eg:varchar(64)
      */
