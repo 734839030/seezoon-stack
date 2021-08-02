@@ -54,7 +54,7 @@ public class ColumnPlan implements Comparable<ColumnPlan> {
     /**
      * 字段长度eg:64
      */
-    private Integer maxLength;
+    private Long maxLength;
 
     // 如下字段接收前端参数设置
     /**
