@@ -137,6 +137,7 @@ public class SeezoonProperties {
 
         private LocalProperties local = new LocalProperties();
         private AliyunOssProperties aliyun = new AliyunOssProperties();
+        private MinioProperties minio = new MinioProperties();
 
         @Getter
         @Setter
@@ -172,5 +173,25 @@ public class SeezoonProperties {
             private String accessKeySecret;
         }
 
+        @Getter
+        @Setter
+        public static class MinioProperties {
+            /**
+             * Minio 存储桶名
+             */
+            private String bucketName;
+            /**
+             * 对外可访问的域名,线上推荐用内网，开发测试如果无法连接则使用公网
+             */
+            private String endpoint;
+            /**
+             * 分配的用户
+             */
+            private String accessKey;
+            /**
+             * 分配密钥
+             */
+            private String secretKey;
+        }
     }
 }
