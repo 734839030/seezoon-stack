@@ -2,9 +2,9 @@
   <!-- 查询表单 -->
   <a-form
     ref="searchForm"
-    :labelCol="this.labelCol"
+    :labelCol="labelCol"
     :model="searchForm"
-    :wrapperCol="this.wrapperCol"
+    :wrapperCol="wrapperCol"
     layout="inline"
   >
     <a-form-item label="文件名" name="name">
@@ -23,7 +23,7 @@
     <a-form-item>
       <a-space>
         <a-button v-auth="'sys:file:query'" type="primary" @click="handleQuery()">查询</a-button>
-        <a-button type="default" @click="this.$refs.searchForm.resetFields()">重置</a-button>
+        <a-button type="default" @click="$refs.searchForm.resetFields()">重置</a-button>
         <a-upload
           :customRequest="customRequest"
           :multiple="true"
@@ -79,7 +79,10 @@
     data() {
       return {
         searchForm: {
-          createDateRange: [moment().day(-7).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')],
+          createDateRange: [
+            moment().add(-7, 'd').format('YYYY-MM-DD'),
+            moment().format('YYYY-MM-DD'),
+          ],
         },
         url: '/sys/file/query',
         columns: [
