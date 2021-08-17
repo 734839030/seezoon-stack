@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.seezoon.dao.framework.entity.BaseEntity;
 
@@ -52,6 +53,12 @@ public class SysUser extends BaseEntity<Integer> {
 
     @ApiModelProperty(value = "邮件")
     private String email;
+    @ApiModelProperty(value = "openId")
+    @JsonIgnore
+    private String openId;
+    @ApiModelProperty(value = "unionId")
+    @JsonIgnore
+    private String unionId;
 
     /**
      * 以下为扩展字段

@@ -22,6 +22,24 @@ public class AdminPasswordEncoder {
     }
 
     public static PasswordEncoder getEncoder() {
-        return new BCryptPasswordEncoder();
+        return new AdminBCryptPasswordEncoder();
+    }
+
+    public static class AdminBCryptPasswordEncoder extends BCryptPasswordEncoder {
+        @Override
+        public String encode(CharSequence rawPassword) {
+            if (StringUtils.isEmpty(rawPassword)) {
+                return null;
+            }
+            return super.encode(rawPassword);
+        }
+
+        @Override
+        public boolean matches(CharSequence rawPassword, String encodedPassword) {
+            if (StringUtils.isEmpty(rawPassword) && StringUtils.isEmpty(encodedPassword)) {
+                return true;
+            }
+            return super.matches(rawPassword, encodedPassword);
+        }
     }
 }

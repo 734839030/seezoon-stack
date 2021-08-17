@@ -18,7 +18,7 @@ target/
 *.iml
 *.iws
 *.factorypath
-
+.hbuilderx
 # seezoon project
 logs/
 

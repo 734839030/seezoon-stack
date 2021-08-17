@@ -48,6 +48,13 @@ public class SysUserService extends AbstractCrudService<SysUserDao, SysUser, Int
     }
 
     @Transactional(readOnly = true)
+    public SysUser findByOpenId(@NotEmpty String openId) {
+        SysUserCondition sysUserCondition = new SysUserCondition();
+        sysUserCondition.setOpenId(openId);
+        return this.findOne(sysUserCondition);
+    }
+
+    @Transactional(readOnly = true)
     public SysUser findByMobile(@NotEmpty String mobile) {
         SysUserCondition sysUserCondition = new SysUserCondition();
         sysUserCondition.setMobile(mobile);
