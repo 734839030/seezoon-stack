@@ -9,6 +9,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 public class AdminPasswordEncoder {
 
+    /**
+     * 适合低三方登录的无密码传入
+     */
+    public static final String NONE_PASSWORD = AdminPasswordEncoder.encode("none");
+
     public static String encode(String password) {
         if (StringUtils.isEmpty(password)) {
             return null;
@@ -22,24 +27,7 @@ public class AdminPasswordEncoder {
     }
 
     public static PasswordEncoder getEncoder() {
-        return new AdminBCryptPasswordEncoder();
+        return new BCryptPasswordEncoder();
     }
 
-    public static class AdminBCryptPasswordEncoder extends BCryptPasswordEncoder {
-        @Override
-        public String encode(CharSequence rawPassword) {
-            if (StringUtils.isEmpty(rawPassword)) {
-                return null;
-            }
-            return super.encode(rawPassword);
-        }
-
-        @Override
-        public boolean matches(CharSequence rawPassword, String encodedPassword) {
-            if (StringUtils.isEmpty(rawPassword) && StringUtils.isEmpty(encodedPassword)) {
-                return true;
-            }
-            return super.matches(rawPassword, encodedPassword);
-        }
-    }
 }

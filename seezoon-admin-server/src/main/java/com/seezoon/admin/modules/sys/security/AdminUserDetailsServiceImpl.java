@@ -81,7 +81,7 @@ public class AdminUserDetailsServiceImpl implements UserDetailsService {
                 throw new UsernameNotFoundException(wxMaJscode2SessionResult.getOpenid() + "  not found");
             } else {
                 username = user.getUsername();
-                user.setPassword(null);
+                user.setPassword(AdminPasswordEncoder.NONE_PASSWORD);
             }
         } else {
             boolean locked = loginSecurityService.getUsernameLockStrategy().isLocked(username);

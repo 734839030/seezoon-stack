@@ -36,7 +36,8 @@
 							defHttp.postForm({
 								url: '/login?type=MP_WEIXIN',
 								data: {
-									username: res.code
+									username: res.code,
+									password:'none'
 								},
 								success: ({
 									resp: {
