@@ -4,10 +4,10 @@
 			<image style="width: 80px; height: 80px; border-radius: 40px;" src="../../static/uni.png"></image>
 		</view>
 		<!-- #ifdef H5 -->
-		<account></account>
+		<account @redirect="goOriginalPage"></account>
 		<!-- #endif -->
 		<!-- #ifdef MP-WEIXIN -->
-		<mpwx></mpwx>
+		<mpwx @redirect="goOriginalPage"></mpwx>
 		<!-- #endif -->
 	</view>
 </template>
@@ -15,6 +15,30 @@
 	import account from './account.vue';
 	import mpwx from './mp-wx.vue';
 	export default {
-		components:{account,mpwx}
+		components: {
+			account,
+			mpwx
+		},
+		data() {
+			return {
+				goPage: null
+			}
+		},
+		onLoad(options) {
+			this.goPage = decodeURIComponent(options.goPage)
+			console.log("goPage:",goPage);
+		},
+		methods: {
+			goOriginalPage() {
+				uni.switchTab({
+					url: this.goPage,
+					fail: (res) => {
+						uni.redirectTo({
+							url: this.goPage
+						})
+					}
+				})
+			}
+		}
 	}
 </script>

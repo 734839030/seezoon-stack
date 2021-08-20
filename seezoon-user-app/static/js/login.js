@@ -1,12 +1,6 @@
 let LOGIN_COOKIE_KEY = 'loginCookieKey';
 let XSRF_TOKEN_KEY = 'xsrfTokenKey';
 
-export function loginSuccess(cookies) {
-	setLoginResponseData(cookies);
-	uni.switchTab({
-		url: '/pages/home/index'
-	})
-}
 /**
  * 针对小程序类需要自动处理cookie
  * 

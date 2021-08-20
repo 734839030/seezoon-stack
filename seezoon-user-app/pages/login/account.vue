@@ -28,9 +28,10 @@
 	import {
 		defHttp
 	} from '../../static/js/request.js'
-	import {loginSuccess} from '../../static/js/login.js'
+	import {setLoginResponseData} from '../../static/js/login.js'
 	export default {
 		name:'account',
+		emits:['redirect'],
 		data() {
 			return {
 				loginMsg: '登录失败',
@@ -78,7 +79,8 @@
 							},cookies
 						}) => {
 							if (code == '0') {
-								loginSuccess(cookies);
+								setLoginResponseData(cookies);
+								this.$emit('redirect');
 							} else {
 								this.loginMsg = msg;
 								this.$refs.popup.open();

@@ -16,9 +16,10 @@
 		mounted() {
 			defHttp.get({
 				url:'/sys/user/info',
-				success: ({resp : {data}}) => {
-					console.log('data:',data)
-					this.userInfo = data;
+				success: ({resp : {code,data}}) => {
+					if (code == '0') {
+						this.userInfo = data;
+					} 
 				}
 			});
 		},

@@ -29,6 +29,7 @@ import com.seezoon.dao.framework.constants.EntityStatus;
 import com.seezoon.dao.modules.sys.entity.SysMenu;
 import com.seezoon.dao.modules.sys.entity.SysRole;
 import com.seezoon.dao.modules.sys.entity.SysUser;
+import com.seezoon.framework.exception.BusinessException;
 import com.seezoon.framework.utils.IpUtil;
 import com.seezoon.generator.plan.TablePlan;
 
@@ -73,16 +74,13 @@ public class AdminUserDetailsServiceImpl implements UserDetailsService {
         // 获取登录标识
         final String type = request.getParameter("type");
         SysUser user = null;
-        if (LoginType.MP_WEIXIN.name().equals(type)) {
-            WxMaJscode2SessionResult wxMaJscode2SessionResult = wxMaService.jsCode2SessionInfo(username);
-            // 如果是多公众号 小程序 一起用在公众平台绑定后使用unionId.
-            user = sysUserService.findByOpenId(wxMaJscode2SessionResult.getOpenid());
+        if (StringUtils.isNotEmpty(type)) {
+            user = this.thirdLogin(type, username);
             if (null == user) {
-                throw new UsernameNotFoundException(wxMaJscode2SessionResult.getOpenid() + "  not found");
-            } else {
-                username = user.getUsername();
-                user.setPassword(AdminPasswordEncoder.NONE_PASSWORD);
+                throw new UsernameNotFoundException("user not found");
             }
+            username = user.getUsername();
+            user.setPassword(AdminPasswordEncoder.NONE_PASSWORD);
         } else {
             boolean locked = loginSecurityService.getUsernameLockStrategy().isLocked(username);
             if (locked) {
@@ -109,6 +107,20 @@ public class AdminUserDetailsServiceImpl implements UserDetailsService {
         AdminUserDetails adminUserDetails = new AdminUserDetails(userInfo, username, user.getPassword());
         adminUserDetails.setAuthorities(getAuthorities(userRoles, user.getId()));
         return adminUserDetails;
+    }
+
+    @SneakyThrows
+    private SysUser thirdLogin(String type, String username) throws UsernameNotFoundException {
+        SysUser user = null;
+        if (LoginType.MP_WEIXIN.name().equals(type)) {
+            WxMaJscode2SessionResult wxMaJscode2SessionResult = wxMaService.jsCode2SessionInfo(username);
+            // 如果是多公众号 小程序 一起用在公众平台绑定后使用unionId.
+            user = sysUserService.findByOpenId(wxMaJscode2SessionResult.getOpenid());
+        } else {
+            throw new BusinessException("un support login type");
+        }
+
+        return user;
     }
 
     /**

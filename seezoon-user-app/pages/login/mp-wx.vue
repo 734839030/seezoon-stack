@@ -3,7 +3,6 @@
 		<button v-if="needRegist" type="primary" plain="true" open-type="getPhoneNumber"
 			@getphonenumber="getPhoneNumber">一键登录</button>
 		<button v-if="relogin" type="primary" plain="true" @click="login">登录</button>
-
 	</view>
 </template>
 
@@ -12,11 +11,12 @@
 		defHttp
 	} from '../../static/js/request.js'
 	import {
-		loginSuccess
+		setLoginResponseData
 	} from '../../static/js/login.js'
 
 	export default {
 		name: 'mpwx',
+		emits:['redirect'],
 		data() {
 			return {
 				needRegist: false,
@@ -25,6 +25,7 @@
 			}
 		},
 		mounted() {
+			console.log("mounted")
 			this.login();
 		},
 		methods: {
@@ -32,6 +33,7 @@
 				wx.login({
 					success: (res) => {
 						if (res.code) {
+							console.log(res.code)
 							// 先自动登录,未注册时候再次获取code
 							defHttp.postForm({
 								url: '/login?type=MP_WEIXIN',
@@ -47,7 +49,9 @@
 									cookies
 								}) => {
 									if (code == '0') {
-										loginSuccess(cookies);
+										setLoginResponseData(cookies);
+										console.log("setLoginResponseData")
+										this.$emit('redirect');
 									} else if (code == '80001') { // 微信未注册，后台约定错误码
 										this.relogin=false;
 										wx.login({
@@ -74,7 +78,6 @@
 				})
 			},
 			getPhoneNumber(e) {
-				console.log(e)
 				console.log(e.detail.errMsg)
 				if (e.detail.iv && e.detail.encryptedData) {
 					defHttp.postForm({

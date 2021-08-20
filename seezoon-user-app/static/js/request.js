@@ -41,12 +41,23 @@ export function requestInterceptor() {
 		},
 		success(args) {
 			if (args.statusCode == 401) {
+				const  pages = getCurrentPages();
+				// 获取当前页方便登录后跳回
+				let curPage = pages[pages.length-1].$page.fullPath;
 				uni.redirectTo({
-					url: '/pages/login/index'
+					url: '/pages/login/index?goPage=' + encodeURIComponent(curPage)
 				})
+				return false;
 			} else {
 				args.resp = args.data;
 				args.data = null;
+				const {code,msg} = args.resp;
+				if (code != '0') {
+					uni.showToast({
+						icon:'none',
+						title:msg
+					})
+				}
 			}
 		},
 		fail(err) {

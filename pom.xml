@@ -61,7 +61,7 @@
         <!-- 使用阿里云免费配置中心(可选使用) -->
         <nacos.starter>0.2.7</nacos.starter>
         <easy.excel.version>2.2.10</easy.excel.version>
-        <wx.java>4.1.0</wx.java>
+        <wx.java>4.1.6.B</wx.java>
     </properties>
     <dependencyManagement>
         <dependencies>
