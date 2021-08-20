@@ -1,5 +1,6 @@
 package com.seezoon.dao.modules.sys.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.seezoon.dao.framework.entity.PageCondition;
 import com.seezoon.dao.framework.sort.annotation.SortField;
 
@@ -39,6 +40,10 @@ public class SysUserCondition extends PageCondition {
      */
     @ApiModelProperty(value = "手机")
     private String mobile;
+    @ApiModelProperty(value = "openId")
+    private String openId;
+    @ApiModelProperty(value = "unionId")
+    private String unionId;
     /**
      * 手机
      */

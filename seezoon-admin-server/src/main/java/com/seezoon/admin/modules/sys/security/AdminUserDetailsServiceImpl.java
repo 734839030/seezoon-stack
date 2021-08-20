@@ -22,6 +22,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import com.seezoon.admin.framework.file.FileService;
 import com.seezoon.admin.modules.sys.dto.UserInfo;
 import com.seezoon.admin.modules.sys.security.constant.LockType;
+import com.seezoon.admin.modules.sys.security.constant.LoginType;
 import com.seezoon.admin.modules.sys.security.data.DataScope;
 import com.seezoon.admin.modules.sys.service.SysUserService;
 import com.seezoon.dao.framework.constants.EntityStatus;
@@ -30,6 +31,10 @@ import com.seezoon.dao.modules.sys.entity.SysRole;
 import com.seezoon.dao.modules.sys.entity.SysUser;
 import com.seezoon.framework.utils.IpUtil;
 import com.seezoon.generator.plan.TablePlan;
+
+import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
+import lombok.SneakyThrows;
 
 /**
  * 用户加载逻辑
@@ -47,27 +52,46 @@ public class AdminUserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private LoginSecurityService loginSecurityService;
 
+    @Autowired
+    private WxMaService wxMaService;
+
+    @SneakyThrows
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         HttpServletRequest request =
             ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
+
         String remoteIp = IpUtil.getRemoteIp(request);
         boolean ipLocked = loginSecurityService.getIpLockStrategy().isLocked(remoteIp);
         if (ipLocked) {
             throw new LockedException(LockType.IP.name());
         }
-
         if (StringUtils.isBlank(username)) {
             throw new UsernameNotFoundException("username is empty");
         }
 
-        boolean locked = loginSecurityService.getUsernameLockStrategy().isLocked(username);
-        if (locked) {
-            throw new LockedException(LockType.USERNAME.name());
-        }
-        SysUser user = sysUserService.findByUsername(username);
-        if (null == user) {
-            throw new UsernameNotFoundException(username + "  not found");
+        // 获取登录标识
+        final String type = request.getParameter("type");
+        SysUser user = null;
+        if (LoginType.MP_WEIXIN.name().equals(type)) {
+            WxMaJscode2SessionResult wxMaJscode2SessionResult = wxMaService.jsCode2SessionInfo(username);
+            // 如果是多公众号 小程序 一起用在公众平台绑定后使用unionId.
+            user = sysUserService.findByOpenId(wxMaJscode2SessionResult.getOpenid());
+            if (null == user) {
+                throw new UsernameNotFoundException(wxMaJscode2SessionResult.getOpenid() + "  not found");
+            } else {
+                username = user.getUsername();
+                user.setPassword(AdminPasswordEncoder.NONE_PASSWORD);
+            }
+        } else {
+            boolean locked = loginSecurityService.getUsernameLockStrategy().isLocked(username);
+            if (locked) {
+                throw new LockedException(LockType.USERNAME.name());
+            }
+            user = sysUserService.findByUsername(username);
+            if (null == user) {
+                throw new UsernameNotFoundException(username + "  not found");
+            }
         }
 
         if (EntityStatus.INVALID.status() == user.getStatus()) {

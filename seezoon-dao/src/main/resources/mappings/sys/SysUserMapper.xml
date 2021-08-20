@@ -10,6 +10,8 @@
         <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
         <result column="photo" jdbcType="VARCHAR" property="photo"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="open_id" jdbcType="VARCHAR" property="openId"/>
+        <result column="union_id" jdbcType="VARCHAR" property="unionId"/>
         <result column="status" jdbcType="TINYINT" property="status"/>
         <result column="create_by" jdbcType="INTEGER" property="createBy"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
@@ -22,7 +24,8 @@
 
     <sql id="Base_Column_List">
         t.id, IF(d.name is null, null, t.dept_id) as
-        dept_id,t.username,t.password,t.name,t.mobile,t.photo,t.email,t.status,t.create_by,t.create_time,t.update_by,t.update_time,t.remarks,
+        dept_id,t.username,t.password,t.name,t.mobile,t.photo,t.email,t.open_id,t.union_id,
+        t.status,t.create_by,t.create_time,t.update_by,t.update_time,t.remarks,
         d.name dept_name
 
     </sql>
@@ -54,6 +57,12 @@
             </if>
             <if test="mobile != null and mobile != ''">
                 and t.mobile = #{mobile}
+            </if>
+            <if test="openId != null and openId != '' ">
+                and t.open_id = #{openId}
+            </if>
+            <if test="unionId != null and unionId != '' ">
+                and t.union_id = #{unionId}
             </if>
             <if test="name != null and name != ''">
                 and t.name = #{name}
@@ -95,10 +104,10 @@
 
     <insert id="insert" keyColumn="id" keyProperty="id" useGeneratedKeys="true">
         insert into sys_user
-        (dept_id,username,password,name,mobile,photo,email,status,create_by,create_time,update_by,update_time,remarks)
+        (dept_id,username,password,name,mobile,photo,email,open_id,union_id,status,create_by,create_time,update_by,update_time,remarks)
         values
         <foreach item="item" collection="array" separator=",">
-            (#{item.deptId},#{item.username},#{item.password},#{item.name},#{item.mobile},#{item.photo},#{item.email},#{item.status},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remarks})
+            (#{item.deptId},#{item.username},#{item.password},#{item.name},#{item.mobile},#{item.photo},#{item.email},#{item.openId},#{item.unionId},#{item.status},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remarks})
         </foreach>
     </insert>
 
@@ -126,6 +135,12 @@
             <if test="email != null">
                 t.email = #{email},
             </if>
+            <if test="openId != null">
+                t.open_id = #{openId},
+            </if>
+            <if test="unionId != null">
+                t.union_id = #{unionId},
+            </if>
             <if test="status != null">
                 t.status = #{status},
             </if>
@@ -150,6 +165,8 @@
         ,t.mobile = #{mobile}
         ,t.photo = #{photo}
         ,t.email = #{email}
+        ,t.open_id = #{openId}
+        ,t.union_id = #{unionId}
         ,t.status = #{status}
         ,t.update_by = #{updateBy}
         ,t.update_time = #{updateTime}
