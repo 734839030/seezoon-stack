@@ -27,9 +27,9 @@ export const defHttp = {
 
 export function requestInterceptor() {
 	uni.addInterceptor('request', {
-		timeout: 10000,
-		withCredentials: true,
 		invoke(args) {
+			args.timeout = args.timeout ? args.timeout : 10000
+			args.withCredentials = true; 
 			args.url = getBaseUrl() + args.url
 			if (!args.header) {
 				args.header = {};
@@ -51,6 +51,7 @@ export function requestInterceptor() {
 			} else {
 				args.resp = args.data;
 				args.data = null;
+				debugger
 				const {code,msg} = args.resp;
 				if (code != '0') {
 					uni.showToast({

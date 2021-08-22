@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view style="text-align: center;margin-top: 120rpx;margin-bottom: 35rpx;">
-			<image style="width: 80px; height: 80px; border-radius: 40px;" src="../../static/uni.png"></image>
+			<image style="width: 80px; height: 80px; border-radius: 50%;" src="../../static/uni.png"></image>
 		</view>
 		<!-- #ifdef H5 -->
 		<account @redirect="goOriginalPage"></account>
@@ -25,8 +25,12 @@
 			}
 		},
 		onLoad(options) {
-			this.goPage = decodeURIComponent(options.goPage)
-			console.log("goPage:",goPage);
+			if (!options.goPage) {
+				this.goPage = '/pages/home/index'
+			} else {
+				this.goPage = decodeURIComponent(options.goPage)
+			}
+			console.log("goPage:",this.goPage);
 		},
 		methods: {
 			goOriginalPage() {

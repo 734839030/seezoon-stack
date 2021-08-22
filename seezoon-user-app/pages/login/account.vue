@@ -76,9 +76,12 @@
 							resp: {
 								code,
 								msg
-							},cookies
+							}
 						}) => {
 							if (code == '0') {
+								// H5 从respone 取不到cookie 所以使用document 来取
+								let cookies = document.cookie.split(';');
+								cookies.forEach((val, index) =>cookies[index] = val + ';');
 								setLoginResponseData(cookies);
 								this.$emit('redirect');
 							} else {

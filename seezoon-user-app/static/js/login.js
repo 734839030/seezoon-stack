@@ -13,6 +13,7 @@ export function setLoginResponseData(cookies) {
 		if (value.startsWith('SESSION=') || value.startsWith('remember-me=')) {
 			loginCookie = loginCookie + value + ';';
 		}
+		debugger
 		if (value.startsWith('XSRF-TOKEN=')) {
 			const xsrfToken = value.substring(11, value.indexOf(';'));
 			console.log('xsrf-token:', xsrfToken);

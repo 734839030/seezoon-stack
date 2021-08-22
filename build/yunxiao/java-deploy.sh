@@ -4,7 +4,7 @@ set -e
 APP_NAME="seezoon-admin-server"
 mkdir -p /data/${APP_NAME}
 if [ -d /data/${APP_NAME}/bin ]; then
-  rm -rf bin
+  rm -rf /data/${APP_NAME}/bin
 fi
 
 # 目录不存在则为首次部署
