@@ -17,5 +17,9 @@ public enum StoreType {
     /**
      * 阿里云oss存储
      */
-    ALIYUN_OSS;
+    ALIYUN_OSS,
+    /**
+     * Minio对象存储
+     */
+    MINIO;
 }

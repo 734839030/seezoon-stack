@@ -32,9 +32,16 @@
           name="file"
         >
           <a-button v-auth="'sys:file:upload'" :loading="uploadBtnLoading" type="default">
-            <cloud-upload-outlined />
+            <cloud-upload-outlined />上传
           </a-button>
         </a-upload>
+        <a-button
+          v-auth="'sys:file:delete'"
+          :disabled="selectedRowKeys.length == 0"
+          type="default"
+          @click="batchDelete(selectedRowKeys)"
+          >删除
+        </a-button>
       </a-space>
     </a-form-item>
   </a-form>
@@ -45,6 +52,7 @@
     :pagination="pagination"
     :row-key="(record) => record.id"
     bordered
+    :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
     class="mt-4"
     size="small"
     @change="handleTableChange"
@@ -85,6 +93,7 @@
           ],
         },
         url: '/sys/file/query',
+        selectedRowKeys: [],
         columns: [
           {
             title: '文件名',
@@ -117,6 +126,9 @@
       this.handleQuery();
     },
     methods: {
+      onSelectChange(selectedRowKeys) {
+        this.selectedRowKeys = selectedRowKeys;
+      },
       preview(url) {
         openWindow(url);
       },
@@ -135,6 +147,17 @@
             this.handleQuery();
           })
           .finally(() => (this.uploadBtnLoading = false));
+      },
+      batchDelete(selectedRowKeys) {
+        defHttp.postForm('/sys/file/delete_batch', { ids: selectedRowKeys.join(',') })
+          .then(() => {
+            this.$message.success('删除成功');
+            this.handleQuery();
+          })
+          .catch((error) => {
+            console.info(error);
+            this.$message.error(error);
+          });
       },
     },
   };

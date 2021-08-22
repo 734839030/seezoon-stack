@@ -3,6 +3,7 @@ package com.seezoon.admin.modules.sys.controller;
 import java.io.*;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
@@ -149,6 +151,33 @@ public class SysFileController extends BaseController {
         }
         int count = sysFileService.delete(id);
         return count == 1 ? Result.SUCCESS : Result.error(DefaultCodeMsgBundle.DELETE_ERROR, count);
+    }
+
+    @ApiOperation(value = "批量删除")
+    @PreAuthorize("hasAuthority('sys:file:delete')")
+    @PostMapping(value = "/delete_batch")
+    public Result delete(@RequestParam String[] ids) {
+        int successCount = 0;
+        List<String> errorIds = new ArrayList<>(ids.length);
+        for (String id: ids) {
+            SysFile sysFile = sysFileService.find(id);
+            Assert.notNull(sysFile, "file record not exists");
+            try {
+                fileService.delete(sysFile.getRelativePath());
+            } catch (IOException e) {
+                logger.error("remove file:" + sysFile.getRelativePath() + " error", e);
+            }
+            int count = sysFileService.delete(id);
+            if (1 == count) { // 删除成功
+                successCount ++;
+            } else { // 删除失败
+                errorIds.add(id + "：" + sysFile.getName());
+            }
+        }
+        return successCount == ids.length
+                ? Result.SUCCESS
+                : Result.error(DefaultCodeMsgBundle.DELETE_ERROR,
+                        "删除失败文件列表：\n" + StringUtils.join(errorIds, ",\n"));
     }
 
     @ApiOperation(value = "文件url前缀")

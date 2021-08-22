@@ -1,14 +1,11 @@
 package com.seezoon.framework.component.file;
 
+import com.seezoon.framework.component.file.handler.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 
-import com.seezoon.framework.component.file.handler.AliyunOssHandler;
-import com.seezoon.framework.component.file.handler.FileHandler;
-import com.seezoon.framework.component.file.handler.LocalFileHandler;
-import com.seezoon.framework.component.file.handler.NoneFileHandler;
 import com.seezoon.framework.properties.SeezoonProperties;
 
 import lombok.RequiredArgsConstructor;
@@ -41,5 +38,11 @@ public class FileHandlerConfiguration {
     @ConditionalOnProperty(name = "seezoon.file.store-type", havingValue = "aliyun_oss")
     public FileHandler aliyunOssFileHandler() {
         return new AliyunOssHandler(seezoonProperties.getFile());
+    }
+
+    @Bean
+    @ConditionalOnProperty(name = "seezoon.file.store-type", havingValue = "minio")
+    public FileHandler minioFileHandler() {
+        return new MinioHandler(seezoonProperties.getFile());
     }
 }
