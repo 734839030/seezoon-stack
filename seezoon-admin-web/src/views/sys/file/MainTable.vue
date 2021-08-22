@@ -23,7 +23,7 @@
     <a-form-item>
       <a-space>
         <a-button v-auth="'sys:file:query'" type="primary" @click="handleQuery()">查询</a-button>
-        <a-button type="default" @click="$refs.searchForm.resetFields()">重置</a-button>
+        <!--<a-button type="default" @click="$refs.searchForm.resetFields()">重置</a-button>-->
         <a-upload
           :customRequest="customRequest"
           :multiple="true"
@@ -32,7 +32,8 @@
           name="file"
         >
           <a-button v-auth="'sys:file:upload'" :loading="uploadBtnLoading" type="default">
-            <cloud-upload-outlined />上传
+            <cloud-upload-outlined />
+            上传
           </a-button>
         </a-upload>
         <a-button
@@ -51,8 +52,8 @@
     :loading="loading"
     :pagination="pagination"
     :row-key="(record) => record.id"
-    bordered
     :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
+    bordered
     class="mt-4"
     size="small"
     @change="handleTableChange"
@@ -87,10 +88,7 @@
     data() {
       return {
         searchForm: {
-          createDateRange: [
-            moment().add(-7, 'd').format('YYYY-MM-DD'),
-            moment().format('YYYY-MM-DD'),
-          ],
+          createDateRange: [moment().day(-7).format('YYYY-MM-DD'), moment().format('YYYY-MM-DD')],
         },
         url: '/sys/file/query',
         selectedRowKeys: [],
@@ -149,15 +147,11 @@
           .finally(() => (this.uploadBtnLoading = false));
       },
       batchDelete(selectedRowKeys) {
-        defHttp.postForm('/sys/file/delete_batch', { ids: selectedRowKeys.join(',') })
-          .then(() => {
-            this.$message.success('删除成功');
-            this.handleQuery();
-          })
-          .catch((error) => {
-            console.info(error);
-            this.$message.error(error);
-          });
+        defHttp.postForm('/sys/file/delete_batch', { ids: selectedRowKeys.join(',') }).then(() => {
+          this.$message.success('删除成功');
+          this.selectedRowKeys = [];
+          this.handleQuery();
+        });
       },
     },
   };

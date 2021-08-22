@@ -22,7 +22,7 @@ public class SeezoonAdminProperties {
     public class LoginProperties {
 
         private Integer lockPasswdFailTimes = 5;
-        private Integer lockIpFailTimes = 10;
+        private Integer lockIpFailTimes = 20;
         private Duration lockTime = Duration.ofDays(1);
         private boolean recordLog = true;
 
