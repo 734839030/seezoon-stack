@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.seezoon</groupId>
@@ -62,6 +63,7 @@
         <nacos.starter>0.2.7</nacos.starter>
         <easy.excel.version>2.2.10</easy.excel.version>
         <wx.java>4.1.6.B</wx.java>
+        <minio.vesion>8.3.0</minio.vesion>
     </properties>
     <dependencyManagement>
         <dependencies>
