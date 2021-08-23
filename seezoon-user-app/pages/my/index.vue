@@ -10,10 +10,14 @@
 			</view>
 			<!-- #endif -->
 			<!-- #ifdef H5 -->
-			<view class="user-image">
-				<image src="../../static/user.png"></image>
-			</view>
+			<image class="user-image" :src="userInfo.photoUrl? userInfo.photoUrl : '../../static/user.png'"></image>
+			<text>{{userInfo.name?userInfo.name:userInfo.mobile}}</text>
 			<!-- #endif -->
+		</view>
+		<view class="function-list">
+			<uni-list>
+				    <uni-list-item  title="列表文字" :show-badge="true" badge-text="12"></uni-list-item>
+			</uni-list>
 		</view>
 	</view>
 </template>
@@ -30,7 +34,7 @@
 			this.getUserInfo();
 		},
 		onPullDownRefresh(){
-			console.log('onPullDownRefresh');
+			this.getUserInfo();
 		},
 		methods: {
 		  getUserInfo() {
@@ -58,6 +62,7 @@
 	.user-image {
 		height: 150rpx;
 		width: 150rpx;
+		border-radius: 50%;
 		overflow: hidden;
 	}
 </style>

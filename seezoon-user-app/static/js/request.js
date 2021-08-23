@@ -51,7 +51,6 @@ export function requestInterceptor() {
 			} else {
 				args.resp = args.data;
 				args.data = null;
-				debugger
 				const {code,msg} = args.resp;
 				if (code != '0') {
 					uni.showToast({
