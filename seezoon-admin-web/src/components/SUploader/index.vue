@@ -3,11 +3,11 @@
     v-model:fileList="fileList"
     :accept="accept"
     :customRequest="customRequest"
+    :disabled="disabled"
     :list-type="listType"
     :multiple="multiple"
     action="/sys/file/upload"
     name="file"
-    :disabled="disabled"
     @change="handleChange"
   >
     <div v-if="fileList.length < limit && !disabled">
@@ -63,7 +63,9 @@
         handler: function (val) {
           // 不能写成=> 这种函数，会导致this undefined
           // 首次回显
-          if (val && this.fileList.length == 0) {
+          if (val) {
+            // 会进入两次的问题，加这个会无法拿到最后一次的变动
+            // && this.fileList.length == 0
             defHttp
               .postForm('/sys/file/info', { relativePaths: val, includeFileName: true })
               .then((data) => {
