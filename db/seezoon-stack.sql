@@ -384,7 +384,7 @@ CREATE TABLE `sys_user` (
 -- Records of sys_user
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_user` VALUES (1, NULL, 'admin', '$2a$10$GOB1Kw.6noZYJ1i7BzwbvezlRafUoWqlSILIzXvBYeZURrKFdG2aO', '系统管理员', '132****3372', NULL , '734839030@qq.com', 1, 1, '2021-01-19 00:57:42', 1, '2021-04-16 02:11:55', '');
+INSERT INTO `sys_user` VALUES (1, NULL, 'admin', '$2a$10$GOB1Kw.6noZYJ1i7BzwbvezlRafUoWqlSILIzXvBYeZURrKFdG2aO', '系统管理员', '132****3372', NULL , '734839030@qq.com', NULL, NULL, 1, 1, '2021-01-19 00:57:42', 1, '2021-04-16 02:11:55', '');
 COMMIT;
 
 -- ----------------------------
