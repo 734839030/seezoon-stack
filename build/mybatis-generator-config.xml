@@ -12,7 +12,7 @@
         <jdbcConnection
                 connectionURL="jdbc:mysql://127.0.0.1:3306/seezoon-stack"
                 driverClass="com.mysql.cj.jdbc.Driver"
-                password="12345678"
+                password=""
                 userId="root">
             <!-- 只获取当前指定库的表-->
             <property name="nullCatalogMeansCurrent" value="true"/>
@@ -20,6 +20,7 @@
 
         <javaTypeResolver>
             <property name="forceBigDecimals" value="false"/>
+            <property name="useJSR310Types" value="true"/>
         </javaTypeResolver>
         <!-- targetProject="MAVEN" is decided by mybatis-generator-maven-plugin,default is   ${project.build.directory}/generated-sources/mybatis-generator -->
         <javaModelGenerator targetPackage="com.seezoon.dao.modules.sys.entity"

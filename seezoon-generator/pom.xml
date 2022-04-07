@@ -13,7 +13,7 @@
     <artifactId>seezoon-generator</artifactId>
 
     <properties>
-        <mybatis-generator-maven-plugin.version>1.4.0</mybatis-generator-maven-plugin.version>
+        <mybatis-generator-maven-plugin.version>1.4.1</mybatis-generator-maven-plugin.version>
         <mysql-connector-java.version>8.0.22</mysql-connector-java.version>
     </properties>
 
