@@ -26,7 +26,7 @@ stop() {
       checkpid
       if [ $pid -gt 0 ]; then
         sleep 1
-        waitSeconds=$(expr $waitSeconds - 1)
+        waitSeconds=$(($waitSeconds - 1))
       else
         echo "${APP_NAME} stoped "
         exit 0
